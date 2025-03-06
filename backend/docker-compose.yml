@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: my_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: taskwisedb
+      POSTGRES_USER: taskwiseUser
+      POSTGRES_PASSWORD: taskwisePassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  springboot-app:
+    build: .
+    container_name: my_spring_app
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/taskwisedb
+      SPRING_DATASOURCE_USERNAME: taskwiseUser
+      SPRING_DATASOURCE_PASSWORD: taskwisePassword
+    ports:
+      - "8088:8088"
+
+volumes:
+  pg_data:

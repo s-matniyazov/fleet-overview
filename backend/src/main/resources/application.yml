@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: "Fleet Overview"
+  profiles:
+    active: "prod"
+
+# swagger-ui custom path
+springdoc:
+  swagger-ui:
+    path: "/swagger-ui"
+  show-actuator: true
+  override-with-generic-response: false

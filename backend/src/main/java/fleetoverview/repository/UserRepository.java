@@ -1,0 +1,17 @@
+package fleetoverview.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import fleetoverview.domain.entity.UserEntity;
+
+import java.util.Optional;
+
+/**
+ * @author :  sardor.matniyazov
+ * @mailto :  sardorbekmatniyazov03@gmail.com
+ * @created : 28 янв. 2025
+ **/
+public interface UserRepository extends JpaRepository<UserEntity, Integer>, JpaSpecificationExecutor<UserEntity> {
+    Optional<UserEntity> findByUsername(String username);
+
+}

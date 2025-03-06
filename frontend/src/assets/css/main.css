@@ -1,0 +1,44 @@
+/* Hide scrollbar buttons in Chrome, Edge, and Safari */
+::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+/* Remove scrollbar buttons in older versions of Chrome */
+::-webkit-scrollbar-button:vertical:start:increment,
+::-webkit-scrollbar-button:vertical:end:increment,
+::-webkit-scrollbar-button:horizontal:start:increment,
+::-webkit-scrollbar-button:horizontal:end:increment {
+    display: none !important;
+}
+
+/* Custom Scrollbar (Without Arrows) */
+::-webkit-scrollbar {
+    width: 8px; /* Adjust thickness */
+    height: 8px; /* Horizontal scrollbar */
+    padding-left: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent; /* No default background */
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #4b6cc5, #5577b4); /* Custom gradient */
+    border-radius: 10px; /* Rounded corners */
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #4353b2, #4e6ea6); /* Darker on hover */
+}
+
+/* Firefox Custom Scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #38527e transparent; /* Thumb & Track */
+}
