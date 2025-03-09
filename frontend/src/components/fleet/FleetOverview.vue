@@ -41,20 +41,6 @@ const columns = [
     styles: '',
     classes: '',
   },
-  {
-    key: 'createdBy',
-    name: 'createdBy',
-    label: t('createdBy'),
-    styles: '',
-    classes: '',
-  },
-  {
-    key: 'status',
-    name: 'status',
-    label: t('status'),
-    styles: '',
-    classes: '',
-  },
 ]
 
 const newModel = () => {
@@ -62,13 +48,12 @@ const newModel = () => {
     id: null,
     name: null,
     description: null,
-    actions: []
   }
 }
 
 const addModal = ref(false);
 
-const apiUrl = URIS.ROLES;
+const apiUrl = URIS.PROJECT_STATUSES;
 const dataList = ref([]);
 const data = ref(newModel())
 const selectedRow = ref();
@@ -79,10 +64,7 @@ const onAdd = () => {
 
   addModal.value = true;
 }
-
-
 const onEdit = (d) => {
-
   data.value = {...d};
 
   addModal.value = true;
@@ -129,7 +111,7 @@ function getData() {
         dataList.value = res.data.data;
         selectedRow.value = null;
       }).catch(e => {
-    showMessage(e)
+    alert("ERROR");
   });
 }
 
@@ -144,16 +126,16 @@ onMounted(() => {
   <div class="mb-0">
     <div class="col-12">
       <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-3">
-        <div class="d-flex">
+        <div>
           <button @click="onAdd" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-plus"></span> {{ t('add') }}
           </button>
           <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
               class="mdi mdi-pen"></span> {{ t('edit') }}
           </button>
-          <button @click="onDelete(selectedRow)" class="btn btn-primary btn-sm mx-1" :disabled="!selectedRow"><span
+          <button @click="onDelete(selectedRow)" class="btn btn-primary btn-sm d-none" :disabled="!selectedRow"><span
               class="mdi mdi-delete"></span> {{ t('delete') }}
           </button>
-          <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
+          <button @click="getData" class="btn btn-primary btn-sm mx-1 "><span class="mdi mdi-reload"></span></button>
         </div>
       </div>
     </div>
@@ -170,7 +152,7 @@ onMounted(() => {
       <template #header>
         <div class="d-flex" style="width: 100%">
           <div class="text-dark">
-            {{ data.id ? t('edit') : t('add') }} {{ t('project_priority') }}
+            {{ data.id ? t('edit') : t('add') }} {{ t('project_status') }}
           </div>
           <div class="text-end" style="right: 0; margin-left: auto">
             <button class="btn-close" @click="onClose"></button>
@@ -179,18 +161,19 @@ onMounted(() => {
       </template>
 
       <template #body>
-        <form class="needs-validation" novalidate="">
+        <form class="needs-validation" name="event-form" novalidate="">
           <div class="row">
             <!--            name-->
             <div class="col-12">
               <UInput v-model="data.name" :label="t('name')" :hint="t('name')" :name="t('name')"
-                      :placeholder="t('enter_priority_name')" classes="mb-3"/>
+                      :placeholder="t('enter_status_name')" classes="mb-3"/>
             </div>
 
             <!--            description-->
             <div class="col-12">
               <UTextarea v-model="data.description" :label="t('description')"
-                         :placeholder="t('enter_priority_description')" classes="mb-3"/>
+                         :placeholder="t('enter_project_description')"
+                         classes="mb-3"/>
             </div>
           </div>
         </form>

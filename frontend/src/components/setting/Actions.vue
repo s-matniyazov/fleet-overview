@@ -10,7 +10,7 @@ import UTextarea from "@/components/base/UTextarea.vue";
 import {useI18n} from "vue-i18n";
 import {longToDateTime, showMessage} from "@/util/utils.js";
 
-const { t } = useI18n();
+const {t} = useI18n();
 
 const columns = [
   {
@@ -112,7 +112,7 @@ const onSave = () => {
 }
 const onDelete = (d) => {
   if (d.id) {
-    axiosIns.delete(apiUrl, { data: d })
+    axiosIns.delete(apiUrl, {data: d})
         .then(res => {
           getData();
           onClose();
@@ -141,24 +141,27 @@ onMounted(() => {
 
 <template>
   <div class="mb-0">
-    <div class="row align-items-center">
-      <div class="col-12">
-        <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-3">
-          <div class="d-flex">
-            <button @click="onAdd" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-plus"></span> {{ t('add') }}</button>
-            <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span class="mdi mdi-pen"></span> {{ t('edit') }} </button>
-            <button @click="onDelete(selectedRow)" class="btn btn-primary btn-sm mx-1" :disabled="!selectedRow"><span class="mdi mdi-delete"></span> {{ t('delete') }} </button>
-            <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
-          </div>
+    <div class="col-12">
+      <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-3">
+        <div class="d-flex">
+          <button @click="onAdd" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-plus"></span> {{ t('add') }}
+          </button>
+          <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
+              class="mdi mdi-pen"></span> {{ t('edit') }}
+          </button>
+          <button @click="onDelete(selectedRow)" class="btn btn-primary btn-sm mx-1" :disabled="!selectedRow"><span
+              class="mdi mdi-delete"></span> {{ t('delete') }}
+          </button>
+          <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
         </div>
       </div>
-
-      <UTable :items="dataList" :columns="columns" v-model="selectedRow">
-        <template #row_created="{row}">
-          <td>{{longToDateTime(row?.created)}}</td>
-        </template>
-      </UTable>
     </div>
+
+    <UTable :items="dataList" :columns="columns" v-model="selectedRow">
+      <template #row_created="{row}">
+        <td>{{ longToDateTime(row?.created) }}</td>
+      </template>
+    </UTable>
   </div>
 
   <Teleport to="body">
@@ -179,12 +182,14 @@ onMounted(() => {
           <div class="row">
             <!--            name-->
             <div class="col-12">
-              <UInput v-model="data.name" :label="t('name')" :hint="t('name')" :name="t('name')" :placeholder="t('enter_priority_name')" classes="mb-3" />
+              <UInput v-model="data.name" :label="t('name')" :hint="t('name')" :name="t('name')"
+                      :placeholder="t('enter_priority_name')" classes="mb-3"/>
             </div>
 
             <!--            description-->
             <div class="col-12">
-              <UTextarea v-model="data.description" :label="t('description')" :placeholder="t('enter_priority_description')" classes="mb-3" />
+              <UTextarea v-model="data.description" :label="t('description')"
+                         :placeholder="t('enter_priority_description')" classes="mb-3"/>
             </div>
           </div>
         </form>

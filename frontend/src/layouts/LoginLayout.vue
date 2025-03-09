@@ -40,9 +40,9 @@ function onLogin() {
             <div class="w-100">
               <div class="d-flex flex-column h-100">
                 <div class="mb-4 mb-md-5 text-center">
-                  <a href="index.html" class="d-block auth-logo">
-                    <img src="@/assets/logo.svg" alt="" height="28"> <span class="logo-txt">FB-TASKWISE</span>
-                  </a>
+                  <router-link to="/" class="d-block auth-logo">
+                    <img src="@/assets/logo.png" alt="" size="12"> <span class="logo-txt">Fleet</span>
+                  </router-link>
                 </div>
                 <div class="auth-content my-auto">
                   <div class="text-center">

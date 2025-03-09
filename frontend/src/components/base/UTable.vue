@@ -21,6 +21,11 @@ const props = defineProps({
     required: true,
     default: []
   },
+  styles: {
+    type: String,
+    required: false,
+    default: 'height: calc(100vh - 328px)'
+  },
 })
 
 const selected = defineModel({});
@@ -35,7 +40,7 @@ const onRowClick = (row) => {
 </script>
 
 <template>
-  <div class="table-responsive row p-0" style="height: calc(100vh - 328px)">
+  <div class="table-responsive row p-0" :style="styles">
     <div class="col-12">
       <table class="table align-middle datatable dt-responsive table-check nowrap table-hover">
         <thead>

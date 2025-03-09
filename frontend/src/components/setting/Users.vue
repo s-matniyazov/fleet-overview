@@ -196,51 +196,57 @@ async function fetchData() {
 
 <template>
   <div class="mb-0">
-    <div class="row align-items-center">
-      <div class="col-12">
-        <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-2">
-          <div class="d-flex">
-            <button @click="onAdd" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-plus"></span> {{ t('add') }}</button>
-            <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span class="mdi mdi-pen"></span> {{ t('edit') }} </button>
-            <button @click="getData" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-reload"></span></button>
-            <button @click="isOpen = true" class="btn btn-primary btn-sm"><span class="mdi mdi-file-eye"></span> Открыть диалог</button>
-            <button @click="fetchData" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-file-eye"></span> Загрузить данные</button>
-          </div>
+    <div class="col-12">
+      <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-2">
+        <div class="d-flex">
+          <button @click="onAdd" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-plus"></span> {{ t('add') }}
+          </button>
+          <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
+              class="mdi mdi-pen"></span> {{ t('edit') }}
+          </button>
+          <button @click="getData" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-reload"></span></button>
+          <button @click="isOpen = true" class="btn btn-primary btn-sm"><span class="mdi mdi-file-eye"></span> Открыть
+            диалог
+          </button>
+          <button @click="fetchData" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-file-eye"></span>
+            Загрузить данные
+          </button>
         </div>
       </div>
-
-      <UTable :items="dataList" :columns="columns" v-model="selectedRow">
-        <template #row_status="{row}">
-          <td>
-            <div class="d-flex gap-2">
-              <a class="badge bg-primary-subtle text-primary" :class="`bg-${row?.status === 'PASSIVE' ? 'danger' : 'primary'}-subtle`"> {{row?.status}}</a>
-            </div>
-          </td>
-        </template>
-
-        <template #row_department="{row}">
-          <td>
-            {{row?.department.name}}
-          </td>
-        </template>
-
-        <template #row_position="{row}">
-          <td>
-            {{row?.position.name}}
-          </td>
-        </template>
-
-        <template #row_role="{row}">
-          <td>
-            {{row?.role.name}}
-          </td>
-        </template>
-
-        <template #row_created="{row}">
-          <td>{{longToDateTime(row?.created)}}</td>
-        </template>
-      </UTable>
     </div>
+
+    <UTable :items="dataList" :columns="columns" v-model="selectedRow">
+      <template #row_status="{row}">
+        <td>
+          <div class="d-flex gap-2">
+            <a class="badge bg-primary-subtle text-primary"
+               :class="`bg-${row?.status === 'PASSIVE' ? 'danger' : 'primary'}-subtle`"> {{ row?.status }}</a>
+          </div>
+        </td>
+      </template>
+
+      <template #row_department="{row}">
+        <td>
+          {{ row?.department.name }}
+        </td>
+      </template>
+
+      <template #row_position="{row}">
+        <td>
+          {{ row?.position.name }}
+        </td>
+      </template>
+
+      <template #row_role="{row}">
+        <td>
+          {{ row?.role.name }}
+        </td>
+      </template>
+
+      <template #row_created="{row}">
+        <td>{{ longToDateTime(row?.created) }}</td>
+      </template>
+    </UTable>
   </div>
 
   <URightOverlay :isOpen="isOpen" @close="isOpen = false">
@@ -266,7 +272,8 @@ async function fetchData() {
           <div class="row">
             <!--            name-->
             <div class="col-12">
-              <UInput v-model="data.name" :label="t('NSP')" :hint="t('NSP')" :name="t('NSP')" :placeholder="t('enter_employer_nsp')" classes="mb-3" />
+              <UInput v-model="data.name" :label="t('NSP')" :hint="t('NSP')" :name="t('NSP')"
+                      :placeholder="t('enter_employer_nsp')" classes="mb-3"/>
             </div>
 
             <!--            department-->
@@ -289,7 +296,8 @@ async function fetchData() {
 
             <!--            email-->
             <div class="col-12">
-              <UInput v-model="data.email" :label="t('email')" :hint="t('email')" :name="t('email')" :placeholder="t('enter_email')" classes="mb-3" />
+              <UInput v-model="data.email" :label="t('email')" :hint="t('email')" :name="t('email')"
+                      :placeholder="t('enter_email')" classes="mb-3"/>
             </div>
 
             <!--            role-->

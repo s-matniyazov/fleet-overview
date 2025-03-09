@@ -7,7 +7,7 @@
 #page-topbar {
     position: fixed;
     top: 0;
-    right: 0;
+    right: 15px;
     left: 0;
     z-index: 1;
     background-color: var(--bs-header-bg);
@@ -25,8 +25,7 @@
     -ms-flex-align: center;
     align-items: center;
     margin: 0 auto;
-    height: 70px;
-    padding: 0 1.5rem 0 0
+    height: 60px;
 }
 
 .navbar-header .dropdown .show.header-item {
@@ -35,7 +34,7 @@
 
 .navbar-brand-box {
     padding: 0 1.5rem;
-    width: 250px;
+    width: 220px;
     background: var(--bs-sidebar-bg);
     border-right: 1px solid var(--bs-sidebar-border-color);
     -webkit-box-shadow: 0 2px 2px var(--bs-sidebar-bg);
@@ -140,11 +139,11 @@ body[data-bs-theme=dark] .layout-mode-light {
 }
 
 .page-content {
-    padding: calc(70px + 1.5rem) calc(1.5rem * .75) 60px calc(1.5rem * .75)
+    padding: calc(60px + 1rem) calc(1.3rem * .75) 0 calc(1.3rem * .75)
 }
 
 .header-item {
-    height: 70px;
+    height: 60px;
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
     color: var(--bs-header-item-color);
@@ -329,7 +328,7 @@ body[data-layout=horizontal] .navbar-brand-box {
 }
 
 body[data-layout=horizontal] .page-content {
-    margin-top: 70px;
+    margin-top: 60px;
     padding: calc(55px + 1.5rem) calc(1.5rem / 2) 60px calc(1.5rem / 2)
 }
 
@@ -367,7 +366,7 @@ body[data-layout=horizontal][data-sidebar=dark] .navbar-brand-box {
     position: absolute;
     right: 0;
     color: var(--bs-footer-color);
-    left: 250px;
+    left: 220px;
     height: 60px;
     background-color: var(--bs-footer-bg);
     border-top: 1px solid var(--bs-border-color)
@@ -489,24 +488,24 @@ body[data-layout=horizontal] .footer {
 }
 
 .vertical-menu {
-    width: 250px;
+    width: 220px;
     z-index: 1001;
     background: var(--bs-sidebar-bg);
     bottom: 0;
     margin-top: 0;
     position: fixed;
-    top: 70px;
+    top: 60px;
     border-right: 1px solid var(--bs-border-color)
 }
 
 .main-content {
-    margin-left: 250px;
+    margin-left: 220px;
     overflow: hidden
 }
 
 .main-content .content {
     padding: 0 15px 10px 15px;
-    margin-top: 70px
+    margin-top: 60px
 }
 
 #sidebar-menu {
@@ -1188,7 +1187,7 @@ body[data-sidebar=brand][data-sidebar-size=sm] .vertical-menu #sidebar-menu ul l
 .topnav {
     background: var(--bs-header-bg);
     padding: 0 calc(1.5rem / 2);
-    margin-top: 70px;
+    margin-top: 60px;
     position: fixed;
     left: 0;
     right: 0;
@@ -1497,7 +1496,7 @@ body[data-layout-size=boxed] #page-topbar {
 
 body[data-layout-size=boxed] .footer {
     margin: 0 auto;
-    max-width: calc(1300px - 250px)
+    max-width: calc(1300px - 220px)
 }
 
 @media (min-width: 992px) {

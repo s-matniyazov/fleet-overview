@@ -32,6 +32,11 @@ defineProps({
     required: false,
     default: 'btn-info waves-effect waves-light'
   },
+  wrapper_styles: {
+    type: String,
+    required: false,
+    default: ''
+  },
   styles: {
     type: String,
     required: false,
@@ -66,7 +71,7 @@ onUnmounted(() => {
         Drop end <i class="mdi mdi-chevron-right"></i>
       </slot>
     </button>
-    <div class="dropdown-menu" :class="open && 'show'">
+    <div class="dropdown-menu" :class="open && 'show'" :style="wrapper_styles">
       <slot name="body">
         <a class="dropdown-item">Action</a>
         <a class="dropdown-item">Another action</a>
