@@ -36,6 +36,11 @@ defineProps({
     required: false,
     default: ''
   },
+  type: {
+    type: String,
+    required: false,
+    default: 'text'
+  },
 })
 
 const model = defineModel({});
@@ -45,8 +50,8 @@ const model = defineModel({});
 <template>
   <div :class="classes" :style="styles">
     <label class="form-label">{{ label }}</label>
-    <input class="form-control font-size-12" :placeholder="placeholder" type="text" :name="name"
-           v-model="model" required>
+    <input class="form-control font-size-12" :placeholder="placeholder" :name="name"
+           v-model="model" required :type="type">
     <div class="invalid-feedback">{{ hint }}</div>
   </div>
 </template>

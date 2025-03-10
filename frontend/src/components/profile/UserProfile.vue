@@ -17,7 +17,7 @@ const requiredRule = (val) => (!val ? 'This field is required' : '');
 <template>
   <BaseForm ref="formRef" @submit="submitForm">
     <BaseInput v-model="username" name="username" label="Username" :rules="requiredRule" />
-    <BaseInput v-model="password" name="password" label="Password" :rules="requiredRule" />
+    <BaseInput v-model="password" name="password" label="Password"/>
     <button type="submit">Submit</button>
   </BaseForm>
 </template>

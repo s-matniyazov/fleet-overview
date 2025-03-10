@@ -7,6 +7,7 @@ import {showMessage} from "@/util/utils.js";
 import useUserStore from "@/store/UserStore";
 import router from "@/router/index.js";
 import {useAuthStore} from "@/store/UseAuthStore.js";
+import UInput from "@/components/base/UInput.vue";
 const userStore = useUserStore();
 
 const username = ref("username");
@@ -51,43 +52,16 @@ function onLogin() {
                   </div>
                   <form class="mt-4 pt-2">
                     <div class="mb-3">
-                      <label class="form-label">Имя пользователя</label>
-                      <input v-model="username" type="text" class="form-control" id="username" placeholder="Введите имя пользователя">
+                      <UInput v-model="username" placeholder="Введите имя пользователя" label="Username"/>
                     </div>
                     <div class="mb-3">
-                      <div class="d-flex align-items-start">
-                        <div class="flex-grow-1">
-                          <label class="form-label">Пароль</label>
-                        </div>
-                        <div class="flex-shrink-0">
-                          <div class="">
-                            <a href="auth-recoverpw.html" class="text-muted">Забыли пароль?</a>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="input-group auth-pass-inputgroup">
-                        <input v-model="password" type="password" class="form-control" placeholder="Введите пароль" aria-label="Password"
-                               aria-describedby="password-addon">
-                        <button class="btn btn-light shadow-none ms-0" type="button" id="password-addon"><i
-                            class="mdi mdi-eye-outline"></i></button>
-                      </div>
-                    </div>
-                    <div class="row mb-4">
-                      <div class="col">
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="remember-check">
-                          <label class="form-check-label" for="remember-check">Запомнить меня</label>
-                        </div>
-                      </div>
+                      <UInput v-model="password" placeholder="Введите пароль" label="Password" type="password"/>
                     </div>
                     <div class="mb-3">
                       <button class="btn btn-primary w-100 waves-effect waves-light" type="button" @click="e => {onLogin(); e.stopPropagation()}">Войти</button>
                     </div>
                   </form>
-
                 </div>
-
               </div>
             </div>
           </div>
@@ -95,28 +69,6 @@ function onLogin() {
         <div class="col-xxl-9 col-lg-8 col-md-7">
           <div class="auth-bg pt-md-5 p-4 d-flex">
             <div class="bg-overlay bg-primary"></div>
-            <ul class="bg-stars">
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-            </ul>
             <div class="row justify-content-center align-items-center">
               <div class="col-xl-7">
                 <div class="p-0 p-sm-4 px-xl-0">
