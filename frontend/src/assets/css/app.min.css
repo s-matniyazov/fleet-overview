@@ -4283,14 +4283,13 @@ div.dataTables_wrapper div.dataTables_info {
 .auth-pass-inputgroup input[type=input] + .btn .mdi-eye-outline:before {
     content: "\f06d1"
 }
-
 .bg-bubbles {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden
+    overflow: hidden;
 }
 
 .bg-bubbles li {
@@ -4299,19 +4298,18 @@ div.dataTables_wrapper div.dataTables_info {
     display: block;
     width: 40px;
     height: 40px;
-    border-radius: 30px;
-    background-color: rgba(255, 255, 255, .1);
+    background-color: rgba(255, 255, 255, 0.1);
     bottom: -50px;
-    -webkit-animation: square 20s infinite;
-    animation: square 20s infinite;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%,
+    50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    -webkit-animation: star 20s infinite;
+    animation: star 20s infinite;
     -webkit-transition-timing-function: linear;
-    transition-timing-function: linear
+    transition-timing-function: linear;
 }
 
-.bg-bubbles li:nth-child(1) {
-    left: 10%
-}
-
+/* Keeping different sizes and delays */
+.bg-bubbles li:nth-child(1) { left: 10%; }
 .bg-bubbles li:nth-child(2) {
     left: 20%;
     width: 120px;
@@ -4319,45 +4317,31 @@ div.dataTables_wrapper div.dataTables_info {
     -webkit-animation-delay: 2s;
     animation-delay: 2s;
     -webkit-animation-duration: 17s;
-    animation-duration: 17s
+    animation-duration: 17s;
 }
-
-.bg-bubbles li:nth-child(3) {
-    left: 25%;
-    -webkit-animation-delay: 4s;
-    animation-delay: 4s
-}
-
+.bg-bubbles li:nth-child(3) { left: 25%; -webkit-animation-delay: 4s; animation-delay: 4s; }
 .bg-bubbles li:nth-child(4) {
     left: 40%;
     width: 80px;
     height: 80px;
     -webkit-animation-duration: 22s;
-    animation-duration: 22s
+    animation-duration: 22s;
 }
-
-.bg-bubbles li:nth-child(5) {
-    left: 70%;
-    width: 90px;
-    height: 90px
-}
-
+.bg-bubbles li:nth-child(5) { left: 70%; width: 90px; height: 90px; }
 .bg-bubbles li:nth-child(6) {
     left: 70%;
     width: 120px;
     height: 120px;
     -webkit-animation-delay: 3s;
-    animation-delay: 3s
+    animation-delay: 3s;
 }
-
 .bg-bubbles li:nth-child(7) {
     left: 32%;
     width: 150px;
     height: 150px;
     -webkit-animation-delay: 7s;
-    animation-delay: 7s
+    animation-delay: 7s;
 }
-
 .bg-bubbles li:nth-child(8) {
     left: 55%;
     width: 80px;
@@ -4365,9 +4349,8 @@ div.dataTables_wrapper div.dataTables_info {
     -webkit-animation-delay: 15s;
     animation-delay: 15s;
     -webkit-animation-duration: 40s;
-    animation-duration: 40s
+    animation-duration: 40s;
 }
-
 .bg-bubbles li:nth-child(9) {
     left: 25%;
     width: 50px;
@@ -4375,38 +4358,91 @@ div.dataTables_wrapper div.dataTables_info {
     -webkit-animation-delay: 2s;
     animation-delay: 2s;
     -webkit-animation-duration: 40s;
-    animation-duration: 40s
+    animation-duration: 40s;
 }
-
 .bg-bubbles li:nth-child(10) {
     left: 90%;
     width: 140px;
     height: 140px;
     -webkit-animation-delay: 11s;
-    animation-delay: 11s
+    animation-delay: 11s;
 }
 
-@-webkit-keyframes square {
-    0% {
-        -webkit-transform: translateY(0);
-        transform: translateY(0)
-    }
-    100% {
-        -webkit-transform: translateY(-1000px) rotate(600deg);
-        transform: translateY(-1000px) rotate(600deg)
-    }
+@-webkit-keyframes star {
+    0% { -webkit-transform: translateY(0); transform: translateY(0); }
+    100% { -webkit-transform: translateY(-1000px) rotate(360deg); transform: translateY(-1000px) rotate(360deg); }
 }
 
-@keyframes square {
-    0% {
-        -webkit-transform: translateY(0);
-        transform: translateY(0)
-    }
-    100% {
-        -webkit-transform: translateY(-1000px) rotate(600deg);
-        transform: translateY(-1000px) rotate(600deg)
-    }
+@keyframes star {
+    0% { -webkit-transform: translateY(0); transform: translateY(0); }
+    100% { -webkit-transform: translateY(-1000px) rotate(360deg); transform: translateY(-1000px) rotate(360deg); }
 }
+
+.bg-stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.bg-stars li {
+    position: absolute;
+    list-style: none;
+    display: block;
+    width: 30px; /* Star size */
+    height: 30px;
+    background-image: url('https://cdn-icons-png.flaticon.com/512/1828/1828884.png'); /* Replace with your star image */
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.8;
+    animation: var(--direction) 10s infinite linear;
+}
+
+/* Random star positions and movement directions */
+.bg-stars li:nth-child(1) { left: 10%; top: 10%; --direction: moveRight; }
+.bg-stars li:nth-child(2) { left: 80%; top: 20%; --direction: moveLeft; }
+.bg-stars li:nth-child(3) { left: 32%; top: 70%; --direction: moveUp; }
+.bg-stars li:nth-child(4) { left: 60%; top: 50%; --direction: moveDown; }
+.bg-stars li:nth-child(5) { left: 20%; top: 80%; --direction: moveRight; }
+.bg-stars li:nth-child(6) { left: 95%; top: 30%; --direction: moveLeft; }
+.bg-stars li:nth-child(7) { left: 50%; top: 90%; --direction: moveUp; }
+.bg-stars li:nth-child(8) { left: 40%; top: 40%; --direction: moveDown; }
+.bg-stars li:nth-child(9) { left: 70%; top: 10%; --direction: moveRight; }
+.bg-stars li:nth-child(10){ left: 35%; top: 65%; --direction: moveLeft; }
+.bg-stars li:nth-child(11) { left: 10%; top: 10%; --direction: moveRight; }
+.bg-stars li:nth-child(12) { left: 80%; top: 20%; --direction: moveLeft; }
+.bg-stars li:nth-child(13) { left: 32%; top: 70%; --direction: moveUp; }
+.bg-stars li:nth-child(14) { left: 60%; top: 50%; --direction: moveDown; }
+.bg-stars li:nth-child(15) { left: 20%; top: 80%; --direction: moveRight; }
+.bg-stars li:nth-child(16) { left: 95%; top: 30%; --direction: moveLeft; }
+.bg-stars li:nth-child(17) { left: 50%; top: 90%; --direction: moveUp; }
+.bg-stars li:nth-child(18) { left: 40%; top: 40%; --direction: moveDown; }
+.bg-stars li:nth-child(19) { left: 70%; top: 10%; --direction: moveRight; }
+.bg-stars li:nth-child(20){ left: 35%; top: 65%; --direction: moveLeft; }
+
+@keyframes moveRight {
+    0% { left: -50px; }
+    100% { left: 110vw; } /* Move off-screen to the right */
+}
+
+@keyframes moveLeft {
+    0% { left: 110vw; }
+    100% { left: -50px; } /* Move off-screen to the left */
+}
+
+@keyframes moveUp {
+    0% { top: 110vh; }
+    100% { top: -50px; } /* Move off-screen to the top */
+}
+
+@keyframes moveDown {
+    0% { top: -50px; }
+    100% { top: 110vh; } /* Move off-screen to the bottom */
+}
+
 
 .email-leftbar {
     width: 236px;

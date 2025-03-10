@@ -47,7 +47,7 @@ function onLogin() {
                 <div class="auth-content my-auto">
                   <div class="text-center">
                     <h5 class="mb-0">Добро пожаловать !</h5>
-                    <p class="text-muted mt-2">Войдите, чтобы продолжить в Taskwise.</p>
+                    <p class="text-muted mt-2">Войдите, чтобы продолжить в Fleet.</p>
                   </div>
                   <form class="mt-4 pt-2">
                     <div class="mb-3">
@@ -87,9 +87,7 @@ function onLogin() {
                   </form>
 
                 </div>
-                <div class="mt-4 mt-md-5 text-center">
-                  <p class="mb-0">©2025 Taskwise. Все права защищены.</p>
-                </div>
+
               </div>
             </div>
           </div>
@@ -97,7 +95,17 @@ function onLogin() {
         <div class="col-xxl-9 col-lg-8 col-md-7">
           <div class="auth-bg pt-md-5 p-4 d-flex">
             <div class="bg-overlay bg-primary"></div>
-            <ul class="bg-bubbles">
+            <ul class="bg-stars">
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
               <li></li>
               <li></li>
               <li></li>
@@ -112,21 +120,16 @@ function onLogin() {
             <div class="row justify-content-center align-items-center">
               <div class="col-xl-7">
                 <div class="p-0 p-sm-4 px-xl-0">
-                  <div id="reviewcarouselIndicators" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel slide">
                     <div class="carousel-inner">
                       <div class="carousel-item active">
-                        <div class="testi-contain text-white">
+                        <div class="test-contain text-white">
                           <i class="bx bxs-quote-alt-left text-success display-6"></i>
 
-                          <h4 class="mt-4 fw-medium lh-base text-white">“Taskwise – это современный инструмент для
+                          <h4 class="mt-4 fw-medium lh-base text-white">“Fleet – это современный инструмент для
                             управления задачами и организации работы. Он позволяет пользователям планировать ежедневные
                             задачи, расставлять приоритеты и отслеживать их выполнение.”
                           </h4>
-                          <div class="mt-4 pt-3 pb-5">
-                            <div class="d-flex align-items-start">
-
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
