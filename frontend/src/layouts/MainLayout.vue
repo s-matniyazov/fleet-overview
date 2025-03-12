@@ -4,10 +4,7 @@ import VerticalMenu from "@/components/VerticalMenu.vue";
 import {onMounted, ref} from "vue";
 import feather from "feather-icons";
 import router from "@/router/index.js";
-import {useAuthStore} from "@/store/UseAuthStore.js";
 import USelect from "@/components/base/USelect.vue";
-
-const authStore = useAuthStore()
 
 const company = ref(1);
 const companies = ref([
@@ -24,11 +21,6 @@ const companies = ref([
     name: "COMPANY three"
   },
 ]);
-
-function onLogout() {
-  authStore.logout();
-  pushPage('/login');
-}
 
 function pushPage(page) {
   router.push(page);
@@ -57,13 +49,6 @@ onMounted(() => {
 
         <div class="flex">
           <USelect :items="companies" v-model="company" option_name="name" option_value="id" styles="width: 20rem"/>
-        </div>
-
-        <div class="d-flex">
-          <button class="btn btn btn-outline-light" style="height: 50px; width: 50px"
-                  @click="e => {onLogout(); e.stopPropagation()}">
-            <img src="@/assets/logout.png" alt="logout" height="24"/>
-          </button>
         </div>
       </div>
     </header>

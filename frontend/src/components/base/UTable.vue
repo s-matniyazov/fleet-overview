@@ -42,7 +42,7 @@ const onRowClick = (row) => {
 <template>
   <div class="table-responsive row p-0" :style="styles">
     <div class="col-12">
-      <table class="table align-middle datatable dt-responsive table-check nowrap table-hover">
+      <table class="table align-middle table-hover">
         <thead>
         <tr>
           <slot v-for="col in columns" :col="col" :name="`col_${col.name}`" :key="col.key">
@@ -66,22 +66,11 @@ const onRowClick = (row) => {
         </tbody>
       </table>
     </div>
-
-    <div class="col-12 d-flex p-0" style="margin-top: auto; bottom: 0">
-      <div class="dropdown-divider"></div>
-      <div class="" style="right: 0; margin-left: auto">
-        <ul class="pagination pagination-sm">
-          <li class="page-item"><a class="page-link">&laquo;</a></li>
-          <li class="page-item active"><a class="page-link">1</a></li>
-          <li class="page-item"><a class="page-link">&raquo;</a></li>
-        </ul>
-      </div>
-    </div>
   </div>
 </template>
 
 <style scoped>
-.table-responsive thead th {
+.table-responsive thead th {;
   position: sticky;
   top: 0;
   background: white;

@@ -718,8 +718,8 @@ progress {
     --bs-gutter-x: 1.5rem;
     --bs-gutter-y: 0;
     width: 100%;
-    padding-right: calc(var(--bs-gutter-x) * .5);
-    padding-left: calc(var(--bs-gutter-x) * .5);
+    /*padding-right: calc(var(--bs-gutter-x) * .5);*/
+    /*padding-left: calc(var(--bs-gutter-x) * .5);*/
     margin-right: auto;
     margin-left: auto
 }
@@ -2266,7 +2266,7 @@ progress {
 }
 
 .table > :not(caption) > * > * {
-    padding: .75rem .75rem;
+    padding: .45rem .45rem;
     color: var(--bs-table-color-state, var(--bs-table-color-type, var(--bs-table-color)));
     background-color: var(--bs-table-bg);
     border-bottom-width: var(--bs-border-width);

@@ -223,28 +223,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mb-0 p-0">
+  <div class="p-2">
     <div class="row">
       <div class="col-12">
         <div class="col-12">
-          <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-3">
-            <div>
-              <button @click="onAdd" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-plus"></span> {{
-                  t("add")
-                }}
-              </button>
-              <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-                  class="mdi mdi-pen"></span> {{ t("edit") }}
-              </button>
-              <button @click="onDelete(selectedRow)" class="btn btn-primary btn-sm mx-1" :disabled="!selectedRow"><span
-                  class="mdi mdi-delete"></span> {{ t("delete") }}
-              </button>
-              <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
-            </div>
+          <div>
+            <button @click="onAdd" class="btn btn-primary btn-sm"><span class="mdi mdi-plus"></span> {{ t("add") }}</button>
+            <button @click="getData" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-reload"></span></button>
           </div>
         </div>
 
-        <UTable :items="dataList" :columns="columns" v-model="selectedRow" styles="height: calc(100vh - 388px)">
+        <UTable :items="dataList" :columns="columns" v-model="selectedRow" styles="height: calc(100vh - 153px)">
           <template #row_status="{row}">
             <td>
               <div class="d-flex gap-2">
@@ -280,9 +269,9 @@ onMounted(() => {
         </UTable>
       </div>
 
-      <div class="col-12" style="height: 60px; border: 1px dashed black">
-        <b>Opysanie: </b> {{selectedRow?.description}}
-      </div>
+<!--      <div class="col-12" style="height: 60px; border: 1px dashed rgba(0,0,0,0.22)">-->
+<!--        <b>Opysanie: </b> {{ selectedRow?.description }}-->
+<!--      </div>-->
     </div>
   </div>
 

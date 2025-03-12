@@ -1,5 +1,7 @@
 <script setup>
 import {ref} from "vue";
+import {useAuthStore} from "@/store/UseAuthStore.js";
+import router from "@/router/index.js";
 
 const currentOpenMenu = ref([]);
 const toggleSubmenu = (menu) => {
@@ -9,6 +11,17 @@ const toggleSubmenu = (menu) => {
     currentOpenMenu.value.push(menu);
   }
 };
+
+const authStore = useAuthStore()
+
+function pushPage(page) {
+  router.push(page);
+}
+
+function onLogout() {
+  authStore.logout();
+  pushPage('/login');
+}
 </script>
 
 <template>
@@ -74,6 +87,12 @@ const toggleSubmenu = (menu) => {
             <hr/>
           </li>
         </ul>
+      </div>
+      <div class="w-100 d-flex align-items-center p-1 bg-sublte-info" style="margin-top: auto; bottom: 0">
+        <button class="btn btn btn-outline-light" style="height: 50px; width: 50px; /*margin-left: auto; right: 0*/"
+                @click="e => {onLogout(); e.stopPropagation()}">
+          <img src="@/assets/logout.png" alt="logout" height="24"/>
+        </button>
       </div>
     </div>
   </div>

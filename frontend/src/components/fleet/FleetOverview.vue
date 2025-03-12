@@ -129,12 +129,6 @@ onMounted(() => {
         <div>
           <button @click="onAdd" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-plus"></span> {{ t('add') }}
           </button>
-          <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-              class="mdi mdi-pen"></span> {{ t('edit') }}
-          </button>
-          <button @click="onDelete(selectedRow)" class="btn btn-primary btn-sm d-none" :disabled="!selectedRow"><span
-              class="mdi mdi-delete"></span> {{ t('delete') }}
-          </button>
           <button @click="getData" class="btn btn-primary btn-sm mx-1 "><span class="mdi mdi-reload"></span></button>
         </div>
       </div>

@@ -1,0 +1,26 @@
+Truck
+    Unit details
+        unit # - unit
+        in service date - inServiceDate
+        [US, Canada, Mexico] - country
+        license plate - licensePlate
+        state (state of country) - city
+        make (model maker) - modelMaker
+        year - year
+        fuel type - fuelType
+        gross weight - grossWeight
+        number of axles - axles
+        vin - vin
+    Ownership details
+        ownership (ownership type) - ownership
+            - company ->
+                include to the IFTA - includeIFTA
+                Other details
+                    purchase type - purchaseType
+                    equipment provider - equipmentProvider
+            - owner operator's ->
+                owner operator - ownerOperator
+            - contractor owned ->
+                include to the IFTA - includeIFTA
+    Additional notes
+        note - description
