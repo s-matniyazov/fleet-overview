@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
-import BaseForm from '@/components/base/BaseForm.vue';
 import BaseInput from '@/components/base/BaseInput.vue';
+import UForm from "@/components/base/UForm.vue";
 
 const username = ref('');
 const password = ref('');
@@ -15,9 +15,9 @@ const requiredRule = (val) => (!val ? 'This field is required' : '');
 </script>
 
 <template>
-  <BaseForm ref="formRef" @submit="submitForm">
+  <UForm ref="formRef" @submit="submitForm">
     <BaseInput v-model="username" name="username" label="Username" :rules="requiredRule" />
     <BaseInput v-model="password" name="password" label="Password"/>
     <button type="submit">Submit</button>
-  </BaseForm>
+  </UForm>
 </template>

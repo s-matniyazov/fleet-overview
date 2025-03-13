@@ -23,26 +23,41 @@ export function hideLoader() {
 }
 
 // date export functions
-export function longToDate(date) {
+// yyyy-mm-dd  -- 1
+// dd.mm.yyyy  -- 2
+
+// date export functions
+// dd.mm.yyyy
+// dd.mm.yyyy
+export function longToDate(date, format) {
     if (!date) return '';
     let a = new Date(date)
     let res = '';
-    res += a.getFullYear() + '-';
-    res += toClockNumber(a.getMonth() + 1) + '-';
-    res += toClockNumber(a.getDate());
+
+    if (format === 1) {
+        res += a.getFullYear() + '-';
+        res += toClockNumber(a.getMonth() + 1) + '-';
+        res += toClockNumber(a.getDate());
+    } else {
+        res += toClockNumber(a.getDate()) + ".";
+        res += toClockNumber(a.getMonth() + 1) + '.';
+        res += a.getFullYear();
+    }
 
     return res;
 }
 
+// dd.mm.yyyy
 export function longToDateTime(date) {
     if (!date) return '';
     let a = new Date(date)
     let res = '';
-    res += a.getFullYear() + '-';
-    res += toClockNumber(a.getMonth() + 1) + '-';
-    res += toClockNumber(a.getDate()) + ' ';
+    res += toClockNumber(a.getDate()) + '.';
+    res += toClockNumber(a.getMonth() + 1) + '.';
+    res += a.getFullYear() + ' ';
     res += toClockNumber(a.getHours()) + ':'
-    res += toClockNumber(a.getMinutes())
+    res += toClockNumber(a.getMinutes()) + ':'
+    res += toClockNumber(a.getSeconds())
 
     return res;
 }

@@ -19,13 +19,6 @@ defineProps({
           <slot name="body"></slot>
         </div>
 
-        <div class="modal-footer">
-          <slot name="footer">
-            <div class="d-flex text-end align-items-end mt-2">
-              <button type="submit" class="btn btn-success" @click="$emit('save')">Сахранить</button>
-            </div>
-          </slot>
-        </div>
       </div>
     </div>
   </Transition>
@@ -33,7 +26,7 @@ defineProps({
 <style>
 .modal-mask {
   position: fixed;
-  z-index: 99;
+  z-index: 1002;
   top: 0;
   left: 0;
   width: 100%;
@@ -46,7 +39,7 @@ defineProps({
 .modal-container {
   width: 550px;
   margin: auto;
-  padding: 10px 20px;
+  padding: 20px 30px;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);

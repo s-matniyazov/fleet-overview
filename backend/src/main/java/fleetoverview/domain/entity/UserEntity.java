@@ -24,10 +24,11 @@ import java.util.Date;
 @Entity
 @Table(name = "ts_users")
 public class UserEntity extends BaseEntity implements UserDetails {
+    @Column(nullable = false, length = 50)
     private String username;
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 300)
     private String name;
 
     @Column(nullable = false, length = 50)
@@ -44,7 +45,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private LangEnum lang = LangEnum.KIRIL;
-    private boolean enableNotif = true;
+    private boolean enableNotification = true;
 
     public UserEntity() {}
 
@@ -125,11 +126,11 @@ public class UserEntity extends BaseEntity implements UserDetails {
         this.lang = lang;
     }
 
-    public boolean isEnableNotif() {
-        return enableNotif;
+    public boolean isEnableNotification() {
+        return enableNotification;
     }
 
-    public void setEnableNotif(boolean enableNotif) {
-        this.enableNotif = enableNotif;
+    public void setEnableNotification(boolean enableNotification) {
+        this.enableNotification = enableNotification;
     }
 }

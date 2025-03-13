@@ -1,5 +1,11 @@
 <script setup>
-defineProps({
+import {inject, ref} from "vue";
+
+const props = defineProps({
+  name: {
+    type: String,
+    required: false,
+  },
   label: {
     type: String,
     required: false,
@@ -7,7 +13,7 @@ defineProps({
   hint: {
     type: String,
     required: false,
-    default: 'Please select date'
+    default: 'Please select'
   },
   option_name: {
     type: String,
@@ -34,14 +40,26 @@ defineProps({
     required: false,
     default: ''
   },
+  rules: Function,
 })
 
 const selected = defineModel({});
+const errorMessage = ref('');
+
+const formState = inject('formState', null);
+const registerField = inject('registerField', () => {});
+
+const validate = () => {
+  errorMessage.value = props.rules ? props.rules(selected.value) : '';
+  return errorMessage.value;
+};
+
+registerField(props.name, validate);
 
 </script>
 
 <template>
-  <div :class="classes" :style="styles">
+  <div :class="`${classes} ${errorMessage && 'has-danger'}`" :style="styles">
     <label v-if="label" class="form-label">{{ label }}</label>
     <select class="form-control form-select font-size-12" v-model="selected">
 <!--      <option selected disabled> - </option>-->
@@ -50,6 +68,7 @@ const selected = defineModel({});
       </option>
     </select>
     <div class="invalid-feedback">{{ hint }}</div>
+    <p v-if="errorMessage" class="pristine-error text-help">{{ errorMessage }}</p>
   </div>
 </template>
 

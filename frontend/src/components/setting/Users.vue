@@ -195,7 +195,7 @@ async function fetchData() {
 </script>
 
 <template>
-  <div class="mb-0">
+  <div class="mb-0 p-2">
     <div class="col-12">
       <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-2">
         <div class="d-flex">

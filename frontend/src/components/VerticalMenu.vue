@@ -45,15 +45,15 @@ function onLogout() {
           <li v-show="currentOpenMenu.includes('fleet')">
             <router-link to="fleet-compliance" class="btn w-100 text-start p-0">
               <i data-feather="truck"></i>
-              <span data-key="t-dashboard">Fleet Compliance</span>
+              <span>Fleet Compliance</span>
             </router-link>
             <router-link to="fleet-overview" class="btn w-100 text-start p-0">
               <i data-feather="map-pin"></i>
-              <span data-key="t-projects">Fleet overview</span>
+              <span>Fleet overview</span>
             </router-link>
             <router-link to="maintenance" class="btn w-100 text-start p-0">
               <i data-feather="tool"></i>
-              <span data-key="t-projects">Maintenance</span>
+              <span>Maintenance</span>
             </router-link>
             <hr/>
           </li>
@@ -74,21 +74,66 @@ function onLogout() {
           <li v-show="currentOpenMenu.includes('chleet')">
             <router-link to="fleet-compliance" class="btn w-100 text-start p-0">
               <i data-feather="truck"></i>
-              <span data-key="t-dashboard">Fleet Compliance</span>
+              <span>Fleet Compliance</span>
             </router-link>
             <router-link to="fleet-overview" class="btn w-100 text-start p-0">
               <i data-feather="map-pin"></i>
-              <span data-key="t-projects">Fleet overview</span>
+              <span>Fleet overview</span>
             </router-link>
             <router-link to="maintenance" class="btn w-100 text-start p-0">
               <i data-feather="tool"></i>
-              <span data-key="t-projects">Maintenance</span>
+              <span>Maintenance</span>
+            </router-link>
+            <hr/>
+          </li>
+
+          <button @click="e => {toggleSubmenu('references'); e.stopPropagation()}" class="btn w-100 text-start p-0">
+            <li class="menu-title cursor-pointer flex align-items-center justify-content-between text-gray-light font-size-14">
+              <i data-feather="command"></i>
+              <span class="m-2">References</span>
+              <span class="ml-auto" v-if="currentOpenMenu.includes('references')">
+                <i class="mdi mdi-arrow-down-drop-circle-outline"/>
+              </span>
+              <span class="ml-auto text-end" v-else style="margin-right: auto; left: 0">
+                <i class="mdi mdi-arrow-up-drop-circle-outline"/>
+              </span>
+            </li>
+          </button>
+          <li v-show="currentOpenMenu.includes('references')">
+            <router-link to="country" class="btn w-100 text-start p-0">
+              <i data-feather="flag"></i>
+              <span>Country</span>
+            </router-link>
+            <router-link to="city" class="btn w-100 text-start p-0">
+              <i data-feather="map-pin"></i>
+              <span>City</span>
+            </router-link>
+            <router-link to="fuel-type" class="btn w-100 text-start p-0">
+              <i data-feather="tool"></i>
+              <span>Fuel type</span>
+            </router-link>
+            <router-link to="model-maker" class="btn w-100 text-start p-0">
+              <i data-feather="tool"></i>
+              <span>Model maker</span>
+            </router-link>
+            <router-link to="owner-operator" class="btn w-100 text-start p-0">
+              <i data-feather="tool"></i>
+              <span>Owner operator</span>
+            </router-link>
+            <router-link to="ownership-type" class="btn w-100 text-start p-0">
+              <i data-feather="tool"></i>
+              <span>Ownership type</span>
+            </router-link>
+            <router-link to="purchase-type" class="btn w-100 text-start p-0">
+              <i data-feather="tool"></i>
+              <span>Purchase type</span>
             </router-link>
             <hr/>
           </li>
         </ul>
       </div>
-      <div class="w-100 d-flex align-items-center p-1 bg-sublte-info" style="margin-top: auto; bottom: 0">
+
+      <div class="w-100 position-absolute d-flex align-items-center p-1 bg-sublte-info" style="margin-top: auto; bottom: 0">
         <button class="btn btn btn-outline-light" style="height: 50px; width: 50px; /*margin-left: auto; right: 0*/"
                 @click="e => {onLogout(); e.stopPropagation()}">
           <img src="@/assets/logout.png" alt="logout" height="24"/>

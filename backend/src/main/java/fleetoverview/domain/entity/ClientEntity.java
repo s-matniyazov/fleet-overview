@@ -11,7 +11,7 @@ import fleetoverview.domain.entity.enums.UserStatusEnum;
  * @created : 10 февр. 2025
  **/
 @Entity
-@Table(name = "ts_clients")
+@Table(name = "clients")
 public class ClientEntity extends BaseEntity {
     @Column(nullable = false, length = 55)
     private String name;

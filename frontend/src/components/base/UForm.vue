@@ -1,34 +1,45 @@
-<template>
-  <form @submit.prevent="submitForm" class="p-4 border rounded-lg">
-    <slot name="fields" :formData="formData" :errors="errors"></slot>
-    <button type="submit" class="mt-4 p-2 bg-blue-500 text-white rounded">Submit</button>
-  </form>
-</template>
-
 <script setup>
-import { defineProps, defineEmits, reactive } from 'vue';
+import { provide, reactive, defineExpose } from 'vue';
 
-const props = defineProps({
-  modelValue: Object,
-  rules: Object
+const emit = defineEmits(['submit']);
+const formState = reactive({
+  fields: {},
+  errors: {},
 });
-const emit = defineEmits(['update:modelValue', 'submit']);
 
-const formData = reactive({...props.modelValue});
-const errors = reactive({});
+const registerField = (name, validate) => {
+  formState.fields[name] = validate;
+};
 
-const validate = () => {
-  Object.keys(props.rules).forEach(field => {
-    const rule = props.rules[field];
-    errors[field] = rule(formData[field]) || '';
-  });
-  return Object.values(errors).every(error => !error);
+const validateForm = () => {
+  let isValid = true;
+  formState.errors = {};
+
+  for (const [name, validate] of Object.entries(formState.fields)) {
+    const error = validate();
+    if (error) {
+      isValid = false;
+      formState.errors[name] = error;
+    }
+  }
+
+  return isValid;
 };
 
 const submitForm = () => {
-  if (validate()) {
-    emit('update:modelValue', formData);
-    emit('submit', formData);
+  if (validateForm()) {
+    emit('submit');
   }
 };
+
+provide('registerField', registerField);
+provide('formState', formState);
+
+defineExpose({ submitForm });
 </script>
+
+<template>
+  <form @submit.prevent="submitForm">
+    <slot />
+  </form>
+</template>

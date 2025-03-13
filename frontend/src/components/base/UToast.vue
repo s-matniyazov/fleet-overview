@@ -47,7 +47,7 @@ const toastStore = useToasterStore();
   position: fixed;
   top: 3%;
   right: 38vw;
-  z-index: 100;
+  z-index: 99999;
   display: flex;
   flex-direction: column;
   gap: 1rem;
