@@ -1,13 +1,23 @@
 <script setup>
 defineProps({
-  show: Boolean
+  show: Boolean,
+  styles: {
+    type: String,
+    required: false
+  },
+  width: {
+    type: String,
+    required: false,
+    default: '550px'
+  }
+
 })
 </script>
 <template>
   <Transition name="modal">
     <div v-if="show" class="modal-mask">
-      <div class="modal-container">
-        <div class="modal-header py-3 border-bottom-0">
+      <div class="modal-container" :style="`width: ${width}`">
+        <div class="modal-header pb-3 border-bottom-0">
           <slot name="header">
             <h5 class="modal-title">Создание</h5>
 
@@ -15,7 +25,7 @@ defineProps({
           </slot>
         </div>
 
-        <div class="modal-body">
+        <div class="modal-body" :style="styles">
           <slot name="body"></slot>
         </div>
 
@@ -34,12 +44,13 @@ defineProps({
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   transition: opacity 0.3s ease;
+  overflow-y:scroll;
+  overflow-x:hidden;
 }
 
 .modal-container {
-  width: 550px;
   margin: auto;
-  padding: 20px 30px;
+  padding: 20px 20px;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);

@@ -15,5 +15,8 @@ export const URIS = {
     MODEL_MAKER: "/model-makers",
     OWNER_OPERATOR: "/owner-operators",
     OWNERSHIP_TYPE: "/ownership-type",
-    PURCHASE_TYPE: "/purchase-types"
+    PURCHASE_TYPE: "/purchase-types",
+
+    // truck
+    TRUCK: "/trucks"
 }

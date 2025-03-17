@@ -8,30 +8,15 @@ const props = defineProps({
     required: false,
     default: 'input'
   },
-  type: {
-    type: String,
+  checked: {
+    type: Boolean,
     required: false,
-    default: 'text'
+    default: false
   },
   label: {
     type: String,
     required: false,
     default: 'input'
-  },
-  placeholder: {
-    type: String,
-    required: false,
-    default: 'Please type input'
-  },
-  hint: {
-    type: String,
-    required: false,
-    default: 'Please type input'
-  },
-  rows: {
-    type: Number,
-    required: false,
-    default: 3
   },
   classes: {
     type: String,
@@ -62,10 +47,10 @@ registerField(props.name, validate);
 
 <template>
   <div :class="`${classes} ${errorMessage && 'has-danger'}`" :style="styles">
-    <label class="form-label">{{ label }}</label>
-    <input class="form-control font-size-12 " :placeholder="placeholder" :type="type" :name="name"
-           v-model="model">
-    <div class="invalid-feedback">{{ hint }}</div>
+    <input class="form-check-input" type="checkbox" v-model="model" :checked="checked">
+    <label class="form-check-label px-2">
+      {{ label }}
+    </label>
     <p v-if="errorMessage" class="pristine-error text-help">{{ errorMessage }}</p>
   </div>
 </template>

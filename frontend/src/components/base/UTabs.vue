@@ -11,7 +11,7 @@ const activeTab = defineModel()
 </script>
 
 <template>
-  <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs">
+  <ul class="nav nav-tabs">
     <li class="nav-item" v-for="tab in tabs" @click="activeTab = tab.key">
       <button class="nav-link btn-default" :class="activeTab === tab.key && 'active'">
         <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
@@ -22,5 +22,33 @@ const activeTab = defineModel()
 </template>
 
 <style scoped>
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+  color: #fff;
+  background-color: #385a8a;
+}
 
+.nav-tabs {
+  border: none;
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  color: #385a8a;
+}
+
+.nav-tabs .nav-link:hover {
+  color: gray;
+}
+
+.sidebar-tab-shadow {
+  border: 1px solid #dde2e5;
+  border-radius: 6px;
+}
+.sidebar-tab-shadow :nth-child(1) button {
+  border-radius: 6px;
+}
+.sidebar-tab-shadow :nth-child(2) button {
+  border-radius: 6px;
+}
 </style>

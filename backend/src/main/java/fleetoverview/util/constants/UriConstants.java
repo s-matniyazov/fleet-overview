@@ -22,4 +22,7 @@ public interface UriConstants {
     String OWNER_OPERATOR = API + "/owner-operators";
     String OWNERSHIP_TYPE = API + "/ownership-type";
     String PURCHASE_TYPE = API + "/purchase-types";
+
+    // truck
+    String TRUCK = API + "/trucks";
 }

@@ -9,6 +9,7 @@ import UInput from "@/components/base/UInput.vue";
 import {useI18n} from "vue-i18n";
 import {longToDateTime, showMessage} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
+import USelect from "@/components/base/USelect.vue";
 
 const {t} = useI18n();
 
@@ -18,6 +19,20 @@ const columns = [
     name: 'id',
     label: '',
     styles: 'width: 50px;',
+    classes: '',
+  },
+  {
+    key: 'name',
+    name: 'name',
+    label: t('name'),
+    styles: 'width: 400px;',
+    classes: '',
+  },
+  {
+    key: 'name',
+    name: 'name',
+    label: t('name'),
+    styles: 'width: 400px;',
     classes: '',
   },
   {
@@ -40,16 +55,18 @@ const newModel = () => {
   return {
     id: null,
     name: null,
+    countryId: null,
     description: null,
   }
 }
 
 const addModal = ref(false);
 
-const apiUrl = URIS.PURCHASE_TYPE;
+const apiUrl = URIS.CITY;
 const dataList = ref([]);
 const data = ref(newModel())
 const selectedRow = ref();
+const countries = ref([]);
 
 // FUNCTIONS
 const onAdd = () => {
@@ -58,9 +75,12 @@ const onAdd = () => {
   addModal.value = true;
 }
 const onEdit = (d) => {
+
   data.value = {
     id: d.id,
     name: d.name,
+    countryId: d?.country.id,
+    description: d.description,
   };
 
   addModal.value = true;
@@ -111,9 +131,19 @@ function getData() {
   });
 }
 
+function getCountry() {
+  axiosIns.get(URIS.COUNTRY)
+      .then(res => {
+        countries.value = res.data.data;
+      }).catch(e => {
+    showMessage(e)
+  });
+}
+
 // HOOKS
 onMounted(() => {
   getData();
+  getCountry();
 })
 
 </script>
@@ -133,7 +163,7 @@ onMounted(() => {
             class="mdi mdi-delete"></span> {{ t("delete") }}
         </button>
 
-        <div class="align-items-center" style="right: 2px; margin-left: auto">
+        <div class="align-items-center u-end">
           <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
         </div>
       </div>
@@ -143,6 +173,9 @@ onMounted(() => {
       <template #row_created="{row}">
         <td>{{ longToDateTime(row?.created) }}</td>
       </template>
+      <template #row_country="{row}">
+        <td>{{ row?.country.name }}</td>
+      </template>
     </UTable>
   </div>
 
@@ -151,7 +184,7 @@ onMounted(() => {
       <template #header>
         <div class="d-flex" style="width: 100%">
           <div class="text-dark">
-            {{ data.id ? t('edit') : t('add') }} {{ t('purchase_type') }}
+            {{ data.id ? t('edit') : t('add') }} {{ t('city') }}
           </div>
           <div class="text-end u-end">
             <button class="btn-close" @click="onClose"></button>
@@ -167,6 +200,16 @@ onMounted(() => {
               <UInput v-model="data.name" :label="t('name')" :hint="t('name')" :name="t('name')"
                       :placeholder="t('enter_status_name')" classes="mb-3"
                       :rules="(val) => (!val && $t('required'))"/>
+            </div>
+
+            <!--            customer-->
+            <div class="col-12">
+              <USelect v-model="data.countryId" :label="t('countries')"
+                       :items="countries" name="country"
+                       option_name="name"
+                       classes="mb-3"
+                       :rules="(val) => (!val && $t('required'))"
+              ></USelect>
             </div>
           </div>
 

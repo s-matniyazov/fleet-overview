@@ -261,7 +261,7 @@ async function fetchData() {
           <div class="text-dark">
             {{ data.id ? t('edit') : t('add') }} {{ t('employer') }}
           </div>
-          <div class="text-end" style="right: 0; margin-left: auto">
+          <div class="text-end u-end">
             <button class="btn-close" @click="onClose"></button>
           </div>
         </div>

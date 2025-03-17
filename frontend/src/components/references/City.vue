@@ -156,7 +156,7 @@ onMounted(() => {
             class="mdi mdi-delete"></span> {{ t("delete") }}
         </button>
 
-        <div class="align-items-center" style="right: 2px; margin-left: auto">
+        <div class="align-items-center u-end">
           <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
         </div>
       </div>
@@ -179,7 +179,7 @@ onMounted(() => {
           <div class="text-dark">
             {{ data.id ? t('edit') : t('add') }} {{ t('city') }}
           </div>
-          <div class="text-end" style="right: 0; margin-left: auto">
+          <div class="text-end u-end">
             <button class="btn-close" @click="onClose"></button>
           </div>
         </div>

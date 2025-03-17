@@ -11,7 +11,9 @@ const routes = [
             {path: '/dashboard', name: "Dashboard", meta: {requiresAuth: true}, component: import('@/components/Dashboard.vue')},
 
             // fleet
-            {path: '/fleet-compliance', name: "Fleet Compliance", meta: {requiresAuth: true}, component: import('@/components/fleet/FleetCompliance.vue')},
+            {
+                path: '/fleet-compliance', name: "Fleet Compliance", meta: {requiresAuth: true}, component: import('@/components/fleet/FleetCompliance.vue'),
+            },
             {path: '/fleet-overview', name: "Fleet Overview", meta: {requiresAuth: true}, component: import('@/components/fleet/FleetOverview.vue')},
             {path: '/maintenance', name: "Maintenance", meta: {requiresAuth: true}, component: import('@/components/fleet/Maintenance.vue')},
 

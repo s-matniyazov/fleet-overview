@@ -764,7 +764,7 @@ progress {
 }
 
 .row {
-    --bs-gutter-x: 1.5rem;
+    --bs-gutter-x: 1rem;
     --bs-gutter-y: 0;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -6539,15 +6539,15 @@ textarea.form-control-lg {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    padding: var(--bs-modal-header-padding);
+    /*padding: var(--bs-modal-header-padding);*/
     border-bottom: var(--bs-modal-header-border-width) solid var(--bs-modal-header-border-color);
     border-top-left-radius: var(--bs-modal-inner-border-radius);
     border-top-right-radius: var(--bs-modal-inner-border-radius)
 }
 
 .modal-header .btn-close {
-    padding: calc(var(--bs-modal-header-padding-y) * .5) calc(var(--bs-modal-header-padding-x) * .5);
-    margin: calc(-.5 * var(--bs-modal-header-padding-y)) calc(-.5 * var(--bs-modal-header-padding-x)) calc(-.5 * var(--bs-modal-header-padding-y)) auto
+    /*padding: calc(var(--bs-modal-header-padding-y) * .5) calc(var(--bs-modal-header-padding-x) * .5);*/
+    /*margin: calc(-.5 * var(--bs-modal-header-padding-y)) calc(-.5 * var(--bs-modal-header-padding-x)) calc(-.5 * var(--bs-modal-header-padding-y)) auto*/
 }
 
 .modal-title {

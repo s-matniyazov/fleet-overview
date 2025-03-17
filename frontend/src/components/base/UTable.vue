@@ -69,7 +69,7 @@ const onRowClick = (row) => {
 
 
     <div class="col-12 d-flex px-2" style="margin-top: auto; bottom: 0; height: 60px">
-      <div class="d-flex align-items-center gap-2" style="right: 0; margin-left: auto">
+      <div class="d-flex align-items-center gap-2 u-end">
         <ul class="pagination pagination-sm ul-style">
           <li class="page-item cursor-pointer"><a class="page-link">&laquo;</a></li>
           <li class="page-item active cursor-not-allowed"><a class="page-link">1</a></li>
