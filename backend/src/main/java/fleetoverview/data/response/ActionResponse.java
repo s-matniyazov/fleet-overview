@@ -5,6 +5,10 @@ package fleetoverview.data.response;
  * @mailto :  sardorbekmatniyazov03@gmail.com
  * @created : 28 янв. 2025
  **/
+/**
+ * instead of use specific methods of ApiResponse
+* */
+@Deprecated
 public class ActionResponse extends ApiResponse {
     private final String actionMessage;
     private final int actionCode;

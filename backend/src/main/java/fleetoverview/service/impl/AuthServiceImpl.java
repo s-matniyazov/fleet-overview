@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
                 return DataResponse.success(jwtService.generateToken(user));
             }
         }
-        return new ActionResponse(400, "NO No no", "there is no tomarrow", 34);
+        return ApiResponse.badRequest("there is no tomorrow");
     }
 
     @Override

@@ -1,10 +1,7 @@
 package fleetoverview.domain.entity;
 
 import fleetoverview.domain.entity.base.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 /**
  * @author :  Sardor Matniyazov
@@ -12,7 +9,7 @@ import jakarta.persistence.Table;
  * @created : 13 март 2025
  **/
 @Entity
-@Table(name = "cities")
+@Table(name = "cities", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "country_id" }) })
 public class CityEntity extends BaseEntity {
     @Column(length = 50)
     private String name;

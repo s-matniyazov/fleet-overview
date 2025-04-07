@@ -8,6 +8,7 @@ import fleetoverview.repository.CityRepository;
 import fleetoverview.repository.CountryRepository;
 import fleetoverview.service.CityService;
 import fleetoverview.service.base.BaseService;
+import fleetoverview.util.exceptions.ExistsException;
 import fleetoverview.util.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,12 +39,17 @@ public class CityServiceImpl extends BaseService implements CityService {
 
     @Override
     public ApiResponse post(CityRequest data) {
+        repository.findByNameAndCountry_Id(data.name(), data.countryId()).ifPresent((city) -> {
+            throw new ExistsException(mSourceBundle.apply("city.found"));
+        });
+
         repository.save(
                 new CityEntity(
                         data.name(),
                         countryRepository.findById(data.countryId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("country.not_found")))
                 )
         );
+
         return ApiResponse.success();
     }
 

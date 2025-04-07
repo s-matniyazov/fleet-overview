@@ -1,5 +1,7 @@
 package fleetoverview.config.filters;
 
+import fleetoverview.domain.entity.RoleEntity;
+import fleetoverview.repository.RoleRepository;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
@@ -8,6 +10,7 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,13 +33,16 @@ import java.util.Optional;
 public class AuthorizationFilter implements Filter {
     private final Logger log = LoggerFactory.getLogger(AuthorizationFilter.class);
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final JwtService jwtService;
 
-    public AuthorizationFilter(UserRepository userRepository, JwtService jwtService) {
+    public AuthorizationFilter(UserRepository userRepository, RoleRepository roleRepository, JwtService jwtService) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.jwtService = jwtService;
     }
 
+    @Transactional
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         log.info("doFilter {}", AuthorizationFilter.class.getName());
@@ -61,9 +67,16 @@ public class AuthorizationFilter implements Filter {
         if (byUsername.isPresent()) {
             UserEntity user = byUsername.get();
 
-            SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities())
-            );
+            RoleEntity roleWithActions = roleRepository.findRoleWithActions(user.getRole().getId());
+            if (roleWithActions != null) {
+                user.setRole(roleWithActions);
+            }
+
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
+                    user,
+                    null,
+                    user.getRole().getRoleActions()
+            ));
         } else {
             log.error("Invalid JWT token");
             unSuccess(response);
@@ -86,6 +99,6 @@ public class AuthorizationFilter implements Filter {
     private void unSuccess(HttpServletResponse response) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
-        response.getWriter().write("Unauthorized");
+        response.getWriter().write("{\"message\":\"Unauthorized\"}");
     }
 }

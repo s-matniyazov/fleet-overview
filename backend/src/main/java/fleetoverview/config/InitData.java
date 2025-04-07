@@ -1,5 +1,10 @@
 package fleetoverview.config;
 
+import fleetoverview.domain.entity.ActionEntity;
+import fleetoverview.domain.entity.OwnershipTypeEntity;
+import fleetoverview.domain.entity.enums.ActionTypesEnum;
+import fleetoverview.repository.ActionRepository;
+import fleetoverview.repository.OwnershipTypeRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -10,6 +15,10 @@ import fleetoverview.repository.UserRepository;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static fleetoverview.util.helper.Utils.getUrls;
 
 /**
  * @author :  sardor.matniyazov
@@ -19,16 +28,40 @@ import java.util.List;
 @Component
 public class InitData implements CommandLineRunner {
 
-    public InitData(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository) {
+        this.actionRepository = actionRepository;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.ownershipTypeRepository = ownershipTypeRepository;
     }
 
     @Override
     public void run(String... args) {
+        initActions();
         initRoles();
         initUsers();
+        initOwnershipTypes();
+    }
+
+    private final ActionRepository actionRepository;
+    private Set<ActionEntity> actions = new HashSet<>();
+    private void initActions() {
+        if (!actionRepository.existsByUrl("/api")) {
+            actions = new HashSet<>(actionRepository.saveAll(
+                    getUrls().stream()
+                            .map(it -> {
+                                String[] split = it.split("/");
+                                return new ActionEntity(
+                                        split[split.length - 1],
+                                        split[split.length - 1],
+                                        it,
+                                        ActionTypesEnum.ACTION
+                                );
+                            })
+                            .collect(Collectors.toSet())
+            ));
+        }
     }
 
     private final RoleRepository roleRepository;
@@ -39,12 +72,12 @@ public class InitData implements CommandLineRunner {
                             new RoleEntity(
                                     "ADMIN",
                                     "admin",
-                                    new HashSet<>()
+                                    actions
                             ),
                             new RoleEntity(
                                     "USER",
                                     "user",
-                                    new HashSet<>()
+                                    actions
                             )
                     )
             );
@@ -64,6 +97,19 @@ public class InitData implements CommandLineRunner {
                                     "kuchukcha@gmail.com",
                                     roleRepository.getReferenceById(1)
                             )
+                    )
+            );
+        }
+    }
+
+    private final OwnershipTypeRepository ownershipTypeRepository;
+    private void initOwnershipTypes() {
+        if (ownershipTypeRepository.existsById(1)) {
+            ownershipTypeRepository.saveAll(
+                    List.of(
+                            new OwnershipTypeEntity("Company"),
+                            new OwnershipTypeEntity("Owner Operator's"),
+                            new OwnershipTypeEntity("Contractor Owned")
                     )
             );
         }

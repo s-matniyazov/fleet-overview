@@ -120,15 +120,8 @@ onMounted(() => {
   <div class="mb-0 p-2">
     <div class="col-12">
       <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
-        <button @click="onAdd" class="btn btn-primary btn-sm"><span class="mdi mdi-plus"></span> {{
-            t("add")
-          }}
-        </button>
         <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
             class="mdi mdi-pen"></span> {{ t("edit") }}
-        </button>
-        <button @click="onDelete(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-            class="mdi mdi-delete"></span> {{ t("delete") }}
         </button>
 
         <div class="align-items-center" style="right: 2px; margin-left: auto">
@@ -137,7 +130,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <UTable :items="dataList" :columns="columns" v-model="selectedRow" styles="height: calc(100vh - 296px)">
+    <UTable :items="dataList" :columns="columns" v-model="selectedRow" styles="height: calc(100vh - 141px)">
       <template #row_created="{row}">
         <td>{{ longToDateTime(row?.created) }}</td>
       </template>

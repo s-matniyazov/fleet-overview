@@ -19,7 +19,7 @@ const tooltipVisible = ref(false);
 
     <slot></slot> <!-- Button or any element -->
 
-    <div v-if="tooltipVisible" class="tooltip" :class="position">
+    <div v-if="tooltipVisible" class="tooltip bg-primary-subtle text-primary" :class="position">
       <slot name="content"></slot> <!-- Tooltip text -->
     </div>
   </div>

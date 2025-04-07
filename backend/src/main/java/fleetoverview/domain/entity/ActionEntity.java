@@ -15,7 +15,7 @@ import fleetoverview.domain.entity.enums.ActionTypesEnum;
  **/
 
 @Entity
-@Table(name = "ts_actions")
+@Table(name = "actions")
 public class ActionEntity extends BaseEntity implements GrantedAuthority {
     private String name;
     private String description;

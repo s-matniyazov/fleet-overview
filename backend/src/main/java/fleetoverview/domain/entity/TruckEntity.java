@@ -1,12 +1,13 @@
 package fleetoverview.domain.entity;
 
 import fleetoverview.domain.entity.base.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import fleetoverview.domain.entity.enums.TruckStatusEnum;
+import fleetoverview.domain.listener.TruckListener;
+import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author :  Sardor Matniyazov
@@ -15,6 +16,7 @@ import java.sql.Date;
  **/
 @Entity
 @Table(name = "trucks")
+@EntityListeners(TruckListener.class)
 public class TruckEntity extends BaseEntity {
     @Column(length = 50)
     private String unit;
@@ -44,6 +46,12 @@ public class TruckEntity extends BaseEntity {
 
     @Column(length = 4000)
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    private TruckStatusEnum status = TruckStatusEnum.ACTIVE;
+
+    @OneToMany(mappedBy = "truck", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<TruckFileEntity> files = new HashSet<>();
 
     public TruckEntity() {
     }
@@ -187,5 +195,21 @@ public class TruckEntity extends BaseEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public TruckStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(TruckStatusEnum status) {
+        this.status = status;
+    }
+
+    public Set<TruckFileEntity> getFiles() {
+        return files;
+    }
+
+    public void setFiles(Set<TruckFileEntity> files) {
+        this.files = files;
     }
 }

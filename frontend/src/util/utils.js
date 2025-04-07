@@ -4,13 +4,15 @@ import useUserStore from "@/store/UserStore.js";
 
 // toast store access
 const toasterStore = useToasterStore();
-export function showMessage(message) {
-    if (message?.actionCode > 0 || !message?.actionCode) {
-        toasterStore.error({ text: message?.actionMessage ? message.actionMessage : message })
-    } else if (message?.actionCode >= 0) {
-        toasterStore.warning({ text: message?.actionMessage ? message.actionMessage : message })
+export function showMessage(error) {
+    console.log(error)
+    const msg = error?.response?.data?.message, status = error?.response?.data?.status;
+    if (status === 500) {
+        toasterStore.error({ text: msg ? msg : error })
+    } else if (status === 400) {
+        toasterStore.warning({ text: msg ? msg : error })
     } else {
-        toasterStore.success({ text: message?.actionMessage ? message.actionMessage : message })
+        toasterStore.success({ text: msg ? msg : error })
     }
 }
 // loader store access

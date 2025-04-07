@@ -5469,3 +5469,19 @@ body[data-layout=horizontal] .chat-conversation {
 .u-end {
     right: 2px; margin-left: auto;
 }
+
+.f-700 {
+    font-weight: 700;
+}
+
+.f-500 {
+    font-weight: 500;
+}
+
+.text-gray-light {
+    color: #89909c;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

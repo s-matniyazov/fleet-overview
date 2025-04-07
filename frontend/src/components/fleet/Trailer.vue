@@ -36,13 +36,6 @@ const columns = [
     classes: '',
   },
   {
-    key: 'name',
-    name: 'name',
-    label: t('name'),
-    styles: 'width: 400px;',
-    classes: '',
-  },
-  {
     key: 'created',
     name: 'created',
     label: t('created'),
@@ -169,7 +162,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <UTable :items="dataList" :columns="columns" v-model="selectedRow" styles="height: calc(100vh - 296px)">
+    <UTable :items="dataList" :columns="columns" v-model="selectedRow" styles="height: calc(100vh - 201px)">
       <template #row_created="{row}">
         <td>{{ longToDateTime(row?.created) }}</td>
       </template>
@@ -182,8 +175,8 @@ onMounted(() => {
   <Teleport to="body">
     <modal :show="addModal" @close="addModal = false">
       <template #header>
-        <div class="d-flex" style="width: 100%">
-          <div class="text-dark">
+        <div class="d-flex w-100">
+          <div>
             {{ data.id ? t('edit') : t('add') }} {{ t('city') }}
           </div>
           <div class="text-end u-end">

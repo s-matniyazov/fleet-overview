@@ -46,7 +46,6 @@ public class AuthenticationFilter implements Filter {
             unSuccess(response);
             return;
         }
-        System.out.println(authentication.getPrincipal());
 
         chain.doFilter(request, response);
     }

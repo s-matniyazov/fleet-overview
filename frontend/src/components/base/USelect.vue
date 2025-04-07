@@ -59,10 +59,9 @@ registerField(props.name, validate);
 </script>
 
 <template>
-  <div :class="`${classes} ${errorMessage && 'has-danger'}`" :style="styles">
+  <div :class="`${classes} ${errorMessage && 'has-danger'} p-1`" :style="styles">
     <label v-if="label" class="form-label">{{ label }}</label>
     <select class="form-control form-select font-size-12" v-model="selected">
-<!--      <option selected disabled> - </option>-->
       <option v-for="option in items" :value="option[option_value]">
         {{ option[option_name] }}
       </option>

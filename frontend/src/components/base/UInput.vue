@@ -8,11 +8,6 @@ const props = defineProps({
     required: false,
     default: 'input'
   },
-  type: {
-    type: String,
-    required: false,
-    default: 'text'
-  },
   label: {
     type: String,
     required: false,
@@ -61,9 +56,9 @@ registerField(props.name, validate);
 </script>
 
 <template>
-  <div :class="`${classes} ${errorMessage && 'has-danger'}`" :style="styles">
+  <div :class="`${classes} ${errorMessage && 'has-danger'} p-1`" :style="styles">
     <label class="form-label">{{ label }}</label>
-    <input class="form-control font-size-12 " :placeholder="placeholder" :type="type" :name="name"
+    <input class="form-control font-size-12" :placeholder="placeholder" type="text" :name="name"
            v-model="model">
     <div class="invalid-feedback">{{ hint }}</div>
     <p v-if="errorMessage" class="pristine-error text-help">{{ errorMessage }}</p>

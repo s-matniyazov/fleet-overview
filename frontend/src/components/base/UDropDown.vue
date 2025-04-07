@@ -1,85 +1,57 @@
 <script setup>
-import {onMounted, onUnmounted, ref} from "vue";
+import {onMounted, onUnmounted, ref, computed} from "vue";
 
-defineProps({
-  label: {
+const props = defineProps({
+  label: {type: String, default: "Select"},
+  hint: {type: String, default: "Please select item"},
+  option_name: {type: String, default: "id"},
+  option_value: {type: String, default: "id"},
+  classes: {type: String, default: ""},
+  btn_classes: {type: String, default: "btn-info waves-effect waves-light"},
+  wrapper_styles: {type: String, default: ""},
+  styles: {type: String, default: ""},
+  placement: {
     type: String,
-    required: false,
-    default: 'Select'
-  },
-  hint: {
-    type: String,
-    required: false,
-    default: 'Please select item'
-  },
-  option_name: {
-    type: String,
-    required: false,
-    default: 'id'
-  },
-  option_value: {
-    type: String,
-    required: false,
-    default: 'id'
-  },
-  classes: {
-    type: String,
-    required: false,
-    default: ''
-  },
-  btn_classes: {
-    type: String,
-    required: false,
-    default: 'btn-info waves-effect waves-light'
-  },
-  wrapper_styles: {
-    type: String,
-    required: false,
-    default: ''
-  },
-  styles: {
-    type: String,
-    required: false,
-    default: ''
-  },
-})
+    default: "right",
+    validator: (value) => ["left", "right"].includes(value)
+  }
+});
 
 const open = ref(false);
+const dropdownRef = ref(null);
 
-const dropdownRef = ref(null)
+// Compute dropdown class based on placement
+const dropdownClass = computed(() => props.placement === "left" ? "dropdown-menu-end dropdown-menu-lg-start" : "dropdown-menu-lg-end");
 
 const handleClickOutside = (event) => {
   if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
-    open.value = false
+    open.value = false;
   }
-}
+};
 
-// Attach and remove global event listeners
+// Attach event listener
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
-})
+  document.addEventListener("mousedown", handleClickOutside);
+});
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
+  document.removeEventListener("mousedown", handleClickOutside);
+});
 </script>
 
 <template>
-  <div ref="dropdownRef" class="btn-group dropend" @click="e => {e.stopPropagation(); open = !open;}">
-    <button type="button" class="btn dropdown-toggle" :class="btn_classes">
+  <div ref="dropdownRef" class="dropdown" @click.stop="open = !open">
+    <button type="button" class="btn dropdown-toggle" :class="`${btn_classes} ${open && 'show'}`" :aria-expanded="open">
       <slot name="header">
-        Drop end <i class="mdi mdi-chevron-right"></i>
+        Dropdown <i class="mdi mdi-chevron-right"></i>
       </slot>
     </button>
-    <div class="dropdown-menu" :class="open && 'show'" :style="wrapper_styles">
+    <div class="dropdown-menu" :class="`${dropdownClass} ${open && 'show'}`" :style="wrapper_styles" role="menu">
       <slot name="body">
-        <a class="dropdown-item">Action</a>
-        <a class="dropdown-item">Another action</a>
-        <a class="dropdown-item">Something else here</a>
+        <a class="dropdown-item" role="menuitem">Action</a>
+        <a class="dropdown-item" role="menuitem">Another action</a>
+        <a class="dropdown-item" role="menuitem">Something else here</a>
       </slot>
     </div>
   </div>
 </template>
-
-<style scoped>
-</style>

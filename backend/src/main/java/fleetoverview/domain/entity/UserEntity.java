@@ -22,7 +22,7 @@ import java.util.Date;
  * @created : 28 янв. 2025
  **/
 @Entity
-@Table(name = "ts_users")
+@Table(name = "users")
 public class UserEntity extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 50)
     private String username;

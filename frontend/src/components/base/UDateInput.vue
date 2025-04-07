@@ -29,6 +29,11 @@ const props = defineProps({
     default: ''
   },
   rules: Function,
+  noLabel: {
+    type: Boolean,
+    required: false,
+    default: false
+  }
 })
 
 const model = defineModel({});
@@ -57,8 +62,8 @@ registerField(props.name, validate);
 </script>
 
 <template>
-  <div :class="`${classes} ${errorMessage && 'has-danger'}`" :style="styles">
-    <label for="date-label" class="form-label">{{ label }}</label>
+  <div :class="`${classes} ${errorMessage && 'has-danger'} p-1`" :style="styles">
+    <label v-if="!noLabel" for="date-label" class="form-label">{{ label }}</label>
     <input class="form-control font-size-12" type="date" v-model="inputDate" id="date-label">
     <div class="invalid-feedback">{{ hint }}</div>
     <p v-if="errorMessage" class="pristine-error text-help">{{ errorMessage }}</p>

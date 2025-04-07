@@ -16,7 +16,7 @@ import java.util.Set;
  * @created : 28 янв. 2025
  **/
 @Entity
-@Table(name = "ts_roles")
+@Table(name = "roles")
 public class RoleEntity extends BaseEntity {
     @Column(nullable = false, length = 55)
     private String name;
@@ -24,7 +24,7 @@ public class RoleEntity extends BaseEntity {
     @Column(nullable = false, length = 1000)
     private String description;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<ActionEntity> roleActions = new HashSet<>();
 
     public RoleEntity() {}

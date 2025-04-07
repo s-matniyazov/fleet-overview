@@ -31,13 +31,11 @@ import java.util.List;
 public class SecurityConfig {
     private final AuthorizationFilter authorizationFilter;
     private final AuthenticationFilter authenticationFilter;
-    private final CORSFilter corsFilter;
 
     @Autowired
-    public SecurityConfig(AuthorizationFilter authorizationFilter, AuthenticationFilter authenticationFilter, CORSFilter corsFilter) {
+    public SecurityConfig(AuthorizationFilter authorizationFilter, AuthenticationFilter authenticationFilter) {
         this.authorizationFilter = authorizationFilter;
         this.authenticationFilter = authenticationFilter;
-        this.corsFilter = corsFilter;
     }
 
     @Bean
@@ -56,7 +54,6 @@ public class SecurityConfig {
                         }
                 )
                 .httpBasic(Customizer.withDefaults())
-//                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(se -> se.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

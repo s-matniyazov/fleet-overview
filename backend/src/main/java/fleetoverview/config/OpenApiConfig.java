@@ -36,7 +36,7 @@ public class OpenApiConfig {
 
     private Info apiInfo() {
         Info info = new Info();
-        String appName = "FB-Taskwise";
+        String appName = "Fleet overview";
         info.title(appName);
         String version = "0.1";
         info.version(version);

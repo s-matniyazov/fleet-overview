@@ -1,5 +1,8 @@
 package fleetoverview.util.handler;
 
+import fleetoverview.util.exceptions.ExistsException;
+import fleetoverview.util.exceptions.FileException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,10 +25,30 @@ public class CExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final java.util.logging.Logger logger = Logger.getLogger(CExceptionHandler.class.getName());
 
-    // todo: BaseResponse should be returned
     @ExceptionHandler(value = {NotFoundException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<?> handleNotExists(NotFoundException e) {
+        logger.warning(e.getMessage());
+        return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage()));
+    }
+
+    @ExceptionHandler(value = {ExistsException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<?> handleExists(ExistsException e) {
+        logger.warning(e.getMessage());
+        return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage()));
+    }
+
+    @ExceptionHandler(value = {DataAccessException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<?> handleDBExceptions(DataAccessException e) {
+        logger.warning(e.getMessage());
+        return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage()));
+    }
+
+    @ExceptionHandler(value = {FileException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<?> handleFileExceptions(FileException e) {
         logger.warning(e.getMessage());
         return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage()));
     }

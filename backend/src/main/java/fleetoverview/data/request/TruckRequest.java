@@ -1,5 +1,7 @@
 package fleetoverview.data.request;
 
+import fleetoverview.domain.entity.enums.TruckStatusEnum;
+
 import java.sql.Date;
 
 /**
@@ -23,5 +25,6 @@ public record TruckRequest(
         boolean includeIFTA,
         int purchaseTypeId,
         int ownerOperatorId,
-        String description
+        String description,
+        TruckStatusEnum status
 ) { }
