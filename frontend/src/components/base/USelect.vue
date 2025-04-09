@@ -41,13 +41,19 @@ const props = defineProps({
     default: ''
   },
   rules: Function,
+  readonly: {
+    type: Boolean,
+    required: false,
+    default: false
+  }
 })
 
 const selected = defineModel({});
 const errorMessage = ref('');
 
 const formState = inject('formState', null);
-const registerField = inject('registerField', () => {});
+const registerField = inject('registerField', () => {
+});
 
 const validate = () => {
   errorMessage.value = props.rules ? props.rules(selected.value) : '';

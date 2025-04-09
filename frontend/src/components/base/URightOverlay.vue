@@ -3,8 +3,10 @@
     <Transition name="slide">
       <div v-if="isOpen" class="dialog-overlay">
         <div class="dialog-content">
-          <button @click="close" class="close-btn">×</button>
-          <slot></slot>
+          <slot name="header">
+            <button @click="close" class="close-btn">×</button>
+          </slot>
+          <slot name="body"></slot>
         </div>
       </div>
     </Transition>

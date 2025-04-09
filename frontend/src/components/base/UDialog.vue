@@ -1,12 +1,16 @@
 <script setup>
 defineProps({
-  show: Boolean
+  show: Boolean,
+  width: {
+    type: String,
+    default: "550px"
+  }
 })
 </script>
 <template>
   <Transition name="modal">
     <div v-if="show" class="modal-mask">
-      <div class="modal-container">
+      <div class="modal-container" :style="`width: ${width}`">
         <div class="modal-header pb-3 border-bottom-0 text-primary" style="font-weight: 1000; font-size: 16px">
           <slot name="header">
             <h5 class="modal-title">Создание</h5>
@@ -49,7 +53,6 @@ defineProps({
 }
 
 .modal-container {
-  width: 550px;
   margin: auto;
   padding: 20px 20px;
   background-color: #fff;
@@ -59,7 +62,6 @@ defineProps({
 }
 
 [data-bs-theme=dark] .modal-container {
-  width: 550px;
   margin: auto;
   padding: 20px 20px;
   background-color: rgb(0, 0, 0);

@@ -33,6 +33,11 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false
+  },
+  readonly: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 })
 
@@ -56,7 +61,7 @@ registerField(props.name, validate);
   <div :class="`${classes} ${errorMessage && 'has-danger'} p-1`" :style="styles">
     <label v-if="!noLabel" for="for-description" class="form-label">{{ label }}</label>
     <textarea class="form-control font-size-12" id="for-description" v-model="model" :placeholder="placeholder"
-              :rows="rows"></textarea>
+              :rows="rows" :readonly="readonly"></textarea>
   </div>
 </template>
 

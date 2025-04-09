@@ -21,6 +21,13 @@ import TruckFileOverlay from "@/components/fleet/TruckFileOverlay.vue";
 
 const {t} = useI18n();
 
+const FILE_TYPE_NAMES = {
+  "1": "Registration (Cab Card)",
+  "2": "Annual Inspection",
+  "3": "Physical Damage Insurance",
+  "4": "Lease Agreement"
+}
+
 const columns = [
   {
     key: 'unit_details',
@@ -116,6 +123,7 @@ const newModel = () => {
 }
 
 const addModal = ref(false);
+const showModal = ref(false);
 const selectedFileSection = ref({
   dialog: false,
   fileType: null
@@ -293,9 +301,14 @@ watch(
   <div class="mb-0 p-2">
     <div class="col-12">
       <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
-        <button @click="onAdd" class="btn btn-primary btn-sm"><span class="mdi mdi-plus"></span> {{ t("add") }}</button>
+        <button @click="onAdd" class="btn btn-primary btn-sm">
+          <span class="mdi mdi-plus"></span> {{ t("add") }}
+        </button>
         <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow">
           <span class="mdi mdi-pen"></span> {{ t("edit") }}
+        </button>
+        <button @click="showModal = true" class="btn btn-primary btn-sm" :disabled="!selectedRow">
+          <span class="mdi mdi-eye"></span>
         </button>
 
         <div class="align-items-center u-end">
@@ -367,25 +380,29 @@ watch(
 
       <template #row_registration="{row}">
         <td>
-          <TruckFileSelection name="REG (CAB CARD)" @click="(e) => {selectedRow = row; selectFileSection(1); e.stopPropagation()}"/>
+          <TruckFileSelection name="REG (CAB CARD)"
+                              @click="(e) => {selectedRow = row; selectFileSection(1); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_annual_inspection="{row}">
         <td>
-          <TruckFileSelection name="ANN INS" @click="(e) => {selectedRow = row; selectFileSection(2); e.stopPropagation()}"/>
+          <TruckFileSelection name="ANN INS"
+                              @click="(e) => {selectedRow = row; selectFileSection(2); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_physical_damage_inc="{row}">
         <td>
-          <TruckFileSelection name="PHYS DAMAGE" @click="(e) => {selectedRow = row; selectFileSection(3); e.stopPropagation()}"/>
+          <TruckFileSelection name="PHYS DAMAGE"
+                              @click="(e) => {selectedRow = row; selectFileSection(3); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_lease_agreement="{row}">
         <td>
-          <TruckFileSelection name="LEASE AGR" @click="(e) => {selectedRow = row; selectFileSection(4); e.stopPropagation()}"/>
+          <TruckFileSelection name="LEASE AGR"
+                              @click="(e) => {selectedRow = row; selectFileSection(4); e.stopPropagation()}"/>
         </td>
       </template>
 
@@ -463,7 +480,7 @@ watch(
   </div>
 
   <Teleport to="body">
-    <UDialog :show="addModal" @close="addModal = false" width="calc(100vw - 200px)">
+    <UDialog :show="addModal" @close="addModal = false" width="calc(100vw - 400px)">
       <template #header>
         <div class="d-flex w-100">
           <div class="text-primary" style="font-weight: 1000; font-size: 16px">
@@ -650,8 +667,145 @@ watch(
     </UDialog>
   </Teleport>
 
+  <Teleport to="body">
+    <UDialog :show="showModal" width="calc(100vw - 200px)">
+      <template #header>
+        <div class="d-flex w-100">
+          <div class="text-end u-end">
+            <button class="btn-close" @click="showModal = false"></button>
+          </div>
+        </div>
+      </template>
+
+      <template #body>
+        <UForm @submit="onSave">
+          <UScrollArea height="calc(100vh - 200px)">
+            <div class="row">
+              <div class="col-6 row">
+                <div class="col-12 text-primary mb-3" style="font-weight: 1000; font-size: 16px">
+                  Unit details
+                </div>
+                <!--            unit-->
+                <div class="col-12">
+                  {{ t('unit') }}: {{ selectedRow.unit }}
+                </div>
+
+                <!--            country-->
+                <div class="col-6">
+                  {{ t('countries') }}: {{ countries.find(it => it.id === selectedRow.city.country.id)?.name }}
+                </div>
+
+                <!--            city-->
+                <div class="col-6">
+                  {{ t('city') }}: {{ cities.find(it => it.id === selectedRow.city.id)?.name }}
+                </div>
+
+                <!--            inServiceDate-->
+                <div class="col-6">
+                  {{ t('inServiceDate') }}: {{ selectedRow.inServiceDate }}
+                </div>
+
+                <!--            licensePlate-->
+                <div class="col-12">
+                  {{ t('licensePlate') }}: {{ selectedRow.licensePlate }}
+                </div>
+
+                <!--            modelMaker-->
+                <div class="col-12">
+                  {{ t('modelMakers') }}: {{ makers.find(it => it.id === selectedRow.modelMaker.id)?.name }}
+                </div>
+
+                <!--            year-->
+                <div class="col-6">
+                  {{ t('year') }}: {{ selectedRow.year }}
+                </div>
+
+                <!--            fuelType-->
+                <div class="col-6">
+                  {{ t('fuelTypes') }}: {{ fuelTypes.find(it => it.id === selectedRow.fuelType.id)?.name }}
+                </div>
+
+                <!--            grossWeight-->
+                <div class="col-6">
+                  {{ t('grossWeight') }}: {{ selectedRow.grossWeight }}
+                </div>
+
+                <!--            axles-->
+                <div class="col-6">
+                  {{ t('axles') }}: {{ selectedRow.axles }}
+                </div>
+
+                <!--            vin-->
+                <div class="col-12">
+                  {{ t('vin') }}: {{ selectedRow.vin }}
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="col-12 text-primary mb-3" style="font-weight: 1000; font-size: 16px">
+                  Ownership details
+                </div>
+
+                <!--            ownershipType-->
+                <div class="col-12">
+                  {{ t('ownershipTypes') }}: {{ ownershipTypes.find(it => it.id === selectedRow.ownershipType.id)?.name }}
+                </div>
+
+                <template v-if="selectedRow.ownershipTypeId === 2">
+                  <!--            ownerOperator-->
+                  <div class="col-12">
+                    {{ t('ownerOperators') }}: {{ ownerOperators.find(it => it.id === selectedRow.ownerOperator.id)?.name }}
+                  </div>
+                </template>
+
+                <!--            includeIFTA-->
+                <div class="col-12">
+                  <UCheckbox v-model="selectedRow.includeIFTA" :label="t('Include To The IFTA')" :name="t('includeIFTA')"
+                             classes="mb-2" type="checkbox" readonly="true"
+                             :rules="(val) => (!val && $t('required'))"/>
+                </div>
+
+                <template v-if="selectedRow.ownershipTypeId === 1">
+                  <div class="col-12 text-primary my-3" style="font-weight: 1000; font-size: 16px">
+                    Other Details
+                  </div>
+
+                  <!--            purchaseType-->
+                  <div class="col-12">
+                    {{ t('purchaseTypes') }}: {{ purchaseTypes.find(it => it.id === selectedRow.purchaseType.id)?.name }}
+                  </div>
+                </template>
+
+
+                <div class="col-12 text-primary my-3" style="font-weight: 1000; font-size: 16px">
+                  Additional Notes
+                </div>
+                <!--            description-->
+                <div class="col-12">
+                  {{ t('description') }}: {{ selectedRow.description }}
+                </div>
+              </div>
+
+            </div>
+          </UScrollArea>
+        </UForm>
+      </template>
+    </UDialog>
+  </Teleport>
+
   <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
-    <TruckFileOverlay :truck-id="selectedRow.id"/>
+    <template #header>
+      <h4 class="fw-bold text-white bg-primary p-3 rounded-top d-flex">{{
+          FILE_TYPE_NAMES[selectedFileSection.fileType]
+        }}
+        <span class="text-end u-end">
+          <button class="btn-close" @click="selectedFileSection.dialog = false"></button>
+        </span>
+      </h4>
+    </template>
+    <template #body>
+      <TruckFileOverlay :truck-id="selectedRow.id" :file-type="selectedFileSection.fileType"/>
+    </template>
   </URightOverlay>
 </template>
 

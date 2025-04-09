@@ -1,7 +1,5 @@
 <template>
-  <div class="container py-4">
-    <h4 class="fw-bold text-white bg-primary p-3 rounded-top">Registration (Cab Card)</h4>
-    <p class="text-muted ms-2">(002)</p>
+  <div class="container">
 
     <!-- Upload Drop Zone -->
     <div
@@ -80,7 +78,11 @@ const props = defineProps({
   truckId: {
     type: Number,
     required: true
-  }
+  },
+  fileType: {
+    type: String,
+    required: true
+  },
 })
 
 const isDragging = ref(false);
