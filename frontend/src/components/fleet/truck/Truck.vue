@@ -15,9 +15,10 @@ import UTextarea from "@/components/base/UTextarea.vue";
 import UScrollArea from "@/components/base/UScrollArea.vue";
 import UDialog from "@/components/base/UDialog.vue";
 import UTooltip from "@/components/base/UTooltip.vue";
-import TruckFileSelection from "@/components/fleet/TruckFileSelection.vue";
+import TruckFileSelection from "@/components/fleet/truck/TruckFileSelection.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
-import TruckFileOverlay from "@/components/fleet/TruckFileOverlay.vue";
+import TruckFileOverlay from "@/components/fleet/truck/TruckFileOverlay.vue";
+import TruckCard from "@/components/fleet/truck/TruckCard.vue";
 
 const {t} = useI18n();
 
@@ -131,8 +132,8 @@ const selectedFileSection = ref({
 
 const apiUrl = URIS.TRUCK;
 const dataList = ref([]);
-const data = ref(newModel())
 const selectedRow = ref();
+const data = ref(newModel())
 
 const countries = ref([]);
 const cities = ref([]);
@@ -411,7 +412,7 @@ watch(
           <div class="qm-badge qm-badge--dim justify-content-start permit-box">
             <div class="row m-0 align-items-center ng-star-inserted">
               <div class="col-1 p-0 me-1">
-                <img src="@/assets/file-na-sm.svg"
+                <img src="../../../assets/file-na-sm.svg"
                      alt="File checked icon"
                      class="ng-star-inserted"/>
               </div>
@@ -425,7 +426,7 @@ watch(
             </div>
             <div class="row m-0 align-items-center ng-star-inserted">
               <div class="col-1 p-0 me-1">
-                <img src="@/assets/file-na-sm.svg"
+                <img src="../../../assets/file-na-sm.svg"
                      alt="File checked icon"
                      class="ng-star-inserted"/>
               </div>
@@ -439,7 +440,7 @@ watch(
             </div>
             <div class="row m-0 align-items-center ng-star-inserted">
               <div class="col-1 p-0 me-1">
-                <img src="@/assets/file-na-sm.svg"
+                <img src="../../../assets/file-na-sm.svg"
                      alt="File checked icon"
                      class="ng-star-inserted"/>
               </div>
@@ -453,7 +454,7 @@ watch(
             </div>
             <div class="row m-0 align-items-center ng-star-inserted">
               <div class="col-1 p-0 me-1">
-                <img src="@/assets/file-na-sm.svg"
+                <img src="../../../assets/file-na-sm.svg"
                      alt="File checked icon"
                      class="ng-star-inserted">
               </div>
@@ -479,6 +480,7 @@ watch(
     </UTable>
   </div>
 
+  <!--  truck modal-->
   <Teleport to="body">
     <UDialog :show="addModal" @close="addModal = false" width="calc(100vw - 400px)">
       <template #header>
@@ -667,10 +669,12 @@ watch(
     </UDialog>
   </Teleport>
 
+  <!--  truck card-->
   <Teleport to="body">
     <UDialog :show="showModal" width="calc(100vw - 200px)">
       <template #header>
         <div class="d-flex w-100">
+          Truck Card
           <div class="text-end u-end">
             <button class="btn-close" @click="showModal = false"></button>
           </div>
@@ -678,117 +682,9 @@ watch(
       </template>
 
       <template #body>
-        <UForm @submit="onSave">
-          <UScrollArea height="calc(100vh - 200px)">
-            <div class="row">
-              <div class="col-6 row">
-                <div class="col-12 text-primary mb-3" style="font-weight: 1000; font-size: 16px">
-                  Unit details
-                </div>
-                <!--            unit-->
-                <div class="col-12">
-                  {{ t('unit') }}: {{ selectedRow.unit }}
-                </div>
-
-                <!--            country-->
-                <div class="col-6">
-                  {{ t('countries') }}: {{ countries.find(it => it.id === selectedRow.city.country.id)?.name }}
-                </div>
-
-                <!--            city-->
-                <div class="col-6">
-                  {{ t('city') }}: {{ cities.find(it => it.id === selectedRow.city.id)?.name }}
-                </div>
-
-                <!--            inServiceDate-->
-                <div class="col-6">
-                  {{ t('inServiceDate') }}: {{ selectedRow.inServiceDate }}
-                </div>
-
-                <!--            licensePlate-->
-                <div class="col-12">
-                  {{ t('licensePlate') }}: {{ selectedRow.licensePlate }}
-                </div>
-
-                <!--            modelMaker-->
-                <div class="col-12">
-                  {{ t('modelMakers') }}: {{ makers.find(it => it.id === selectedRow.modelMaker.id)?.name }}
-                </div>
-
-                <!--            year-->
-                <div class="col-6">
-                  {{ t('year') }}: {{ selectedRow.year }}
-                </div>
-
-                <!--            fuelType-->
-                <div class="col-6">
-                  {{ t('fuelTypes') }}: {{ fuelTypes.find(it => it.id === selectedRow.fuelType.id)?.name }}
-                </div>
-
-                <!--            grossWeight-->
-                <div class="col-6">
-                  {{ t('grossWeight') }}: {{ selectedRow.grossWeight }}
-                </div>
-
-                <!--            axles-->
-                <div class="col-6">
-                  {{ t('axles') }}: {{ selectedRow.axles }}
-                </div>
-
-                <!--            vin-->
-                <div class="col-12">
-                  {{ t('vin') }}: {{ selectedRow.vin }}
-                </div>
-              </div>
-
-              <div class="col-6">
-                <div class="col-12 text-primary mb-3" style="font-weight: 1000; font-size: 16px">
-                  Ownership details
-                </div>
-
-                <!--            ownershipType-->
-                <div class="col-12">
-                  {{ t('ownershipTypes') }}: {{ ownershipTypes.find(it => it.id === selectedRow.ownershipType.id)?.name }}
-                </div>
-
-                <template v-if="selectedRow.ownershipTypeId === 2">
-                  <!--            ownerOperator-->
-                  <div class="col-12">
-                    {{ t('ownerOperators') }}: {{ ownerOperators.find(it => it.id === selectedRow.ownerOperator.id)?.name }}
-                  </div>
-                </template>
-
-                <!--            includeIFTA-->
-                <div class="col-12">
-                  <UCheckbox v-model="selectedRow.includeIFTA" :label="t('Include To The IFTA')" :name="t('includeIFTA')"
-                             classes="mb-2" type="checkbox" readonly="true"
-                             :rules="(val) => (!val && $t('required'))"/>
-                </div>
-
-                <template v-if="selectedRow.ownershipTypeId === 1">
-                  <div class="col-12 text-primary my-3" style="font-weight: 1000; font-size: 16px">
-                    Other Details
-                  </div>
-
-                  <!--            purchaseType-->
-                  <div class="col-12">
-                    {{ t('purchaseTypes') }}: {{ purchaseTypes.find(it => it.id === selectedRow.purchaseType.id)?.name }}
-                  </div>
-                </template>
-
-
-                <div class="col-12 text-primary my-3" style="font-weight: 1000; font-size: 16px">
-                  Additional Notes
-                </div>
-                <!--            description-->
-                <div class="col-12">
-                  {{ t('description') }}: {{ selectedRow.description }}
-                </div>
-              </div>
-
-            </div>
-          </UScrollArea>
-        </UForm>
+        <UScrollArea height="calc(100vh - 200px)">
+          <TruckCard :data="selectedRow"/>
+        </UScrollArea>
       </template>
     </UDialog>
   </Teleport>

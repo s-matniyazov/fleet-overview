@@ -13,9 +13,8 @@ const activeTab = defineModel()
 <template>
   <ul class="nav nav-tabs">
     <li class="nav-item" v-for="tab in tabs" @click="activeTab = tab.key">
-      <button class="nav-link btn-default" :class="activeTab === tab.key && 'active'">
-        <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-        <span class="d-none d-sm-block">{{ tab.name }}</span>
+      <button class="nav-link btn-default" :class="activeTab === tab.key ? 'active' : 'bg-light'">
+        <span class="d-none d-sm-block  fw-bold"> {{ tab.name }} </span>
       </button>
     </li>
   </ul>

@@ -2,8 +2,7 @@
 import {onMounted, ref} from "vue";
 
 import {useI18n} from "vue-i18n";
-import {useRouterStore} from "@/store/RouterStore.js";
-import Truck from "@/components/fleet/Truck.vue";
+import Truck from "@/components/fleet/truck/Truck.vue";
 import TabPanels from "@/components/base/UTabPanels.vue";
 import Tabs from "@/components/base/UTabs.vue";
 import Trailer from "@/components/fleet/Trailer.vue";

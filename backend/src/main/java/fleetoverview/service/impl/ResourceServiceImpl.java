@@ -4,11 +4,17 @@ import fleetoverview.domain.entity.ResourceEntity;
 import fleetoverview.repository.ResourceRepository;
 import fleetoverview.service.ResourceService;
 import fleetoverview.util.exceptions.FileException;
+import fleetoverview.util.exceptions.NotFoundException;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,6 +34,21 @@ public class ResourceServiceImpl implements ResourceService {
     @Autowired
     public ResourceServiceImpl(ResourceRepository repository) {
         this.repository = repository;
+    }
+
+    @Override
+    public void downloadResource(Integer id, HttpServletResponse response) {
+        ResourceEntity resource = repository.findById(id).orElseThrow(() -> new NotFoundException("file.not_found"));
+
+        response.setContentType(resource.getContentType());
+
+        try {
+            File file = new File(resource.getPath());
+
+            FileCopyUtils.copy(new FileInputStream(file), response.getOutputStream());
+        } catch (IOException e) {
+            throw new NotFoundException("system.file.not_found");
+        }
     }
 
     @Transactional

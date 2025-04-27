@@ -1,6 +1,7 @@
 package fleetoverview.service;
 
 import fleetoverview.domain.entity.ResourceEntity;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @created : 23 март 2025
  **/
 public interface ResourceService {
+    void downloadResource(Integer id, HttpServletResponse response);
     ResourceEntity createResource(MultipartFile file);
     void removeResource(ResourceEntity resource);
 }

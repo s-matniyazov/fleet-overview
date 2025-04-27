@@ -8,6 +8,7 @@ package fleetoverview.util.constants;
 public interface UriConstants {
     String API = "/api";
     String AUTH = "/api/auth";
+    String RESOURCES = "/api/resources";
 
     String USERS = API + "/users";
     String ROLES = API + "/roles";
