@@ -1,5 +1,6 @@
 package fleetoverview.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fleetoverview.domain.entity.base.BaseIdEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -15,6 +16,7 @@ public class ResourceEntity extends BaseIdEntity {
     private String fileName;
     private String extension;
     private Long size;
+    @JsonIgnore
     private String path;
     private String contentType;
 

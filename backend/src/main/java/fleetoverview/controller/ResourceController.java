@@ -1,4 +1,4 @@
-package fleetoverview;
+package fleetoverview.controller;
 
 import fleetoverview.controller.base.BaseController;
 import fleetoverview.service.ResourceService;

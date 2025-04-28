@@ -2,6 +2,8 @@ export const URIS = {
     LOGIN: '/auth/login',
     UNLOCK: '/auth/unlock',
 
+    RESOURCES: '/resources',
+
     //tasks
 
     CLIENTS: 'clients',
