@@ -46,13 +46,6 @@ const columns = [
     classes: '',
   },
   {
-    key: 'status',
-    name: 'status',
-    label: t('status'),
-    styles: '',
-    classes: '',
-  },
-  {
     key: 'actions',
     name: 'actions',
     label: t('actions'),
@@ -66,12 +59,12 @@ const selectedRow = ref();
 function downloadDoc(row) {
   axiosIns.get(URIS.RESOURCES + '/view/' + row.id)
       .then(res => {
-        const link = document.createElement('a');
-        link.href = res.data;
-        link.download = row.fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        const blob = new Blob([res.data], { type: row.contentType })
+        const link = document.createElement('a')
+        link.href = URL.createObjectURL(blob)
+        link.download = row.fileName
+        link.click()
+        URL.revokeObjectURL(link.href)
       }).catch(e => {
     showMessage(e)
   });
@@ -81,7 +74,7 @@ function downloadDoc(row) {
 
 <template>
   <div class="mb-0 p-2">
-    <UTable :items="data.files" :columns="columns" v-model="selectedRow" height="calc(100vh - 348px)">
+    <UTable :items="data.files" :columns="columns" v-model="selectedRow" height="calc(100vh - 348px)" hide-pagination>
       <template #row_actions="{row}">
         <td>
           <button @click="downloadDoc(row?.resource)" class="btn btn-primary btn-sm">

@@ -32,6 +32,11 @@ const props = defineProps({
     type: String,
     required: false,
     default: 'height: calc(100vh - 328px)'
+  },
+  hidePagination: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 })
 
@@ -76,7 +81,7 @@ const onRowClick = (row) => {
       </UScrollArea>
     </div>
 
-    <div class="col-12 d-flex align-items-center px-2">
+    <div v-if="!hidePagination" class="col-12 d-flex align-items-center px-2">
       <div class="d-flex align-items-center gap-2" style="right: 0; margin-left: auto">
         <ul class="pagination pagination-sm ul-style">
           <li class="page-item cursor-pointer"><a class="page-link">&laquo;</a></li>
