@@ -296,6 +296,13 @@ watch(
     }
 )
 
+watch(
+    () => selectedFileSection.value.dialog,
+    function (newValue) {
+      if (!newValue) getData()
+    }
+)
+
 </script>
 
 <template>

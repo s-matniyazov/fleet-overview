@@ -128,7 +128,6 @@ const removeFile = (index) => {
 const saveFile = (index) => {
   const fileIn = uploads.value[index]
 
-
   const data = {
     truckId: fileIn.truckId,
     description: fileIn.description,
@@ -141,8 +140,6 @@ const saveFile = (index) => {
 
   axiosIns.post(URIS.TRUCK + "/attach-file", formData)
       .then(res => {
-        console.log(res)
-
         removeFile(index);
       }).catch(e => {
         showMessage(e)

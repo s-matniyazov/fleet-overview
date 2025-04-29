@@ -39,6 +39,20 @@ const columns = [
     classes: '',
   },
   {
+    key: 'file_name',
+    name: 'file_name',
+    label: t('file_name'),
+    styles: 'width: 200px;',
+    classes: '',
+  },
+  {
+    key: 'file_size',
+    name: 'file_size',
+    label: t('file_size'),
+    styles: 'width: 200px;',
+    classes: '',
+  },
+  {
     key: 'operated_by',
     name: 'operated_by',
     label: t('operated_by'),
@@ -57,8 +71,11 @@ const columns = [
 const selectedRow = ref();
 
 function downloadDoc(row) {
-  axiosIns.get(URIS.RESOURCES + '/view/' + row.id)
+  axiosIns.get(URIS.RESOURCES + '/view/' + row.id, {
+    responseType: 'blob',
+  })
       .then(res => {
+        console.log(row);
         const blob = new Blob([res.data], { type: row.contentType })
         const link = document.createElement('a')
         link.href = URL.createObjectURL(blob)
@@ -70,11 +87,28 @@ function downloadDoc(row) {
   });
 }
 
+const formatSize = (size) => {
+  return (size / 1024).toFixed(2) + ' KB';
+};
+
 </script>
 
 <template>
   <div class="mb-0 p-2">
     <UTable :items="data.files" :columns="columns" v-model="selectedRow" height="calc(100vh - 348px)" hide-pagination>
+
+      <template #row_file_name="{row}">
+        <td>
+          {{row.resource.fileName}}
+        </td>
+      </template>
+
+      <template #row_file_size="{row}">
+        <td>
+          {{ formatSize(row.resource.size)}}
+        </td>
+      </template>
+
       <template #row_actions="{row}">
         <td>
           <button @click="downloadDoc(row?.resource)" class="btn btn-primary btn-sm">

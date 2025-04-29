@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script type="module" src="/@id/virtual:vue-devtools-path:overlay.js"></script>
+  <script type="module" src="/@id/virtual:vue-inspector-path:load.js"></script>
+
+  <script type="module" src="/@vite/client"></script>
+
+    <meta charset="UTF-8"/>
+    <link rel="icon" href="/src/assets/logo.png">
+    <title>Fleet</title>
+</head>
+<body>
+<div id="app"></div>
+<script type="module" src="/src/main.js?t=1745807194552"></script>
+</body>
+</html>
