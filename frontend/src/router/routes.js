@@ -2,6 +2,7 @@
 
 const routes = [
     {path: '/login', name: "Login", meta: {requiresAuth: false}, component: import('@/layouts/LoginLayout.vue')},
+    {path: '/company', name: "Company", meta: {requiresAuth: true}, component: import('@/components/company/Company.vue')},
     {
         path: '/',
         meta: {requiresAuth: false},
@@ -17,9 +18,10 @@ const routes = [
             {path: '/fleet-overview', name: "Fleet Overview", meta: {requiresAuth: true}, component: import('@/components/fleet/FleetOverview.vue')},
             {path: '/maintenance', name: "Maintenance", meta: {requiresAuth: true}, component: import('@/components/fleet/Maintenance.vue')},
 
+
             // references
             {path: '/country', name: "Country", meta: {requiresAuth: true}, component: import('@/components/references/Country.vue')},
-            {path: '/city', name: "City", meta: {requiresAuth: true}, component: import('@/components/references/City.vue')},
+            {path: '/city', name: "States", meta: {requiresAuth: true}, component: import('@/components/references/City.vue')},
             {path: '/fuel-type', name: "Fuel Type", meta: {requiresAuth: true}, component: import('@/components/references/FuelType.vue')},
             {path: '/model-maker', name: "Model Maker", meta: {requiresAuth: true}, component: import('@/components/references/ModelMaker.vue')},
             {path: '/owner-operator', name: "Owner Operator", meta: {requiresAuth: true}, component: import('@/components/references/OwnerOperator.vue')},
