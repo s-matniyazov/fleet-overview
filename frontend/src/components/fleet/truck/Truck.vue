@@ -15,7 +15,7 @@ import UTextarea from "@/components/base/UTextarea.vue";
 import UScrollArea from "@/components/base/UScrollArea.vue";
 import UDialog from "@/components/base/UDialog.vue";
 import UTooltip from "@/components/base/UTooltip.vue";
-import TruckFileSelection from "@/components/fleet/truck/TruckFileSelection.vue";
+import TruckFileMiniCard from "@/components/fleet/truck/TruckFileMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
 import TruckFileOverlay from "@/components/fleet/truck/TruckFileOverlay.vue";
 import TruckCard from "@/components/fleet/truck/TruckCard.vue";
@@ -388,28 +388,28 @@ watch(
 
       <template #row_registration="{row}">
         <td>
-          <TruckFileSelection name="REG (CAB CARD)"
+          <TruckFileMiniCard name="REG (CAB CARD)"
                               @click="(e) => {selectedRow = row; selectFileSection(1); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_annual_inspection="{row}">
         <td>
-          <TruckFileSelection name="ANN INS"
+          <TruckFileMiniCard name="ANN INS"
                               @click="(e) => {selectedRow = row; selectFileSection(2); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_physical_damage_inc="{row}">
         <td>
-          <TruckFileSelection name="PHYS DAMAGE"
+          <TruckFileMiniCard name="PHYS DAMAGE"
                               @click="(e) => {selectedRow = row; selectFileSection(3); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_lease_agreement="{row}">
         <td>
-          <TruckFileSelection name="LEASE AGR"
+          <TruckFileMiniCard name="LEASE AGR"
                               @click="(e) => {selectedRow = row; selectFileSection(4); e.stopPropagation()}"/>
         </td>
       </template>

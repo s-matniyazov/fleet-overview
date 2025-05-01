@@ -54,7 +54,7 @@
                       label="Expiration Date *"/>
         </div>
         <div class="col-md-12">
-          <UTextarea v-model="upload.comments" placeholder="Comments" :noLabel="true" rows="1"/>
+          <UTextarea v-model="upload.description" placeholder="description" :noLabel="true" rows="1"/>
         </div>
 
         <div class="mt-3 text-end">
@@ -103,7 +103,8 @@ const addFiles = (fileList) => {
       file,
       progress: 0,
       expirationDate: '',
-      comments: '',
+      description: '',
+      type: '',
       truckId: props.truckId
     };
     uploads.value.push(upload);
@@ -131,7 +132,8 @@ const saveFile = (index) => {
   const data = {
     truckId: fileIn.truckId,
     description: fileIn.description,
-    expirationDate: fileIn.expirationDate
+    expirationDate: fileIn.expirationDate,
+    type: props.fileType,
   }
 
   const formData = new FormData();

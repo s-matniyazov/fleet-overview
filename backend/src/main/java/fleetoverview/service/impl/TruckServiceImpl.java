@@ -117,9 +117,9 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         truck.getFiles().add(
                 new TruckFileEntity(
                         resource,
-                        null,
-                        "description",
-                        TruckFileTypeEnum.ANN_INS,
+                        data.expirationDate(),
+                        data.description(),
+                        data.type(),
                         truck
                 )
         );

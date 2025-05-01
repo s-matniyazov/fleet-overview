@@ -5,7 +5,7 @@ import {ref} from "vue";
 import {useI18n} from "vue-i18n";
 import axiosIns from "@/plugins/axios.js";
 import {URIS} from "@/constants/UriConstants.js";
-import {showMessage} from "@/util/utils.js";
+import {longToDate, showMessage} from "@/util/utils.js";
 
 const {t} = useI18n();
 
@@ -95,7 +95,7 @@ const formatSize = (size) => {
 
 <template>
   <div class="mb-0 p-2">
-    <UTable :items="data.files" :columns="columns" v-model="selectedRow" height="calc(100vh - 348px)" hide-pagination>
+    <UTable :items="data.files" :columns="columns" v-model="selectedRow" height="calc(100vh - 258px)" hide-pagination>
 
       <template #row_file_name="{row}">
         <td>
@@ -106,6 +106,12 @@ const formatSize = (size) => {
       <template #row_file_size="{row}">
         <td>
           {{ formatSize(row.resource.size)}}
+        </td>
+      </template>
+
+      <template #row_expiration_date="{row}">
+        <td>
+          {{ longToDate(row.expirationDate) }}
         </td>
       </template>
 
