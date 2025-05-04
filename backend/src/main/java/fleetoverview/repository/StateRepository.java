@@ -1,6 +1,6 @@
 package fleetoverview.repository;
 
-import fleetoverview.domain.entity.CityEntity;
+import fleetoverview.domain.entity.StateEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -10,6 +10,6 @@ import java.util.Optional;
  * @mailto :  sardorbekmatniyazov03@gmail.com
  * @created : 13 март 2025
  **/
-public interface CityRepository extends JpaRepository<CityEntity, Integer> {
-    Optional<CityEntity> findByNameAndCountry_Id(String name, int countryId);
+public interface StateRepository extends JpaRepository<StateEntity, Integer> {
+    Optional<StateEntity> findByNameAndState_Id(String name, int stateId);
 }

@@ -1,7 +1,7 @@
 package fleetoverview.service;
 
-import fleetoverview.data.request.CityRequest;
-import fleetoverview.domain.entity.CityEntity;
+import fleetoverview.data.request.StateRequest;
+import fleetoverview.domain.entity.StateEntity;
 import fleetoverview.service.base.CrudService;
 
 /**
@@ -9,5 +9,5 @@ import fleetoverview.service.base.CrudService;
  * @mailto :  sardorbekmatniyazov03@gmail.com
  * @created : 13 март 2025
  **/
-public interface CityService extends CrudService<CityEntity, CityRequest> {
+public interface StateService extends CrudService<StateEntity, StateRequest> {
 }

@@ -23,8 +23,8 @@ public class TruckEntity extends BaseEntity {
     private Date inServiceDate;
     @Column(length = 50)
     private String licensePlate;
-    @ManyToOne(targetEntity = CityEntity.class)
-    private CityEntity city;
+    @ManyToOne(targetEntity = StateEntity.class)
+    private StateEntity city;
     @ManyToOne(targetEntity = ModelMakerEntity.class)
     private ModelMakerEntity modelMaker;
     private Integer year;
@@ -56,7 +56,7 @@ public class TruckEntity extends BaseEntity {
     public TruckEntity() {
     }
 
-    public TruckEntity(String unit, Date inServiceDate, String licensePlate, CityEntity city, ModelMakerEntity modelMaker,
+    public TruckEntity(String unit, Date inServiceDate, String licensePlate, StateEntity city, ModelMakerEntity modelMaker,
                        Integer year, FuelTypeEntity fuelType, Double grossWeight, Integer axles, String vin,
                        OwnershipTypeEntity ownershipType, Boolean includeIFTA, PurchaseTypeEntity purchaseType,
                        OwnerOperatorEntity ownerOperator, String description) {
@@ -101,11 +101,11 @@ public class TruckEntity extends BaseEntity {
         this.licensePlate = licensePlate;
     }
 
-    public CityEntity getCity() {
+    public StateEntity getCity() {
         return city;
     }
 
-    public void setCity(CityEntity city) {
+    public void setCity(StateEntity city) {
         this.city = city;
     }
 

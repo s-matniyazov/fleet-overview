@@ -6,4 +6,4 @@ package fleetoverview.data.request;
  * @mailto :  sardorbekmatniyazov03@gmail.com
  * @created : 13 март 2025
  **/
-public record CityRequest(int id, String name, int countryId) {}
+public record StateRequest(int id, String name, int countryId) {}

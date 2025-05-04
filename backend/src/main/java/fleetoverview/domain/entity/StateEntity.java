@@ -9,17 +9,17 @@ import jakarta.persistence.*;
  * @created : 13 март 2025
  **/
 @Entity
-@Table(name = "cities", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "country_id" }) })
-public class CityEntity extends BaseEntity {
+@Table(name = "states", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "country_id" }) })
+public class StateEntity extends BaseEntity {
     @Column(length = 50)
     private String name;
     @ManyToOne(targetEntity = CountryEntity.class)
     private CountryEntity country;
 
-    public CityEntity() {
+    public StateEntity() {
     }
 
-    public CityEntity(String name, CountryEntity country) {
+    public StateEntity(String name, CountryEntity country) {
         this.name = name;
         this.country = country;
     }
