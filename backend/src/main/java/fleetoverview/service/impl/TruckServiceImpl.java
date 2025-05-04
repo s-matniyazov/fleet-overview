@@ -6,7 +6,6 @@ import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
 import fleetoverview.domain.entity.*;
 import fleetoverview.domain.entity.enums.TruckFileStatusEnum;
-import fleetoverview.domain.entity.enums.TruckFileTypeEnum;
 import fleetoverview.repository.*;
 import fleetoverview.service.ResourceService;
 import fleetoverview.service.TruckService;
@@ -16,7 +15,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,7 +32,7 @@ import java.util.Objects;
 public class TruckServiceImpl extends BaseService implements TruckService {
     private final ResourceService resourceService;
     private final TruckRepository repository;
-    private final CityRepository cityRepository;
+    private final StateRepository stateRepository;
     private final ModelMakerRepository makerRepository;
     private final FuelTypeRepository fuelTypeRepository;
     private final OwnershipTypeRepository ownershipTypeRepository;
@@ -46,12 +44,12 @@ public class TruckServiceImpl extends BaseService implements TruckService {
     private EntityManager entityManager;
 
     @Autowired
-    public TruckServiceImpl(ResourceService resourceService, TruckRepository repository, CityRepository cityRepository, ModelMakerRepository makerRepository,
+    public TruckServiceImpl(ResourceService resourceService, TruckRepository repository, StateRepository stateRepository, ModelMakerRepository makerRepository,
                             FuelTypeRepository fuelTypeRepository, OwnershipTypeRepository ownershipTypeRepository,
                             PurchaseTypeRepository purchaseTypeRepository, OwnerOperatorRepository ownerOperatorRepository, CompanyRepository companyRepository) {
         this.resourceService = resourceService;
         this.repository = repository;
-        this.cityRepository = cityRepository;
+        this.stateRepository = stateRepository;
         this.makerRepository = makerRepository;
         this.fuelTypeRepository = fuelTypeRepository;
         this.ownershipTypeRepository = ownershipTypeRepository;
@@ -93,7 +91,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
                         data.unit(),
                         data.inServiceDate(),
                         data.licensePlate(),
-                        cityRepository.findById(data.cityId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("city.not_found"))),
+                        stateRepository.findById(data.stateId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("state.not_found"))),
                         makerRepository.findById(data.modelMakerId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("maker.not_found"))),
                         data.year(),
                         fuelTypeRepository.findById(data.fuelTypeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("fuelType.not_found"))),
@@ -118,7 +116,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         truck.setUnit(data.unit());
         truck.setInServiceDate(data.inServiceDate());
         truck.setLicensePlate(data.licensePlate());
-        truck.setCity(cityRepository.findById(data.cityId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("city.not_found"))));
+        truck.setState(stateRepository.findById(data.stateId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("state.not_found"))));
         truck.setModelMaker(makerRepository.findById(data.modelMakerId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("maker.not_found"))));
         truck.setYear(data.year());
         truck.setFuelType(fuelTypeRepository.findById(data.fuelTypeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("fuelType.not_found"))));

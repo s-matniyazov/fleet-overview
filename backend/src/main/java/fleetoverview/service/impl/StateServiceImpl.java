@@ -4,13 +4,9 @@ package fleetoverview.service.impl;
 import fleetoverview.data.request.StateRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
-<<<<<<< HEAD:backend/src/main/java/fleetoverview/service/impl/StateServiceImpl.java
 import fleetoverview.domain.entity.StateEntity;
-=======
-import fleetoverview.domain.entity.CityEntity;
 import fleetoverview.domain.entity.CountryEntity;
-import fleetoverview.repository.CityRepository;
->>>>>>> 55023a1902470c26e5dd14d3e4e6ebd007716a49:backend/src/main/java/fleetoverview/service/impl/CityServiceImpl.java
+import fleetoverview.repository.StateRepository;
 import fleetoverview.repository.CountryRepository;
 import fleetoverview.repository.StateRepository;
 
@@ -44,32 +40,24 @@ public class StateServiceImpl extends BaseService implements StateService {
     private final CountryRepository countryRepository;
 
     @Autowired
-<<<<<<< HEAD:backend/src/main/java/fleetoverview/service/impl/StateServiceImpl.java
-    public StateServiceImpl(StateRepository repository, CountryRepository countryRepository) {
-=======
     private EntityManager entityManager;
 
     @Autowired
-    public CityServiceImpl(CityRepository repository, CountryRepository countryRepository) {
->>>>>>> 55023a1902470c26e5dd14d3e4e6ebd007716a49:backend/src/main/java/fleetoverview/service/impl/CityServiceImpl.java
+    public StateServiceImpl(StateRepository repository, CountryRepository countryRepository) {
         this.repository = repository;
         this.countryRepository = countryRepository;
     }
 
     @Override
-<<<<<<< HEAD:backend/src/main/java/fleetoverview/service/impl/StateServiceImpl.java
     public DataResponse<List<StateEntity>> get(Map<String, String> params) {
-        return DataResponse.success(repository.findAll());
-=======
-    public DataResponse<List<CityEntity>> get(Map<String, String> params) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<CityEntity> cq = cb.createQuery(CityEntity.class);
-        Root<CityEntity> cities = cq.from(CityEntity.class);
+        CriteriaQuery<StateEntity> cq = cb.createQuery(StateEntity.class);
+        Root<StateEntity> cities = cq.from(StateEntity.class);
 
         List<Predicate> filters = new ArrayList<>();
 
         if (params.containsKey("countryId")) {
-            Join<CityEntity, CountryEntity> country = cities.join("country");
+            Join<StateEntity, CountryEntity> country = cities.join("country");
             filters.add(cb.equal(country.get("id"), params.get("countryId")));
         } else {
             throw new NotFoundException(mSourceBundle.apply("filter.country.missed"));
@@ -79,18 +67,16 @@ public class StateServiceImpl extends BaseService implements StateService {
                 .where(cb.and(filters.stream().filter(Objects::nonNull).toArray(Predicate[]::new)))
                 .orderBy(cb.desc(cities.get("id")));
 
-        TypedQuery<CityEntity> query = entityManager.createQuery(cq);
-        List<CityEntity> results = query.getResultList();
+        TypedQuery<StateEntity> query = entityManager.createQuery(cq);
+        List<StateEntity> results = query.getResultList();
 
         return DataResponse.success(results);
-//        return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
->>>>>>> 55023a1902470c26e5dd14d3e4e6ebd007716a49:backend/src/main/java/fleetoverview/service/impl/CityServiceImpl.java
     }
 
     @Override
     public ApiResponse post(StateRequest data) {
-        repository.findByNameAndState_Id(data.name(), data.countryId()).ifPresent((city) -> {
-            throw new ExistsException(mSourceBundle.apply("city.not_found"));
+        repository.findByNameAndId(data.name(), data.countryId()).ifPresent((state) -> {
+            throw new ExistsException(mSourceBundle.apply("state.not_found"));
         });
 
         repository.save(
@@ -115,9 +101,9 @@ public class StateServiceImpl extends BaseService implements StateService {
 
     @Override
     public ApiResponse delete(StateRequest data) {
-        StateEntity city = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("city.not_found")));
+        StateEntity state = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("state.not_found")));
 
-        repository.delete(city);
+        repository.delete(state);
 
         return ApiResponse.success();
     }

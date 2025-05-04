@@ -22,13 +22,13 @@ import static fleetoverview.util.helper.Utils.getUrls;
 @Component
 public class InitData implements CommandLineRunner {
 
-    public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository, StateRepository statesRepository, FuelTypeRepository fuelRepository, CountryRepository countryRepository, CountryRepository countryRepository1) {
+    public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository, StateRepository stateRepository, FuelTypeRepository fuelRepository, CountryRepository countryRepository, CountryRepository countryRepository1) {
         this.actionRepository = actionRepository;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.ownershipTypeRepository = ownershipTypeRepository;
-        this.statesRepository = statesRepository;
+        this.stateRepository = stateRepository;
         this.fuelTypeRepository = fuelRepository;
         this.countryRepository = countryRepository;
     }
@@ -159,11 +159,10 @@ private final CountryRepository countryRepository;
         }
     }
 
-    private final StateRepository statesRepository;
-
+    private final StateRepository stateRepository;
     private void initStates() {
-        if (!statesRepository.existsById(1)) {
-            statesRepository.saveAll(
+        if (!stateRepository.existsById(1)) {
+            stateRepository.saveAll(
                     List.of(
                             new StateEntity("Alabama, AL", new CountryEntity("USA")),
                             new StateEntity("Alaska, AK", new CountryEntity("USA")),

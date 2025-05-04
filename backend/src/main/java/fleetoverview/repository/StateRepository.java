@@ -11,5 +11,5 @@ import java.util.Optional;
  * @created : 13 март 2025
  **/
 public interface StateRepository extends JpaRepository<StateEntity, Integer> {
-    Optional<StateEntity> findByNameAndState_Id(String name, int stateId);
+    Optional<StateEntity> findByNameAndId(String name, int stateId);
 }

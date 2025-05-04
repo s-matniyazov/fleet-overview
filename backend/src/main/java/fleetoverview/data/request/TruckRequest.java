@@ -14,7 +14,7 @@ public record TruckRequest(
         String unit,
         Date inServiceDate,
         String licensePlate,
-        int cityId,
+        int stateId,
         int modelMakerId,
         int year,
         int fuelTypeId,

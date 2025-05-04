@@ -18,7 +18,7 @@ public interface UriConstants {
     String COMPANIES = API + "/companies";
 
     String COUNTRY = API + "/countries";
-    String CITY = API + "/cities";
+    String STATE = API + "/states";
     String FUEL_TYPE = API + "/fuel-types";
     String MODEL_MAKER = API + "/model-makers";
     String OWNER_OPERATOR = API + "/owner-operators";

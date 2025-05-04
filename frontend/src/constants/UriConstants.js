@@ -13,7 +13,7 @@ export const URIS = {
     ACTIONS: 'actions',
 
     COUNTRY: 'countries',
-    CITY: "/cities",
+    STATE: "/states",
     FUEL_TYPE: "/fuel-types",
     MODEL_MAKER: "/model-makers",
     OWNER_OPERATOR: "/owner-operators",

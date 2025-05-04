@@ -1,13 +1,13 @@
 package fleetoverview.controller;
 
 import fleetoverview.controller.base.CrudController;
-import fleetoverview.data.request.CityRequest;
+import fleetoverview.data.request.StateRequest;
 import fleetoverview.domain.entity.StateEntity;
-import fleetoverview.service.CityService;
+import fleetoverview.service.StateService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static fleetoverview.util.constants.UriConstants.CITY;
+import static fleetoverview.util.constants.UriConstants.STATE;
 
 /**
  * @author :  Sardor Matniyazov
@@ -15,9 +15,9 @@ import static fleetoverview.util.constants.UriConstants.CITY;
  * @created : 13 март 2025
  **/
 @RestController
-@RequestMapping(CITY)
-public class CityController extends CrudController<StateEntity, CityRequest> {
-    protected CityController(CityService service) {
+@RequestMapping(STATE)
+public class StateController extends CrudController<StateEntity, StateRequest> {
+    protected StateController(StateService service) {
         super(service);
     }
 }

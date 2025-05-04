@@ -227,7 +227,7 @@ function getCountry() {
 }
 
 function getCity(countryId) {
-  axiosIns.get(`${URIS.CITY}?countryId=${countryId}`)
+  axiosIns.get(`${URIS.STATE}?countryId=${countryId}`)
       .then(res => {
         cities.value = res.data.data;
       }).catch(e => {

@@ -55,7 +55,7 @@ const newModel = () => {
 
 const addModal = ref(false);
 
-const apiUrl = URIS.CITY;
+const apiUrl = URIS.STATE;
 const dataList = ref([]);
 const data = ref(newModel())
 const selectedRow = ref();
