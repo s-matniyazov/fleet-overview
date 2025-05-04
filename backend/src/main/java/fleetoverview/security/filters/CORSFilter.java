@@ -1,4 +1,4 @@
-package fleetoverview.config.filters;
+package fleetoverview.security.filters;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;

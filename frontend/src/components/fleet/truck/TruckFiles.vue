@@ -18,23 +18,30 @@ const props = defineProps({
 
 const columns = [
   {
+    key: 'id',
+    name: 'id',
+    label: t('id'),
+    styles: 'width: 50px;',
+    classes: '',
+  },
+  {
     key: 'type',
     name: 'type',
-    label: t('truck_file_type'),
+    label: t('type'),
     styles: 'width: 200px;',
     classes: '',
   },
   {
     key: 'description',
     name: 'description',
-    label: t('truck_file_description'),
+    label: t('description'),
     styles: 'width: 200px;',
     classes: '',
   },
   {
     key: 'expiration_date',
     name: 'expiration_date',
-    label: t('truck_file_expiration_date'),
+    label: t('expiration_date'),
     styles: 'width: 200px;',
     classes: '',
   },
@@ -49,6 +56,13 @@ const columns = [
     key: 'file_size',
     name: 'file_size',
     label: t('file_size'),
+    styles: 'width: 200px;',
+    classes: '',
+  },
+  {
+    key: 'status',
+    name: 'status',
+    label: t('status'),
     styles: 'width: 200px;',
     classes: '',
   },
@@ -76,7 +90,7 @@ function downloadDoc(row) {
   })
       .then(res => {
         console.log(row);
-        const blob = new Blob([res.data], { type: row.contentType })
+        const blob = new Blob([res.data], {type: row.contentType})
         const link = document.createElement('a')
         link.href = URL.createObjectURL(blob)
         link.download = row.fileName
@@ -95,23 +109,34 @@ const formatSize = (size) => {
 
 <template>
   <div class="mb-0 p-2">
-    <UTable :items="data.files" :columns="columns" v-model="selectedRow" height="calc(100vh - 258px)" hide-pagination>
+    <UTable :items="data.files.sort((it, bit) => it.id <= bit.id ? 1 : -1)" :columns="columns" v-model="selectedRow"
+            height="calc(100vh - 258px)" hide-pagination>
 
       <template #row_file_name="{row}">
         <td>
-          {{row.resource.fileName}}
+          {{ row.resource.fileName }}
         </td>
       </template>
 
       <template #row_file_size="{row}">
         <td>
-          {{ formatSize(row.resource.size)}}
+          {{ formatSize(row.resource.size) }}
         </td>
       </template>
 
       <template #row_expiration_date="{row}">
         <td>
           {{ longToDate(row.expirationDate) }}
+        </td>
+      </template>
+
+      <template #row_status="{row}">
+        <td>
+          <div class="col-12 d-flex align-items-center">
+              <span class="badge badge-pill" :class="row?.status === 'ACTIVE' ? 'text-primary  badge-soft-primary' : 'text-danger badge-soft-danger'">
+                {{ row?.status }}
+              </span>
+          </div>
         </td>
       </template>
 

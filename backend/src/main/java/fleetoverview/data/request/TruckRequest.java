@@ -26,5 +26,6 @@ public record TruckRequest(
         int purchaseTypeId,
         int ownerOperatorId,
         String description,
-        TruckStatusEnum status
+        TruckStatusEnum status,
+        int companyId
 ) { }

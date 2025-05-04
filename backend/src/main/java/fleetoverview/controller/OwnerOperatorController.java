@@ -1,7 +1,7 @@
 package fleetoverview.controller;
 
 import fleetoverview.controller.base.CrudController;
-import fleetoverview.data.request.OnlyNameRequest;
+import fleetoverview.data.request.OwnerOperatorRequest;
 import fleetoverview.domain.entity.OwnerOperatorEntity;
 import fleetoverview.service.OwnerOperatorService;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +16,7 @@ import static fleetoverview.util.constants.UriConstants.OWNER_OPERATOR;
  **/
 @RestController
 @RequestMapping(OWNER_OPERATOR)
-public class OwnerOperatorController extends CrudController<OwnerOperatorEntity, OnlyNameRequest> {
+public class OwnerOperatorController extends CrudController<OwnerOperatorEntity, OwnerOperatorRequest> {
     protected OwnerOperatorController(OwnerOperatorService service) {
         super(service);
     }

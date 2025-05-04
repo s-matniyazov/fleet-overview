@@ -4,22 +4,26 @@ import fleetoverview.data.request.TruckFileRequest;
 import fleetoverview.data.request.TruckRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
-import fleetoverview.domain.entity.ResourceEntity;
-import fleetoverview.domain.entity.TruckEntity;
-import fleetoverview.domain.entity.TruckFileEntity;
+import fleetoverview.domain.entity.*;
+import fleetoverview.domain.entity.enums.TruckFileStatusEnum;
 import fleetoverview.domain.entity.enums.TruckFileTypeEnum;
 import fleetoverview.repository.*;
 import fleetoverview.service.ResourceService;
 import fleetoverview.service.TruckService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.NotFoundException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author :  Sardor Matniyazov
@@ -36,11 +40,15 @@ public class TruckServiceImpl extends BaseService implements TruckService {
     private final OwnershipTypeRepository ownershipTypeRepository;
     private final PurchaseTypeRepository purchaseTypeRepository;
     private final OwnerOperatorRepository ownerOperatorRepository;
+    private final CompanyRepository companyRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Autowired
     public TruckServiceImpl(ResourceService resourceService, TruckRepository repository, CityRepository cityRepository, ModelMakerRepository makerRepository,
                             FuelTypeRepository fuelTypeRepository, OwnershipTypeRepository ownershipTypeRepository,
-                            PurchaseTypeRepository purchaseTypeRepository, OwnerOperatorRepository ownerOperatorRepository) {
+                            PurchaseTypeRepository purchaseTypeRepository, OwnerOperatorRepository ownerOperatorRepository, CompanyRepository companyRepository) {
         this.resourceService = resourceService;
         this.repository = repository;
         this.cityRepository = cityRepository;
@@ -49,11 +57,33 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         this.ownershipTypeRepository = ownershipTypeRepository;
         this.purchaseTypeRepository = purchaseTypeRepository;
         this.ownerOperatorRepository = ownerOperatorRepository;
+        this.companyRepository = companyRepository;
     }
 
     @Override
     public DataResponse<List<TruckEntity>> get(Map<String, String> params) {
-        return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<TruckEntity> cq = cb.createQuery(TruckEntity.class);
+        Root<TruckEntity> trucks = cq.from(TruckEntity.class);
+
+        List<Predicate> filters = new ArrayList<>();
+
+        if (params.containsKey("companyId")) {
+            Join<TruckEntity, CompanyEntity> company = trucks.join("company");
+            filters.add(cb.equal(company.get("id"), params.get("companyId")));
+        } else {
+            throw new NotFoundException(mSourceBundle.apply("filter.company.missed"));
+        }
+
+        cq.select(trucks)
+                .where(cb.and(filters.stream().filter(Objects::nonNull).toArray(Predicate[]::new)))
+                .orderBy(cb.desc(trucks.get("id")));
+
+        TypedQuery<TruckEntity> query = entityManager.createQuery(cq);
+        List<TruckEntity> results = query.getResultList();
+
+        return DataResponse.success(results);
+//        return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 
     @Override
@@ -64,17 +94,18 @@ public class TruckServiceImpl extends BaseService implements TruckService {
                         data.inServiceDate(),
                         data.licensePlate(),
                         cityRepository.findById(data.cityId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("city.not_found"))),
-                        makerRepository.findById(data.cityId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("maker.not_found"))),
+                        makerRepository.findById(data.modelMakerId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("maker.not_found"))),
                         data.year(),
-                        fuelTypeRepository.findById(data.cityId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("fuelType.not_found"))),
+                        fuelTypeRepository.findById(data.fuelTypeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("fuelType.not_found"))),
                         data.grossWeight(),
                         data.axles(),
                         data.vin(),
-                        ownershipTypeRepository.findById(data.cityId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("ownershipType.not_found"))),
+                        ownershipTypeRepository.findById(data.ownershipTypeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("ownershipType.not_found"))),
                         data.includeIFTA(),
-                        purchaseTypeRepository.findById(data.cityId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("purchaseType.not_found"))),
-                        ownerOperatorRepository.findById(data.cityId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("ownerOperator.not_found"))),
-                        data.description()
+                        purchaseTypeRepository.findById(data.purchaseTypeId()).orElse(null),
+                        ownerOperatorRepository.findById(data.ownerOperatorId()).orElse(null),
+                        data.description(),
+                        companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found")))
                 )
         );
         return ApiResponse.success();
@@ -88,17 +119,18 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         truck.setInServiceDate(data.inServiceDate());
         truck.setLicensePlate(data.licensePlate());
         truck.setCity(cityRepository.findById(data.cityId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("city.not_found"))));
-        truck.setModelMaker(makerRepository.findById(data.cityId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("maker.not_found"))));
+        truck.setModelMaker(makerRepository.findById(data.modelMakerId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("maker.not_found"))));
         truck.setYear(data.year());
-        truck.setFuelType(fuelTypeRepository.findById(data.cityId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("fuelType.not_found"))));
+        truck.setFuelType(fuelTypeRepository.findById(data.fuelTypeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("fuelType.not_found"))));
         truck.setGrossWeight(data.grossWeight());
         truck.setAxles(data.axles());
         truck.setVin(data.vin());
-        truck.setOwnershipType(ownershipTypeRepository.findById(data.cityId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("ownershipType.not_found"))));
+        truck.setOwnershipType(ownershipTypeRepository.findById(data.ownershipTypeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("ownershipType.not_found"))));
         truck.setIncludeIFTA(data.includeIFTA());
-        truck.setPurchaseType(purchaseTypeRepository.findById(data.cityId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("purchaseType.not_found"))));
-        truck.setOwnerOperator(ownerOperatorRepository.findById(data.cityId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("ownerOperator.not_found"))));
+        truck.setPurchaseType(purchaseTypeRepository.findById(data.purchaseTypeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("purchaseType.not_found"))));
+        truck.setOwnerOperator(ownerOperatorRepository.findById(data.ownerOperatorId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("ownerOperator.not_found"))));
         truck.setDescription(data.description());
+        truck.setCompany(companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))));
 
         return null;
     }
@@ -120,6 +152,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
                         data.expirationDate(),
                         data.description(),
                         data.type(),
+                        TruckFileStatusEnum.ACTIVE,
                         truck
                 )
         );

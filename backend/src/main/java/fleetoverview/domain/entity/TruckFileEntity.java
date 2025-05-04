@@ -1,6 +1,7 @@
 package fleetoverview.domain.entity;
 
 import fleetoverview.domain.entity.base.BaseEntity;
+import fleetoverview.domain.entity.enums.TruckFileStatusEnum;
 import fleetoverview.domain.entity.enums.TruckFileTypeEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,17 +33,22 @@ public class TruckFileEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TruckFileTypeEnum type;
 
+    @Enumerated(EnumType.STRING)
+    private TruckFileStatusEnum status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private TruckEntity truck;
 
     public TruckFileEntity() {
     }
 
-    public TruckFileEntity(ResourceEntity resource, Date expirationDate, String description, TruckFileTypeEnum type, TruckEntity truck) {
+    public TruckFileEntity(ResourceEntity resource, Date expirationDate, String description,
+                           TruckFileTypeEnum type, TruckFileStatusEnum status, TruckEntity truck) {
         this.resource = resource;
         this.expirationDate = expirationDate;
         this.description = description;
         this.type = type;
+        this.status = status;
         this.truck = truck;
     }
 
@@ -66,12 +72,16 @@ public class TruckFileEntity extends BaseEntity {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public TruckFileStatusEnum getStatus() {
+        return status;
     }
 
-    public void setTruck(TruckEntity truck) {
-        this.truck = truck;
+    public void setStatus(TruckFileStatusEnum status) {
+        this.status = status;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public TruckFileTypeEnum getType() {

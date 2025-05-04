@@ -15,6 +15,7 @@ public interface UriConstants {
     String ACTIONS = API + "/actions";
 
     String CLIENTS = API + "/clients";
+    String COMPANIES = API + "/companies";
 
     String COUNTRY = API + "/countries";
     String CITY = API + "/cities";

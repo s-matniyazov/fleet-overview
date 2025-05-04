@@ -53,13 +53,16 @@ public class TruckEntity extends BaseEntity {
     @OneToMany(mappedBy = "truck", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<TruckFileEntity> files = new HashSet<>();
 
+    @ManyToOne
+    private CompanyEntity company;
+
     public TruckEntity() {
     }
 
     public TruckEntity(String unit, Date inServiceDate, String licensePlate, StateEntity city, ModelMakerEntity modelMaker,
                        Integer year, FuelTypeEntity fuelType, Double grossWeight, Integer axles, String vin,
                        OwnershipTypeEntity ownershipType, Boolean includeIFTA, PurchaseTypeEntity purchaseType,
-                       OwnerOperatorEntity ownerOperator, String description) {
+                       OwnerOperatorEntity ownerOperator, String description, CompanyEntity company) {
         this.unit = unit;
         this.inServiceDate = inServiceDate;
         this.licensePlate = licensePlate;
@@ -75,6 +78,8 @@ public class TruckEntity extends BaseEntity {
         this.purchaseType = purchaseType;
         this.ownerOperator = ownerOperator;
         this.description = description;
+        this.company = company;
+        this.status = TruckStatusEnum.ACTIVE;
     }
 
     public String getUnit() {
@@ -211,5 +216,9 @@ public class TruckEntity extends BaseEntity {
 
     public void setFiles(Set<TruckFileEntity> files) {
         this.files = files;
+    }
+
+    public void setCompany(CompanyEntity company) {
+        this.company = company;
     }
 }

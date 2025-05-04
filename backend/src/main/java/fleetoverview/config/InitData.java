@@ -108,7 +108,7 @@ public class InitData implements CommandLineRunner {
     private final OwnershipTypeRepository ownershipTypeRepository;
 
     private void initOwnershipTypes() {
-        if (ownershipTypeRepository.existsById(1)) {
+        if (!ownershipTypeRepository.existsByName("Company")) {
             ownershipTypeRepository.saveAll(
                     List.of(
                             new OwnershipTypeEntity("Company"),

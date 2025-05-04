@@ -40,6 +40,8 @@ const props = defineProps({
   }
 })
 
+const emits = defineEmits(['row-dblclick']);
+
 const selected = defineModel({});
 
 const onRowClick = (row) => {
@@ -48,6 +50,10 @@ const onRowClick = (row) => {
   } else {
     selected.value = row;
   }
+}
+
+const onRowDoubleClick = (row) => {
+  emits('row-dblclick', row);
 }
 </script>
 
@@ -59,7 +65,7 @@ const onRowClick = (row) => {
           <thead>
           <tr>
             <slot v-for="col in columns" :col="col" :name="`col_${col.name}`" :key="col.key">
-              <th scope="col" :style="col.styles" :class="col.classes">
+              <th scope="col" :style="col.styles" :class="col.classes" style="font-style: italic">
                 {{ col.label }}
               </th>
             </slot>
@@ -67,7 +73,8 @@ const onRowClick = (row) => {
           </thead>
 
           <tbody>
-          <tr v-for="(row, index) in items" :key="index" @click="(e) => {e.stopPropagation(); onRowClick(row);}"
+          <tr v-for="(row, index) in items" :key="index" @click="(e) => { e.stopPropagation(); onRowClick(row); }"
+              @dblclick="(e) => { e.stopPropagation(); onRowDoubleClick(row); }"
               :class="row.id === selected?.id && 'table-light'"
           >
             <slot v-for="col in columns" :row="row" :name="`row_${col.name}`">

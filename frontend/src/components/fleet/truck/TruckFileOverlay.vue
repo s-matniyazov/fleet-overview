@@ -73,6 +73,9 @@ import UDateInput from "@/components/base/UDateInput.vue";
 import axiosIns from "@/plugins/axios.js";
 import {URIS} from "@/constants/UriConstants.js";
 import {showMessage} from "@/util/utils.js";
+import useToastStore from "@/store/ToastStore.js";
+
+const toastStore = useToastStore();
 
 const props = defineProps({
   truckId: {
@@ -142,6 +145,11 @@ const saveFile = (index) => {
 
   axiosIns.post(URIS.TRUCK + "/attach-file", formData)
       .then(res => {
+
+        toastStore.success({
+          text: "File successfully uploaded"
+        })
+
         removeFile(index);
       }).catch(e => {
         showMessage(e)

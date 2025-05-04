@@ -19,14 +19,16 @@ import TruckFileMiniCard from "@/components/fleet/truck/TruckFileMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
 import TruckFileOverlay from "@/components/fleet/truck/TruckFileOverlay.vue";
 import TruckCard from "@/components/fleet/truck/TruckCard.vue";
+import {useFilterStore} from "@/store/FilterStore.js";
 
 const {t} = useI18n();
+const filterStore = useFilterStore();
 
 const FILE_TYPE_NAMES = {
-  "1": "Registration (Cab Card)",
-  "2": "Annual Inspection",
-  "3": "Physical Damage Insurance",
-  "4": "Lease Agreement"
+  "REG_CAB_CARD": "Registration (Cab Card)",
+  "ANN_INS": "Annual Inspection",
+  "PHYS_DAMAGE": "Physical Damage Insurance",
+  "LEASE_AGR": "Lease Agreement"
 }
 
 const columns = [
@@ -116,10 +118,11 @@ const newModel = () => {
     axles: null,
     vin: null,
     ownershipTypeId: null,
-    includeIFTA: null,
+    includeIFTA: false,
     purchaseTypeId: null,
     ownerOperatorId: null,
     description: null,
+    companyId: filterStore.companyId
   }
 }
 
@@ -168,6 +171,7 @@ const onEdit = (d) => {
     purchaseTypeId: d?.purchaseType?.id,
     ownerOperatorId: d.ownerOperator.id,
     description: d.description,
+    companyId: filterStore.companyId
   };
 
   addModal.value = true;
@@ -204,7 +208,7 @@ const onSave = () => {
 }
 
 function getData() {
-  axiosIns.get(apiUrl)
+  axiosIns.get(`${apiUrl}?companyId=${filterStore.companyId}`)
       .then(res => {
         dataList.value = res.data.data;
         selectedRow.value = null;
@@ -268,7 +272,7 @@ function getPurchaseType() {
 }
 
 function getOwnerOperator() {
-  axiosIns.get(URIS.PURCHASE_TYPE)
+  axiosIns.get(`${URIS.OWNER_OPERATOR}?companyId=${filterStore.companyId}`)
       .then(res => {
         ownerOperators.value = res.data.data;
       }).catch(e => {
@@ -388,29 +392,33 @@ watch(
 
       <template #row_registration="{row}">
         <td>
-          <TruckFileMiniCard name="REG (CAB CARD)"
-                              @click="(e) => {selectedRow = row; selectFileSection(1); e.stopPropagation()}"/>
+          <TruckFileMiniCard name="REG (CAB CARD)" type="REG_CAB_CARD"
+                             :file="row.files.find(it => it.type==='REG_CAB_CARD' && it.status === 'ACTIVE')"
+                             @click="(e) => {selectedRow = row; selectFileSection('REG_CAB_CARD'); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_annual_inspection="{row}">
         <td>
-          <TruckFileMiniCard name="ANN INS"
-                              @click="(e) => {selectedRow = row; selectFileSection(2); e.stopPropagation()}"/>
+          <TruckFileMiniCard name="ANN INS" type="ANN_INS"
+                             :file="row.files.find(it => it.type==='ANN_INS' && it.status === 'ACTIVE')"
+                             @click="(e) => {selectedRow = row; selectFileSection('ANN_INS'); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_physical_damage_inc="{row}">
         <td>
-          <TruckFileMiniCard name="PHYS DAMAGE"
-                              @click="(e) => {selectedRow = row; selectFileSection(3); e.stopPropagation()}"/>
+          <TruckFileMiniCard name="PHYS DAMAGE" type="PHYS_DAMAGE"
+                             :file="row.files.find(it => it.type==='PHYS_DAMAGE' && it.status === 'ACTIVE')"
+                             @click="(e) => {selectedRow = row; selectFileSection('PHYS_DAMAGE'); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_lease_agreement="{row}">
         <td>
-          <TruckFileMiniCard name="LEASE AGR"
-                              @click="(e) => {selectedRow = row; selectFileSection(4); e.stopPropagation()}"/>
+          <TruckFileMiniCard name="LEASE AGR" type="LEASE_AGR"
+                             :file="row.files.find(it => it.type==='LEASE_AGR' && it.status === 'ACTIVE')"
+                             @click="(e) => {selectedRow = row; selectFileSection('LEASE_AGR'); e.stopPropagation()}"/>
         </td>
       </template>
 
@@ -631,8 +639,7 @@ watch(
                 <!--            includeIFTA-->
                 <div class="col-12">
                   <UCheckbox v-model="data.includeIFTA" :label="t('Include To The IFTA')" :name="t('includeIFTA')"
-                             classes="mb-2" type="checkbox"
-                             :rules="(val) => (!val && $t('required'))"/>
+                             classes="mb-2" type="checkbox"/>
                 </div>
 
                 <template v-if="data.ownershipTypeId === 1">
@@ -668,7 +675,7 @@ watch(
 
           <div class="modal-footer">
             <div class="d-flex text-end align-items-end mt-2">
-              <button type="submit" class="btn btn-primary">Сахранить</button>
+              <button type="submit" class="btn btn-primary">Save</button>
             </div>
           </div>
         </UForm>

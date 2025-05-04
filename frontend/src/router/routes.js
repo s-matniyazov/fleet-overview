@@ -2,7 +2,11 @@
 
 const routes = [
     {path: '/login', name: "Login", meta: {requiresAuth: false}, component: import('@/layouts/LoginLayout.vue')},
+<<<<<<< HEAD
     {path: '/company', name: "Company", meta: {requiresAuth: true}, component: import('@/components/company/Company.vue')},
+=======
+    {path: '/company-layout', name: "Company", meta: {requiresAuth: true}, component: import('@/components/company/CompanyLayout.vue')},
+>>>>>>> 55023a1902470c26e5dd14d3e4e6ebd007716a49
     {
         path: '/',
         meta: {requiresAuth: false},
@@ -30,6 +34,7 @@ const routes = [
 
             {path: '/settings', name: "Settings", meta: {requiresAuth: true}, component: import('@/components/setting/SettingsPage.vue')},
             {path: '/user-profile', name: "User Profile", meta: {requiresAuth: true}, component: import('@/components/profile/UserProfile.vue')},
+
         ]
     }
 ]
