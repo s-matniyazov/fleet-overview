@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @created : 13 март 2025
  **/
 public interface OwnershipTypeRepository extends JpaRepository<OwnershipTypeEntity, Integer> {
+    boolean existsByName(String company);
 }

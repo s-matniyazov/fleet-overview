@@ -1,5 +1,6 @@
 package fleetoverview.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -65,11 +66,13 @@ public class UserEntity extends BaseEntity implements UserDetails {
         this.username = username;
     }
 
+    @JsonIgnore
     @Override
     public Collection<ActionEntity> getAuthorities() {
         return role.getRoleActions();
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -98,6 +101,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
         return role;
     }
 
+    @JsonIgnore
     public void setRole(RoleEntity role) {
         this.role = role;
     }

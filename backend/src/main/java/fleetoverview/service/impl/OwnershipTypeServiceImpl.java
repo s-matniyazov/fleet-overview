@@ -9,6 +9,7 @@ import fleetoverview.service.OwnershipTypeService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class OwnershipTypeServiceImpl extends BaseService implements OwnershipTy
 
     @Override
     public DataResponse<List<OwnershipTypeEntity>> get(Map<String, String> params) {
-        return DataResponse.success(repository.findAll());
+        return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 
     @Override

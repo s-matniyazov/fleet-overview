@@ -1,37 +1,51 @@
 <script setup>
 
 import VerticalMenu from "@/components/VerticalMenu.vue";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import feather from "feather-icons";
 import router from "@/router/index.js";
 import {useRouterStore} from "@/store/RouterStore.js";
 import USelect from "@/components/base/USelect.vue";
+import axiosIns from "@/plugins/axios.js";
+import {showMessage} from "@/util/utils.js";
+import {URIS} from "@/constants/UriConstants.js";
+import {useFilterStore} from "@/store/FilterStore.js";
 
 const routerStore = useRouterStore();
+const filterStore = useFilterStore();
 
-const company = ref(1);
-const companies = ref([
-  {
-    id: 1,
-    name: "COMPANY one"
-  },
-  {
-    id: 2,
-    name: "COMPANY two"
-  },
-  {
-    id: 3,
-    name: "COMPANY three"
-  },
-]);
+const companies = ref();
+const companyId = ref(filterStore.globalFilter.companyId);
 
 function pushPage(page) {
   router.push(page);
 }
 
+function getCompanies() {
+  axiosIns.get(URIS.COMPANIES)
+      .then(res => {
+        companies.value = res.data.data;
+      }).catch(e => {
+    showMessage(e)
+  });
+}
+
 onMounted(() => {
+  getCompanies();
+
   feather.replace();
 });
+
+
+
+watch(
+    companyId,
+    (newVal) => {
+      filterStore.setCompanyId(newVal)
+      window.location.reload()
+    },
+    { deep: true }
+)
 </script>
 
 <template>
@@ -54,7 +68,7 @@ onMounted(() => {
         </div>
 
         <div class="d-flex px-3" style="justify-content: space-around">
-          <USelect :items="companies" v-model="company" option_name="name" option_value="id" styles="width: 20rem; margin-left: calc(50vw - 520px)"/>
+          <USelect :items="companies" v-model="companyId" option_name="name" option_value="id" styles="width: 20rem; margin-left: calc(50vw - 520px)"/>
         </div>
       </div>
     </header>

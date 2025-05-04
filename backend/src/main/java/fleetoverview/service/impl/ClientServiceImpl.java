@@ -1,5 +1,6 @@
 package fleetoverview.service.impl;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import fleetoverview.data.request.ClientRequest;
 import fleetoverview.data.response.ApiResponse;
@@ -28,7 +29,7 @@ public class ClientServiceImpl extends BaseService implements ClientService {
 
     @Override
     public DataResponse<List<ClientEntity>> get(Map<String,String> params) {
-        return DataResponse.success(repository.findAll());
+        return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 
     @Override

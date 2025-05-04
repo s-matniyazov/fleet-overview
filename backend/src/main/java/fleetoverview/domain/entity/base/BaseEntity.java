@@ -1,8 +1,15 @@
 package fleetoverview.domain.entity.base;
 
+import fleetoverview.domain.entity.UserEntity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
@@ -12,15 +19,21 @@ import java.util.Date;
  * @created : 27 янв. 2025
  **/
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity extends BaseIdEntity {
     @CreationTimestamp
     private Date created;
-    private String createdBy;
+    @CreatedBy
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserEntity createdBy;
     @UpdateTimestamp
     private Date updated;
-    private String updatedBy;
 
-    public BaseEntity(Date created, String createdBy, Date updated, String updatedBy) {
+    @LastModifiedBy
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserEntity updatedBy;
+
+    public BaseEntity(Date created, UserEntity createdBy, Date updated, UserEntity updatedBy) {
         this.created = created;
         this.createdBy = createdBy;
         this.updated = updated;
@@ -34,7 +47,7 @@ public abstract class BaseEntity extends BaseIdEntity {
         return created;
     }
 
-    public String getCreatedBy() {
+    public UserEntity getCreatedBy() {
         return createdBy;
     }
 
@@ -42,7 +55,7 @@ public abstract class BaseEntity extends BaseIdEntity {
         return updated;
     }
 
-    public String getUpdatedBy() {
+    public UserEntity getUpdatedBy() {
         return updatedBy;
     }
 }

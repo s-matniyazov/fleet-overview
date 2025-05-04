@@ -6,12 +6,15 @@ import axiosIns from "@/plugins/axios.js";
 import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
 import UInput from "@/components/base/UInput.vue";
+import UTextarea from "@/components/base/UTextarea.vue";
 import {useI18n} from "vue-i18n";
 import {longToDateTime, showMessage} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
-import USelect from "@/components/base/USelect.vue";
+import {useFilterStore} from "@/store/FilterStore.js";
+import router from "@/router/index.js";
 
 const {t} = useI18n();
+const filterStore = useFilterStore();
 
 const columns = [
   {
@@ -29,10 +32,10 @@ const columns = [
     classes: '',
   },
   {
-    key: 'name',
-    name: 'name',
-    label: t('name'),
-    styles: 'width: 400px;',
+    key: 'description',
+    name: 'description',
+    label: t('description'),
+    styles: '',
     classes: '',
   },
   {
@@ -42,24 +45,29 @@ const columns = [
     styles: '',
     classes: '',
   },
+  {
+    key: 'createdBy',
+    name: 'createdBy',
+    label: t('createdBy'),
+    styles: '',
+    classes: '',
+  }
 ]
 
 const newModel = () => {
   return {
     id: null,
     name: null,
-    countryId: null,
-    description: null,
+    description: null
   }
 }
 
 const addModal = ref(false);
 
-const apiUrl = URIS.CITY;
+const apiUrl = URIS.COMPANIES;
 const dataList = ref([]);
 const data = ref(newModel())
 const selectedRow = ref();
-const countries = ref([]);
 
 // FUNCTIONS
 const onAdd = () => {
@@ -67,19 +75,24 @@ const onAdd = () => {
 
   addModal.value = true;
 }
+
+
 const onEdit = (d) => {
 
-  data.value = {
-    id: d.id,
-    name: d.name,
-    countryId: d?.country.id,
-    description: d.description,
-  };
+  data.value = {...d};
 
   addModal.value = true;
 }
 const onClose = () => {
   addModal.value = false;
+}
+
+const handleDoubleClick = (row) => {
+  setTimeout(() => {
+    filterStore.setCompanyId(row.id)
+
+    router.push("/");
+  }, 300)
 }
 
 // API FUNCTIONS
@@ -124,50 +137,35 @@ function getData() {
   });
 }
 
-function getCountry() {
-  axiosIns.get(URIS.COUNTRY)
-      .then(res => {
-        countries.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
-}
-
 // HOOKS
 onMounted(() => {
   getData();
-  getCountry();
 })
 
 </script>
 
 <template>
-  <div class="mb-0 p-2">
+  <div class="mb-0 p-2 bg-light-subtle">
     <div class="col-12">
-      <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
-        <button @click="onAdd" class="btn btn-primary btn-sm"><span class="mdi mdi-plus"></span> {{
-            t("add")
-          }}
-        </button>
-        <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-            class="mdi mdi-pen"></span> {{ t("edit") }}
-        </button>
-        <button @click="onDelete(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-            class="mdi mdi-delete"></span> {{ t("delete") }}
-        </button>
-
-        <div class="align-items-center u-end">
+      <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-3">
+        <div class="d-flex">
+          <button @click="onAdd" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-plus"></span> {{ t('add') }}
+          </button>
+          <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
+              class="mdi mdi-pen"></span> {{ t('edit') }}
+          </button>
+          <button @click="onDelete(selectedRow)" class="btn btn-primary btn-sm mx-1" :disabled="!selectedRow"><span
+              class="mdi mdi-delete"></span> {{ t('delete') }}
+          </button>
           <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
         </div>
       </div>
     </div>
 
-    <UTable :items="dataList" :columns="columns" v-model="selectedRow" styles="height: calc(100vh - 201px)">
+    <UTable :items="dataList" :columns="columns" v-model="selectedRow" height="calc(100vh - 190px)" hide-pagination
+            @row-dblclick="handleDoubleClick">
       <template #row_created="{row}">
         <td>{{ longToDateTime(row?.created) }}</td>
-      </template>
-      <template #row_country="{row}">
-        <td>{{ row?.country.name }}</td>
       </template>
     </UTable>
   </div>
@@ -175,9 +173,9 @@ onMounted(() => {
   <Teleport to="body">
     <modal :show="addModal" @close="addModal = false">
       <template #header>
-        <div class="d-flex w-100">
-          <div>
-            {{ data.id ? t('edit') : t('add') }} {{ t('city') }}
+        <div class="d-flex" style="width: 100%">
+          <div class="text-dark">
+            {{ data.id ? t('edit') : t('add') }} {{ t('project_priority') }}
           </div>
           <div class="text-end u-end">
             <button class="btn-close" @click="onClose"></button>
@@ -191,26 +189,21 @@ onMounted(() => {
             <!--            name-->
             <div class="col-12">
               <UInput v-model="data.name" :label="t('name')" :hint="t('name')" :name="t('name')"
-                      :placeholder="t('enter_status_name')" classes="mb-3"
-                      :rules="(val) => (!val && $t('required'))"/>
+                      :placeholder="t('enter_priority_name')" classes="mb-3"/>
             </div>
 
-            <!--            customer-->
+            <!--            description-->
             <div class="col-12">
-              <USelect v-model="data.countryId" :label="t('countries')"
-                       :items="countries" name="country"
-                       option_name="name"
-                       classes="mb-3"
-                       :rules="(val) => (!val && $t('required'))"
-              ></USelect>
+              <UTextarea v-model="data.description" :label="t('description')"
+                         :placeholder="t('enter_priority_description')" classes="mb-3"/>
             </div>
           </div>
 
-          <div class="modal-footer">
-            <div class="d-flex text-end align-items-end mt-2">
-              <button type="submit" class="btn btn-primary">Save</button>
-            </div>
+        <div class="modal-footer">
+          <div class="d-flex text-end align-items-end mt-2">
+            <button type="submit" class="btn btn-primary">Save</button>
           </div>
+        </div>
         </UForm>
       </template>
     </modal>

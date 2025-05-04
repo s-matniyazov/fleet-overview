@@ -1,4 +1,4 @@
-package fleetoverview.config;
+package fleetoverview.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import fleetoverview.config.filters.AuthorizationFilter;
-import fleetoverview.config.filters.AuthenticationFilter;
-import fleetoverview.config.filters.CORSFilter;
+import fleetoverview.security.filters.AuthorizationFilter;
+import fleetoverview.security.filters.AuthenticationFilter;
 
 import java.util.List;
 

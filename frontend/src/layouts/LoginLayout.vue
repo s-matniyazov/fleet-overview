@@ -22,7 +22,7 @@ function onLogin() {
 
           authStore.login(res.data.data);
 
-          router.push("/");
+          router.push("/company-layout");
         } else {
           showMessage("Please check your login or password")
         }

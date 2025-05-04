@@ -1,6 +1,7 @@
 package fleetoverview.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -41,7 +42,7 @@ public class UserServiceImpl extends BaseService implements UserService {
         Specification<UserEntity> filters = Specification.where(CollectionUtils.isEmpty(params) ? null : UserFilterSpecifications.hasName(params.get("name")))
                                                          .and(Objects.requireNonNull(CollectionUtils.isEmpty(params) ? null : UserFilterSpecifications.hasStatus(UserStatusEnum.valueOf(params.get("status")))));
 
-        return DataResponse.success(repository.findAll(filters));
+        return DataResponse.success(repository.findAll(filters, Sort.by(Sort.Direction.DESC, "id")));
     }
 
     @Override

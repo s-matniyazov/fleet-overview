@@ -1,6 +1,6 @@
 package fleetoverview.service;
 
-import fleetoverview.data.request.OnlyNameRequest;
+import fleetoverview.data.request.OwnerOperatorRequest;
 import fleetoverview.domain.entity.OwnerOperatorEntity;
 import fleetoverview.service.base.CrudService;
 
@@ -9,5 +9,5 @@ import fleetoverview.service.base.CrudService;
  * @mailto :  sardorbekmatniyazov03@gmail.com
  * @created : 13 март 2025
  **/
-public interface OwnerOperatorService extends CrudService<OwnerOperatorEntity, OnlyNameRequest> {
+public interface OwnerOperatorService extends CrudService<OwnerOperatorEntity, OwnerOperatorRequest> {
 }

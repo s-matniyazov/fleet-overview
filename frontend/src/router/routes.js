@@ -2,6 +2,7 @@
 
 const routes = [
     {path: '/login', name: "Login", meta: {requiresAuth: false}, component: import('@/layouts/LoginLayout.vue')},
+    {path: '/company-layout', name: "Company", meta: {requiresAuth: true}, component: import('@/components/company/CompanyLayout.vue')},
     {
         path: '/',
         meta: {requiresAuth: false},
@@ -28,6 +29,7 @@ const routes = [
 
             {path: '/settings', name: "Settings", meta: {requiresAuth: true}, component: import('@/components/setting/SettingsPage.vue')},
             {path: '/user-profile', name: "User Profile", meta: {requiresAuth: true}, component: import('@/components/profile/UserProfile.vue')},
+
         ]
     }
 ]

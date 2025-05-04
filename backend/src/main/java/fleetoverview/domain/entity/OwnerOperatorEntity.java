@@ -3,6 +3,7 @@ package fleetoverview.domain.entity;
 import fleetoverview.domain.entity.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
@@ -16,11 +17,15 @@ public class OwnerOperatorEntity extends BaseEntity {
     @Column(length = 50)
     private String name;
 
+    @ManyToOne
+    private CompanyEntity company;
+
     public OwnerOperatorEntity() {
     }
 
-    public OwnerOperatorEntity(String name) {
+    public OwnerOperatorEntity(String name, CompanyEntity company) {
         this.name = name;
+        this.company = company;
     }
 
     public String getName() {
@@ -29,5 +34,9 @@ public class OwnerOperatorEntity extends BaseEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setCompany(CompanyEntity company) {
+        this.company = company;
     }
 }

@@ -1,4 +1,4 @@
-package fleetoverview.config.filters;
+package fleetoverview.security.filters;
 
 import fleetoverview.domain.entity.RoleEntity;
 import fleetoverview.repository.RoleRepository;

@@ -4,7 +4,8 @@ export const URIS = {
 
     RESOURCES: '/resources',
 
-    //tasks
+    // company
+    COMPANIES: 'companies',
 
     CLIENTS: 'clients',
     USERS: 'users',
