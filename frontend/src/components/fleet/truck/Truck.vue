@@ -110,7 +110,7 @@ const newModel = () => {
     unit: null,
     inServiceDate: null,
     licensePlate: null,
-    cityId: null,
+    stateId: null,
     modelMakerId: null,
     year: null,
     fuelTypeId: null,
@@ -139,7 +139,7 @@ const selectedRow = ref();
 const data = ref(newModel())
 
 const countries = ref([]);
-const cities = ref([]);
+const states = ref([]);
 const makers = ref([]);
 const fuelTypes = ref([]);
 const ownershipTypes = ref([]);
@@ -158,8 +158,8 @@ const onEdit = (d) => {
     unit: d.unit,
     inServiceDate: d.inServiceDate,
     licensePlate: d.licensePlate,
-    countryId: d?.city?.country.id,
-    cityId: d?.city?.id,
+    countryId: d?.state?.country.id,
+    stateId: d?.state?.id,
     modelMakerId: d?.modelMaker?.id,
     year: d.year,
     fuelTypeId: d?.fuelType.id,
@@ -226,10 +226,10 @@ function getCountry() {
   });
 }
 
-function getCity(countryId) {
+function getState(countryId) {
   axiosIns.get(`${URIS.STATE}?countryId=${countryId}`)
       .then(res => {
-        cities.value = res.data.data;
+        states.value = res.data.data;
       }).catch(e => {
     showMessage(e)
   });
@@ -294,9 +294,9 @@ onMounted(() => {
 watch(
     () => data.value.countryId,
     function (newValue) {
-      data.cityId = null;
-      cities.value = [];
-      getCity(newValue)
+      data.stateId = null;
+      states.value = [];
+      getState(newValue)
     }
 )
 
@@ -534,10 +534,10 @@ watch(
                   ></USelect>
                 </div>
 
-                <!--            city-->
+                <!--            state-->
                 <div class="col-6">
-                  <USelect v-model="data.cityId" :label="t('cities')"
-                           :items="cities" name="city"
+                  <USelect v-model="data.stateId" :label="t('')"
+                           :items="states" name="state"
                            option_name="name"
                            classes="mb-2"
                            :rules="(val) => (!val && $t('required'))"

@@ -2,7 +2,7 @@ spring:
   application:
     name: "Fleet Overview"
   profiles:
-    active: "prod"
+    active: "dev"
 
 # swagger-ui custom path
 springdoc:

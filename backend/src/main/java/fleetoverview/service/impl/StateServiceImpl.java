@@ -52,20 +52,20 @@ public class StateServiceImpl extends BaseService implements StateService {
     public DataResponse<List<StateEntity>> get(Map<String, String> params) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<StateEntity> cq = cb.createQuery(StateEntity.class);
-        Root<StateEntity> cities = cq.from(StateEntity.class);
+        Root<StateEntity> states = cq.from(StateEntity.class);
 
         List<Predicate> filters = new ArrayList<>();
 
         if (params.containsKey("countryId")) {
-            Join<StateEntity, CountryEntity> country = cities.join("country");
+            Join<StateEntity, CountryEntity> country = states.join("country");
             filters.add(cb.equal(country.get("id"), params.get("countryId")));
         } else {
             throw new NotFoundException(mSourceBundle.apply("filter.country.missed"));
         }
 
-        cq.select(cities)
+        cq.select(states)
                 .where(cb.and(filters.stream().filter(Objects::nonNull).toArray(Predicate[]::new)))
-                .orderBy(cb.desc(cities.get("id")));
+                .orderBy(cb.desc(states.get("id")));
 
         TypedQuery<StateEntity> query = entityManager.createQuery(cq);
         List<StateEntity> results = query.getResultList();

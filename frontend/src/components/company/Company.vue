@@ -1,60 +1,4 @@
 <script setup>
-<<<<<<< HEAD
-import {onMounted,ref} from "vue";
-
-import {useI18n} from "vue-i18n";
-
-const {t} = useI18n();
-
-const  columns = [
-  {
-    key:'id',
-    name:'id',
-    label:'',
-    style:'width:50px',
-    classes:'',
-  },
-  {
-    key:'name',
-    name:'name',
-    label:('name'),
-    style:'width:400px',
-    classes:'',
-  },
-  {
-    key:'address',
-    name:'address',
-    label:('address'),
-    style:'width:600px',
-    classes:'',
-  },
-  {
-    key:'phone',
-    name:'phone',
-    label:('phone'),
-    style:'width:200px',
-    classes:'',
-  },
-  {
-    key:'status',
-    name:'status',
-    label:('status'),
-    style:'width:200px',
-    classes:'',
-  },
-]
-
-const newModal = () =>{
-  return {
-    id:null,
-    name:null,
-    description:null,
-  }
-}
-
-onMounted(() => {
-
-=======
 import {onMounted, ref} from "vue";
 
 import modal from '../base/UDialog.vue'
@@ -68,6 +12,7 @@ import {longToDateTime, showMessage} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
 import router from "@/router/index.js";
+import UPhoneField from "@/components/base/UPhoneField.vue";
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
@@ -88,23 +33,30 @@ const columns = [
     classes: '',
   },
   {
-    key: 'description',
-    name: 'description',
-    label: t('description'),
+    key: 'address',
+    name: 'address',
+    label: t('address'),
     styles: '',
     classes: '',
   },
   {
-    key: 'created',
-    name: 'created',
-    label: t('created'),
+    key: 'phone',
+    name: 'phone',
+    label: t('phone'),
     styles: '',
     classes: '',
   },
   {
-    key: 'createdBy',
-    name: 'createdBy',
-    label: t('createdBy'),
+    key: 'status',
+    name: 'status',
+    label: t('status'),
+    styles: '',
+    classes: '',
+  },
+  {
+    key: 'new_company',
+    name: 'new_company',
+    label: t('new_company'),
     styles: '',
     classes: '',
   }
@@ -114,7 +66,8 @@ const newModel = () => {
   return {
     id: null,
     name: null,
-    description: null
+    description: null,
+    phone: null
   }
 }
 
@@ -196,22 +149,11 @@ function getData() {
 // HOOKS
 onMounted(() => {
   getData();
->>>>>>> 55023a1902470c26e5dd14d3e4e6ebd007716a49
 })
 
 </script>
 
 <template>
-<<<<<<< HEAD
-  <div class="h-100 col-12 p-2">
-    <div class="container-fluid mb-2 px-2 d-flex align-items-center"
-         style="border: 1px dashed #eae1e1; border-radius: 5px; height: 50px; font-weight: bold; font-size: 16px;">
-
-    </div>
-
-
-  </div>
-=======
   <div class="mb-0 p-2 bg-light-subtle">
     <div class="col-12">
       <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-3">
@@ -242,7 +184,7 @@ onMounted(() => {
       <template #header>
         <div class="d-flex" style="width: 100%">
           <div class="text-dark">
-            {{ data.id ? t('edit') : t('add') }} {{ t('project_priority') }}
+            {{ data.id ? t('edit') : t('add') }}
           </div>
           <div class="text-end u-end">
             <button class="btn-close" @click="onClose"></button>
@@ -256,13 +198,15 @@ onMounted(() => {
             <!--            name-->
             <div class="col-12">
               <UInput v-model="data.name" :label="t('name')" :hint="t('name')" :name="t('name')"
-                      :placeholder="t('enter_priority_name')" classes="mb-3"/>
+                      :placeholder="t('enter_company_name')" classes="mb-3"/>
             </div>
 
             <!--            description-->
             <div class="col-12">
               <UTextarea v-model="data.description" :label="t('description')"
                          :placeholder="t('enter_priority_description')" classes="mb-3"/>
+              <UPhoneField v-model="data.phone" :label="t('phone')"
+                         :placeholder="t('enter_phone_number')" classes="mb-3"/>
             </div>
           </div>
 
@@ -275,13 +219,9 @@ onMounted(() => {
       </template>
     </modal>
   </Teleport>
->>>>>>> 55023a1902470c26e5dd14d3e4e6ebd007716a49
 </template>
 
 <style scoped>
 
-<<<<<<< HEAD
+
 </style>
-=======
-</style>
->>>>>>> 55023a1902470c26e5dd14d3e4e6ebd007716a49

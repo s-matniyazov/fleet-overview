@@ -3,6 +3,8 @@ package fleetoverview.domain.entity;
 import fleetoverview.domain.entity.base.BaseEntity;
 import jakarta.persistence.*;
 
+import java.util.Optional;
+
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
@@ -16,7 +18,7 @@ public class StateEntity extends BaseEntity {
     @ManyToOne(targetEntity = CountryEntity.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private CountryEntity country;
 
-    public StateEntity() {
+    public StateEntity(String name, Optional<CountryEntity> country) {
     }
 
     public StateEntity(String name, CountryEntity country) {
