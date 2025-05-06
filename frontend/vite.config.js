@@ -6,6 +6,14 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/fleet/',
+  publicPath: 'fleet',
+  define: {
+    global: 'globalThis',
+  },
+  server: {
+    port: 5173
+  },
   plugins: [
     vue(),
     vueDevTools(),

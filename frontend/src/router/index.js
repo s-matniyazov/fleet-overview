@@ -5,7 +5,7 @@ import {useAuthStore} from "@/store/UseAuthStore.js";
 import {useRouterStore} from "@/store/RouterStore.js";
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory("/fleet/"),
     routes,
 })
 
