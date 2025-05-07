@@ -1,0 +1,1 @@
+import{I as l,r,B as c}from"./index-Q4fCUKjd.js";const s=l("filter",()=>{const t=localStorage.getItem("companyId"),o=r(t?{companyId:t}:{companyId:null}),a=c(()=>o.value.companyId);function n(e){o.value.companyId=e,localStorage.setItem("companyId",e)}return{globalFilter:o,companyId:a,setCompanyId:n}});export{s as u};

@@ -3,7 +3,7 @@ import {useAuthStore} from "@/store/UseAuthStore.js";
 import {hideLoader, showLoader} from "@/util/utils.js";
 
 const axiosIns = axios.create({
-  baseURL: 'http://localhost:8088/api/',
+  baseURL: '/api/',
     // baseURL: 'http://localhost:8099/api/',
     // baseURL: 'http://10.50.70.200:8089/taskwise/api/',
     timeout: 5000,
@@ -42,7 +42,7 @@ axiosIns.interceptors.response.use(response => {
     if (error.response && error.response.status === 401) {
         const authStore = useAuthStore()
         authStore.logout() // Clear token on 401
-        window.location.href = '/login' // Redirect to login
+        window.location.href = '/fleet/login' // Redirect to login
     }
 
     return Promise.reject(error)
