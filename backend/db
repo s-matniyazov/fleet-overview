@@ -1,0 +1,12 @@
+sudo -i -u postgres
+createuser fleet --pwprompt
+createdb fleetdb --owner=fleet
+
+CREATE USER fleet WITH PASSWORD 'fleetpassword';
+CREATE DATABASE fleetdb OWNER fleet;
+GRANT ALL PRIVILEGES ON DATABASE fleetdb TO fleet;
+
+psql -U fleet -d fleetdb -h localhost -W
+
+
+
