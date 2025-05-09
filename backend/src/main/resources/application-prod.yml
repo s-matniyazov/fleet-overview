@@ -7,13 +7,13 @@ spring:
     password: 1234
     driver-class-name: org.postgresql.Driver
   jpa:
-    show_sql: true
+    show_sql: false
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
+        format_sql: false
   servlet:
     multipart:
       max-file-size: 100MB
@@ -21,3 +21,10 @@ spring:
 server:
   port: 8088
   max-http-request-header-size: 100MB
+  tomcat:
+    max-swallow-size: 100MB
+    max-http-form-post-size: 50MB
+    connection-timeout: 20s
+    threads:
+      max: 200
+      min-spare: 10

@@ -1,12 +1,13 @@
 package fleetoverview.domain.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.entity.enums.ActionTypesEnum;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 
 /**
  * @author :  sardor.matniyazov

@@ -2,8 +2,17 @@ package fleetoverview.domain.entity;
 
 import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.entity.enums.TruckStatusEnum;
-import fleetoverview.domain.listener.TruckListener;
-import jakarta.persistence.*;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import java.sql.Date;
 import java.util.HashSet;
@@ -16,7 +25,6 @@ import java.util.Set;
  **/
 @Entity
 @Table(name = "trucks")
-@EntityListeners(TruckListener.class)
 public class TruckEntity extends BaseEntity {
     @Column(length = 50)
     private String unit;

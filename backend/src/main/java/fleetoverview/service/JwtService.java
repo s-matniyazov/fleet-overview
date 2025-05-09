@@ -27,7 +27,6 @@ public class JwtService {
         return Jwts.builder()
                 .subject(username)
                 .issuedAt(currentDate)
-                .claim("authorities", user.getAuthorities())
                 .claim("id", user.getId())
                 .expiration(expireDate)
                 .signWith(key())

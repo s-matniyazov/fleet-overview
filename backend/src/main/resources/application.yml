@@ -1,10 +1,4 @@
 spring:
-  mvc:
-    pathmatch:
-      matching-strategy: ANT_PATH_MATCHER
-  web:
-    resources:
-      static-locations: "classpath:/static/"
   application:
     name: "Fleet Overview"
   profiles:

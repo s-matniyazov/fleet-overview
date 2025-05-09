@@ -1,1 +1,0 @@
-import{_ as t,c as a,a as e,o}from"./index-Q4fCUKjd.js";const c={};function n(r,s){return o(),a("div",null,s[0]||(s[0]=[e("div",{class:"row p-2"},[e("div",{class:"col-12"},[e("div",{class:"page-title-box d-sm-flex align-items-center justify-content-between"},[e("h4",{class:"mb-sm-0 font-size-18"},"Дашборд")])])],-1)]))}const i=t(c,[["render",n]]);export{i as default};

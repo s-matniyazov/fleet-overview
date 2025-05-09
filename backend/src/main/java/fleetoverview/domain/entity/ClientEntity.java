@@ -1,6 +1,11 @@
 package fleetoverview.domain.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
+
 import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.entity.enums.ClientStatusEnum;
 import fleetoverview.domain.entity.enums.UserStatusEnum;
