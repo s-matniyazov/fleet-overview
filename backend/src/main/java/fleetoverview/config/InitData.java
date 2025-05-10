@@ -22,6 +22,16 @@ import static fleetoverview.util.helper.Utils.getUrls;
 @Component
 public class InitData implements CommandLineRunner {
 
+    private final ActionRepository actionRepository;
+    private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final OwnershipTypeRepository ownershipTypeRepository;
+    private final CountryRepository countryRepository;
+    private final FuelTypeRepository fuelTypeRepository;
+    private final StateRepository stateRepository;
+    private Set<ActionEntity> actions = new HashSet<>();
+
     public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository, StateRepository stateRepository, FuelTypeRepository fuelRepository, CountryRepository countryRepository, CountryRepository countryRepository1) {
         this.actionRepository = actionRepository;
         this.roleRepository = roleRepository;
@@ -39,13 +49,9 @@ public class InitData implements CommandLineRunner {
         initRoles();
         initUsers();
         initOwnershipTypes();
-        initStates();
         initFuelTypes();
-        initCountries();
+        initCountryAndStates();
     }
-
-    private final ActionRepository actionRepository;
-    private Set<ActionEntity> actions = new HashSet<>();
 
     private void initActions() {
         if (!actionRepository.existsByUrl("/api")) {
@@ -64,8 +70,6 @@ public class InitData implements CommandLineRunner {
             ));
         }
     }
-
-    private final RoleRepository roleRepository;
 
     private void initRoles() {
         if (!roleRepository.existsByName("ADMIN")) {
@@ -86,9 +90,6 @@ public class InitData implements CommandLineRunner {
         }
     }
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-
     private void initUsers() {
         if (userRepository.findByUsername("username").isEmpty()) {
             userRepository.saveAll(
@@ -105,8 +106,6 @@ public class InitData implements CommandLineRunner {
         }
     }
 
-    private final OwnershipTypeRepository ownershipTypeRepository;
-
     private void initOwnershipTypes() {
         if (!ownershipTypeRepository.existsByName("Company")) {
             ownershipTypeRepository.saveAll(
@@ -118,22 +117,6 @@ public class InitData implements CommandLineRunner {
             );
         }
     }
-private final CountryRepository countryRepository;
-
-    private void initCountries() {
-        if (!countryRepository.existsById(1)) {
-            countryRepository.saveAll(
-                    List.of(
-                            new CountryEntity("USA"),
-                            new CountryEntity("MEXICO"),
-                            new CountryEntity("CANADA")
-
-                    )
-            );
-        }
-    }
-
-    private final FuelTypeRepository fuelTypeRepository;
 
     private void initFuelTypes() {
         if (!fuelTypeRepository.existsById(1)) {
@@ -159,61 +142,64 @@ private final CountryRepository countryRepository;
         }
     }
 
-    private final StateRepository stateRepository;
-    private void initStates() {
-        if (!stateRepository.existsById(1)) {
+    private void initCountryAndStates() {
+        if (!countryRepository.existsById(1)) {
+            CountryEntity usa = countryRepository.save(new CountryEntity("USA"));
+            CountryEntity mexico = countryRepository.save(new CountryEntity("MEXICO"));
+            CountryEntity canada = countryRepository.save(new CountryEntity("CANADA"));
+
             stateRepository.saveAll(
                     List.of(
-                            new StateEntity("Alabama, AL", countryRepository.findByName("USA")),
-                            new StateEntity("Alaska, AK", countryRepository.findByName("USA")),
-                            new StateEntity("Arizona, AZ", countryRepository.findByName("USA"))
-//                            new StateEntity("Arkansas, AR", new CountryEntity("USA")),
-//                            new StateEntity("California, CA", new CountryEntity("USA")),
-//                            new StateEntity("Colorado, CO", new CountryEntity("USA")),
-//                            new StateEntity("Connecticut, CT", new CountryEntity("USA")),
-//                            new StateEntity("Delaware, DE", new CountryEntity("USA")),
-//                            new StateEntity("Florida, FL", new CountryEntity("USA")),
-//                            new StateEntity("Georgia, GA", new CountryEntity("USA")),
-//                            new StateEntity("Hawaii, HI", new CountryEntity("USA")),
-//                            new StateEntity("Idaho, ID", new CountryEntity("USA")),
-//                            new StateEntity("Illinois, IL", new CountryEntity("USA")),
-//                            new StateEntity("Indiana, IN", new CountryEntity("USA")),
-//                            new StateEntity("Iowa, IA", new CountryEntity("USA")),
-//                            new StateEntity("Kansas, KS", new CountryEntity("USA")),
-//                            new StateEntity("Kentucky, KY", new CountryEntity("USA")),
-//                            new StateEntity("Louisiana, LA", new CountryEntity("USA")),
-//                            new StateEntity("Maine, ME", new CountryEntity("USA")),
-//                            new StateEntity("Maryland, MD", new CountryEntity("USA")),
-//                            new StateEntity("Massachusetts, MA", new CountryEntity("USA")),
-//                            new StateEntity("Michigan, MI", new CountryEntity("USA")),
-//                            new StateEntity("Minnesota, MN", new CountryEntity("USA")),
-//                            new StateEntity("Mississippi, MS", new CountryEntity("USA")),
-//                            new StateEntity("Missouri, MO", new CountryEntity("USA")),
-//                            new StateEntity("Montana, MT", new CountryEntity("USA")),
-//                            new StateEntity("Nebraska, NE", new CountryEntity("USA")),
-//                            new StateEntity("Nevada, NV", new CountryEntity("USA")),
-//                            new StateEntity("New Hampshire, NH", new CountryEntity("USA")),
-//                            new StateEntity("New Jersey, NJ", new CountryEntity("USA")),
-//                            new StateEntity("New Mexico, NM", new CountryEntity("USA")),
-//                            new StateEntity("New York, NY", new CountryEntity("USA")),
-//                            new StateEntity("North Carolina, NC", new CountryEntity("USA")),
-//                            new StateEntity("North Dakota, ND", new CountryEntity("USA")),
-//                            new StateEntity("Ohio, OH", new CountryEntity("USA")),
-//                            new StateEntity("Oklahoma, OK", new CountryEntity("USA")),
-//                            new StateEntity("Oregon, OR", new CountryEntity("USA")),
-//                            new StateEntity("Pennsylvania, PA", new CountryEntity("USA")),
-//                            new StateEntity("Rhode Island, RI", new CountryEntity("USA")),
-//                            new StateEntity("South Carolina, SC", new CountryEntity("USA")),
-//                            new StateEntity("South Dakota, SD", new CountryEntity("USA")),
-//                            new StateEntity("Tennessee, TN", new CountryEntity("USA")),
-//                            new StateEntity("Texas, TX", new CountryEntity("USA")),
-//                            new StateEntity("Utah, UT", new CountryEntity("USA")),
-//                            new StateEntity("Vermont, VT", new CountryEntity("USA")),
-//                            new StateEntity("Virginia, VA", new CountryEntity("USA")),
-//                            new StateEntity("Washington, WA", new CountryEntity("USA")),
-//                            new StateEntity("West Virginia, WV", new CountryEntity("USA")),
-//                            new StateEntity("Wisconsin, WI", new CountryEntity("USA")),
-//                            new StateEntity("Wyoming, WY", new CountryEntity("USA"))
+                            new StateEntity("Alabama, AL", usa),
+                            new StateEntity("Alaska, AK", usa),
+                            new StateEntity("Arizona, AZ", usa),
+                            new StateEntity("Arkansas, AR", usa),
+                            new StateEntity("California, CA", usa),
+                            new StateEntity("Colorado, CO", usa),
+                            new StateEntity("Connecticut, CT", usa),
+                            new StateEntity("Delaware, DE", usa),
+                            new StateEntity("Florida, FL", usa),
+                            new StateEntity("Georgia, GA", usa),
+                            new StateEntity("Hawaii, HI", usa),
+                            new StateEntity("Idaho, ID", usa),
+                            new StateEntity("Illinois, IL", usa),
+                            new StateEntity("Indiana, IN", usa),
+                            new StateEntity("Iowa, IA", usa),
+                            new StateEntity("Kansas, KS", usa),
+                            new StateEntity("Kentucky, KY", usa),
+                            new StateEntity("Louisiana, LA", usa),
+                            new StateEntity("Maine, ME", usa),
+                            new StateEntity("Maryland, MD", usa),
+                            new StateEntity("Massachusetts, MA", usa),
+                            new StateEntity("Michigan, MI", usa),
+                            new StateEntity("Minnesota, MN", usa),
+                            new StateEntity("Mississippi, MS", usa),
+                            new StateEntity("Missouri, MO", usa),
+                            new StateEntity("Montana, MT", usa),
+                            new StateEntity("Nebraska, NE", usa),
+                            new StateEntity("Nevada, NV", usa),
+                            new StateEntity("New Hampshire, NH", usa),
+                            new StateEntity("New Jersey, NJ", usa),
+                            new StateEntity("New Mexico, NM", usa),
+                            new StateEntity("New York, NY", usa),
+                            new StateEntity("North Carolina, NC", usa),
+                            new StateEntity("North Dakota, ND", usa),
+                            new StateEntity("Ohio, OH", usa),
+                            new StateEntity("Oklahoma, OK", usa),
+                            new StateEntity("Oregon, OR", usa),
+                            new StateEntity("Pennsylvania, PA", usa),
+                            new StateEntity("Rhode Island, RI", usa),
+                            new StateEntity("South Carolina, SC", usa),
+                            new StateEntity("South Dakota, SD", usa),
+                            new StateEntity("Tennessee, TN", usa),
+                            new StateEntity("Texas, TX", usa),
+                            new StateEntity("Utah, UT", usa),
+                            new StateEntity("Vermont, VT", usa),
+                            new StateEntity("Virginia, VA", usa),
+                            new StateEntity("Washington, WA", usa),
+                            new StateEntity("West Virginia, WV", usa),
+                            new StateEntity("Wisconsin, WI", usa),
+                            new StateEntity("Wyoming, WY", usa)
                     )
             );
         }

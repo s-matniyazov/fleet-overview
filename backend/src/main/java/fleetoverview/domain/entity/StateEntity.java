@@ -21,10 +21,10 @@ import java.util.Optional;
 public class StateEntity extends BaseEntity {
     @Column(length = 50)
     private String name;
-    @ManyToOne(targetEntity = CountryEntity.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(targetEntity = CountryEntity.class)
     private CountryEntity country;
 
-    public StateEntity(String name, Optional<CountryEntity> country) {
+    public StateEntity() {
     }
 
     public StateEntity(String name, CountryEntity country) {
