@@ -536,7 +536,7 @@ watch(
 
                 <!--            state-->
                 <div class="col-6">
-                  <USelect v-model="data.stateId" :label="t('')"
+                  <USelect v-model="data.stateId" :label="t('state')"
                            :items="states" name="state"
                            option_name="name"
                            classes="mb-2"
