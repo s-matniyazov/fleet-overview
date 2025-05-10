@@ -3,14 +3,14 @@ package fleetoverview.domain.entity;
 import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.entity.enums.TruckFileStatusEnum;
 import fleetoverview.domain.entity.enums.TruckFileTypeEnum;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import java.sql.Date;
 

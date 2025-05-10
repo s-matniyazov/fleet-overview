@@ -1,17 +1,15 @@
-# Используем официальный образ OpenJDK
+# Faqat JAR ishga tushirish uchun OpenJDK image
 FROM openjdk:17-jdk-slim
 
-# Устанавливаем Maven внутри контейнера
-RUN apt update && apt install -y maven
-
-# Указываем рабочую директорию
+# Ishchi papkani belgilash
 WORKDIR /app
 
-# Копируем файлы проекта в контейнер
-COPY . .
+# Tayyorlangan jar-faylni konteynerga nusxalash
+COPY target/fleetoverview-1.jar app.jar
 
-# Собираем JAR-файл внутри контейнера
-RUN mvn clean package -DskipTests
+# (ixtiyoriy) port ochishni ko‘rsatish
+EXPOSE 8088
 
-# Запускаем приложение
-CMD ["java", "-jar", "target/fleetoverview-1.jar"]
+# Ilovani ishga tushirish
+CMD ["java", "-jar", "app.jar"]
+

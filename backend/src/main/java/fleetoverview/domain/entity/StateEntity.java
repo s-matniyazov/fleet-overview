@@ -1,7 +1,13 @@
 package fleetoverview.domain.entity;
 
 import fleetoverview.domain.entity.base.BaseEntity;
-import jakarta.persistence.*;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import java.util.Optional;
 

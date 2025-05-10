@@ -6,8 +6,8 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/fleet/',
-  publicPath: 'fleet',
+  base: '',
+  publicPath: '',
   define: {
     global: 'globalThis',
   },
