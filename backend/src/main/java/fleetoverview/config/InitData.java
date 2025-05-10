@@ -121,7 +121,7 @@ public class InitData implements CommandLineRunner {
 private final CountryRepository countryRepository;
 
     private void initCountries() {
-        if (countryRepository.existsById(1)) {
+        if (!countryRepository.existsById(1)) {
             countryRepository.saveAll(
                     List.of(
                             new CountryEntity("USA"),
@@ -136,7 +136,7 @@ private final CountryRepository countryRepository;
     private final FuelTypeRepository fuelTypeRepository;
 
     private void initFuelTypes() {
-        if (fuelTypeRepository.existsById(1)) {
+        if (!fuelTypeRepository.existsById(1)) {
             fuelTypeRepository.saveAll(
                     List.of(
                             new FuelTypeEntity("Diesel"),

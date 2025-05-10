@@ -30,6 +30,16 @@ const en = {
     axles:'Number of Axles',
     vin:'VIN',
     ownershipTypes:'Ownership',
+    states:'States',
+    country:'Country',
+    unit:'Unit',
+    enter_unit:'Enter Unit Number',
+    enter_description:'Description',
+    enter_vin:'Enter VIN №',
+    enter_axles:'Enter Unit Number',
+    enter_grossWeight:'Enter Gross Weight',
+    enter_year:'Enter year',
+    enter_licensePlate:'Enter License Plate',
 }
 
 export default en;

@@ -515,7 +515,7 @@ watch(
             <div class="row">
               <div class="col-6 row">
                 <div class="col-12 text-primary mb-3" style="font-weight: 1000; font-size: 16px">
-                  Unit details
+                  Unit Details
                 </div>
                 <!--            unit-->
                 <div class="col-12">
@@ -526,7 +526,7 @@ watch(
 
                 <!--            country-->
                 <div class="col-6">
-                  <USelect v-model="data.countryId" :label="t('countries')"
+                  <USelect v-model="data.countryId" :label="t('country')"
                            :items="countries" name="country"
                            option_name="name"
                            classes="mb-2"
@@ -536,7 +536,7 @@ watch(
 
                 <!--            state-->
                 <div class="col-6">
-                  <USelect v-model="data.stateId" :label="t('state')"
+                  <USelect v-model="data.stateId" :label="t('states')"
                            :items="states" name="state"
                            option_name="name"
                            classes="mb-2"
@@ -611,7 +611,7 @@ watch(
 
               <div class="col-6">
                 <div class="col-12 text-primary mb-3" style="font-weight: 1000; font-size: 16px">
-                  Ownership details
+                  Ownership Details
                 </div>
 
                 <!--            ownershipType-->
