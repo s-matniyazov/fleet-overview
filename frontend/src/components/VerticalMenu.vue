@@ -57,6 +57,27 @@ function onLogout() {
             </router-link>
             <hr/>
           </li>
+          <button @click="e => {toggleSubmenu('drivers'); e.stopPropagation()}"
+                  class="btn w-100 text-start p-0">
+            <li class="menu-title cursor-pointer flex align-items-center justify-content-between text-gray-light font-size-14">
+              <i data-feather="command"></i>
+              <span data-key="t-driver" class="m-2">Drivers</span>
+              <span class="ml-auto" v-if="currentOpenMenu.includes('drivers')">
+                <i class="mdi mdi-arrow-down-drop-circle-outline"/>
+              </span>
+              <span class="ml-auto text-end" v-else style="margin-right: auto; left: 0">
+                <i class="mdi mdi-arrow-up-drop-circle-outline"/>
+              </span>
+            </li>
+          </button>
+          <li v-show="currentOpenMenu.includes('drivers')">
+            <router-link to="drivers" class="btn w-100 text-start p-0">
+              <i data-feather="drivers"></i>
+              <span>Drivers</span>
+            </router-link>
+
+            <hr/>
+          </li>
 
           <button @click="e => {toggleSubmenu('references'); e.stopPropagation()}" class="btn w-100 text-start p-0">
             <li class="menu-title cursor-pointer flex align-items-center justify-content-between text-gray-light font-size-14">

@@ -145,6 +145,7 @@ const fuelTypes = ref([]);
 const ownershipTypes = ref([]);
 const purchaseTypes = ref([]);
 const ownerOperators = ref([]);
+const drivers = ref([]);
 
 // FUNCTIONS
 const onAdd = () => {
@@ -171,7 +172,8 @@ const onEdit = (d) => {
     purchaseTypeId: d?.purchaseType?.id,
     ownerOperatorId: d.ownerOperator.id,
     description: d.description,
-    companyId: filterStore.companyId
+    companyId: filterStore.companyId,
+    driverId: d.driver.id
   };
 
   addModal.value = true;
@@ -280,6 +282,15 @@ function getOwnerOperator() {
   });
 }
 
+function getDrivers() {
+  axiosIns.get(`${URIS.DRIVERS}?companyId=${filterStore.companyId}`)
+      .then(res => {
+        drivers.value = res.data.data;
+      }).catch(e => {
+    showMessage(e)
+  });
+}
+
 // HOOKS
 onMounted(() => {
   getData();
@@ -288,7 +299,8 @@ onMounted(() => {
   getFuelType();
   getOwnershipType();
   getPurchaseType();
-  getOwnerOperator();
+  // getOwnerOperator();
+  getDrivers();
 })
 
 watch(
@@ -623,24 +635,34 @@ watch(
                            :rules="(val) => (!val && $t('required'))"
                   ></USelect>
                 </div>
+                <!--            includeIFTA-->
+                <div class="col-12">
+                  <UCheckbox v-model="data.includeIFTA" :label="t('Include To The IFTA')" :name="t('includeIFTA')"
+                             classes="mb-2" type="checkbox"/>
+                </div>
 
+<!--                <template v-if="data.ownershipTypeId === 2">-->
+<!--                  &lt;!&ndash;            ownerOperator&ndash;&gt;-->
+<!--                  <div class="col-12">-->
+<!--                    <USelect v-model="data.ownerOperatorId" :label="t('ownerOperators')"-->
+<!--                             :items="ownerOperators" name="ownerOperator"-->
+<!--                             option_name="name"-->
+<!--                             classes="mb-2"-->
+<!--                             :rules="(val) => (!val && $t('required'))"-->
+<!--                    ></USelect>-->
+<!--                  </div>-->
+<!--                </template>-->
                 <template v-if="data.ownershipTypeId === 2">
                   <!--            ownerOperator-->
                   <div class="col-12">
-                    <USelect v-model="data.ownerOperatorId" :label="t('ownerOperators')"
-                             :items="ownerOperators" name="ownerOperator"
+                    <USelect v-model="data.driverId" :label="t('ownerOperators')"
+                             :items="drivers" name="driver"
                              option_name="name"
                              classes="mb-2"
                              :rules="(val) => (!val && $t('required'))"
                     ></USelect>
                   </div>
                 </template>
-
-                <!--            includeIFTA-->
-                <div class="col-12">
-                  <UCheckbox v-model="data.includeIFTA" :label="t('Include To The IFTA')" :name="t('includeIFTA')"
-                             classes="mb-2" type="checkbox"/>
-                </div>
 
                 <template v-if="data.ownershipTypeId === 1">
                   <div class="col-12 text-primary my-3" style="font-weight: 1000; font-size: 16px">

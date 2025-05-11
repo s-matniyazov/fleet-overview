@@ -2,9 +2,9 @@ spring:
   application:
     name: "DEV"
   datasource:
-    url: jdbc:postgresql://localhost:5432/fleetoverviewdb
+    url: jdbc:postgresql://localhost:5433/postgres
     username: postgres
-    password: 1234
+    password: admin
     driver-class-name: org.postgresql.Driver
   jpa:
     show_sql: true
@@ -15,7 +15,7 @@ spring:
         level:
           org.hibernate.engine.transaction.jta.platform.internal: ERROR
       hibernate:
-        dialect: org.hibernate.dialect.OracleDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
 server:
   port: 8099

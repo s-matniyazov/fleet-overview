@@ -6,11 +6,13 @@ const en = {
     name:'Name',
     description:'Description',
     address:'Address',
+    city:'City',
     phone:'Phone Number',
     status:'Status',
     new_company:'New Company',
+    company:'Company',
     enter_company_name: 'Enter Company Name',
-    enter_phone_number: '+1 (555) 123-4567',
+    enter_phone_number: 'Enter Phone',
     unit_details:'Unit Details',
     operated_by:'Operated By',
     ownership:'Ownership',
@@ -40,6 +42,21 @@ const en = {
     enter_grossWeight:'Enter Gross Weight',
     enter_year:'Enter year',
     enter_licensePlate:'Enter License Plate',
+    first_name:'First Name',
+    enter_first_name:'Enter First Name',
+    enter_last_name:'Enter Last Name',
+    enter_middle_name:'Enter Middle Name',
+    email:'Email Address',
+    enter_email:'Enter Email Address',
+    date_of_birth:'Date Of Birth',
+    hired_date:'Hire(d) Date',
+    enter_address:'Enter Address',
+    zip_code:'ZIP Code',
+    enter_zip_code:'Enter ZIP Code',
+    enter_city:'Enter City',
+    driver:'Driver',
+
+
 }
 
 export default en;

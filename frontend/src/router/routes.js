@@ -32,6 +32,10 @@ const routes = [
             {path: '/settings', name: "Settings", meta: {requiresAuth: true}, component: () => import('@/components/setting/SettingsPage.vue')},
             {path: '/user-profile', name: "User Profile", meta: {requiresAuth: true}, component: () => import('@/components/profile/UserProfile.vue')},
 
+            // drivers
+            {
+                path: '/drivers', name: "Drivers", meta: {requiresAuth: true}, component: () => import('@/components/driver/Driver.vue'),
+            },
         ]
     }
 ]
