@@ -4,7 +4,7 @@ import {hideLoader, showLoader} from "@/util/utils.js";
 
 const axiosIns = axios.create({
   baseURL: 'https://fleet-backend.tt64295.tw1.ru/api/',
-    // baseURL: 'http://localhost:8099/api/',
+    // baseURL: 'http://localhost:8088/api/',
     timeout: 5000,
 })
 

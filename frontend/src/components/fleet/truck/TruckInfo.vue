@@ -24,12 +24,12 @@ const props = defineProps({
 
     <!--            country-->
     <div class="col-6">
-      {{ t('countries') }}: {{ data.city.country.name }}
+      {{ t('countries') }}: {{ data.state.country.name }}
     </div>
 
-    <!--            city-->
+    <!--            state-->
     <div class="col-6">
-      {{ t('city') }}: {{ data.city.name }}
+      {{ t('state') }}: {{ data.state.name }}
     </div>
 
     <!--            inServiceDate-->
