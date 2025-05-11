@@ -92,18 +92,18 @@ function onLogout() {
             </li>
           </button>
           <li v-show="currentOpenMenu.includes('references')">
-            <router-link to="country" class="btn w-100 text-start p-0">
-              <i data-feather="flag"></i>
-              <span>Country</span>
-            </router-link>
-            <router-link to="city" class="btn w-100 text-start p-0">
-              <i data-feather="map-pin"></i>
-              <span>City</span>
-            </router-link>
-            <router-link to="fuel-type" class="btn w-100 text-start p-0">
-              <i data-feather="tool"></i>
-              <span>Fuel type</span>
-            </router-link>
+<!--            <router-link to="country" class="btn w-100 text-start p-0">-->
+<!--              <i data-feather="flag"></i>-->
+<!--              <span>Country</span>-->
+<!--            </router-link>-->
+<!--            <router-link to="city" class="btn w-100 text-start p-0">-->
+<!--              <i data-feather="map-pin"></i>-->
+<!--              <span>City</span>-->
+<!--            </router-link>-->
+<!--            <router-link to="fuel-type" class="btn w-100 text-start p-0">-->
+<!--              <i data-feather="tool"></i>-->
+<!--              <span>Fuel type</span>-->
+<!--            </router-link>-->
             <router-link to="model-maker" class="btn w-100 text-start p-0">
               <i data-feather="tool"></i>
               <span>Model maker</span>

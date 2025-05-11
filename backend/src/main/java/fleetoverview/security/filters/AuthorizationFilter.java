@@ -45,8 +45,6 @@ public class AuthorizationFilter implements Filter {
     @Transactional
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        log.info("doFilter {}", AuthorizationFilter.class.getName());
-
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
 

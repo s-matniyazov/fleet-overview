@@ -170,7 +170,7 @@ const onEdit = (d) => {
     ownershipTypeId: d?.ownershipType?.id,
     includeIFTA: d.includeIFTA,
     purchaseTypeId: d?.purchaseType?.id,
-    ownerOperatorId: d.ownerOperator.id,
+    ownerOperatorId: d?.ownerOperator?.id,
     description: d.description,
     companyId: filterStore.companyId,
     driverId: d.driver.id
@@ -229,12 +229,14 @@ function getCountry() {
 }
 
 function getState(countryId) {
-  axiosIns.get(`${URIS.STATE}?countryId=${countryId}`)
-      .then(res => {
-        states.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
+  if (countryId) {
+    axiosIns.get(`${URIS.STATE}?countryId=${countryId}`)
+        .then(res => {
+          states.value = res.data.data;
+        }).catch(e => {
+      showMessage(e)
+    });
+  }
 }
 
 function getMaker() {
@@ -364,22 +366,20 @@ watch(
             <div class="col-12 d-flex align-items-center">
               <UTooltip>
                 <span class="text-primary" style="font-size: 15px">
-                  {{ row?.company?.name }}Company
+                  {{ row?.company?.name }}
                 </span>
                 <template #content>
-                  Company name Should be added
+                  {{ row?.company?.name }}
                 </template>
               </UTooltip>
             </div>
             <div class="col-12 d-flex align-items-center">
-
               <UTooltip>
-                <span class="text-gray-light f-700">{{ row?.ownerOperator?.name }}</span>
+                <span class="text-gray-light f-700">{{ row?.createdBy?.name }}</span>
                 <template #content>
-                  {{ row?.ownerOperator?.name }}
+                  {{ row?.createdBy?.name }}
                 </template>
               </UTooltip>
-
             </div>
           </div>
         </td>
@@ -387,18 +387,32 @@ watch(
 
       <template #row_ownership="{row}">
         <td>
-          <template v-if="row?.ownershipType?.id === 1">
-            <div class="row">
-              <div class="col-12 d-flex align-items-center">
+          <div class="row">
+            <div class="col-12 d-flex align-items-center">
+              <UTooltip>
                 <span class="text-primary" style="font-size: 15px">
                   {{ row?.ownershipType?.name }}
                 </span>
-              </div>
-              <div class="col-12 d-flex align-items-center">
-                <span class="text-gray-light f-700"> N/A </span>
-              </div>
+                <template #content>
+                  {{ row?.ownershipType?.name }}
+                </template>
+              </UTooltip>
             </div>
-          </template>
+            <div class="col-12 d-flex align-items-center text-gray-light fw-bold">
+              N/A
+            </div>
+          </div>
+<!--          <template v-if="row?.ownershipType?.id === 1">-->
+<!--            <div class="row">-->
+<!--              <div class="col-12 d-flex align-items-center">-->
+<!--                <span class="text-primary" style="font-size: 15px">-->
+<!--                </span>-->
+<!--              </div>-->
+<!--              <div class="col-12 d-flex align-items-center">-->
+<!--                <span class="text-gray-light f-700"> N/A </span>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </template>-->
         </td>
       </template>
 
@@ -498,11 +512,11 @@ watch(
       </template>
 
       <template #row_status="{row}">
-        <td>{{ row?.unit }}</td>
+        <td>{{ row?.status }}</td>
       </template>
 
       <template #row_actions="{row}">
-        <td>{{ row?.unit }}</td>
+        <td>❌</td>
       </template>
     </UTable>
   </div>
@@ -527,7 +541,7 @@ watch(
             <div class="row">
               <div class="col-6 row">
                 <div class="col-12 text-primary mb-3" style="font-weight: 1000; font-size: 16px">
-                  Unit Details
+                  Unit details
                 </div>
                 <!--            unit-->
                 <div class="col-12">
@@ -538,7 +552,7 @@ watch(
 
                 <!--            country-->
                 <div class="col-6">
-                  <USelect v-model="data.countryId" :label="t('country')"
+                  <USelect v-model="data.countryId" :label="t('countries')"
                            :items="countries" name="country"
                            option_name="name"
                            classes="mb-2"
@@ -623,7 +637,7 @@ watch(
 
               <div class="col-6">
                 <div class="col-12 text-primary mb-3" style="font-weight: 1000; font-size: 16px">
-                  Ownership Details
+                  Ownership details
                 </div>
 
                 <!--            ownershipType-->
@@ -679,7 +693,6 @@ watch(
                     ></USelect>
                   </div>
                 </template>
-
 
                 <div class="col-12 text-primary my-3" style="font-weight: 1000; font-size: 16px">
                   Additional Notes

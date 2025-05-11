@@ -102,6 +102,10 @@ public class TruckEntity extends BaseEntity {
         return inServiceDate;
     }
 
+    public CompanyEntity getCompany() {
+        return company;
+    }
+
     public void setInServiceDate(Date inServiceDate) {
         this.inServiceDate = inServiceDate;
     }

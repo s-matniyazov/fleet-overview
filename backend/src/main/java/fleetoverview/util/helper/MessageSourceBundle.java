@@ -31,11 +31,7 @@ public record MessageSourceBundle (
                     }
             );
         } catch (Exception e) {
-            return messageSource.getMessage(
-                    code,
-                    null,
-                    Locale.forLanguageTag("UZ")
-            );
+            return code;
         }
     }
 }
