@@ -40,8 +40,10 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
         repository.save(
                 new CompanyEntity(
                         data.name(),
-                        data.description(),
-                        data.address()
+                        data.phone(),
+                        data.address(),
+                        data.usdot(),
+                        data.email()
                 )
         );
 
@@ -54,7 +56,9 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
         CompanyEntity company = repository.findById(data.id()).orElseThrow(() -> new ExistsException(mSourceBundle.apply("company.found")));
 
         company.setName(data.name());
-        company.setDescription(data.description());
+        company.setPhone(data.phone());
+        company.setEmail(data.email());
+        company.setUsdot(data.usdot());
         company.setAddress(data.address());
 
         repository.save(company);

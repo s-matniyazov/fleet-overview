@@ -7,12 +7,15 @@ const en = {
     description:'Description',
     address:'Address',
     city:'City',
-    phone:'Phone Number',
+    phone:'Phone',
     status:'Status',
     new_company:'New Company',
     company:'Company',
+    company_name:'Company Name',
+    company_address:'Company Address',
+    enter_company_address:'Enter Company Address',
     enter_company_name: 'Enter Company Name',
-    enter_phone_number: 'Enter Phone',
+    enter_phone_number: 'Enter Phone Number',
     unit_details:'Unit Details',
     operated_by:'Operated By',
     ownership:'Ownership',
@@ -55,6 +58,8 @@ const en = {
     enter_zip_code:'Enter ZIP Code',
     enter_city:'Enter City',
     driver:'Driver',
+    usdot:'usdot',
+    enter_usdot:'Enter USDOT',
 
 
 }
