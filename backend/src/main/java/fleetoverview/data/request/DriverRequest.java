@@ -10,18 +10,20 @@ import java.sql.Date;
 
 
 public record DriverRequest(
+        int id,
+        int companyId,
         String firstName,
         String lastName,
         String middleName,
         Date hireDate,
         Date dateOfBirth,
-        StateEntity state,
-        CountryEntity country,
+        int stateId,
         String address,
         String city,
         int zipCode,
         String email,
-        String phone
+        String phone,
+        String status
 
 
 ) {

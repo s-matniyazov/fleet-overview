@@ -43,7 +43,8 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
                         data.phone(),
                         data.address(),
                         data.usdot(),
-                        data.email()
+                        data.email(),
+                        data.status()
                 )
         );
 
@@ -60,6 +61,7 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
         company.setEmail(data.email());
         company.setUsdot(data.usdot());
         company.setAddress(data.address());
+        company.setStatus(data.status());
 
         repository.save(company);
 

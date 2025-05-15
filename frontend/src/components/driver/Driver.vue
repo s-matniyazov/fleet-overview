@@ -26,16 +26,58 @@ const columns = [
     classes: '',
   },
   {
-    key: 'name',
-    name: 'name',
-    label: t('name'),
-    styles: 'width: 400px;',
+    key: 'firstName',
+    name: 'firstName',
+    label: t('first_name'),
+    styles: '',
     classes: '',
   },
   {
-    key: 'created',
-    name: 'created',
-    label: t('created'),
+    key: 'middleName',
+    name: 'middleName',
+    label: t('middle_name'),
+    styles: '',
+    classes: '',
+  },
+  {
+    key: 'lastName',
+    name: 'lastName',
+    label: t('last_name'),
+    styles: '',
+    classes: '',
+  },
+  {
+    key: 'email',
+    name: 'email',
+    label: t('email'),
+    styles: '',
+    classes: '',
+  },
+  {
+    key: 'phone',
+    name: 'phone',
+    label: t('phone'),
+    styles: '',
+    classes: '',
+  },
+  {
+    key: 'city',
+    name: 'city',
+    label: t('city'),
+    styles: '',
+    classes: '',
+  },
+  {
+    key: 'address',
+    name: 'address',
+    label: t('address'),
+    styles: '',
+    classes: '',
+  },
+  {
+    key: 'status',
+    name: 'status',
+    label: t('status'),
     styles: '',
     classes: '',
   },
@@ -45,10 +87,10 @@ const newModel = () => {
   return {
     id: null,
     name: null,
-    description: null,
-    companies: null,
+    address: null,
     companyId: filterStore.companyId,
     dateOfBirth: null,
+    hiredDate: null,
     firstName: null,
     zipCode: null,
     lastName: null,
@@ -56,7 +98,9 @@ const newModel = () => {
     email: null,
     phone: null,
     stateId:null,
+    countryId:null,
     city:null,
+    status:null,
 
   }
 }
@@ -65,7 +109,6 @@ const addModal = ref(false);
 
 const apiUrl = URIS.DRIVERS;
 const dataList = ref([]);
-const companies = ref([]);
 const countries = ref([]);
 const states = ref([]);
 const data = ref(newModel())
@@ -119,7 +162,7 @@ const onDelete = (d) => {
 }
 
 function getData() {
-  axiosIns.get(apiUrl)
+  axiosIns.get(`${apiUrl}?companyId=${filterStore.companyId}`)
       .then(res => {
         dataList.value = res.data.data;
         selectedRow.value = null;
@@ -128,14 +171,7 @@ function getData() {
   });
 }
 
-function getCompanies() {
-  axiosIns.get(`${URIS.COMPANIES}`)
-      .then(res => {
-        companies.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
-}
+
 function getCountries() {
   axiosIns.get(`${URIS.COUNTRY}`)
       .then(res => {
@@ -156,7 +192,6 @@ function getState(countryId) {
 // HOOKS
 onMounted(() => {
   getData();
-  getCompanies();
   getCountries();
   getState();
 })
@@ -223,14 +258,6 @@ watch(
               <div class="col-12 text-primary mb-3" style="font-weight: 1000; font-size: 16px">
                 Personal Details
               </div>
-<!--              <div class="col-12 row">-->
-<!--                <USelect v-model="data.company" :label="t('company')"-->
-<!--                         :items="companies" name="company"-->
-<!--                         option_name="name"-->
-<!--                         classes="mb-2"-->
-<!--                         :rules="(val) => (!val && $t('required'))"-->
-<!--                ></USelect>-->
-<!--              </div>-->
               <!--            name-->
               <div class="col-12 row">
                 <div class="col-4">
@@ -314,6 +341,15 @@ watch(
                   <UInput v-model="data.zipCode" :label="t('zip_code')" :hint="t('zip_code')" :name="t('zip_code')"
                           :placeholder="t('enter_zip_code')" classes="mb-3"
                           :rules="(val) => (!val && $t('required'))"/>
+                </div>
+                <div class="col-3">
+                  <USelect v-model="data.status" :label="t('status')"
+                           :items="[{name:'ACTIVE'},{name:'PASSIVE'}]" name="status"
+                           option_name="name"
+                           option_value="name"
+                           classes="mb-2"
+                           :rules="(val) => (!val && $t('required'))"
+                  ></USelect>
                 </div>
 
               </div>

@@ -46,6 +46,7 @@ const en = {
     enter_year:'Enter year',
     enter_licensePlate:'Enter License Plate',
     first_name:'First Name',
+    last_name:'Last Name',
     enter_first_name:'Enter First Name',
     enter_last_name:'Enter Last Name',
     enter_middle_name:'Enter Middle Name',
@@ -60,7 +61,6 @@ const en = {
     driver:'Driver',
     usdot:'usdot',
     enter_usdot:'Enter USDOT',
-
 
 }
 

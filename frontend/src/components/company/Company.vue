@@ -13,6 +13,7 @@ import UForm from "@/components/base/UForm.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
 import router from "@/router/index.js";
 import UPhoneField from "@/components/base/UPhoneField.vue";
+import USelect from "@/components/base/USelect.vue";
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
@@ -26,6 +27,12 @@ const columns = [
     classes: '',
   },
   {
+    key: 'usdot',
+    name: 'usdot',
+    label: t('usdot'),
+    styles: '',
+    classes: '',
+  },{
     key: 'name',
     name: 'name',
     label: t('name'),
@@ -36,6 +43,13 @@ const columns = [
     key: 'address',
     name: 'address',
     label: t('address'),
+    styles: '',
+    classes: '',
+  },
+  {
+    key: 'email',
+    name: 'email',
+    label: t('email'),
     styles: '',
     classes: '',
   },
@@ -53,13 +67,7 @@ const columns = [
     styles: '',
     classes: '',
   },
-  {
-    key: 'new_company',
-    name: 'new_company',
-    label: t('new_company'),
-    styles: '',
-    classes: '',
-  }
+
 ]
 
 const newModel = () => {
@@ -68,7 +76,8 @@ const newModel = () => {
     name: null,
     description: null,
     phone: null,
-    USDOT: null
+    USDOT: null,
+    status: null,
   }
 }
 
@@ -76,6 +85,7 @@ const addModal = ref(false);
 
 const apiUrl = URIS.COMPANIES;
 const dataList = ref([]);
+const status = ref([]);
 const data = ref(newModel())
 const selectedRow = ref();
 
@@ -213,9 +223,18 @@ onMounted(() => {
               <UInput v-model="data.phone" :label="t('phone')" :hint="t('phone')" :name="t('phone')"
                       :placeholder="t('enter_phone_number')" classes="mb-3"/>
             </div>
-            <div class="col-12">
+            <div class="col-6">
               <UInput v-model="data.address" :label="t('company_address')" :hint="t('company_address')" :name="t('company_address')"
                       :placeholder="t('enter_company_address')" classes="mb-3"/>
+            </div>
+            <div class="col-6">
+              <USelect v-model="data.status" :label="t('status')"
+                       :items="[{name:'Active'},{name:'Inactive'}]" name="status"
+                       option_name="name"
+                       option_value="name"
+                       classes="mb-2"
+                       :rules="(val) => (!val && $t('required'))"
+              ></USelect>
             </div>
           </div>
 

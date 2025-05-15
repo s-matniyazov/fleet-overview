@@ -552,12 +552,7 @@ watch(
 
                 <!--            country-->
                 <div class="col-6">
-                  <USelect v-model="data.countryId" :label="t('countries')"
-                           :items="countries" name="country"
-                           option_name="name"
-                           classes="mb-2"
-                           :rules="(val) => (!val && $t('required'))"
-                  ></USelect>
+                  c
                 </div>
 
                 <!--            state-->

@@ -23,16 +23,19 @@ public class CompanyEntity extends BaseIdEntity {
     private String email;
     @Column(length = 100)
     private String phone;
+    @Column(length = 10)
+    private String status;
 
     public CompanyEntity() {
     }
 
-    public CompanyEntity(String name, String phone, String address,String usdot,String email) {
+    public CompanyEntity(String name, String phone, String address,String usdot,String email,String status) {
         this.name = name;
         this.phone = phone;
         this.address = address;
         this.usdot = usdot;
         this.email = email;
+        this.status = status;
     }
 
     public String getName() {
@@ -41,6 +44,13 @@ public class CompanyEntity extends BaseIdEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getUsdot() {
