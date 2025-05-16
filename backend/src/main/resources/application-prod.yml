@@ -18,6 +18,17 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: sardorbekmatniyazov03@gmail.com
+    password: "jfus aawx krme uksx"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 server:
   port: 8088
   max-http-request-header-size: 100MB

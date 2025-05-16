@@ -4,6 +4,7 @@ import fleetoverview.domain.entity.CompanyEntity;
 import fleetoverview.domain.entity.TruckFileEntity;
 import fleetoverview.domain.enums.TruckFileStatusEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.sql.Date;
 import java.util.List;

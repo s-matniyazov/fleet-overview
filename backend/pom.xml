@@ -81,6 +81,12 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Java Mail API (для отправки писем) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!--        test-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

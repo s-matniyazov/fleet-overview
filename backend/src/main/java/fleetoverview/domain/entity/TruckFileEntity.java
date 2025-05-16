@@ -1,5 +1,6 @@
 package fleetoverview.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.enums.TruckFileStatusEnum;
 import fleetoverview.domain.enums.TruckFileTypeEnum;
@@ -36,6 +37,7 @@ public class TruckFileEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TruckFileStatusEnum status;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private TruckEntity truck;
 
@@ -90,5 +92,9 @@ public class TruckFileEntity extends BaseEntity {
 
     public void setType(TruckFileTypeEnum type) {
         this.type = type;
+    }
+
+    public TruckEntity getTruck() {
+        return truck;
     }
 }

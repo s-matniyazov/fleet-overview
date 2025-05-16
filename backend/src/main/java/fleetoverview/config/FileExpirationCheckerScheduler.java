@@ -1,7 +1,9 @@
 package fleetoverview.config;
 
+import fleetoverview.service.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +21,17 @@ public class FileExpirationCheckerScheduler {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Scheduled(cron = "0 0 8 * * ?")
+    private final NotificationService notificationService;
+
+    @Autowired
+    public FileExpirationCheckerScheduler(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
+
+    //cron = "0 0 8 * * ?"
+    @Scheduled(fixedDelay = 36000L)
     public void checkFileAndSendNotification() {
         log.info("Mail service working time is  {}", dateFormat.format(new Date()));
+        notificationService.sendNotifications();
     }
 }
