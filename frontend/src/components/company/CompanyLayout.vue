@@ -5,7 +5,7 @@ import UScrollArea from "@/components/base/UScrollArea.vue";
 </script>
 
 <template>
-<UScrollArea height="calc(100vh)" class="bg-primary" style="padding: 50px">
+<UScrollArea height="calc(100vh)" style="padding: 50px 100px;">
 <Company />
 </UScrollArea>
 </template>

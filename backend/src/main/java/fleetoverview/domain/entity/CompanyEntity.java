@@ -15,18 +15,27 @@ import javax.persistence.Table;
 public class CompanyEntity extends BaseIdEntity {
     @Column(length = 55)
     private String name;
-    @Column(length = 4000)
-    private String description;
+    @Column(length = 100)
+    private String usdot;
     @Column(length = 2000)
     private String address;
+    @Column(length = 100)
+    private String email;
+    @Column(length = 100)
+    private String phone;
+    @Column(length = 10)
+    private String status;
 
     public CompanyEntity() {
     }
 
-    public CompanyEntity(String name, String description, String address) {
+    public CompanyEntity(String name, String phone, String address,String usdot,String email,String status) {
         this.name = name;
-        this.description = description;
+        this.phone = phone;
         this.address = address;
+        this.usdot = usdot;
+        this.email = email;
+        this.status = status;
     }
 
     public String getName() {
@@ -36,13 +45,20 @@ public class CompanyEntity extends BaseIdEntity {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getDescription() {
-        return description;
+    public String getStatus() {
+        return status;
     }
 
-    public void setDescription(String properties) {
-        this.description = properties;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getUsdot() {
+        return this.usdot;
+    }
+
+    public void setUsdot(String usdot) {
+        this.usdot = usdot;
     }
 
     public String getAddress() {
@@ -51,5 +67,17 @@ public class CompanyEntity extends BaseIdEntity {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+    public String getPhone() {
+        return phone;
+    }
+    public void setPhone(String phone) {
+        this.phone= phone;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email= email;
     }
 }

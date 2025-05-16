@@ -27,4 +27,6 @@ public interface UriConstants {
 
     // truck
     String TRUCK = API + "/trucks";
+    // driver
+    String DRIVER = API + "/drivers";
 }

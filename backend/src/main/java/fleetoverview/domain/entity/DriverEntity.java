@@ -24,8 +24,6 @@ public class DriverEntity extends BaseEntity {
     private Date dateOfBirth;
     @ManyToOne(targetEntity = StateEntity.class)
     private StateEntity state;
-    @ManyToOne(targetEntity = CountryEntity.class)
-    private CountryEntity country;
 
     @Column(length = 500)
     private String address;
@@ -38,21 +36,19 @@ public class DriverEntity extends BaseEntity {
     private String email;
     @Column(length = 50)
     private String phone;
-
     @Enumerated(EnumType.STRING)
     private DriverStatusEnum status = DriverStatusEnum.ACTIVE;
 
 
-    public DriverEntity(String firstName, String lastName, String middleName, Date hireDate,
-                        Date dateOfBirth, StateEntity state, CountryEntity country, String address,
+    public DriverEntity(CompanyEntity company,String firstName, String lastName, String middleName, Date hireDate,
+                        Date dateOfBirth, StateEntity state, String address,
                         String city, int zipCode, String email, String phone, DriverStatusEnum status) {
+        this.company = company;
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
         this.hireDate = hireDate;
         this.dateOfBirth = dateOfBirth;
-        this.state = state;
-        this.country = country;
         this.address = address;
         this.city = city;
         this.zipCode = zipCode;
@@ -64,6 +60,13 @@ public class DriverEntity extends BaseEntity {
     public DriverEntity() {
 
     }
+    public CompanyEntity getCompany() {
+        return company;
+    }
+    public void setCompany(CompanyEntity company) {
+        this.company = company;
+    }
+
 
     public String getFirstName() {
         return firstName;
@@ -111,14 +114,6 @@ public class DriverEntity extends BaseEntity {
 
     public void setState(StateEntity state) {
         this.state = state;
-    }
-
-    public CountryEntity getCountry() {
-        return country;
-    }
-
-    public void setCountry(CountryEntity country) {
-        this.country = country;
     }
 
     public String getAddress() {

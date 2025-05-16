@@ -13,6 +13,7 @@ import UForm from "@/components/base/UForm.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
 import router from "@/router/index.js";
 import UPhoneField from "@/components/base/UPhoneField.vue";
+import USelect from "@/components/base/USelect.vue";
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
@@ -26,6 +27,12 @@ const columns = [
     classes: '',
   },
   {
+    key: 'usdot',
+    name: 'usdot',
+    label: t('usdot'),
+    styles: '',
+    classes: '',
+  },{
     key: 'name',
     name: 'name',
     label: t('name'),
@@ -36,6 +43,13 @@ const columns = [
     key: 'address',
     name: 'address',
     label: t('address'),
+    styles: '',
+    classes: '',
+  },
+  {
+    key: 'email',
+    name: 'email',
+    label: t('email'),
     styles: '',
     classes: '',
   },
@@ -53,13 +67,7 @@ const columns = [
     styles: '',
     classes: '',
   },
-  {
-    key: 'new_company',
-    name: 'new_company',
-    label: t('new_company'),
-    styles: '',
-    classes: '',
-  }
+
 ]
 
 const newModel = () => {
@@ -67,7 +75,9 @@ const newModel = () => {
     id: null,
     name: null,
     description: null,
-    phone: null
+    phone: null,
+    USDOT: null,
+    status: null,
   }
 }
 
@@ -75,6 +85,7 @@ const addModal = ref(false);
 
 const apiUrl = URIS.COMPANIES;
 const dataList = ref([]);
+const status = ref([]);
 const data = ref(newModel())
 const selectedRow = ref();
 
@@ -154,7 +165,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mb-0 p-2 bg-light-subtle">
+  <div class="mb-0 p-2 bg-light rounded-4 shadow-dark" >
     <div class="col-12">
       <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-3">
         <div class="d-flex">
@@ -180,7 +191,7 @@ onMounted(() => {
   </div>
 
   <Teleport to="body">
-    <modal :show="addModal" @close="addModal = false">
+    <modal :show="addModal" @close="addModal = false" width="calc(100vw-400px)">
       <template #header>
         <div class="d-flex" style="width: 100%">
           <div class="text-dark">
@@ -196,17 +207,34 @@ onMounted(() => {
         <UForm @submit="onSave">
           <div class="row">
             <!--            name-->
-            <div class="col-12">
-              <UInput v-model="data.name" :label="t('name')" :hint="t('name')" :name="t('name')"
+            <div class="col-6">
+              <UInput v-model="data.name" :label="t('company_name')" :hint="t('company_name')" :name="t('company_name')"
                       :placeholder="t('enter_company_name')" classes="mb-3"/>
             </div>
-
-            <!--            description-->
-            <div class="col-12">
-              <UTextarea v-model="data.description" :label="t('description')"
-                         :placeholder="t('enter_priority_description')" classes="mb-3"/>
-              <UPhoneField v-model="data.phone" :label="t('phone')"
-                         :placeholder="t('enter_phone_number')" classes="mb-3"/>
+            <div class="col-6">
+              <UInput v-model="data.usdot" :label="t('usdot')" :hint="t('usdot')" :name="t('usdot')"
+                      :placeholder="t('enter_usdot')" classes="mb-3"/>
+            </div>
+            <div class="col-6">
+              <UInput v-model="data.email" :label="t('email')" :hint="t('email')" :name="t('email')"
+                      :placeholder="t('enter_email')" classes="mb-3"/>
+            </div>
+            <div class="col-6">
+              <UInput v-model="data.phone" :label="t('phone')" :hint="t('phone')" :name="t('phone')"
+                      :placeholder="t('enter_phone_number')" classes="mb-3"/>
+            </div>
+            <div class="col-6">
+              <UInput v-model="data.address" :label="t('company_address')" :hint="t('company_address')" :name="t('company_address')"
+                      :placeholder="t('enter_company_address')" classes="mb-3"/>
+            </div>
+            <div class="col-6">
+              <USelect v-model="data.status" :label="t('status')"
+                       :items="[{name:'Active'},{name:'Inactive'}]" name="status"
+                       option_name="name"
+                       option_value="name"
+                       classes="mb-2"
+                       :rules="(val) => (!val && $t('required'))"
+              ></USelect>
             </div>
           </div>
 
