@@ -2,15 +2,11 @@ package fleetoverview.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import fleetoverview.data.request.UserRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
 import fleetoverview.domain.entity.UserEntity;
-import fleetoverview.domain.entity.enums.UserStatusEnum;
-import fleetoverview.domain.filter.UserFilterSpecifications;
 import fleetoverview.repository.RoleRepository;
 import fleetoverview.repository.UserRepository;
 import fleetoverview.service.UserService;
@@ -19,7 +15,6 @@ import fleetoverview.util.exceptions.NotFoundException;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author :  sardor.matniyazov
@@ -39,10 +34,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 
     @Override
     public DataResponse<List<UserEntity>> get(Map<String, String> params) {
-        Specification<UserEntity> filters = Specification.where(CollectionUtils.isEmpty(params) ? null : UserFilterSpecifications.hasName(params.get("name")))
-                                                         .and(Objects.requireNonNull(CollectionUtils.isEmpty(params) ? null : UserFilterSpecifications.hasStatus(UserStatusEnum.valueOf(params.get("status")))));
-
-        return DataResponse.success(repository.findAll(filters, Sort.by(Sort.Direction.DESC, "id")));
+        return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 
     @Override

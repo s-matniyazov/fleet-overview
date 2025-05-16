@@ -18,7 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import fleetoverview.domain.entity.UserEntity;
 import fleetoverview.repository.UserRepository;
-import fleetoverview.service.JwtService;
+import fleetoverview.security.JwtService;
 import fleetoverview.util.helper.Utils;
 
 import java.io.IOException;

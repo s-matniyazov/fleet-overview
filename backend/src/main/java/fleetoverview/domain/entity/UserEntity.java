@@ -11,8 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.springframework.security.core.userdetails.UserDetails;
 import fleetoverview.domain.entity.base.BaseEntity;
-import fleetoverview.domain.entity.enums.LangEnum;
-import fleetoverview.domain.entity.enums.UserStatusEnum;
+import fleetoverview.domain.enums.LangEnum;
+import fleetoverview.domain.enums.UserStatusEnum;
 
 import java.util.Collection;
 import java.util.Date;

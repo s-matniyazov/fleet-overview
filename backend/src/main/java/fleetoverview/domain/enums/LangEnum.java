@@ -1,4 +1,4 @@
-package fleetoverview.domain.entity.enums;
+package fleetoverview.domain.enums;
 
 /**
  * @author :  sardor.matniyazov

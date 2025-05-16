@@ -1,15 +1,12 @@
 package fleetoverview.repository;
 
-import fleetoverview.domain.entity.TruckEntity;
+import fleetoverview.domain.entity.NotificationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 16 март 2025
+ * @created : 14 май 2025
  **/
-public interface TruckRepository extends JpaRepository<TruckEntity, Integer> {
-
+public interface NotificationRepository extends JpaRepository<NotificationEntity, Integer> {
 }

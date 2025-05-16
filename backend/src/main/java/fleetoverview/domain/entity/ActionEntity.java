@@ -2,7 +2,7 @@ package fleetoverview.domain.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import fleetoverview.domain.entity.base.BaseEntity;
-import fleetoverview.domain.entity.enums.ActionTypesEnum;
+import fleetoverview.domain.enums.ActionTypesEnum;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

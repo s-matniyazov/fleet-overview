@@ -1,6 +1,6 @@
 package fleetoverview.data.request;
 
-import fleetoverview.domain.entity.enums.ActionTypesEnum;
+import fleetoverview.domain.enums.ActionTypesEnum;
 
 /**
  * @author :  sardor.matniyazov

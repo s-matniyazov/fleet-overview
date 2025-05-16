@@ -1,8 +1,8 @@
 package fleetoverview.domain.entity;
 
 import fleetoverview.domain.entity.base.BaseEntity;
-import fleetoverview.domain.entity.enums.TruckFileStatusEnum;
-import fleetoverview.domain.entity.enums.TruckFileTypeEnum;
+import fleetoverview.domain.enums.TruckFileStatusEnum;
+import fleetoverview.domain.enums.TruckFileTypeEnum;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

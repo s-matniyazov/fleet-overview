@@ -1,6 +1,6 @@
 package fleetoverview.data.request;
 
-import fleetoverview.domain.entity.enums.TruckStatusEnum;
+import fleetoverview.domain.enums.TruckStatusEnum;
 
 import java.sql.Date;
 

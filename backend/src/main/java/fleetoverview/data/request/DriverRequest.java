@@ -2,10 +2,7 @@ package fleetoverview.data.request;
 
 import fleetoverview.domain.entity.CountryEntity;
 import fleetoverview.domain.entity.StateEntity;
-import fleetoverview.domain.entity.enums.TruckStatusEnum;
 
-import javax.persistence.Column;
-import javax.persistence.ManyToOne;
 import java.sql.Date;
 
 

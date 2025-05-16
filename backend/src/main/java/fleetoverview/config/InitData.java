@@ -1,7 +1,7 @@
 package fleetoverview.config;
 
 import fleetoverview.domain.entity.*;
-import fleetoverview.domain.entity.enums.ActionTypesEnum;
+import fleetoverview.domain.enums.ActionTypesEnum;
 import fleetoverview.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -5,13 +5,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import fleetoverview.data.request.LoginRequest;
-import fleetoverview.data.response.ActionResponse;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
 import fleetoverview.domain.entity.UserEntity;
 import fleetoverview.repository.UserRepository;
 import fleetoverview.service.AuthService;
-import fleetoverview.service.JwtService;
+import fleetoverview.security.JwtService;
 import fleetoverview.util.exceptions.ForbiddenException;
 import fleetoverview.util.helper.Utils;
 

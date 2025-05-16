@@ -1,6 +1,6 @@
 package fleetoverview.data.request;
 
-import fleetoverview.domain.entity.enums.TruckFileTypeEnum;
+import fleetoverview.domain.enums.TruckFileTypeEnum;
 
 import java.sql.Date;
 

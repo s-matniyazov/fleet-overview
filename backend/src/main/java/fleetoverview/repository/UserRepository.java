@@ -1,7 +1,6 @@
 package fleetoverview.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import fleetoverview.domain.entity.UserEntity;
 
 import java.util.Optional;
@@ -11,7 +10,7 @@ import java.util.Optional;
  * @mailto :  sardorbekmatniyazov03@gmail.com
  * @created : 28 янв. 2025
  **/
-public interface UserRepository extends JpaRepository<UserEntity, Integer>, JpaSpecificationExecutor<UserEntity> {
+public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     Optional<UserEntity> findByUsername(String username);
 
 }

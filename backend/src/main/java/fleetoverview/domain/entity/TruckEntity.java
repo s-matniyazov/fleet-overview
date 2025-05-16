@@ -1,12 +1,11 @@
 package fleetoverview.domain.entity;
 
 import fleetoverview.domain.entity.base.BaseEntity;
-import fleetoverview.domain.entity.enums.TruckStatusEnum;
+import fleetoverview.domain.enums.TruckStatusEnum;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;

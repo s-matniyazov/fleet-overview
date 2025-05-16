@@ -1,7 +1,7 @@
 package fleetoverview.domain.entity;
 
 import fleetoverview.domain.entity.base.BaseEntity;
-import fleetoverview.domain.entity.enums.DriverStatusEnum;
+import fleetoverview.domain.enums.DriverStatusEnum;
 
 import javax.persistence.*;
 import java.sql.Date;

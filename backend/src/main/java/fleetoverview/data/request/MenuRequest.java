@@ -1,6 +1,6 @@
 package fleetoverview.data.request;
 
-import fleetoverview.domain.entity.enums.MenuStatusEnum;
+import fleetoverview.domain.enums.MenuStatusEnum;
 
 import java.util.List;
 

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.Locale;
 import java.util.function.Function;
 
-import static fleetoverview.domain.entity.enums.LangEnum.UZBEK;
+import static fleetoverview.domain.enums.LangEnum.UZBEK;
 
 /**
  * @author :  Sardor Matniyazov

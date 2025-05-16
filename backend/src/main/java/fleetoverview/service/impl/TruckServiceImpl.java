@@ -5,7 +5,7 @@ import fleetoverview.data.request.TruckRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
 import fleetoverview.domain.entity.*;
-import fleetoverview.domain.entity.enums.TruckFileStatusEnum;
+import fleetoverview.domain.enums.TruckFileStatusEnum;
 import fleetoverview.repository.*;
 import fleetoverview.service.ResourceService;
 import fleetoverview.service.TruckService;

@@ -7,8 +7,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import fleetoverview.domain.entity.base.BaseEntity;
-import fleetoverview.domain.entity.enums.ClientStatusEnum;
-import fleetoverview.domain.entity.enums.UserStatusEnum;
+import fleetoverview.domain.enums.ClientStatusEnum;
 
 /**
  * @author :  sardor.matniyazov
