@@ -60,7 +60,7 @@ function onLogout() {
           <button @click="e => {toggleSubmenu('drivers'); e.stopPropagation()}"
                   class="btn w-100 text-start p-0">
             <li class="menu-title cursor-pointer flex align-items-center justify-content-between text-gray-light font-size-14">
-              <i data-feather="command"></i>
+              <i data-feather="users"></i>
               <span data-key="t-driver" class="m-2">Drivers</span>
               <span class="ml-auto" v-if="currentOpenMenu.includes('drivers')">
                 <i class="mdi mdi-arrow-down-drop-circle-outline"/>

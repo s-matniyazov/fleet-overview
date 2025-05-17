@@ -61,6 +61,7 @@ const en = {
     driver:'Driver',
     usdot:'usdot',
     enter_usdot:'Enter USDOT',
+    ownerOperators:'Owner Operators',
 
 }
 

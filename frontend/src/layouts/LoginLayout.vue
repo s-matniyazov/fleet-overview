@@ -40,13 +40,13 @@ function onLogin() {
               <div class="d-flex flex-column h-100">
                 <div class="mb-4 mb-md-5 text-center">
                   <router-link to="/" class="d-block auth-logo">
-                    <img src="@/assets/logo.png" alt="" size="12"> <span class="logo-txt">Fleet</span>
+                    <img src="@/assets/em_logo.png" alt="" size="15"> <br><p class="h1 mt-3" >EFFICIENT MANAGEMENT FLEET</p>
                   </router-link>
                 </div>
                 <div class="auth-content my-auto">
                   <div class="text-center">
-                    <h5 class="mb-0">Добро пожаловать !</h5>
-                    <p class="text-muted mt-2">Войдите, чтобы продолжить в Fleet.</p>
+                    <h5 class="mb-0">Welcome to EM Fleet !</h5>
+                    <p class="text-muted mt-2">Login to continue using EM Fleet..</p>
                   </div>
                   <form class="mt-4 pt-2">
                     <div class="mb-3">
@@ -56,7 +56,7 @@ function onLogin() {
                       <UInput v-model="password" placeholder="Введите пароль" label="Password" type="password"/>
                     </div>
                     <div class="mb-3">
-                      <button class="btn btn-primary w-100 waves-effect waves-light" type="button" @click="e => {onLogin(); e.stopPropagation()}">Войти</button>
+                      <button class="btn btn-primary w-100 waves-effect waves-light" type="button" @click="e => {onLogin(); e.stopPropagation()}">Login</button>
                     </div>
                   </form>
                 </div>
@@ -76,9 +76,8 @@ function onLogin() {
                         <div class="test-contain text-white">
                           <i class="bx bxs-quote-alt-left text-success display-6"></i>
 
-                          <h4 class="mt-4 fw-medium lh-base text-white">“Fleet – это современный инструмент для
-                            управления задачами и организации работы. Он позволяет пользователям планировать ежедневные
-                            задачи, расставлять приоритеты и отслеживать их выполнение.”
+                          <h4 class="mt-4 fw-medium lh-base text-white">“EFFICIENT MANAGEMENT FLEET – is a modern tool for task management and work organization.
+                            It allows users to plan daily tasks, set priorities, and track their completion.”
                           </h4>
                         </div>
                       </div>
