@@ -18,17 +18,7 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: sardorbekmatniyazov03@gmail.com
-    password: "jfus aawx krme uksx"
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+
 server:
   port: 8088
   max-http-request-header-size: 100MB
@@ -42,6 +32,12 @@ server:
 
 telegram:
   token: "6174384781:AAENYCRflrXFt6KERjQC1LhW6yd_zs-7Vbc"
-  chatIds: "-1002554948125,1092527096"
+  chatIds: ""
 mail:
-  senders: "sardorbekmatniyazov03@gmail.com"
+  senders: ""
+  host: smtp.gmail.com
+  username: sardorbekmatniyazov03@gmail.com
+  password: "jfus aawx krme uksx"
+
+resource:
+  path: "d:\\resources\\"

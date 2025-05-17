@@ -4,8 +4,6 @@ import fleetoverview.config.MailConfigurationParams;
 import fleetoverview.config.TelegramConfigurationParams;
 import fleetoverview.domain.enums.TruckFileTypeEnum;
 import fleetoverview.repository.CompanyRepository;
-import fleetoverview.repository.NotificationRepository;
-import fleetoverview.repository.TruckFileRepository;
 import fleetoverview.repository.TruckRepository;
 import fleetoverview.service.NotificationService;
 import org.slf4j.Logger;
@@ -14,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -156,6 +152,8 @@ public class NotificationServiceImpl implements NotificationService {
 
         HttpEntity<Map<String, String>> request = new HttpEntity<>(body, headers);
 
+        if (telegramParams.getChatIds().isEmpty()) return;
+
         for (String chatId: telegramParams.getChatIds().split(",")) {
             body.put("chat_id", chatId);
             restTemplate.postForEntity(
@@ -175,6 +173,8 @@ public class NotificationServiceImpl implements NotificationService {
             helper.setTo("sardorbekmatniyazov03@gmail.com");
             helper.setSubject("fleet alert");
             helper.setText(message, true);
+
+            if (mailParams.getSenders().isEmpty()) return;
 
             for (String mail: mailParams.getSenders().split(",")) {
                 helper.setTo(mail);

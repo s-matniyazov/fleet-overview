@@ -1,5 +1,6 @@
 package fleetoverview.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -9,6 +10,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
+import java.util.Properties;
 
 /**
  * @author :  Sardor Matniyazov
@@ -17,6 +19,14 @@ import java.util.Locale;
  **/
 @Configuration
 public class BeanConfig {
+
+    private final MailConfigurationParams mailParams;
+
+    @Autowired
+    public BeanConfig(MailConfigurationParams mailParams) {
+        this.mailParams = mailParams;
+    }
+
     @Bean
     public LocaleResolver localeResolver () {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
@@ -30,5 +40,21 @@ public class BeanConfig {
         messageSource.setUseCodeAsDefaultMessage(true);
         messageSource.setBasename("messages");
         return messageSource;
+    }
+    @Bean
+    public JavaMailSender javaMailSender() {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
+
+        mailSender.setUsername(mailParams.getUsername());
+        mailSender.setPassword(mailParams.getPassword());
+
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+
+        return mailSender;
     }
 }

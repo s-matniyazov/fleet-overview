@@ -145,7 +145,6 @@ const makers = ref([]);
 const fuelTypes = ref([]);
 const ownershipTypes = ref([]);
 const purchaseTypes = ref([]);
-const ownerOperators = ref([]);
 const drivers = ref([]);
 
 // FUNCTIONS
@@ -276,24 +275,13 @@ function getPurchaseType() {
   });
 }
 
-function getOwnerOperator() {
-  axiosIns.get(`${URIS.OWNER_OPERATOR}?companyId=${filterStore.companyId}`)
-      .then(res => {
-        ownerOperators.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
-}
-
 function getDrivers() {
   axiosIns.get(`${URIS.DRIVERS}?companyId=${filterStore.companyId}`)
       .then(res => {
         drivers.value = res.data.data;
-        alert(JSON.stringify(drivers.value));
       }).catch(e => {
     showMessage(e)
   });
-
 }
 
 // HOOKS
@@ -304,7 +292,6 @@ onMounted(() => {
   getFuelType();
   getOwnershipType();
   getPurchaseType();
-  // getOwnerOperator();
   getDrivers();
 })
 
@@ -658,17 +645,6 @@ watch(
                              classes="mb-2" type="checkbox"/>
                 </div>
 
-<!--                <template v-if="data.ownershipTypeId === 2">-->
-<!--                  &lt;!&ndash;            ownerOperator&ndash;&gt;-->
-<!--                  <div class="col-12">-->
-<!--                    <USelect v-model="data.ownerOperatorId" :label="t('ownerOperators')"-->
-<!--                             :items="ownerOperators" name="ownerOperator"-->
-<!--                             option_name="name"-->
-<!--                             classes="mb-2"-->
-<!--                             :rules="(val) => (!val && $t('required'))"-->
-<!--                    ></USelect>-->
-<!--                  </div>-->
-<!--                </template>-->
                 <template v-if="data.ownershipTypeId === 2">
                   <!--            ownerOperator-->
                   <div class="col-12">

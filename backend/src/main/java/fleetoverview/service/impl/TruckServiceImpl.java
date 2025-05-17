@@ -130,7 +130,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         truck.setDescription(data.description());
         truck.setCompany(companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))));
 
-        return null;
+        return ApiResponse.success();
     }
 
     @Override

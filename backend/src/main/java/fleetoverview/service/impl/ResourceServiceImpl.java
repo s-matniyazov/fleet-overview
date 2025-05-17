@@ -1,5 +1,6 @@
 package fleetoverview.service.impl;
 
+import fleetoverview.config.ResourceConfigurationParams;
 import fleetoverview.domain.entity.ResourceEntity;
 import fleetoverview.repository.ResourceRepository;
 import fleetoverview.service.ResourceService;
@@ -29,10 +30,12 @@ import java.util.UUID;
 @Service
 public class ResourceServiceImpl implements ResourceService {
     private final ResourceRepository repository;
+    private final ResourceConfigurationParams resourceParams;
 
     @Autowired
-    public ResourceServiceImpl(ResourceRepository repository) {
+    public ResourceServiceImpl(ResourceRepository repository, ResourceConfigurationParams resourceParams) {
         this.repository = repository;
+        this.resourceParams = resourceParams;
     }
 
     @Override
@@ -64,7 +67,7 @@ public class ResourceServiceImpl implements ResourceService {
                 file.getOriginalFilename(),
                 split[split.length - 1],
                 file.getSize(),
-                "resources//" + string,
+                resourceParams.getPath() + string,
                 file.getContentType()
         ));
 
