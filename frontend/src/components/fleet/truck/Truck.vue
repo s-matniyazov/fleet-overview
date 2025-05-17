@@ -122,7 +122,8 @@ const newModel = () => {
     purchaseTypeId: null,
     ownerOperatorId: null,
     description: null,
-    companyId: filterStore.companyId
+    companyId: filterStore.companyId,
+    driverId: null
   }
 }
 
@@ -288,9 +289,11 @@ function getDrivers() {
   axiosIns.get(`${URIS.DRIVERS}?companyId=${filterStore.companyId}`)
       .then(res => {
         drivers.value = res.data.data;
+        alert(JSON.stringify(drivers.value));
       }).catch(e => {
     showMessage(e)
   });
+
 }
 
 // HOOKS
@@ -552,7 +555,12 @@ watch(
 
                 <!--            country-->
                 <div class="col-6">
-                  c
+                  <USelect v-model="data.countryId" :label="t('country')"
+                           :items="countries" name="country"
+                           option_name="name"
+                           classes="mb-2"
+                           :rules="(val) => (!val && $t('required'))"
+                  ></USelect>
                 </div>
 
                 <!--            state-->
