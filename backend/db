@@ -76,6 +76,7 @@ sudo apt install certbot python3-certbot-nginx
 sudo certbot --nginx -d fleet-backend.tt64295.tw1.ru -d www.fleet-backend.tt64295.tw1.ru
 
 
+java -jar fleetoverview-1.jar --spring.config.location=/root/fleet/config/config.yml
 
 
 

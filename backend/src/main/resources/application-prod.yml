@@ -39,3 +39,9 @@ server:
     threads:
       max: 200
       min-spare: 10
+
+telegram:
+  token: "6174384781:AAENYCRflrXFt6KERjQC1LhW6yd_zs-7Vbc"
+  chatIds: "-1002554948125,1092527096"
+mail:
+  senders: "sardorbekmatniyazov03@gmail.com"

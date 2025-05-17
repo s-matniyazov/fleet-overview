@@ -1,5 +1,7 @@
 package fleetoverview.service.impl;
 
+import fleetoverview.config.MailConfigurationParams;
+import fleetoverview.config.TelegramConfigurationParams;
 import fleetoverview.domain.enums.TruckFileTypeEnum;
 import fleetoverview.repository.CompanyRepository;
 import fleetoverview.repository.NotificationRepository;
@@ -13,14 +15,13 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.mail.internet.MimeMessage;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -37,21 +38,21 @@ import static fleetoverview.util.helper.Utils.isNull;
 @Service
 public class NotificationServiceImpl implements NotificationService {
     private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
-    private final NotificationRepository repository;
     private final CompanyRepository companyRepository;
     private final TruckRepository truckRepository;
-    private final TruckFileRepository truckFileRepository;
     private final JavaMailSender mailSender;
+    private final TelegramConfigurationParams telegramParams;
+    private final MailConfigurationParams mailParams;
 
     @Autowired
-    public NotificationServiceImpl(NotificationRepository repository, TruckRepository truckRepository,
-                                   CompanyRepository companyRepository, TruckFileRepository truckFileRepository,
-                                   JavaMailSender mailSender) {
-        this.repository = repository;
+    public NotificationServiceImpl(TruckRepository truckRepository,
+                                   CompanyRepository companyRepository,
+                                   JavaMailSender mailSender, TelegramConfigurationParams telegramParams, MailConfigurationParams mailParams) {
         this.truckRepository = truckRepository;
         this.companyRepository = companyRepository;
-        this.truckFileRepository = truckFileRepository;
         this.mailSender = mailSender;
+        this.telegramParams = telegramParams;
+        this.mailParams = mailParams;
     }
 
     @Override
@@ -65,7 +66,7 @@ public class NotificationServiceImpl implements NotificationService {
                                         
                     Dear Qobil,
                                         
-                    This is an automated compliance notification from your Portal system regarding %s.
+                    This is an automated compliance notification from your Efficient management regarding %s.
                                         
                     Please review the following compliance alerts:
                        \
@@ -148,35 +149,26 @@ public class NotificationServiceImpl implements NotificationService {
 
         // JSON body
         Map<String, String> body = new HashMap<>();
-        body.put("chat_id", "1092527096");
         body.put("text", message);
 
-        // HTTP headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // Create the request
         HttpEntity<Map<String, String>> request = new HttpEntity<>(body, headers);
 
-        // Send the request as POST
-        ResponseEntity<String> response = restTemplate.postForEntity("https://api.telegram.org/bot6174384781:AAENYCRflrXFt6KERjQC1LhW6yd_zs-7Vbc/sendmessage", request, String.class);
-
-        // Optional: Print or log the response
-        System.out.println("Telegram response: " + response.getBody());
-//
-//        try {
-//            String fooResourceUrl = "https://api.telegram.org/bot6174384781:AAENYCRflrXFt6KERjQC1LhW6yd_zs-7Vbc/sendmessage?chat_id=1092527096&text=" + URLEncoder.encode(message, StandardCharsets.UTF_8);
-//
-//            RestTemplate restTemplate = new RestTemplate();
-//            restTemplate.getForObject(fooResourceUrl, String.class);
-//
-//        } catch (Exception e) {
-//            logger.error("TG_RESULT " + e.getMessage());
-//        }
+        for (String chatId: telegramParams.getChatIds().split(",")) {
+            body.put("chat_id", chatId);
+            restTemplate.postForEntity(
+                    String.format("https://api.telegram.org/bot%s/sendmessage", telegramParams.getToken()),
+                    request,
+                    String.class
+            );
+        }
     }
 
     private void sendToGmail(String message) {
         try {
+
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
@@ -184,7 +176,11 @@ public class NotificationServiceImpl implements NotificationService {
             helper.setSubject("fleet alert");
             helper.setText(message, true);
 
-            mailSender.send(mimeMessage);
+            for (String mail: mailParams.getSenders().split(",")) {
+                helper.setTo(mail);
+                mailSender.send(mimeMessage);
+            }
+
         } catch (Exception e) {
             logger.error("MAIL_RESULT " + e.getMessage());
         }

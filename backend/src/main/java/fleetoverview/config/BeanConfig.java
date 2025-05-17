@@ -31,9 +31,4 @@ public class BeanConfig {
         messageSource.setBasename("messages");
         return messageSource;
     }
-
-    @Bean
-    public JavaMailSender javaMailSender() {
-        return new JavaMailSenderImpl();
-    }
 }

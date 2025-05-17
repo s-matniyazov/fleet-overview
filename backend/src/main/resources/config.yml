@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: "Fleet Overview"
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fleetdb
+    username: fleet
+    password: fleet
+    driver-class-name: org.postgresql.Driver
+    jpa:
+      show_sql: false
+      hibernate:
+        ddl-auto: update
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+          format_sql: false
+    servlet:
+      multipart:
+        max-file-size: 100MB
+        max-request-size: 100MB
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: sardorbekmatniyazov03@gmail.com
+      password: "jfus aawx krme uksx"
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+  server:
+    port: 8088
+    max-http-request-header-size: 100MB
+    tomcat:
+      max-swallow-size: 100MB
+      max-http-form-post-size: 50MB
+      connection-timeout: 20s
+      threads:
+        max: 200
+        min-spare: 10

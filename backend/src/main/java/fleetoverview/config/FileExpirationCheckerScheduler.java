@@ -29,7 +29,7 @@ public class FileExpirationCheckerScheduler {
     }
 
     //cron = "0 0 8 * * ?"
-    @Scheduled(fixedDelay = 36000L)
+    @Scheduled(/*fixedRate = 60 * 60 * 1000*/ fixedDelay = 1000L)
     public void checkFileAndSendNotification() {
         log.info("Mail service working time is  {}", dateFormat.format(new Date()));
         notificationService.sendNotifications();
