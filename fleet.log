@@ -1,0 +1,31 @@
+2025-05-18 11:44:34.611  INFO 14344 --- [main] fleetoverview.FleetOverviewApplication   : Starting FleetOverviewApplication using Java 21.0.2 on DESKTOP-KNVC6V4 with PID 14344 (D:\Uniteam\fleet-overview\backend\target\classes started by OMEN in D:\Uniteam\fleet-overview)
+2025-05-18 11:44:34.612  INFO 14344 --- [main] fleetoverview.FleetOverviewApplication   : The following 1 profile is active: "prod"
+2025-05-18 11:44:35.072  INFO 14344 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-18 11:44:35.135  INFO 14344 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 58 ms. Found 17 JPA repository interfaces.
+2025-05-18 11:44:35.465  INFO 14344 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8088 (http)
+2025-05-18 11:44:35.470  INFO 14344 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-18 11:44:35.470  INFO 14344 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2025-05-18 11:44:35.527  INFO 14344 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-18 11:44:35.528  INFO 14344 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 883 ms
+2025-05-18 11:44:35.629  INFO 14344 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-18 11:44:35.653  INFO 14344 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.12.Final
+2025-05-18 11:44:35.754  INFO 14344 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2025-05-18 11:44:35.801  INFO 14344 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-18 11:44:35.874  INFO 14344 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-18 11:44:35.882  INFO 14344 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+2025-05-18 11:44:36.579  INFO 14344 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2025-05-18 11:44:36.583  INFO 14344 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-18 11:44:36.865  INFO 14344 --- [main] f.security.filters.AuthorizationFilter   : AuthorizationFilter init
+2025-05-18 11:44:36.866  INFO 14344 --- [main] f.security.filters.AuthenticationFilter  : AuthenticationFilter init
+2025-05-18 11:44:36.866  INFO 14344 --- [main] f.security.filters.CORSFilter            : CORSFilter init
+2025-05-18 11:44:37.200  INFO 14344 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5f3c866c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@16e0afab, org.springframework.security.web.context.SecurityContextPersistenceFilter@be186df, org.springframework.security.web.header.HeaderWriterFilter@3af6c672, org.springframework.web.filter.CorsFilter@7b9b6a56, org.springframework.security.web.authentication.logout.LogoutFilter@65fe1f47, fleetoverview.security.filters.AuthorizationFilter@239bc43f, fleetoverview.security.filters.AuthenticationFilter@a9c5b75, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@256d8f17, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@16269ff4, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4a225014, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6e111aeb, org.springframework.security.web.session.SessionManagementFilter@136690b1, org.springframework.security.web.access.ExceptionTranslationFilter@7e24a2e2, org.springframework.security.web.access.intercept.AuthorizationFilter@6fe91918]
+2025-05-18 11:44:37.219  WARN 14344 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-18 11:44:37.472  INFO 14344 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8088 (http) with context path ''
+2025-05-18 11:44:37.479  INFO 14344 --- [scheduling-1] f.config.FileExpirationCheckerScheduler  : Mail service working time is  11:44:37
+2025-05-18 11:44:37.481  INFO 14344 --- [main] fleetoverview.FleetOverviewApplication   : Started FleetOverviewApplication in 3.163 seconds (JVM running for 3.612)
+2025-05-18 11:49:35.355  INFO 14344 --- [SpringApplicationShutdownHook] f.security.filters.AuthorizationFilter   : AuthorizationFilter destroyed
+2025-05-18 11:49:35.355  INFO 14344 --- [SpringApplicationShutdownHook] f.security.filters.AuthenticationFilter  : AuthenticationFilter destroyed
+2025-05-18 11:49:35.355  INFO 14344 --- [SpringApplicationShutdownHook] f.security.filters.CORSFilter            : CORSFilter destroyed
+2025-05-18 11:49:35.370  INFO 14344 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-18 11:49:35.370  INFO 14344 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-18 11:49:35.370  INFO 14344 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

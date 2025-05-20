@@ -43,14 +43,14 @@ const columns = [
     key: 'operated_by',
     name: 'operated_by',
     label: t('operated_by'),
-    styles: 'width: 200px;',
+    styles: 'min-width: 160px;',
     classes: '',
   },
   {
     key: 'ownership',
     name: 'ownership',
     label: t('ownership'),
-    styles: 'width: 200px;',
+    styles: 'min-width: 140px;',
     classes: '',
   },
   {
@@ -95,13 +95,13 @@ const columns = [
     styles: '',
     classes: '',
   },
-  {
-    key: 'actions',
-    name: 'actions',
-    label: t('actions'),
-    styles: '',
-    classes: '',
-  },
+  // {
+  //   key: 'actions',
+  //   name: 'actions',
+  //   label: t('actions'),
+  //   styles: '',
+  //   classes: '',
+  // },
 ]
 
 const newModel = () => {
@@ -120,10 +120,9 @@ const newModel = () => {
     ownershipTypeId: null,
     includeIFTA: false,
     purchaseTypeId: null,
-    ownerOperatorId: null,
+    driverId: null,
     description: null,
-    companyId: filterStore.companyId,
-    driverId: null
+    companyId: filterStore.companyId
   }
 }
 
@@ -170,10 +169,9 @@ const onEdit = (d) => {
     ownershipTypeId: d?.ownershipType?.id,
     includeIFTA: d.includeIFTA,
     purchaseTypeId: d?.purchaseType?.id,
-    ownerOperatorId: d?.ownerOperator?.id,
+    driverId: d?.driver?.id,
     description: d.description,
-    companyId: filterStore.companyId,
-    driverId: d.driver.id
+    companyId: filterStore.companyId
   };
 
   addModal.value = true;
@@ -186,6 +184,13 @@ const selectFileSection = (type) => {
     dialog: true,
     fileType: type
   };
+}
+const getOwnership = (row) => {
+  if (row?.ownershipType?.id === 1) {
+    return row?.purchaseType?.name
+  } else if (row?.ownershipType?.id === 2) {
+    return row?.driver?.firstName
+  } else return "N/A";
 }
 
 // API FUNCTIONS
@@ -305,6 +310,14 @@ watch(
 )
 
 watch(
+    () => data.value.ownershipTypeId,
+    function (newValue) {
+      data.driverId = null;
+      data.purchaseTypeId = null;
+    }
+)
+
+watch(
     () => selectedFileSection.value.dialog,
     function (newValue) {
       if (!newValue) getData()
@@ -389,20 +402,9 @@ watch(
               </UTooltip>
             </div>
             <div class="col-12 d-flex align-items-center text-gray-light fw-bold">
-              N/A
+              {{ getOwnership(row) }}
             </div>
           </div>
-<!--          <template v-if="row?.ownershipType?.id === 1">-->
-<!--            <div class="row">-->
-<!--              <div class="col-12 d-flex align-items-center">-->
-<!--                <span class="text-primary" style="font-size: 15px">-->
-<!--                </span>-->
-<!--              </div>-->
-<!--              <div class="col-12 d-flex align-items-center">-->
-<!--                <span class="text-gray-light f-700"> N/A </span>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </template>-->
         </td>
       </template>
 
@@ -443,7 +445,7 @@ watch(
           <div class="qm-badge qm-badge--dim justify-content-start permit-box">
             <div class="row m-0 align-items-center ng-star-inserted">
               <div class="col-1 p-0 me-1">
-                <img src="../../../assets/file-na-sm.svg"
+                <img src="../../../assets/icons/file-na-sm.svg"
                      alt="File checked icon"
                      class="ng-star-inserted"/>
               </div>
@@ -457,7 +459,7 @@ watch(
             </div>
             <div class="row m-0 align-items-center ng-star-inserted">
               <div class="col-1 p-0 me-1">
-                <img src="../../../assets/file-na-sm.svg"
+                <img src="../../../assets/icons/file-na-sm.svg"
                      alt="File checked icon"
                      class="ng-star-inserted"/>
               </div>
@@ -471,7 +473,7 @@ watch(
             </div>
             <div class="row m-0 align-items-center ng-star-inserted">
               <div class="col-1 p-0 me-1">
-                <img src="../../../assets/file-na-sm.svg"
+                <img src="../../../assets/icons/file-na-sm.svg"
                      alt="File checked icon"
                      class="ng-star-inserted"/>
               </div>
@@ -485,7 +487,7 @@ watch(
             </div>
             <div class="row m-0 align-items-center ng-star-inserted">
               <div class="col-1 p-0 me-1">
-                <img src="../../../assets/file-na-sm.svg"
+                <img src="../../../assets/icons/file-na-sm.svg"
                      alt="File checked icon"
                      class="ng-star-inserted">
               </div>
@@ -502,7 +504,12 @@ watch(
       </template>
 
       <template #row_status="{row}">
-        <td>{{ row?.status }}</td>
+        <td>
+          <div class="d-flex gap-2">
+            <a class="badge bg-primary-subtle text-primary"
+               :class="`bg-${row?.status === 'PASSIVE' ? 'danger' : 'primary'}-subtle`"> {{ row?.status }}</a>
+          </div>
+        </td>
       </template>
 
       <template #row_actions="{row}">
@@ -650,7 +657,7 @@ watch(
                   <div class="col-12">
                     <USelect v-model="data.driverId" :label="t('ownerOperators')"
                              :items="drivers" name="driver"
-                             option_name="name"
+                             option_name="firstName"
                              classes="mb-2"
                              :rules="(val) => (!val && $t('required'))"
                     ></USelect>
@@ -699,7 +706,7 @@ watch(
 
   <!--  truck card-->
   <Teleport to="body">
-    <UDialog :show="showModal" width="calc(100vw - 200px)">
+    <UDialog :show="showModal" width="calc(100vw - 200px)" class="">
       <template #header>
         <div class="d-flex w-100">
           Truck Card

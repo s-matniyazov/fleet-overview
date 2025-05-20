@@ -16,7 +16,6 @@ import UDateInput from "@/components/base/UDateInput.vue";
 const {t} = useI18n();
 const filterStore = useFilterStore();
 
-
 const columns = [
   {
     key: 'id',
@@ -86,22 +85,20 @@ const columns = [
 const newModel = () => {
   return {
     id: null,
-    name: null,
     address: null,
     companyId: filterStore.companyId,
     dateOfBirth: null,
-    hiredDate: null,
+    hireDate: null,
     firstName: null,
     zipCode: null,
     lastName: null,
     middleName: null,
     email: null,
     phone: null,
-    stateId:null,
-    countryId:null,
-    city:null,
-    status:null,
-
+    stateId: null,
+    countryId: null,
+    city: null,
+    status: null,
   }
 }
 
@@ -121,7 +118,12 @@ const onAdd = () => {
   addModal.value = true;
 }
 const onEdit = (d) => {
-  data.value = {...d};
+  data.value = {
+    ...d,
+    countryId: d?.state?.country.id,
+    stateId: d?.state?.id,
+    companyId: filterStore.companyId
+  };
 
   addModal.value = true;
 }
@@ -180,20 +182,22 @@ function getCountries() {
     showMessage(e)
   });
 }
+
 function getState(countryId) {
-  axiosIns.get(`${URIS.STATE}?countryId=${countryId}`)
-      .then(res => {
-        states.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
+  if (countryId) {
+    axiosIns.get(`${URIS.STATE}?countryId=${countryId}`)
+        .then(res => {
+          states.value = res.data.data;
+        }).catch(e => {
+      showMessage(e)
+    });
+  }
 }
 
 // HOOKS
 onMounted(() => {
   getData();
   getCountries();
-  getState();
 })
 
 watch(
@@ -204,8 +208,6 @@ watch(
       getState(newValue)
     }
 )
-
-
 
 </script>
 
@@ -261,13 +263,15 @@ watch(
               <!--            name-->
               <div class="col-12 row">
                 <div class="col-4">
-                  <UInput v-model="data.firstName" :label="t('first_name')" :hint="t('first_name')" :name="t('first_name')"
+                  <UInput v-model="data.firstName" :label="t('first_name')" :hint="t('first_name')"
+                          :name="t('first_name')"
                           :placeholder="t('enter_first_name')" classes="mb-3"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
                 <!--           middle name-->
                 <div class="col-4">
-                  <UInput v-model="data.middleName" :label="t('middle_name')" :hint="t('middle_name')" :name="t('middle_name')"
+                  <UInput v-model="data.middleName" :label="t('middle_name')" :hint="t('middle_name')"
+                          :name="t('middle_name')"
                           :placeholder="t('enter_middle_name')" classes="mb-3"/>
                 </div>
                 <!--           last name-->
@@ -293,7 +297,7 @@ watch(
                               :rules="(val) => (!val && t('required'))"/>
                 </div>
                 <div class="col-3">
-                  <UDateInput v-model="data.hiredDate" classes="mb-2" :label="t('hired_date')"
+                  <UDateInput v-model="data.hireDate" classes="mb-2" :label="t('hired_date')"
                               name="hiredDate"
                               :rules="(val) => (!val && t('required'))"/>
                 </div>
@@ -306,18 +310,18 @@ watch(
               <div class="col-12 row">
                 <div class="col-6">
                   <USelect v-model="data.countryId" :label="t('country')"
-                      :items="countries" name="country"
-                      option_name="name"
-                      classes="mb-2"
-                      :rules="(val) => (!val && $t('required'))"
+                           :items="countries" name="country"
+                           option_name="name"
+                           classes="mb-2"
+                           :rules="(val) => (!val && $t('required'))"
                   ></Uselect>
                 </div>
                 <div class="col-6">
                   <USelect v-model="data.stateId" :label="t('state')"
-                      :items="states" name="state"
-                      option_name="name"
-                      classes="mb-2"
-                      :rules="(val) => (!val && $t('required'))"
+                           :items="states" name="state"
+                           option_name="name"
+                           classes="mb-2"
+                           :rules="(val) => (!val && $t('required'))"
                   ></Uselect>
                 </div>
               </div>

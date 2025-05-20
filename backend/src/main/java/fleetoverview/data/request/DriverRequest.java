@@ -1,10 +1,6 @@
 package fleetoverview.data.request;
 
-import fleetoverview.domain.entity.CountryEntity;
-import fleetoverview.domain.entity.StateEntity;
-
 import java.sql.Date;
-
 
 public record DriverRequest(
         int id,
@@ -21,7 +17,5 @@ public record DriverRequest(
         String email,
         String phone,
         String status
-
-
 ) {
 }

@@ -56,7 +56,7 @@ watch(
         <div class="d-flex items-center">
           <div class="navbar-brand-box">
             <router-link to="/" class="logo logo-dark">
-              <span class="logo-lg"> <img src="@/assets/em_logo.png" alt="" size="12" style="height: 50px">
+              <span class="logo-lg"> <img src="../assets/icons/em_logo.png" alt="" size="12" style="height: 50px">
                 <span class="logo-txt">EM Fleet</span>
                                 </span>
             </router-link>

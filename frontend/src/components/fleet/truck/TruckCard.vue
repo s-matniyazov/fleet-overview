@@ -1,12 +1,12 @@
 <script setup>
 
 import {useI18n} from "vue-i18n";
-import Trailer from "@/components/fleet/Trailer.vue";
 import {ref} from "vue";
 import TruckInfo from "@/components/fleet/truck/TruckInfo.vue";
 import TruckFiles from "@/components/fleet/truck/TruckFiles.vue";
 import UTabs from "@/components/base/UTabs.vue";
 import TabPanels from "@/components/base/UTabPanels.vue";
+import TruckDocuments from "@/components/fleet/truck/TruckDocuments.vue";
 
 const {t} = useI18n();
 
@@ -34,9 +34,9 @@ const TABS = [
   },
   {
     key: 'tra',
-    name: t('truck_activities'),
+    name: t('truck_documents'),
     description: '',
-    component: Trailer,
+    component: TruckDocuments,
     props: {data: props.data}
   },
 ];

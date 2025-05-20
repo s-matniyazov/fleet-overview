@@ -3,9 +3,13 @@ package fleetoverview.domain.entity;
 import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.enums.DriverStatusEnum;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.sql.Date;
-
 
 @Entity
 @Table(name = "drivers")
@@ -39,7 +43,6 @@ public class DriverEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private DriverStatusEnum status = DriverStatusEnum.ACTIVE;
 
-
     public DriverEntity(CompanyEntity company,String firstName, String lastName, String middleName, Date hireDate,
                         Date dateOfBirth, StateEntity state, String address,
                         String city, int zipCode, String email, String phone, DriverStatusEnum status) {
@@ -55,6 +58,7 @@ public class DriverEntity extends BaseEntity {
         this.email = email;
         this.phone = phone;
         this.status = status;
+        this.state = state;
     }
 
     public DriverEntity() {

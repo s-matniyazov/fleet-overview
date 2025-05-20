@@ -71,13 +71,13 @@ public class DriverServiceImpl extends BaseService implements DriverService {
     public ApiResponse post(DriverRequest data) {
         repository.save(
                 new DriverEntity(
-                        companyRepository.findById(data.companyId()).orElseThrow(()->new NotFoundException(mSourceBundle.apply("company.not_found"))),
+                        companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))),
                         data.firstName(),
-                        data.lastName(), 
+                        data.lastName(),
                         data.middleName(),
                         data.hireDate(),
                         data.dateOfBirth(),
-                        stateRepository.findById(data.stateId()).orElseThrow(()->new NotFoundException(mSourceBundle.apply("state.not_found"))),
+                        stateRepository.findById(data.stateId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("state.not_found"))),
                         data.address(),
                         data.city(),
                         data.zipCode(),
@@ -101,10 +101,11 @@ public class DriverServiceImpl extends BaseService implements DriverService {
         driver.setEmail(data.email());
         driver.setPhone(data.phone());
         driver.setZipCode(data.zipCode());
-        driver.setCompany(companyRepository.findById(data.companyId()).orElseThrow(()->new NotFoundException(mSourceBundle.apply("company.not_found"))));
+        driver.setCompany(companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))));
         driver.setHireDate(data.hireDate());
         driver.setDateOfBirth(data.dateOfBirth());
         driver.setStatus(DriverStatusEnum.valueOf(data.status().toUpperCase()));
+        driver.setState(stateRepository.findById(data.stateId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("state.not_found"))));
 
         return ApiResponse.success();
     }
@@ -117,7 +118,6 @@ public class DriverServiceImpl extends BaseService implements DriverService {
 
         return ApiResponse.success();
     }
-
 
 
 }

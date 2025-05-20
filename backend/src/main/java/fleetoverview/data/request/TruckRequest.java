@@ -24,7 +24,7 @@ public record TruckRequest(
         int ownershipTypeId,
         boolean includeIFTA,
         int purchaseTypeId,
-        int ownerOperatorId,
+        int driverId,
         String description,
         TruckStatusEnum status,
         int companyId

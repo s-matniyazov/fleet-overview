@@ -48,8 +48,8 @@ public class TruckEntity extends BaseEntity {
     @ManyToOne(targetEntity = PurchaseTypeEntity.class)
     private PurchaseTypeEntity purchaseType;
 
-    @ManyToOne(targetEntity = OwnerOperatorEntity.class)
-    private OwnerOperatorEntity ownerOperator;
+    @ManyToOne(targetEntity = DriverEntity.class)
+    private DriverEntity driver;
 
     @Column(length = 4000)
     private String description;
@@ -69,7 +69,7 @@ public class TruckEntity extends BaseEntity {
     public TruckEntity(String unit, Date inServiceDate, String licensePlate, StateEntity state, ModelMakerEntity modelMaker,
                        Integer year, FuelTypeEntity fuelType, Double grossWeight, Integer axles, String vin,
                        OwnershipTypeEntity ownershipType, Boolean includeIFTA, PurchaseTypeEntity purchaseType,
-                       OwnerOperatorEntity ownerOperator, String description, CompanyEntity company) {
+                       DriverEntity driver, String description, CompanyEntity company) {
         this.unit = unit;
         this.inServiceDate = inServiceDate;
         this.licensePlate = licensePlate;
@@ -83,7 +83,7 @@ public class TruckEntity extends BaseEntity {
         this.ownershipType = ownershipType;
         this.includeIFTA = includeIFTA;
         this.purchaseType = purchaseType;
-        this.ownerOperator = ownerOperator;
+        this.driver = driver;
         this.description = description;
         this.company = company;
         this.status = TruckStatusEnum.ACTIVE;
@@ -197,12 +197,12 @@ public class TruckEntity extends BaseEntity {
         this.purchaseType = purchaseType;
     }
 
-    public OwnerOperatorEntity getOwnerOperator() {
-        return ownerOperator;
+    public DriverEntity getDriver() {
+        return driver;
     }
 
-    public void setOwnerOperator(OwnerOperatorEntity ownerOperator) {
-        this.ownerOperator = ownerOperator;
+    public void setDriver(DriverEntity ownerOperator) {
+        this.driver = ownerOperator;
     }
 
     public String getDescription() {

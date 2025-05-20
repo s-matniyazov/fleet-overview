@@ -10,7 +10,7 @@ defineProps({
 <template>
   <Transition name="modal">
     <div v-if="show" class="modal-mask">
-      <div class="modal-container" :style="`width: ${width}`">
+      <div class="modal-container bg-light rounded-4 shadow-dark" :style="`width: ${width}`">
         <div class="modal-header pb-3 border-bottom-0 text-primary" style="font-weight: 1000; font-size: 16px">
           <slot name="header">
             <h5 class="modal-title">Создание</h5>
@@ -55,7 +55,6 @@ defineProps({
 .modal-container {
   margin: auto;
   padding: 20px 20px;
-  background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.2s ease;

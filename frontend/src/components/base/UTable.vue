@@ -61,7 +61,7 @@ const onRowDoubleClick = (row) => {
   <div class="table-responsive row p-0">
     <div class="col-12">
       <UScrollArea :height="height">
-        <table class="table align-middle datatable dt-responsive table-check nowrap table-hover">
+        <table class="table align-middle datatable dt-responsive table-check nowrap table-hover rounded-4">
           <thead>
           <tr>
             <slot v-for="col in columns" :col="col" :name="`col_${col.name}`" :key="col.key">
@@ -104,6 +104,6 @@ const onRowDoubleClick = (row) => {
 .table-responsive thead th {
   position: sticky;
   top: 0;
-  z-index: 10; /* Чтобы заголовок был поверх контента */
+  z-index: 10;
 }
 </style>

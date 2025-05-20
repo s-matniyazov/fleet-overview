@@ -29,7 +29,7 @@ defineProps({
       </div>
     </div>
     <div class="d-flex justify-content-start align-items-center">
-      <img src="../../../assets/file-na.svg" alt="File checked icon"
+      <img src="../../../assets/icons/file-na.svg" alt="File checked icon"
            class="me-2 ng-star-inserted"/>
       <span class="fw-semibold font-size-10 text-gray-light">
         <strong>{{ name }}</strong>

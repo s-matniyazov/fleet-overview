@@ -40,7 +40,7 @@ function onLogin() {
               <div class="d-flex flex-column h-100">
                 <div class="mb-4 mb-md-5 text-center">
                   <router-link to="/" class="d-block auth-logo">
-                    <img src="@/assets/em_logo.png" alt="" size="15"> <br><p class="h1 mt-3" >EFFICIENT MANAGEMENT FLEET</p>
+                    <img src="../assets/icons/em_logo.png" alt="" size="15"> <br><p class="h1 mt-3" >EFFICIENT MANAGEMENT FLEET</p>
                   </router-link>
                 </div>
                 <div class="auth-content my-auto">

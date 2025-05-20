@@ -37,7 +37,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
     private final FuelTypeRepository fuelTypeRepository;
     private final OwnershipTypeRepository ownershipTypeRepository;
     private final PurchaseTypeRepository purchaseTypeRepository;
-    private final OwnerOperatorRepository ownerOperatorRepository;
+    private final DriverRepository driverRepository;
     private final CompanyRepository companyRepository;
 
     @Autowired
@@ -46,7 +46,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
     @Autowired
     public TruckServiceImpl(ResourceService resourceService, TruckRepository repository, StateRepository stateRepository, ModelMakerRepository makerRepository,
                             FuelTypeRepository fuelTypeRepository, OwnershipTypeRepository ownershipTypeRepository,
-                            PurchaseTypeRepository purchaseTypeRepository, OwnerOperatorRepository ownerOperatorRepository, CompanyRepository companyRepository) {
+                            PurchaseTypeRepository purchaseTypeRepository, DriverRepository driverRepository, CompanyRepository companyRepository) {
         this.resourceService = resourceService;
         this.repository = repository;
         this.stateRepository = stateRepository;
@@ -54,7 +54,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         this.fuelTypeRepository = fuelTypeRepository;
         this.ownershipTypeRepository = ownershipTypeRepository;
         this.purchaseTypeRepository = purchaseTypeRepository;
-        this.ownerOperatorRepository = ownerOperatorRepository;
+        this.driverRepository = driverRepository;
         this.companyRepository = companyRepository;
     }
 
@@ -101,7 +101,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
                         ownershipTypeRepository.findById(data.ownershipTypeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("ownershipType.not_found"))),
                         data.includeIFTA(),
                         purchaseTypeRepository.findById(data.purchaseTypeId()).orElse(null),
-                        ownerOperatorRepository.findById(data.ownerOperatorId()).orElse(null),
+                        driverRepository.findById(data.driverId()).orElse(null),
                         data.description(),
                         companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found")))
                 )
@@ -126,7 +126,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         truck.setOwnershipType(ownershipTypeRepository.findById(data.ownershipTypeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("ownershipType.not_found"))));
         truck.setIncludeIFTA(data.includeIFTA());
         truck.setPurchaseType(purchaseTypeRepository.findById(data.purchaseTypeId()).orElse(null));
-        truck.setOwnerOperator(ownerOperatorRepository.findById(data.ownerOperatorId()).orElse(null));
+        truck.setDriver(driverRepository.findById(data.driverId()).orElse(null));
         truck.setDescription(data.description());
         truck.setCompany(companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))));
 
