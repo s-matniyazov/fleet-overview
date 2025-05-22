@@ -58,7 +58,7 @@ registerField(props.name, validate);
 </script>
 
 <template>
-  <div :class="`${classes} ${errorMessage && 'has-danger'} p-1`" :style="styles">
+  <div :class="[classes, errorMessage ? 'has-danger' : '', readonly ? 'readonly-mode' : '', 'p-1']" :style="styles">
     <label v-if="!noLabel" for="for-description" class="form-label">{{ label }}</label>
     <textarea class="form-control font-size-12" id="for-description" v-model="model" :placeholder="placeholder"
               :rows="rows" :readonly="readonly"></textarea>
@@ -66,5 +66,23 @@ registerField(props.name, validate);
 </template>
 
 <style scoped>
+.readonly-mode {
+  background-color: #f9f9f9 !important;
+}
 
+.readonly-mode .form-control {
+  background-color: #e9ecef !important; /* Bootstrap readonly rang */
+  color: #6c757d !important; /* kulrang matn */
+  pointer-events: none; /* kursor kirmaydi */
+}
+
+.readonly-mode .form-label {
+  color: #6c757d !important;
+}
+
+.readonly-mode .invalid-feedback,
+.readonly-mode .pristine-error,
+.readonly-mode .form-hint {
+  color: #6c757d !important;
+}
 </style>

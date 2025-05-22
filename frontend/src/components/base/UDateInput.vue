@@ -33,6 +33,11 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false
+  },
+  readonly: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 })
 
@@ -62,14 +67,32 @@ registerField(props.name, validate);
 </script>
 
 <template>
-  <div :class="`${classes} ${errorMessage && 'has-danger'} p-1`" :style="styles">
+  <div :class="[classes, errorMessage ? 'has-danger' : '', readonly ? 'readonly-mode' : '', 'p-1']" :style="styles">
     <label v-if="!noLabel" for="date-label" class="form-label">{{ label }}</label>
-    <input class="form-control font-size-12" type="date" v-model="inputDate" id="date-label">
+    <input class="form-control font-size-12" type="date" v-model="inputDate" id="date-label" :readonly="readonly">
     <div class="invalid-feedback">{{ hint }}</div>
     <p v-if="errorMessage" class="pristine-error text-help">{{ errorMessage }}</p>
   </div>
 </template>
 
 <style scoped>
+.readonly-mode {
+  background-color: #f9f9f9 !important;
+}
 
+.readonly-mode .form-control {
+  background-color: #e9ecef !important; /* Bootstrap readonly rang */
+  color: #6c757d !important; /* kulrang matn */
+  pointer-events: none; /* kursor kirmaydi */
+}
+
+.readonly-mode .form-label {
+  color: #6c757d !important;
+}
+
+.readonly-mode .invalid-feedback,
+.readonly-mode .pristine-error,
+.readonly-mode .form-hint {
+  color: #6c757d !important;
+}
 </style>

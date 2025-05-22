@@ -627,7 +627,7 @@ watch(
                 <!--            vin-->
                 <div class="col-12">
                   <UInput v-model="data.vin" :label="t('vin')" :hint="t('vin')" :name="t('vin')"
-                          :placeholder="t('enter_vin')" classes="mb-2" type="number"
+                          :placeholder="t('enter_vin')" classes="mb-2"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
               </div>
@@ -726,7 +726,7 @@ watch(
 
   <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
     <template #header>
-      <h4 class="fw-bold text-white bg-primary p-3 rounded-top d-flex">{{
+      <h4 class="fw-bold text-white bg-primary p-2 rounded-2 d-flex">{{
           FILE_TYPE_NAMES[selectedFileSection.fileType]
         }}
         <span class="text-end u-end">
