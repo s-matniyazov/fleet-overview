@@ -2,7 +2,6 @@
 
 import VerticalMenu from "@/components/VerticalMenu.vue";
 import {onMounted, ref, watch} from "vue";
-import feather from "feather-icons";
 import router from "@/router/index.js";
 import {useRouterStore} from "@/store/RouterStore.js";
 import USelect from "@/components/base/USelect.vue";
@@ -32,8 +31,6 @@ function getCompanies() {
 
 onMounted(() => {
   getCompanies();
-
-  feather.replace();
 });
 
 
