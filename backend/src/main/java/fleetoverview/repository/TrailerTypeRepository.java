@@ -1,12 +1,12 @@
 package fleetoverview.repository;
 
-import fleetoverview.domain.entity.OwnerOperatorEntity;
+import fleetoverview.domain.entity.trailer.TrailerTypeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 13 март 2025
+ * @created : 24 май 2025
  **/
-public interface OwnerOperatorRepository extends JpaRepository<OwnerOperatorEntity, Integer> {
+public interface TrailerTypeRepository extends JpaRepository<TrailerTypeEntity, Integer> {
 }

@@ -7,22 +7,21 @@ import java.sql.Date;
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 16 март 2025
+ * @created : 24 май 2025
  **/
-public record TruckRequest(
+public record TrailerRequest(
         int id,
         String unit,
-        Date inServiceDate,
         String licensePlate,
-        int stateId,
+        Date inServiceDate,
         int modelMakerId,
+        int typeId,
         int year,
-        int fuelTypeId,
-        double grossWeight,
         int axles,
+        double length,
+        double height,
         String vin,
         int ownershipTypeId,
-        boolean includeIFTA,
         int purchaseTypeId,
         int driverId,
         String description,

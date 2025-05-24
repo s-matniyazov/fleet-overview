@@ -1,9 +1,8 @@
-package fleetoverview.domain.entity;
+package fleetoverview.domain.entity.truck;
 
 import fleetoverview.domain.entity.base.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -12,20 +11,16 @@ import javax.persistence.Table;
  * @created : 13 март 2025
  **/
 @Entity
-@Table(name = "owner_operators")
-public class OwnerOperatorEntity extends BaseEntity {
+@Table(name = "truck_model_makers")
+public class TruckModelMakerEntity extends BaseEntity {
     @Column(length = 50)
     private String name;
 
-    @ManyToOne
-    private CompanyEntity company;
-
-    public OwnerOperatorEntity() {
+    public TruckModelMakerEntity() {
     }
 
-    public OwnerOperatorEntity(String name, CompanyEntity company) {
+    public TruckModelMakerEntity(String name) {
         this.name = name;
-        this.company = company;
     }
 
     public String getName() {
@@ -34,9 +29,5 @@ public class OwnerOperatorEntity extends BaseEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setCompany(CompanyEntity company) {
-        this.company = company;
     }
 }

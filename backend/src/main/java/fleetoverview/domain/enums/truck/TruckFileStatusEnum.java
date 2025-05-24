@@ -1,4 +1,4 @@
-package fleetoverview.domain.enums;
+package fleetoverview.domain.enums.truck;
 
 /**
  * @author :  Sardor Matniyazov

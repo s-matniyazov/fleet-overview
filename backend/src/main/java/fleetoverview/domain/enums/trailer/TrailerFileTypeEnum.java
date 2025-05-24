@@ -1,11 +1,11 @@
-package fleetoverview.domain.enums;
+package fleetoverview.domain.enums.trailer;
 
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 23 март 2025
+ * @created : 24 май 2025
  **/
-public enum TruckFileTypeEnum {
+public enum TrailerFileTypeEnum {
     REG_CAB_CARD("REG (CAB CARD)"),
     ANN_INS("ANN INS"),
     PHYS_DAMAGE("PHYS DAMAGE"),
@@ -13,7 +13,7 @@ public enum TruckFileTypeEnum {
 
     private String description;
 
-    TruckFileTypeEnum(String description) {
+    TrailerFileTypeEnum(String description) {
         this.description = description;
     }
 

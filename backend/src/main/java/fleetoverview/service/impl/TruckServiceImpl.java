@@ -5,7 +5,9 @@ import fleetoverview.data.request.TruckRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
 import fleetoverview.domain.entity.*;
-import fleetoverview.domain.enums.TruckFileStatusEnum;
+import fleetoverview.domain.entity.truck.TruckEntity;
+import fleetoverview.domain.entity.truck.TruckFileEntity;
+import fleetoverview.domain.enums.truck.TruckFileStatusEnum;
 import fleetoverview.repository.*;
 import fleetoverview.service.ResourceService;
 import fleetoverview.service.TruckService;
@@ -33,7 +35,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
     private final ResourceService resourceService;
     private final TruckRepository repository;
     private final StateRepository stateRepository;
-    private final ModelMakerRepository makerRepository;
+    private final TruckModelMakerRepository makerRepository;
     private final FuelTypeRepository fuelTypeRepository;
     private final OwnershipTypeRepository ownershipTypeRepository;
     private final PurchaseTypeRepository purchaseTypeRepository;
@@ -44,7 +46,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
     private EntityManager entityManager;
 
     @Autowired
-    public TruckServiceImpl(ResourceService resourceService, TruckRepository repository, StateRepository stateRepository, ModelMakerRepository makerRepository,
+    public TruckServiceImpl(ResourceService resourceService, TruckRepository repository, StateRepository stateRepository, TruckModelMakerRepository makerRepository,
                             FuelTypeRepository fuelTypeRepository, OwnershipTypeRepository ownershipTypeRepository,
                             PurchaseTypeRepository purchaseTypeRepository, DriverRepository driverRepository, CompanyRepository companyRepository) {
         this.resourceService = resourceService;
@@ -81,7 +83,6 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         List<TruckEntity> results = query.getResultList();
 
         return DataResponse.success(results);
-//        return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 
     @Override
@@ -135,6 +136,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
 
     @Override
     public ApiResponse delete(TruckRequest data) {
+        // not implemented
         return null;
     }
 

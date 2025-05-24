@@ -1,7 +1,7 @@
 package fleetoverview.service;
 
 import fleetoverview.data.request.OnlyNameRequest;
-import fleetoverview.domain.entity.ModelMakerEntity;
+import fleetoverview.domain.entity.truck.TruckModelMakerEntity;
 import fleetoverview.service.base.CrudService;
 
 /**
@@ -9,5 +9,5 @@ import fleetoverview.service.base.CrudService;
  * @mailto :  sardorbekmatniyazov03@gmail.com
  * @created : 13 март 2025
  **/
-public interface ModelMakerService extends CrudService<ModelMakerEntity, OnlyNameRequest> {
+public interface ModelMakerService extends CrudService<TruckModelMakerEntity, OnlyNameRequest> {
 }

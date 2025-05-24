@@ -25,7 +25,6 @@ const routes = [
             {path: '/city', name: "States", meta: {requiresAuth: true}, component: () => import('@/components/references/City.vue')},
             {path: '/fuel-type', name: "Fuel Type", meta: {requiresAuth: true}, component: () => import('@/components/references/FuelType.vue')},
             {path: '/model-maker', name: "Model Maker", meta: {requiresAuth: true}, component: () => import('@/components/references/ModelMaker.vue')},
-            {path: '/owner-operator', name: "Owner Operator", meta: {requiresAuth: true}, component: () => import('@/components/references/OwnerOperator.vue')},
             {path: '/ownership-type', name: "Ownership Type", meta: {requiresAuth: true}, component: () => import('@/components/references/OwnershipType.vue')},
             {path: '/purchase-type', name: "Purchase Type", meta: {requiresAuth: true}, component: () => import('@/components/references/PurchaseType.vue')},
 

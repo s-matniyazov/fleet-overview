@@ -3,7 +3,7 @@ package fleetoverview.service;
 import fleetoverview.data.request.TruckFileRequest;
 import fleetoverview.data.request.TruckRequest;
 import fleetoverview.data.response.ApiResponse;
-import fleetoverview.domain.entity.TruckEntity;
+import fleetoverview.domain.entity.truck.TruckEntity;
 import fleetoverview.service.base.CrudService;
 import org.springframework.web.multipart.MultipartFile;
 

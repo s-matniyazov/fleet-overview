@@ -3,7 +3,7 @@ package fleetoverview.service.impl;
 import fleetoverview.data.request.OnlyNameRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
-import fleetoverview.domain.entity.FuelTypeEntity;
+import fleetoverview.domain.entity.truck.FuelTypeEntity;
 import fleetoverview.repository.FuelTypeRepository;
 import fleetoverview.service.FuelTypeService;
 import fleetoverview.service.base.BaseService;

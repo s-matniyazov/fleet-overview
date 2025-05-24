@@ -1,6 +1,6 @@
 package fleetoverview.repository;
 
-import fleetoverview.domain.entity.ModelMakerEntity;
+import fleetoverview.domain.entity.truck.TruckModelMakerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @mailto :  sardorbekmatniyazov03@gmail.com
  * @created : 13 март 2025
  **/
-public interface ModelMakerRepository extends JpaRepository<ModelMakerEntity, Integer> {
+public interface TruckModelMakerRepository extends JpaRepository<TruckModelMakerEntity, Integer> {
+    boolean existsByName(String name);
 }

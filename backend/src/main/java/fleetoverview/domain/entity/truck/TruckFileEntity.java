@@ -1,9 +1,10 @@
-package fleetoverview.domain.entity;
+package fleetoverview.domain.entity.truck;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import fleetoverview.domain.entity.ResourceEntity;
 import fleetoverview.domain.entity.base.BaseEntity;
-import fleetoverview.domain.enums.TruckFileStatusEnum;
-import fleetoverview.domain.enums.TruckFileTypeEnum;
+import fleetoverview.domain.enums.truck.TruckFileStatusEnum;
+import fleetoverview.domain.enums.truck.TruckFileTypeEnum;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

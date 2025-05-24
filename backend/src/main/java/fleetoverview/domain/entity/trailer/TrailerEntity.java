@@ -1,7 +1,11 @@
-package fleetoverview.domain.entity;
+package fleetoverview.domain.entity.trailer;
 
+import fleetoverview.domain.entity.CompanyEntity;
+import fleetoverview.domain.entity.DriverEntity;
+import fleetoverview.domain.entity.OwnershipTypeEntity;
+import fleetoverview.domain.entity.PurchaseTypeEntity;
 import fleetoverview.domain.entity.base.BaseEntity;
-import fleetoverview.domain.enums.TruckStatusEnum;
+import fleetoverview.domain.enums.trailer.TrailerStatusEnum;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,7 +16,6 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,31 +23,29 @@ import java.util.Set;
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 13 март 2025
+ * @created : 24 май 2025
  **/
 @Entity
-@Table(name = "trucks")
-public class TruckEntity extends BaseEntity {
+@Table(name = "trailers")
+public class TrailerEntity extends BaseEntity {
     @Column(length = 50)
     private String unit;
-    private Date inServiceDate;
     @Column(length = 50)
     private String licensePlate;
-    @ManyToOne(targetEntity = StateEntity.class)
-    private StateEntity state;
-    @ManyToOne(targetEntity = ModelMakerEntity.class)
-    private ModelMakerEntity modelMaker;
+    private Date inServiceDate;
+    @ManyToOne(targetEntity = TrailerModelMakerEntity.class)
+    private TrailerModelMakerEntity modelMaker;
+    @ManyToOne(targetEntity = TrailerTypeEntity.class)
+    private TrailerTypeEntity type;
     private Integer year;
-    @ManyToOne(targetEntity = FuelTypeEntity.class)
-    private FuelTypeEntity fuelType;
-    private Double grossWeight;
     private Integer axles;
+    private Double length;
+    private Double height;
     @Column(length = 50)
     private String vin;
     @ManyToOne(targetEntity = OwnershipTypeEntity.class)
     private OwnershipTypeEntity ownershipType;
 
-    private Boolean includeIFTA;
     @ManyToOne(targetEntity = PurchaseTypeEntity.class)
     private PurchaseTypeEntity purchaseType;
 
@@ -55,38 +56,36 @@ public class TruckEntity extends BaseEntity {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private TruckStatusEnum status = TruckStatusEnum.ACTIVE;
+    private TrailerStatusEnum status = TrailerStatusEnum.ACTIVE;
 
-    @OneToMany(mappedBy = "truck", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<TruckFileEntity> files = new HashSet<>();
+    @OneToMany(mappedBy = "trailer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<TrailerFileEntity> files = new HashSet<>();
 
     @ManyToOne
     private CompanyEntity company;
 
-    public TruckEntity() {
-    }
+    public TrailerEntity() {}
 
-    public TruckEntity(String unit, Date inServiceDate, String licensePlate, StateEntity state, ModelMakerEntity modelMaker,
-                       Integer year, FuelTypeEntity fuelType, Double grossWeight, Integer axles, String vin,
-                       OwnershipTypeEntity ownershipType, Boolean includeIFTA, PurchaseTypeEntity purchaseType,
-                       DriverEntity driver, String description, CompanyEntity company) {
+    public TrailerEntity(String unit, String licensePlate, Date inServiceDate, TrailerModelMakerEntity modelMaker,
+                         TrailerTypeEntity type, Integer year, Integer axles, Double length, Double height, String vin,
+                         OwnershipTypeEntity ownershipType, PurchaseTypeEntity purchaseType, DriverEntity driver,
+                         String description, CompanyEntity company) {
         this.unit = unit;
-        this.inServiceDate = inServiceDate;
         this.licensePlate = licensePlate;
-        this.state = state;
+        this.inServiceDate = inServiceDate;
         this.modelMaker = modelMaker;
+        this.type = type;
         this.year = year;
-        this.fuelType = fuelType;
-        this.grossWeight = grossWeight;
         this.axles = axles;
+        this.length = length;
+        this.height = height;
         this.vin = vin;
         this.ownershipType = ownershipType;
-        this.includeIFTA = includeIFTA;
         this.purchaseType = purchaseType;
         this.driver = driver;
         this.description = description;
+        this.status = TrailerStatusEnum.ACTIVE;
         this.company = company;
-        this.status = TruckStatusEnum.ACTIVE;
     }
 
     public String getUnit() {
@@ -117,19 +116,11 @@ public class TruckEntity extends BaseEntity {
         this.licensePlate = licensePlate;
     }
 
-    public StateEntity getState() {
-        return state;
-    }
-
-    public void setState(StateEntity state) {
-        this.state = state;
-    }
-
-    public ModelMakerEntity getModelMaker() {
+    public TrailerModelMakerEntity getModelMaker() {
         return modelMaker;
     }
 
-    public void setModelMaker(ModelMakerEntity modelMaker) {
+    public void setModelMaker(TrailerModelMakerEntity modelMaker) {
         this.modelMaker = modelMaker;
     }
 
@@ -139,22 +130,6 @@ public class TruckEntity extends BaseEntity {
 
     public void setYear(Integer year) {
         this.year = year;
-    }
-
-    public FuelTypeEntity getFuelType() {
-        return fuelType;
-    }
-
-    public void setFuelType(FuelTypeEntity fuelType) {
-        this.fuelType = fuelType;
-    }
-
-    public Double getGrossWeight() {
-        return grossWeight;
-    }
-
-    public void setGrossWeight(Double grossWeight) {
-        this.grossWeight = grossWeight;
     }
 
     public Integer getAxles() {
@@ -181,13 +156,6 @@ public class TruckEntity extends BaseEntity {
         this.ownershipType = ownershipType;
     }
 
-    public Boolean getIncludeIFTA() {
-        return includeIFTA;
-    }
-
-    public void setIncludeIFTA(Boolean includeIFTA) {
-        this.includeIFTA = includeIFTA;
-    }
 
     public PurchaseTypeEntity getPurchaseType() {
         return purchaseType;
@@ -213,23 +181,47 @@ public class TruckEntity extends BaseEntity {
         this.description = description;
     }
 
-    public TruckStatusEnum getStatus() {
+    public TrailerStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(TruckStatusEnum status) {
+    public void setStatus(TrailerStatusEnum status) {
         this.status = status;
     }
 
-    public Set<TruckFileEntity> getFiles() {
+    public Set<TrailerFileEntity> getFiles() {
         return files;
     }
 
-    public void setFiles(Set<TruckFileEntity> files) {
+    public void setFiles(Set<TrailerFileEntity> files) {
         this.files = files;
     }
 
     public void setCompany(CompanyEntity company) {
         this.company = company;
+    }
+
+    public TrailerTypeEntity getType() {
+        return type;
+    }
+
+    public void setType(TrailerTypeEntity type) {
+        this.type = type;
+    }
+
+    public Double getLength() {
+        return length;
+    }
+
+    public void setLength(Double length) {
+        this.length = length;
+    }
+
+    public Double getHeight() {
+        return height;
+    }
+
+    public void setHeight(Double height) {
+        this.height = height;
     }
 }

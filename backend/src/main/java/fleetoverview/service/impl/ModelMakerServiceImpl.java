@@ -3,8 +3,8 @@ package fleetoverview.service.impl;
 import fleetoverview.data.request.OnlyNameRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
-import fleetoverview.domain.entity.ModelMakerEntity;
-import fleetoverview.repository.ModelMakerRepository;
+import fleetoverview.domain.entity.truck.TruckModelMakerEntity;
+import fleetoverview.repository.TruckModelMakerRepository;
 import fleetoverview.service.ModelMakerService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.NotFoundException;
@@ -22,29 +22,29 @@ import java.util.Map;
  **/
 @Service
 public class ModelMakerServiceImpl extends BaseService implements ModelMakerService {
-    private final ModelMakerRepository repository;
+    private final TruckModelMakerRepository repository;
 
     @Autowired
-    public ModelMakerServiceImpl(ModelMakerRepository repository) {
+    public ModelMakerServiceImpl(TruckModelMakerRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public DataResponse<List<ModelMakerEntity>> get(Map<String, String> params) {
+    public DataResponse<List<TruckModelMakerEntity>> get(Map<String, String> params) {
         return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 
     @Override
     public ApiResponse post(OnlyNameRequest data) {
         repository.save(
-                new ModelMakerEntity(data.name())
+                new TruckModelMakerEntity(data.name())
         );
         return ApiResponse.success();
     }
 
     @Override
     public ApiResponse put(OnlyNameRequest data) {
-        ModelMakerEntity modelMaker = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("modelMaker.not_found")));
+        TruckModelMakerEntity modelMaker = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("modelMaker.not_found")));
 
         modelMaker.setName(data.name());
 
@@ -53,7 +53,7 @@ public class ModelMakerServiceImpl extends BaseService implements ModelMakerServ
 
     @Override
     public ApiResponse delete(OnlyNameRequest data) {
-        ModelMakerEntity modelMaker = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("modelMaker.not_found")));
+        TruckModelMakerEntity modelMaker = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("modelMaker.not_found")));
 
         repository.delete(modelMaker);
 

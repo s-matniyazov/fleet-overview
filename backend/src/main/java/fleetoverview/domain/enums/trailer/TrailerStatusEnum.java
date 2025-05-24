@@ -1,10 +1,10 @@
-package fleetoverview.domain.enums;
+package fleetoverview.domain.enums.trailer;
 
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 22 март 2025
+ * @created : 24 май 2025
  **/
-public enum TruckStatusEnum {
+public enum TrailerStatusEnum {
     NEW, ACTIVE, PASSIVE
 }

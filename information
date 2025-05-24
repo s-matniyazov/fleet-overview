@@ -19,7 +19,7 @@ Truck
                     purchase type - purchaseType
                     equipment provider - equipmentProvider
             - owner operator's ->
-                owner operator - ownerOperator
+                owner operator - driver
             - contractor owned ->
                 include to the IFTA - includeIFTA
     Additional notes

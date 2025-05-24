@@ -1,12 +1,12 @@
 package fleetoverview.repository;
 
-import fleetoverview.domain.entity.truck.FuelTypeEntity;
+import fleetoverview.domain.entity.trailer.TrailerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 13 март 2025
+ * @created : 24 май 2025
  **/
-public interface FuelTypeRepository extends JpaRepository<FuelTypeEntity, Integer> {
+public interface TrailerRepository extends JpaRepository<TrailerEntity, Integer> {
 }

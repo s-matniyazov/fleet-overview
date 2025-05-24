@@ -2,7 +2,7 @@ package fleetoverview.service.impl;
 
 import fleetoverview.config.MailConfigurationParams;
 import fleetoverview.config.TelegramConfigurationParams;
-import fleetoverview.domain.enums.TruckFileTypeEnum;
+import fleetoverview.domain.enums.truck.TruckFileTypeEnum;
 import fleetoverview.repository.CompanyRepository;
 import fleetoverview.repository.TruckRepository;
 import fleetoverview.service.NotificationService;
@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import static fleetoverview.domain.enums.TruckFileTypeEnum.*;
+import static fleetoverview.domain.enums.truck.TruckFileTypeEnum.*;
 import static fleetoverview.util.helper.Utils.isNull;
 
 /**

@@ -1,18 +1,18 @@
 package fleetoverview.data.request;
 
-import fleetoverview.domain.enums.truck.TruckFileTypeEnum;
+import fleetoverview.domain.enums.trailer.TrailerFileTypeEnum;
 
 import java.sql.Date;
 
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 23 март 2025
+ * @created : 24 май 2025
  **/
-public record TruckFileRequest(
+public record TrailerFileRequest(
         int id,
         Date expirationDate,
         String description,
-        TruckFileTypeEnum type,
-        int truckId
-) {}
+        TrailerFileTypeEnum type,
+        int trailerId
+) { }

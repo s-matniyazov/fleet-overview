@@ -1,6 +1,7 @@
-package fleetoverview.domain.entity;
+package fleetoverview.domain.entity.trailer;
 
 import fleetoverview.domain.entity.base.BaseEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -8,18 +9,18 @@ import javax.persistence.Table;
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 13 март 2025
+ * @created : 24 май 2025
  **/
 @Entity
-@Table(name = "fuel_types")
-public class FuelTypeEntity extends BaseEntity {
+@Table(name = "trailer_types")
+public class TrailerTypeEntity extends BaseEntity {
     @Column(length = 50)
     private String name;
 
-    public FuelTypeEntity() {
+    public TrailerTypeEntity() {
     }
 
-    public FuelTypeEntity(String name) {
+    public TrailerTypeEntity(String name) {
         this.name = name;
     }
 

@@ -1,12 +1,16 @@
 package fleetoverview.config;
 
 import fleetoverview.domain.entity.*;
+import fleetoverview.domain.entity.trailer.TrailerModelMakerEntity;
+import fleetoverview.domain.entity.truck.FuelTypeEntity;
+import fleetoverview.domain.entity.truck.TruckModelMakerEntity;
 import fleetoverview.domain.enums.ActionTypesEnum;
 import fleetoverview.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,9 +34,11 @@ public class InitData implements CommandLineRunner {
     private final CountryRepository countryRepository;
     private final FuelTypeRepository fuelTypeRepository;
     private final StateRepository stateRepository;
+    private final TruckModelMakerRepository truckModelMakerRepository;
+    private final TrailerModelMakerRepository trailerModelMakerRepository;
     private Set<ActionEntity> actions = new HashSet<>();
 
-    public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository, StateRepository stateRepository, FuelTypeRepository fuelRepository, CountryRepository countryRepository, CountryRepository countryRepository1) {
+    public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository, StateRepository stateRepository, FuelTypeRepository fuelRepository, CountryRepository countryRepository, CountryRepository countryRepository1, TruckModelMakerRepository truckModelMakerRepository, TrailerModelMakerRepository trailerModelMakerRepository) {
         this.actionRepository = actionRepository;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
@@ -41,6 +47,8 @@ public class InitData implements CommandLineRunner {
         this.stateRepository = stateRepository;
         this.fuelTypeRepository = fuelRepository;
         this.countryRepository = countryRepository;
+        this.truckModelMakerRepository = truckModelMakerRepository;
+        this.trailerModelMakerRepository = trailerModelMakerRepository;
     }
 
     @Override
@@ -51,6 +59,9 @@ public class InitData implements CommandLineRunner {
         initOwnershipTypes();
         initFuelTypes();
         initCountryAndStates();
+
+        initTruckModelMakers();
+        initTrailerModelMakers();
     }
 
     private void initActions() {
@@ -201,6 +212,43 @@ public class InitData implements CommandLineRunner {
                             new StateEntity("Wisconsin, WI", usa),
                             new StateEntity("Wyoming, WY", usa)
                     )
+            );
+        }
+    }
+
+    // truck
+    private void initTruckModelMakers() {
+        // International, Freightliner, Western Star, Volvo, Ford, Mack, Kenworth, Peterbilt, RAM, Other
+        if (!truckModelMakerRepository.existsByName("International")) {
+            truckModelMakerRepository.saveAll(
+                    Arrays.stream(new String[]{
+                                    "International", "Freightliner",
+                                    "Western Star", "Volvo", "Ford",
+                                    "Mack", "Kenworth", "Peterbilt",
+                                    "RAM", "Other"
+                            })
+                            .map(TruckModelMakerEntity::new)
+                            .toList()
+            );
+        }
+    }
+
+    // trailer
+    private void initTrailerModelMakers() {
+        if (!trailerModelMakerRepository.existsByName("Utility")) {
+            trailerModelMakerRepository.saveAll(
+                    Arrays.stream(new String[]{
+                                    "Utility", "Great Dane", "Carrier", "Stoughton", "Hyundai",
+                                    "Wabash", "Vanguard", "Atro", "Doepker", "Doonan", "East",
+                                    "Fontaine", "Felling", "Trailers", "Heil Trailer",
+                                    "Kentucky Trailer", "MAC Trailer", "Pitts Trailers",
+                                    "Polar Tank", "Reitnuer Trailers", "Strick Trailers",
+                                    "Timpte Inc", "Trail King", "Towmaster", "Travis Body &amp; Trailers",
+                                    "Talbert", "Western Trailers", "Fruehauf", "Manac", "CIMC Trailer",
+                                    "Commonwealth Trailer", "Hytr Trailer", "Extreme Trailers",
+                                    "Big Tex", "Inland", "Transcraft", "Other"})
+                            .map(TrailerModelMakerEntity::new)
+                            .toList()
             );
         }
     }

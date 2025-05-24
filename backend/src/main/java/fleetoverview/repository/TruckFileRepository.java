@@ -1,10 +1,9 @@
 package fleetoverview.repository;
 
 import fleetoverview.domain.entity.CompanyEntity;
-import fleetoverview.domain.entity.TruckFileEntity;
-import fleetoverview.domain.enums.TruckFileStatusEnum;
+import fleetoverview.domain.entity.truck.TruckFileEntity;
+import fleetoverview.domain.enums.truck.TruckFileStatusEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.sql.Date;
 import java.util.List;
