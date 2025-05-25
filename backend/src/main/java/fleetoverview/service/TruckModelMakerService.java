@@ -9,5 +9,5 @@ import fleetoverview.service.base.CrudService;
  * @mailto :  sardorbekmatniyazov03@gmail.com
  * @created : 13 март 2025
  **/
-public interface ModelMakerService extends CrudService<TruckModelMakerEntity, OnlyNameRequest> {
+public interface TruckModelMakerService extends CrudService<TruckModelMakerEntity, OnlyNameRequest> {
 }

@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @created : 24 май 2025
  **/
 public interface TrailerTypeRepository extends JpaRepository<TrailerTypeEntity, Integer> {
+    boolean existsByName(String name);
 }

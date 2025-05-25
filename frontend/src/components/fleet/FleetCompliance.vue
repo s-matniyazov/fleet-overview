@@ -5,7 +5,7 @@ import {useI18n} from "vue-i18n";
 import Truck from "@/components/fleet/truck/Truck.vue";
 import TabPanels from "@/components/base/UTabPanels.vue";
 import Tabs from "@/components/base/UTabs.vue";
-import Trailer from "@/components/fleet/Trailer.vue";
+import Trailer from "@/components/fleet/trailer/Trailer.vue";
 
 const {t} = useI18n();
 

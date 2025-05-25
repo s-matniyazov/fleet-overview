@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -55,11 +58,13 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Transactional
     @Override
-    public ResourceEntity createResource(MultipartFile file) {
+    public ResourceEntity createResource(MultipartFile file, String type) {
         if (file == null || file.isEmpty())
             throw new FileException("File is empty !!!");
 
-        String string = UUID.randomUUID().toString();
+        DateFormat format = new SimpleDateFormat("-dd-MM-yyyy");
+
+        String string = UUID.randomUUID() + format.format(new Date());
         String[] split = Objects.requireNonNull(file.getOriginalFilename()).split("\\.");
         string += "." + split[split.length - 1];
 
@@ -67,7 +72,7 @@ public class ResourceServiceImpl implements ResourceService {
                 file.getOriginalFilename(),
                 split[split.length - 1],
                 file.getSize(),
-                resourceParams.getPath() + string,
+                resourceParams.getPath() + type + "/" + string,
                 file.getContentType()
         ));
 

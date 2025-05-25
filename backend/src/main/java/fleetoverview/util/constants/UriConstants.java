@@ -20,14 +20,16 @@ public interface UriConstants {
     String COUNTRY = API + "/countries";
     String STATE = API + "/states";
     String FUEL_TYPE = API + "/fuel-types";
-    String MODEL_MAKER = API + "/model-makers";
     String OWNERSHIP_TYPE = API + "/ownership-type";
     String PURCHASE_TYPE = API + "/purchase-types";
 
     // truck
     String TRUCK = API + "/trucks";
+    String TRUCK_MODEL_MAKER = API + "/truck/model-makers";
     // trailer
     String TRAILER = API + "/trailers";
+    String TRAILER_TYPE = API + "/trailer-types";
+    String TRAILER_MODEL_MAKER = API + "/trailer/model-makers";
     // driver
     String DRIVER = API + "/drivers";
 }

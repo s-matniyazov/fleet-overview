@@ -2,6 +2,7 @@ package fleetoverview.config;
 
 import fleetoverview.domain.entity.*;
 import fleetoverview.domain.entity.trailer.TrailerModelMakerEntity;
+import fleetoverview.domain.entity.trailer.TrailerTypeEntity;
 import fleetoverview.domain.entity.truck.FuelTypeEntity;
 import fleetoverview.domain.entity.truck.TruckModelMakerEntity;
 import fleetoverview.domain.enums.ActionTypesEnum;
@@ -36,9 +37,10 @@ public class InitData implements CommandLineRunner {
     private final StateRepository stateRepository;
     private final TruckModelMakerRepository truckModelMakerRepository;
     private final TrailerModelMakerRepository trailerModelMakerRepository;
+    private final TrailerTypeRepository trailerTypeRepository;
     private Set<ActionEntity> actions = new HashSet<>();
 
-    public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository, StateRepository stateRepository, FuelTypeRepository fuelRepository, CountryRepository countryRepository, CountryRepository countryRepository1, TruckModelMakerRepository truckModelMakerRepository, TrailerModelMakerRepository trailerModelMakerRepository) {
+    public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository, StateRepository stateRepository, FuelTypeRepository fuelRepository, CountryRepository countryRepository, CountryRepository countryRepository1, TruckModelMakerRepository truckModelMakerRepository, TrailerModelMakerRepository trailerModelMakerRepository, TrailerTypeRepository trailerTypeRepository) {
         this.actionRepository = actionRepository;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
@@ -49,6 +51,7 @@ public class InitData implements CommandLineRunner {
         this.countryRepository = countryRepository;
         this.truckModelMakerRepository = truckModelMakerRepository;
         this.trailerModelMakerRepository = trailerModelMakerRepository;
+        this.trailerTypeRepository = trailerTypeRepository;
     }
 
     @Override
@@ -62,6 +65,7 @@ public class InitData implements CommandLineRunner {
 
         initTruckModelMakers();
         initTrailerModelMakers();
+        initTrailerTypes();
     }
 
     private void initActions() {
@@ -248,6 +252,21 @@ public class InitData implements CommandLineRunner {
                                     "Commonwealth Trailer", "Hytr Trailer", "Extreme Trailers",
                                     "Big Tex", "Inland", "Transcraft", "Other"})
                             .map(TrailerModelMakerEntity::new)
+                            .toList()
+            );
+        }
+    }
+
+    private void initTrailerTypes() {
+        if (!trailerTypeRepository.existsByName("Utility")) {
+            trailerTypeRepository.saveAll(
+                    Arrays.stream(new String[]{
+                                    "Van", "Reefer", "Flat Bed",
+                                    "Step Deck", "Container",
+                                    "Lowboy", "Car Hauler",
+                                    "Gooseneck Hot-shot",
+                            })
+                            .map(TrailerTypeEntity::new)
                             .toList()
             );
         }

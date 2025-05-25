@@ -3,11 +3,11 @@ package fleetoverview.controller;
 import fleetoverview.controller.base.CrudController;
 import fleetoverview.data.request.OnlyNameRequest;
 import fleetoverview.domain.entity.truck.TruckModelMakerEntity;
-import fleetoverview.service.ModelMakerService;
+import fleetoverview.service.TruckModelMakerService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static fleetoverview.util.constants.UriConstants.MODEL_MAKER;
+import static fleetoverview.util.constants.UriConstants.TRUCK_MODEL_MAKER;
 
 /**
  * @author :  Sardor Matniyazov
@@ -15,9 +15,9 @@ import static fleetoverview.util.constants.UriConstants.MODEL_MAKER;
  * @created : 13 март 2025
  **/
 @RestController
-@RequestMapping(MODEL_MAKER)
-public class ModelMakerController extends CrudController<TruckModelMakerEntity, OnlyNameRequest> {
-    protected ModelMakerController(ModelMakerService service) {
+@RequestMapping(TRUCK_MODEL_MAKER)
+public class TruckModelMakerController extends CrudController<TruckModelMakerEntity, OnlyNameRequest> {
+    protected TruckModelMakerController(TruckModelMakerService service) {
         super(service);
     }
 }

@@ -144,7 +144,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
     public ApiResponse attachFileToTruck(TruckFileRequest data, MultipartFile file) {
         TruckEntity truck = repository.findById(data.truckId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("truck.not_found")));
 
-        ResourceEntity resource = resourceService.createResource(file);
+        ResourceEntity resource = resourceService.createResource(file, "truck");
 
         truck.getFiles().add(
                 new TruckFileEntity(

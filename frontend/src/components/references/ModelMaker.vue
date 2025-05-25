@@ -47,7 +47,7 @@ const newModel = () => {
 
 const addModal = ref(false);
 
-const apiUrl = URIS.MODEL_MAKER;
+const apiUrl = URIS.TRUCK_MODEL_MAKER;
 const dataList = ref([]);
 const data = ref(newModel())
 const selectedRow = ref();

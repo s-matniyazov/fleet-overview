@@ -151,7 +151,7 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
     public ApiResponse attachFileToTrailer(TrailerFileRequest data, MultipartFile file) {
         TrailerEntity trailer = repository.findById(data.trailerId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("trailer.not_found")));
 
-        ResourceEntity resource = resourceService.createResource(file);
+        ResourceEntity resource = resourceService.createResource(file, "trailer");
 
         trailer.getFiles().add(
                 new TrailerFileEntity(

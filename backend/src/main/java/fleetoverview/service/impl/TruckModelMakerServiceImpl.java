@@ -5,7 +5,7 @@ import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
 import fleetoverview.domain.entity.truck.TruckModelMakerEntity;
 import fleetoverview.repository.TruckModelMakerRepository;
-import fleetoverview.service.ModelMakerService;
+import fleetoverview.service.TruckModelMakerService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +21,11 @@ import java.util.Map;
  * @created : 13 март 2025
  **/
 @Service
-public class ModelMakerServiceImpl extends BaseService implements ModelMakerService {
+public class TruckModelMakerServiceImpl extends BaseService implements TruckModelMakerService {
     private final TruckModelMakerRepository repository;
 
     @Autowired
-    public ModelMakerServiceImpl(TruckModelMakerRepository repository) {
+    public TruckModelMakerServiceImpl(TruckModelMakerRepository repository) {
         this.repository = repository;
     }
 

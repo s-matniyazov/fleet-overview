@@ -12,6 +12,6 @@ import javax.servlet.http.HttpServletResponse;
  **/
 public interface ResourceService {
     void downloadResource(Integer id, HttpServletResponse response);
-    ResourceEntity createResource(MultipartFile file);
+    ResourceEntity createResource(MultipartFile file, String type);
     void removeResource(ResourceEntity resource);
 }

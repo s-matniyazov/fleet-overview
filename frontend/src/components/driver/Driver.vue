@@ -236,6 +236,15 @@ watch(
       <template #row_created="{row}">
         <td>{{ longToDateTime(row?.created) }}</td>
       </template>
+
+      <template #row_status="{row}">
+        <td>
+          <div class="d-flex gap-2">
+            <a class="badge bg-primary-subtle text-primary"
+               :class="`bg-${row?.status === 'PASSIVE' ? 'danger' : 'primary'}-subtle`"> {{ row?.status }}</a>
+          </div>
+        </td>
+      </template>
     </UTable>
   </div>
 
@@ -343,7 +352,7 @@ watch(
                 <!--           zipcode-->
                 <div class="col-4">
                   <UInput v-model="data.zipCode" :label="t('zip_code')" :hint="t('zip_code')" :name="t('zip_code')"
-                          :placeholder="t('enter_zip_code')" classes="mb-3"
+                          :placeholder="t('enter_zip_code')" classes="mb-3" type="number"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
                 <div class="col-3">

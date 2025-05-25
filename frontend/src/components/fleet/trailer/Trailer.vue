@@ -15,10 +15,10 @@ import UTextarea from "@/components/base/UTextarea.vue";
 import UScrollArea from "@/components/base/UScrollArea.vue";
 import UDialog from "@/components/base/UDialog.vue";
 import UTooltip from "@/components/base/UTooltip.vue";
-import TruckFileMiniCard from "@/components/fleet/truck/TruckFileMiniCard.vue";
+import TrailerFileMiniCard from "@/components/fleet/trailer/TrailerFileMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
-import TruckFileOverlay from "@/components/fleet/truck/TruckFileOverlay.vue";
-import TruckCard from "@/components/fleet/truck/TruckCard.vue";
+import TrailerFileOverlay from "@/components/fleet/trailer/TrailerFileOverlay.vue";
+import TrailerCard from "@/components/fleet/trailer/TrailerCard.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
 
 const {t} = useI18n();
@@ -108,17 +108,15 @@ const newModel = () => {
   return {
     id: null,
     unit: null,
-    inServiceDate: null,
     licensePlate: null,
-    stateId: null,
+    inServiceDate: null,
     modelMakerId: null,
+    typeId: null,
     year: null,
-    fuelTypeId: null,
-    grossWeight: null,
     axles: null,
+    length: null,
     vin: null,
     ownershipTypeId: null,
-    includeIFTA: false,
     purchaseTypeId: null,
     driverId: null,
     description: null,
@@ -133,7 +131,7 @@ const selectedFileSection = ref({
   fileType: null
 });
 
-const apiUrl = URIS.TRUCK;
+const apiUrl = URIS.TRAILER;
 const dataList = ref([]);
 const selectedRow = ref();
 const data = ref(newModel())
@@ -141,7 +139,7 @@ const data = ref(newModel())
 const countries = ref([]);
 const states = ref([]);
 const makers = ref([]);
-const fuelTypes = ref([]);
+const types = ref([]);
 const ownershipTypes = ref([]);
 const purchaseTypes = ref([]);
 const drivers = ref([]);
@@ -156,18 +154,15 @@ const onEdit = (d) => {
   data.value = {
     id: d.id,
     unit: d.unit,
-    inServiceDate: d.inServiceDate,
     licensePlate: d.licensePlate,
-    countryId: d?.state?.country.id,
-    stateId: d?.state?.id,
+    inServiceDate: d.inServiceDate,
     modelMakerId: d?.modelMaker?.id,
+    typeId: d?.type?.id,
     year: d.year,
-    fuelTypeId: d?.fuelType.id,
-    grossWeight: d.grossWeight,
     axles: d.axles,
+    length: d.length,
     vin: d.vin,
     ownershipTypeId: d?.ownershipType?.id,
-    includeIFTA: d.includeIFTA,
     purchaseTypeId: d?.purchaseType?.id,
     driverId: d?.driver?.id,
     description: d.description,
@@ -245,7 +240,7 @@ function getState(countryId) {
 }
 
 function getMaker() {
-  axiosIns.get(URIS.TRUCK_MODEL_MAKER)
+  axiosIns.get(URIS.TRAILER_MODEL_MAKER)
       .then(res => {
         makers.value = res.data.data;
       }).catch(e => {
@@ -253,10 +248,10 @@ function getMaker() {
   });
 }
 
-function getFuelType() {
-  axiosIns.get(URIS.FUEL_TYPE)
+function getTypes() {
+  axiosIns.get(URIS.TRAILER_TYPE)
       .then(res => {
-        fuelTypes.value = res.data.data;
+        types.value = res.data.data;
       }).catch(e => {
     showMessage(e)
   });
@@ -294,7 +289,7 @@ onMounted(() => {
   getData();
   getCountry();
   getMaker();
-  getFuelType();
+  getTypes();
   getOwnershipType();
   getPurchaseType();
   getDrivers();
@@ -410,7 +405,7 @@ watch(
 
       <template #row_registration="{row}">
         <td>
-          <TruckFileMiniCard name="REG (CAB CARD)" type="REG_CAB_CARD"
+          <TrailerFileMiniCard name="REG (CAB CARD)" type="REG_CAB_CARD"
                              :file="row.files.find(it => it.type==='REG_CAB_CARD' && it.status === 'ACTIVE')"
                              @click="(e) => {selectedRow = row; selectFileSection('REG_CAB_CARD'); e.stopPropagation()}"/>
         </td>
@@ -418,7 +413,7 @@ watch(
 
       <template #row_annual_inspection="{row}">
         <td>
-          <TruckFileMiniCard name="ANN INS" type="ANN_INS"
+          <TrailerFileMiniCard name="ANN INS" type="ANN_INS"
                              :file="row.files.find(it => it.type==='ANN_INS' && it.status === 'ACTIVE')"
                              @click="(e) => {selectedRow = row; selectFileSection('ANN_INS'); e.stopPropagation()}"/>
         </td>
@@ -426,7 +421,7 @@ watch(
 
       <template #row_physical_damage_inc="{row}">
         <td>
-          <TruckFileMiniCard name="PHYS DAMAGE" type="PHYS_DAMAGE"
+          <TrailerFileMiniCard name="PHYS DAMAGE" type="PHYS_DAMAGE"
                              :file="row.files.find(it => it.type==='PHYS_DAMAGE' && it.status === 'ACTIVE')"
                              @click="(e) => {selectedRow = row; selectFileSection('PHYS_DAMAGE'); e.stopPropagation()}"/>
         </td>
@@ -434,7 +429,7 @@ watch(
 
       <template #row_lease_agreement="{row}">
         <td>
-          <TruckFileMiniCard name="LEASE AGR" type="LEASE_AGR"
+          <TrailerFileMiniCard name="LEASE AGR" type="LEASE_AGR"
                              :file="row.files.find(it => it.type==='LEASE_AGR' && it.status === 'ACTIVE')"
                              @click="(e) => {selectedRow = row; selectFileSection('LEASE_AGR'); e.stopPropagation()}"/>
         </td>
@@ -518,13 +513,13 @@ watch(
     </UTable>
   </div>
 
-  <!--  truck modal-->
+  <!--  trailer modal-->
   <Teleport to="body">
     <UDialog :show="addModal" @close="addModal = false" width="calc(100vw - 400px)">
       <template #header>
         <div class="d-flex w-100">
           <div class="text-primary" style="font-weight: 1000; font-size: 16px">
-            {{ data.id ? t('edit') : t('add') }} {{ t('truck') }}
+            {{ data.id ? t('edit') : t('add') }} {{ t('trailer') }}
           </div>
           <div class="text-end u-end">
             <button class="btn-close" @click="onClose"></button>
@@ -547,24 +542,12 @@ watch(
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
 
-                <!--            country-->
+                <!--            licensePlate-->
                 <div class="col-6">
-                  <USelect v-model="data.countryId" :label="t('country')"
-                           :items="countries" name="country"
-                           option_name="name"
-                           classes="mb-2"
-                           :rules="(val) => (!val && $t('required'))"
-                  ></USelect>
-                </div>
-
-                <!--            state-->
-                <div class="col-6">
-                  <USelect v-model="data.stateId" :label="t('states')"
-                           :items="states" name="state"
-                           option_name="name"
-                           classes="mb-2"
-                           :rules="(val) => (!val && $t('required'))"
-                  ></USelect>
+                  <UInput v-model="data.licensePlate" :label="t('licensePlate')" :hint="t('licensePlate')"
+                          :name="t('licensePlate')"
+                          :placeholder="t('enter_licensePlate')" classes="mb-2"
+                          :rules="(val) => (!val && $t('required'))"/>
                 </div>
 
                 <!--            inServiceDate-->
@@ -574,18 +557,20 @@ watch(
                               :rules="(val) => (!val && $t('required'))"/>
                 </div>
 
-                <!--            licensePlate-->
-                <div class="col-6">
-                  <UInput v-model="data.licensePlate" :label="t('licensePlate')" :hint="t('licensePlate')"
-                          :name="t('licensePlate')"
-                          :placeholder="t('enter_licensePlate')" classes="mb-2"
-                          :rules="(val) => (!val && $t('required'))"/>
-                </div>
-
                 <!--            modelMaker-->
                 <div class="col-6">
                   <USelect v-model="data.modelMakerId" :label="t('modelMakers')"
                            :items="makers" name="modelMaker"
+                           option_name="name"
+                           classes="mb-2"
+                           :rules="(val) => (!val && $t('required'))"
+                  ></USelect>
+                </div>
+
+                <!--            type-->
+                <div class="col-6">
+                  <USelect v-model="data.typeId" :label="t('types')"
+                           :items="types" name="type"
                            option_name="name"
                            classes="mb-2"
                            :rules="(val) => (!val && $t('required'))"
@@ -599,28 +584,26 @@ watch(
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
 
-                <!--            fuelType-->
-                <div class="col-6">
-                  <USelect v-model="data.fuelTypeId" :label="t('fuelTypes')"
-                           :items="fuelTypes" name="fuelType"
-                           option_name="name"
-                           classes="mb-2"
-                           :rules="(val) => (!val && $t('required'))"
-                  ></USelect>
-                </div>
-
-                <!--            grossWeight-->
-                <div class="col-6">
-                  <UInput v-model="data.grossWeight" :label="t('grossWeight')" :hint="t('grossWeight')"
-                          :name="t('grossWeight')"
-                          :placeholder="t('enter_grossWeight')" classes="mb-2" type="number"
-                          :rules="(val) => (!val && $t('required'))"/>
-                </div>
-
                 <!--            axles-->
                 <div class="col-6">
                   <UInput v-model="data.axles" :label="t('axles')" :hint="t('axles')" :name="t('axles')"
                           :placeholder="t('enter_axles')" classes="mb-2" type="number"
+                          :rules="(val) => (!val && $t('required'))"/>
+                </div>
+
+                <!--            length-->
+                <div class="col-6">
+                  <UInput v-model="data.length" :label="t('length')" :hint="t('length')"
+                          :name="t('length')"
+                          :placeholder="t('enter_length')" classes="mb-2" type="number"
+                          :rules="(val) => (!val && $t('required'))"/>
+                </div>
+
+                <!--            height-->
+                <div class="col-6">
+                  <UInput v-model="data.height" :label="t('height')" :hint="t('height')"
+                          :name="t('height')"
+                          :placeholder="t('enter_height')" classes="mb-2" type="number"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
 
@@ -646,13 +629,8 @@ watch(
                            :rules="(val) => (!val && $t('required'))"
                   ></USelect>
                 </div>
-                <!--            includeIFTA-->
-                <div class="col-12">
-                  <UCheckbox v-model="data.includeIFTA" :label="t('Include To The IFTA')" :name="t('includeIFTA')"
-                             classes="mb-2" type="checkbox"/>
-                </div>
 
-                <template v-if="data.ownershipTypeId === 2">
+                <template v-if="[2].includes(data.ownershipTypeId)">
                   <!--            ownerOperator-->
                   <div class="col-12">
                     <USelect v-model="data.driverId" :label="t('ownerOperators')"
@@ -664,7 +642,7 @@ watch(
                   </div>
                 </template>
 
-                <template v-if="data.ownershipTypeId === 1">
+                <template v-if="[1, 3].includes(data.ownershipTypeId)">
                   <div class="col-12 text-primary my-3" style="font-weight: 1000; font-size: 16px">
                     Other Details
                   </div>
@@ -683,6 +661,7 @@ watch(
                 <div class="col-12 text-primary my-3" style="font-weight: 1000; font-size: 16px">
                   Additional Notes
                 </div>
+
                 <!--            description-->
                 <div class="col-12">
                   <UTextarea v-model="data.description" :label="t('description')"
@@ -704,12 +683,12 @@ watch(
     </UDialog>
   </Teleport>
 
-  <!--  truck card-->
+  <!--  trailer card-->
   <Teleport to="body">
     <UDialog :show="showModal" width="calc(100vw - 200px)" class="">
       <template #header>
         <div class="d-flex w-100">
-          Truck Card
+          Trailer Card
           <div class="text-end u-end">
             <button class="btn-close" @click="showModal = false"></button>
           </div>
@@ -718,7 +697,7 @@ watch(
 
       <template #body>
         <UScrollArea height="calc(100vh - 200px)">
-          <TruckCard :data="selectedRow"/>
+          <TrailerCard :data="selectedRow"/>
         </UScrollArea>
       </template>
     </UDialog>
@@ -735,7 +714,7 @@ watch(
       </h4>
     </template>
     <template #body>
-      <TruckFileOverlay :truck-id="selectedRow.id" :file-type="selectedFileSection.fileType"/>
+      <TrailerFileOverlay :trailer-id="selectedRow.id" :file-type="selectedFileSection.fileType"/>
     </template>
   </URightOverlay>
 </template>

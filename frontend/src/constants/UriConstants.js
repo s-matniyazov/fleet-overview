@@ -17,11 +17,16 @@ export const URIS = {
     COUNTRY: 'countries',
     STATE: "/states",
     FUEL_TYPE: "/fuel-types",
-    MODEL_MAKER: "/model-makers",
     OWNER_OPERATOR: "/owner-operators",
     OWNERSHIP_TYPE: "/ownership-type",
     PURCHASE_TYPE: "/purchase-types",
 
     // truck
-    TRUCK: "/trucks"
+    TRUCK: "/trucks",
+    TRUCK_MODEL_MAKER: "/truck/model-makers",
+
+    // truck
+    TRAILER: "/trailers",
+    TRAILER_TYPE: "/trailer-types",
+    TRAILER_MODEL_MAKER: "/trailer/model-makers",
 }
