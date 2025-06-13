@@ -25,10 +25,8 @@ public class TruckFileCheckerServiceImpl implements FileCheckerService {
 
     @Override
     public void checkAndDisableFile() {
-        List<TruckFileEntity> files = truckFileRepository.findExpiredFiles().stream().map(it -> {
-            it.setStatus(TruckFileStatusEnum.PASSIVE);
-            return it;
-        }).toList();
+        List<TruckFileEntity> files = truckFileRepository.findExpiredFiles().stream()
+                .peek(it -> it.setStatus(TruckFileStatusEnum.PASSIVE)).toList();
 
         truckFileRepository.saveAll(files);
     }

@@ -24,17 +24,19 @@ public class FileExpirationCheckerScheduler {
 
     private final NotificationService notificationService;
     private final FileCheckerService truckFileCheckerServiceImpl;
+    private final FileCheckerService permitFileCheckerServiceImpl;
 
     @Autowired
-    public FileExpirationCheckerScheduler(NotificationService notificationService, FileCheckerService truckFileCheckerServiceImpl) {
+    public FileExpirationCheckerScheduler(NotificationService notificationService, FileCheckerService truckFileCheckerServiceImpl, FileCheckerService permitFileCheckerServiceImpl) {
         this.notificationService = notificationService;
         this.truckFileCheckerServiceImpl = truckFileCheckerServiceImpl;
+        this.permitFileCheckerServiceImpl = permitFileCheckerServiceImpl;
     }
 
     @Scheduled(cron = "0 0 1 * * ?")
     public void checkFileAndMakeExpired() {
-        log.info("Expired worker working time is  {}", dateFormat.format(new Date()));
         truckFileCheckerServiceImpl.checkAndDisableFile();
+        permitFileCheckerServiceImpl.checkAndDisableFile();
     }
 
     //cron = "0 0 8 * * ?"
