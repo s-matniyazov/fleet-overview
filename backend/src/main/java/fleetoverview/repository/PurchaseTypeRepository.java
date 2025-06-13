@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @created : 13 март 2025
  **/
 public interface PurchaseTypeRepository extends JpaRepository<PurchaseTypeEntity, Integer> {
+    boolean existsByName(String name);
 }

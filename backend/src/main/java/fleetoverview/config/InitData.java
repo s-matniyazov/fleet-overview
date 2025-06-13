@@ -38,9 +38,10 @@ public class InitData implements CommandLineRunner {
     private final TruckModelMakerRepository truckModelMakerRepository;
     private final TrailerModelMakerRepository trailerModelMakerRepository;
     private final TrailerTypeRepository trailerTypeRepository;
+    private final PurchaseTypeRepository purchaseTypeRepository;
     private Set<ActionEntity> actions = new HashSet<>();
 
-    public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository, StateRepository stateRepository, FuelTypeRepository fuelRepository, CountryRepository countryRepository, TruckModelMakerRepository truckModelMakerRepository, TrailerModelMakerRepository trailerModelMakerRepository, TrailerTypeRepository trailerTypeRepository) {
+    public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository, StateRepository stateRepository, FuelTypeRepository fuelRepository, CountryRepository countryRepository, TruckModelMakerRepository truckModelMakerRepository, TrailerModelMakerRepository trailerModelMakerRepository, TrailerTypeRepository trailerTypeRepository, PurchaseTypeRepository purchaseTypeRepository) {
         this.actionRepository = actionRepository;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
@@ -52,6 +53,7 @@ public class InitData implements CommandLineRunner {
         this.truckModelMakerRepository = truckModelMakerRepository;
         this.trailerModelMakerRepository = trailerModelMakerRepository;
         this.trailerTypeRepository = trailerTypeRepository;
+        this.purchaseTypeRepository = purchaseTypeRepository;
     }
 
     @Override
@@ -66,6 +68,7 @@ public class InitData implements CommandLineRunner {
         initTruckModelMakers();
         initTrailerModelMakers();
         initTrailerTypes();
+        initPurchaseTypes();
     }
 
     private void initActions() {
@@ -389,6 +392,19 @@ public class InitData implements CommandLineRunner {
                                     "Gooseneck Hot-shot",
                             })
                             .map(TrailerTypeEntity::new)
+                            .toList()
+            );
+        }
+    }
+
+    private void initPurchaseTypes() {
+        if (!purchaseTypeRepository.existsByName("Utility")) {
+            purchaseTypeRepository.saveAll(
+                    Arrays.stream(new String[]{
+                                    "N/A", "Company owned", "Rental",
+                                    "Leased", "Lease to own"
+                            })
+                            .map(PurchaseTypeEntity::new)
                             .toList()
             );
         }
