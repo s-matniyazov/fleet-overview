@@ -4,7 +4,7 @@ import DocumentMiniCard from "@/components/fleet/DocumentMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
 import FileOverlay from "@/components/fleet/FileOverlay.vue";
 import {ref} from "vue";
-import {DOCUMENT_TYPES, FILE_TYPE_NAMES, PERMIT_NAMES} from "@/util/utils.js";
+import {DOCUMENT_TYPES, downloadResource, FILE_TYPE_NAMES, PERMIT_NAMES} from "@/util/utils.js";
 import TruckFileMiniCard from "@/components/fleet/FileMiniCard.vue";
 import {URIS} from "@/constants/UriConstants.js";
 
@@ -29,6 +29,24 @@ const selectedFileSection = ref({
   fileType: null
 });
 
+function downloadAll (type) {
+  if (type === 'truckFiles') {
+    FILE_TYPE_NAMES.forEach(item => {
+      const resource = truckFileStore.files.find(it => it.type===item.key)?.resource
+      if (resource) {
+        downloadResource(resource)
+      }
+    })
+  } else if (type === 'permits') {
+    PERMIT_NAMES.forEach(item => {
+      const resource = truckFileStore.permits.find(it => it.type===item.key)?.resource
+      if (resource) {
+        downloadResource(resource)
+      }
+    })
+  }
+}
+
 </script>
 
 <template>
@@ -39,8 +57,10 @@ const selectedFileSection = ref({
           <div class="font-size-20 fw-bold text-secondary"> General Documents</div>
         </div>
         <div class="col-6 font-size-16 text-end">
-          <button class="btn btn-light cursor-pointer" disabled="">
-            <span>Download All Files</span><i class="mdi mdi-cloud-download-outline ms-2"></i></button>
+          <button class="btn btn-light" @click="downloadAll('truckFiles')">
+            <span>Download All Files</span>
+            <i class="mdi mdi-cloud-download-outline ms-2"></i>
+          </button>
         </div>
       </div>
       <div class="row">
@@ -60,8 +80,10 @@ const selectedFileSection = ref({
           <div class="font-size-20 fw-bold text-secondary"> Permits</div>
         </div>
         <div class="col-6 font-size-16 text-end">
-          <button class="btn btn-light cursor-pointer" disabled=""><span>Download All Files</span><i
-              class="mdi mdi-cloud-download-outline ms-2"></i></button>
+          <button class="btn btn-light" @click="downloadAll('permits')">
+            <span>Download All Files</span>
+            <i class="mdi mdi-cloud-download-outline ms-2"></i>
+          </button>
         </div>
       </div>
       <div class="row">

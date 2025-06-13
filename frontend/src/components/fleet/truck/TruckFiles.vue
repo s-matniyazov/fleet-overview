@@ -5,7 +5,7 @@ import {ref} from "vue";
 import {useI18n} from "vue-i18n";
 import axiosIns from "@/plugins/axios.js";
 import {URIS} from "@/constants/UriConstants.js";
-import {DOCUMENT_TYPES, longToDate, showMessage} from "@/util/utils.js";
+import {DOCUMENT_TYPES, downloadResource, longToDate, showMessage} from "@/util/utils.js";
 import {useTruckFileStore} from "@/store/TruckFileStore.js";
 
 const truckFileStore = useTruckFileStore();
@@ -86,23 +86,6 @@ const columns = [
 
 const selectedRow = ref();
 
-function downloadDoc(row) {
-  axiosIns.get(URIS.RESOURCES + '/view/' + row.id, {
-    responseType: 'blob',
-  })
-      .then(res => {
-        console.log(row);
-        const blob = new Blob([res.data], {type: row.contentType})
-        const link = document.createElement('a')
-        link.href = URL.createObjectURL(blob)
-        link.download = row.fileName
-        link.click()
-        URL.revokeObjectURL(link.href)
-      }).catch(e => {
-    showMessage(e)
-  });
-}
-
 const formatSize = (size) => {
   return (size / 1024).toFixed(2) + ' KB';
 };
@@ -156,7 +139,7 @@ const formatSize = (size) => {
 
       <template #row_actions="{row}">
         <td>
-          <button @click="downloadDoc(row?.resource)" :disabled="!row?.resource" class="btn btn-primary btn-sm">
+          <button @click="downloadResource(row?.resource)" :disabled="!row?.resource" class="btn btn-primary btn-sm">
             <span class="mdi mdi-download"></span>
           </button>
         </td>

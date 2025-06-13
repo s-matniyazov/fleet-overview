@@ -1,6 +1,8 @@
 import useToasterStore from "@/store/ToastStore";
 import {useLoaderStore} from "@/store/LoaderStore.js";
 import useUserStore from "@/store/UserStore.js";
+import axiosIns from "@/plugins/axios.js";
+import {URIS} from "@/constants/UriConstants.js";
 
 // toast store access
 const toasterStore = useToasterStore();
@@ -140,3 +142,20 @@ const PERMIT_NAMES = [
         value: "Connecticut"
     },
 ]
+
+export function downloadResource(resource) {
+    axiosIns.get(URIS.RESOURCES + '/view/' + resource.id, {
+        responseType: 'blob',
+    })
+        .then(res => {
+            console.log(resource);
+            const blob = new Blob([res.data], {type: resource.contentType})
+            const link = document.createElement('a')
+            link.href = URL.createObjectURL(blob)
+            link.download = resource.fileName
+            link.click()
+            URL.revokeObjectURL(link.href)
+        }).catch(e => {
+        showMessage(e)
+    });
+}
