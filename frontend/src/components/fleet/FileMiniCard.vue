@@ -29,8 +29,15 @@ defineProps({
       </div>
     </div>
     <div class="d-flex justify-content-start align-items-center">
-      <img src="../../../assets/icons/file-na.svg" alt="File checked icon"
-           class="me-2 ng-star-inserted"/>
+      <template v-if="file">
+        <img src="../../assets/icons/file-check.svg" alt="File checked icon"
+             class="me-2 ng-star-inserted"/>
+      </template>
+      <template v-else>
+        <img src="../../assets/icons/file-na.svg" alt="File na icon"
+             class="me-2 ng-star-inserted"/>
+      </template>
+
       <span class="fw-semibold font-size-10 text-gray-light">
         <strong>{{ name }}</strong>
         On File

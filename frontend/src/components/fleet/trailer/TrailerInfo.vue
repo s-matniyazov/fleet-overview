@@ -22,14 +22,9 @@ const props = defineProps({
       {{ t('unit') }}: {{ data.unit }}
     </div>
 
-    <!--            country-->
-    <div class="col-6">
-      {{ t('countries') }}: {{ data.state.country.name }}
-    </div>
-
-    <!--            state-->
-    <div class="col-6">
-      {{ t('state') }}: {{ data.state.name }}
+    <!--            licensePlate-->
+    <div class="col-12">
+      {{ t('licensePlate') }}: {{ data.licensePlate }}
     </div>
 
     <!--            inServiceDate-->
@@ -37,14 +32,14 @@ const props = defineProps({
       {{ t('inServiceDate') }}: {{ data.inServiceDate }}
     </div>
 
-    <!--            licensePlate-->
-    <div class="col-12">
-      {{ t('licensePlate') }}: {{ data.licensePlate }}
-    </div>
-
     <!--            modelMaker-->
     <div class="col-12">
       {{ t('modelMakers') }}: {{  data.modelMaker.name }}
+    </div>
+
+    <!--            type-->
+    <div class="col-12">
+      {{ t('types') }}: {{  data.type.name }}
     </div>
 
     <!--            year-->
@@ -52,19 +47,19 @@ const props = defineProps({
       {{ t('year') }}: {{ data.year }}
     </div>
 
-    <!--            fuelType-->
-    <div class="col-6">
-      {{ t('fuelTypes') }}: {{ data.fuelType.name }}
-    </div>
-
-    <!--            grossWeight-->
-    <div class="col-6">
-      {{ t('grossWeight') }}: {{ data.grossWeight }}
-    </div>
-
     <!--            axles-->
     <div class="col-6">
       {{ t('axles') }}: {{ data.axles }}
+    </div>
+
+    <!--            length-->
+    <div class="col-6">
+      {{ t('length') }}: {{ data.length }}
+    </div>
+
+    <!--            height-->
+    <div class="col-6">
+      {{ t('height') }}: {{ data.height }}
     </div>
 
     <!--            vin-->

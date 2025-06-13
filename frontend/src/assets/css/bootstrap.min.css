@@ -181,6 +181,14 @@
     --bs-form-invalid-border-color: #fea19e
 }
 
+:root {
+    --sidebar-width: 220px;
+}
+
+body.collapsed-sidebar {
+    --sidebar-width: 70px;
+}
+
 *, ::after, ::before {
     -webkit-box-sizing: border-box;
     box-sizing: border-box

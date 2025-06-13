@@ -16,6 +16,15 @@ const filterStore = useFilterStore();
 const companies = ref();
 const companyId = ref(filterStore.globalFilter.companyId);
 
+const sidebarWidth = ref(200);
+const collapsed = ref(document.body.classList.toggle("collapsed-sidebar"))
+const toggleSidebar = () => {
+  collapsed.value = !collapsed.value;
+  sidebarWidth.value = collapsed.value ? 80 : 200;
+
+  document.body.classList.toggle('collapsed-sidebar', collapsed.value);
+};
+
 function pushPage(page) {
   router.push(page);
 }
@@ -33,15 +42,13 @@ onMounted(() => {
   getCompanies();
 });
 
-
-
 watch(
     companyId,
     (newVal) => {
       filterStore.setCompanyId(newVal)
       window.location.reload()
     },
-    { deep: true }
+    {deep: true}
 )
 </script>
 
@@ -51,28 +58,44 @@ watch(
     <header id="page-topbar">
       <div class="navbar-header">
         <div class="d-flex items-center">
-          <div class="navbar-brand-box">
-            <router-link to="/" class="logo logo-dark">
-              <span class="logo-lg"> <img src="../assets/icons/em_logo.png" alt="" size="12" style="height: 50px">
-                <span class="logo-txt">EM Fleet</span>
-                                </span>
-            </router-link>
+          <div class="navbar-brand-box" :style="collapsed ? 'padding: 0 0.5rem;' : 'padding: 0 1.5rem;'">
+            <template v-if="!collapsed">
+              <router-link to="/" class="logo logo-dark">
+                <span class="logo-lg"> <img src="@/assets/icons/em_logo.png" alt="fleet logo" size="12"
+                                            style="height: 50px">
+                  <span class="logo-txt">EM Fleet</span>
+                </span>
+              </router-link>
+            </template>
+            <template v-else>
+                <span class="logo-sm"> <img src="@/assets/icons/em_logo.png" alt="fleet logo" size="8"
+                                            style="height: 50px"/> </span>
+              <span class="logo-txt"></span>
+            </template>
           </div>
         </div>
 
+        <button class="btn btn bg-light btn-outline-light mx-1" style="height: 50px; width: 50px;"
+                @click="e => {toggleSidebar(); e.stopPropagation()}">
+          <img src="@/assets/icons/resize.png" alt="resize" height="24"/>
+        </button>
+
         <div class="d-flex px-3" style="justify-content: space-around">
-          <span class="text-primary" style="font-size: 18px; font-weight: 1000">{{ routerStore.currentRouterName }}</span>
+          <span class="text-primary" style="font-size: 18px; font-weight: 1000">{{
+              routerStore.currentRouterName
+            }}</span>
         </div>
 
         <div class="d-flex px-3" style="justify-content: space-around">
-          <USelect :items="companies" v-model="companyId" option_name="name" option_value="id" styles="width: 20rem; margin-left: calc(50vw - 520px)"/>
+          <USelect :items="companies" v-model="companyId" option_name="name" option_value="id"
+                   styles="width: 20rem; margin-left: calc(50vw - 520px)"/>
         </div>
       </div>
     </header>
 
-    <vertical-menu/>
+    <vertical-menu :collapsed="collapsed" @toggle-sidebar="toggleSidebar"/>
 
-    <div class="main-content">
+    <div class="main-content flex-fill">
       <div class="page-content">
         <div class="container-fluid"
              style="border: 1px dashed #eae1e1; border-radius: 5px; height: calc(100vh - 90px); overflow: hidden; overflow-y: auto">

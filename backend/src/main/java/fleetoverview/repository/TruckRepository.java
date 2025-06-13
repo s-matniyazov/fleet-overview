@@ -13,8 +13,17 @@ import java.util.List;
  * @created : 16 март 2025
  **/
 public interface TruckRepository extends JpaRepository<TruckEntity, Integer> {
+    @Override
+    @Query("""
+            select t from TruckEntity t
+            left join fetch TruckFileEntity tf on tf.truck = t and tf.status = 'ACTIVE'
+            left join fetch PermitEntity tp on tp.truck = t and tp.status = 'ACTIVE'
+            """)
+    List<TruckEntity> findAll();
+
     @Query(value = """
             select t.unit  as truckUnit,
+                    t.year as truckYear,
                     mm.name as truckMaker,
                     ft.name as truckFuelType,
                     tf.*

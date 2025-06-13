@@ -1,5 +1,6 @@
 package fleetoverview.config;
 
+import fleetoverview.service.FileCheckerService;
 import fleetoverview.service.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +23,18 @@ public class FileExpirationCheckerScheduler {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
     private final NotificationService notificationService;
+    private final FileCheckerService truckFileCheckerServiceImpl;
 
     @Autowired
-    public FileExpirationCheckerScheduler(NotificationService notificationService) {
+    public FileExpirationCheckerScheduler(NotificationService notificationService, FileCheckerService truckFileCheckerServiceImpl) {
         this.notificationService = notificationService;
+        this.truckFileCheckerServiceImpl = truckFileCheckerServiceImpl;
+    }
+
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void checkFileAndMakeExpired() {
+        log.info("Expired worker working time is  {}", dateFormat.format(new Date()));
+        truckFileCheckerServiceImpl.checkAndDisableFile();
     }
 
     //cron = "0 0 8 * * ?"

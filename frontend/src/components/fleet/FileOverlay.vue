@@ -25,7 +25,6 @@
     </div>
 
     <!-- Uploaded Files List -->
-
     <UScrollArea height="calc(100vh - 290px)">
       <div
           v-for="(upload, index) in uploads"
@@ -94,6 +93,10 @@ const props = defineProps({
     type: String,
     required: true
   },
+  url: {
+    type: String,
+    required: true
+  },
 })
 
 const isDragging = ref(false);
@@ -151,7 +154,7 @@ const saveFile = (index) => {
   formData.append("file", fileIn.file);
   formData.append("data", new Blob([JSON.stringify(data)], {type: "application/json"}));
 
-  axiosIns.post(URIS.TRUCK + "/attach-file", formData)
+  axiosIns.post(props.url, formData)
       .then(res => {
 
         toastStore.success({

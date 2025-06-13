@@ -11,7 +11,7 @@ const props = defineProps({
   placeholder: {
     type: String,
     required: false,
-    default: 'Please type textarea'
+    default: ''
   },
   rows: {
     type: Number,
@@ -66,23 +66,4 @@ registerField(props.name, validate);
 </template>
 
 <style scoped>
-.readonly-mode {
-  background-color: #f9f9f9 !important;
-}
-
-.readonly-mode .form-control {
-  background-color: #e9ecef !important; /* Bootstrap readonly rang */
-  color: #6c757d !important; /* kulrang matn */
-  pointer-events: none; /* kursor kirmaydi */
-}
-
-.readonly-mode .form-label {
-  color: #6c757d !important;
-}
-
-.readonly-mode .invalid-feedback,
-.readonly-mode .pristine-error,
-.readonly-mode .form-hint {
-  color: #6c757d !important;
-}
 </style>

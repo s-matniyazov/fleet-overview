@@ -11,6 +11,7 @@ public interface ExpirationTruckFilesProjection {
     String getTruckUnit();
     String getTruckMaker();
     String getTruckFuelType();
+    Integer getTruckYear();
 
     LocalDate getRegCabCardExp();
     LocalDate getAnnsInsExp();

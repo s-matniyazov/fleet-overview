@@ -80,14 +80,7 @@ const columns = [
     label: t('lease_agreement'),
     styles: 'min-width: 200px;',
     classes: '',
-  },
-  {
-    key: 'permits',
-    name: 'permits',
-    label: t('permits'),
-    styles: 'min-width: 200px;',
-    classes: '',
-  },
+  },  
   {
     key: 'status',
     name: 'status',

@@ -6,7 +6,7 @@ import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
 import UInput from "@/components/base/UInput.vue";
 import {useI18n} from "vue-i18n";
-import {showMessage} from "@/util/utils.js";
+import {DOCUMENT_TYPES, PERMIT_NAMES, showMessage} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
 import USelect from "@/components/base/USelect.vue";
 import UDateInput from "@/components/base/UDateInput.vue";
@@ -15,28 +15,26 @@ import UTextarea from "@/components/base/UTextarea.vue";
 import UScrollArea from "@/components/base/UScrollArea.vue";
 import UDialog from "@/components/base/UDialog.vue";
 import UTooltip from "@/components/base/UTooltip.vue";
-import TruckFileMiniCard from "@/components/fleet/truck/TruckFileMiniCard.vue";
+import TruckFileMiniCard from "@/components/fleet/FileMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
-import TruckFileOverlay from "@/components/fleet/truck/TruckFileOverlay.vue";
+import FileOverlay from "@/components/fleet/FileOverlay.vue";
 import TruckCard from "@/components/fleet/truck/TruckCard.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
+import {useTruckFileStore} from "@/store/TruckFileStore.js";
+import PermitMiniCard from "@/components/fleet/PermitMiniCard.vue";
+import {useTruckReferenceStore} from "@/store/TruckReferencesStore.js";
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
-
-const FILE_TYPE_NAMES = {
-  "REG_CAB_CARD": "Registration (Cab Card)",
-  "ANN_INS": "Annual Inspection",
-  "PHYS_DAMAGE": "Physical Damage Insurance",
-  "LEASE_AGR": "Lease Agreement"
-}
+const truckFileStore = useTruckFileStore();
+const truckReferenceStore = useTruckReferenceStore();
 
 const columns = [
   {
     key: 'unit_details',
     name: 'unit_details',
     label: t('unit_details'),
-    styles: 'width: 200px;',
+    styles: 'min-width: 120px;',
     classes: '',
   },
   {
@@ -138,12 +136,7 @@ const dataList = ref([]);
 const selectedRow = ref();
 const data = ref(newModel())
 
-const countries = ref([]);
 const states = ref([]);
-const makers = ref([]);
-const fuelTypes = ref([]);
-const ownershipTypes = ref([]);
-const purchaseTypes = ref([]);
 const drivers = ref([]);
 
 // FUNCTIONS
@@ -193,6 +186,11 @@ const getOwnership = (row) => {
   } else return "N/A";
 }
 
+const reload = () => {
+  getData();
+  truckReferenceStore.init();
+}
+
 // API FUNCTIONS
 const onSave = () => {
   if (data.value.id) {
@@ -224,15 +222,6 @@ function getData() {
   });
 }
 
-function getCountry() {
-  axiosIns.get(URIS.COUNTRY)
-      .then(res => {
-        countries.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
-}
-
 function getState(countryId) {
   if (countryId) {
     axiosIns.get(`${URIS.STATE}?countryId=${countryId}`)
@@ -242,42 +231,6 @@ function getState(countryId) {
       showMessage(e)
     });
   }
-}
-
-function getMaker() {
-  axiosIns.get(URIS.TRUCK_MODEL_MAKER)
-      .then(res => {
-        makers.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
-}
-
-function getFuelType() {
-  axiosIns.get(URIS.FUEL_TYPE)
-      .then(res => {
-        fuelTypes.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
-}
-
-function getOwnershipType() {
-  axiosIns.get(URIS.OWNERSHIP_TYPE)
-      .then(res => {
-        ownershipTypes.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
-}
-
-function getPurchaseType() {
-  axiosIns.get(URIS.PURCHASE_TYPE)
-      .then(res => {
-        purchaseTypes.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
 }
 
 function getDrivers() {
@@ -292,16 +245,13 @@ function getDrivers() {
 // HOOKS
 onMounted(() => {
   getData();
-  getCountry();
-  getMaker();
-  getFuelType();
-  getOwnershipType();
-  getPurchaseType();
   getDrivers();
+
+  truckReferenceStore.init();
 })
 
 watch(
-    () => data.value.countryId,
+    () => data.value?.countryId,
     function (newValue) {
       data.stateId = null;
       states.value = [];
@@ -311,7 +261,7 @@ watch(
 
 watch(
     () => data.value.ownershipTypeId,
-    function (newValue) {
+    function () {
       data.driverId = null;
       data.purchaseTypeId = null;
     }
@@ -321,6 +271,14 @@ watch(
     () => selectedFileSection.value.dialog,
     function (newValue) {
       if (!newValue) getData()
+    }
+)
+
+watch(
+    () => showModal.value,
+    function (newValue) {
+      if (newValue) truckFileStore.init(selectedRow.value.id)
+      else truckFileStore.clear()
     }
 )
 
@@ -341,7 +299,7 @@ watch(
         </button>
 
         <div class="align-items-center u-end">
-          <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
+          <button @click="reload" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
         </div>
       </div>
     </div>
@@ -411,7 +369,7 @@ watch(
       <template #row_registration="{row}">
         <td>
           <TruckFileMiniCard name="REG (CAB CARD)" type="REG_CAB_CARD"
-                             :file="row.files.find(it => it.type==='REG_CAB_CARD' && it.status === 'ACTIVE')"
+                             :file="row?.files.find(it => it.type==='REG_CAB_CARD')"
                              @click="(e) => {selectedRow = row; selectFileSection('REG_CAB_CARD'); e.stopPropagation()}"/>
         </td>
       </template>
@@ -419,7 +377,7 @@ watch(
       <template #row_annual_inspection="{row}">
         <td>
           <TruckFileMiniCard name="ANN INS" type="ANN_INS"
-                             :file="row.files.find(it => it.type==='ANN_INS' && it.status === 'ACTIVE')"
+                             :file="row?.files.find(it => it.type==='ANN_INS')"
                              @click="(e) => {selectedRow = row; selectFileSection('ANN_INS'); e.stopPropagation()}"/>
         </td>
       </template>
@@ -435,7 +393,7 @@ watch(
       <template #row_lease_agreement="{row}">
         <td>
           <TruckFileMiniCard name="LEASE AGR" type="LEASE_AGR"
-                             :file="row.files.find(it => it.type==='LEASE_AGR' && it.status === 'ACTIVE')"
+                             :file="row?.files.find(it => it.type==='LEASE_AGR')"
                              @click="(e) => {selectedRow = row; selectFileSection('LEASE_AGR'); e.stopPropagation()}"/>
         </td>
       </template>
@@ -443,62 +401,8 @@ watch(
       <template #row_permits="{row}">
         <td>
           <div class="qm-badge qm-badge--dim justify-content-start permit-box">
-            <div class="row m-0 align-items-center ng-star-inserted">
-              <div class="col-1 p-0 me-1">
-                <img src="../../../assets/icons/file-na-sm.svg"
-                     alt="File checked icon"
-                     class="ng-star-inserted"/>
-              </div>
-              <div class="col-2 p-0">
-                <span class="text-secondary fw-semibold">OR</span></div>
-              <div class="col-5 p-0 me-2 text-start"><span
-                  class="fw-semibold text text-gray-light"> N/A </span>
-              </div>
-              <div class="col-3 ps-0">
-              </div>
-            </div>
-            <div class="row m-0 align-items-center ng-star-inserted">
-              <div class="col-1 p-0 me-1">
-                <img src="../../../assets/icons/file-na-sm.svg"
-                     alt="File checked icon"
-                     class="ng-star-inserted"/>
-              </div>
-              <div class="col-2 p-0"><span
-                  class="text-secondary fw-semibold">NM</span></div>
-              <div class="col-5 p-0 me-2 text-start"><span
-                  class="fw-semibold text text-gray-light"> N/A </span>
-              </div>
-              <div class="col-3 ps-0">
-              </div>
-            </div>
-            <div class="row m-0 align-items-center ng-star-inserted">
-              <div class="col-1 p-0 me-1">
-                <img src="../../../assets/icons/file-na-sm.svg"
-                     alt="File checked icon"
-                     class="ng-star-inserted"/>
-              </div>
-              <div class="col-2 p-0"><span
-                  class="text-secondary fw-semibold">KY</span></div>
-              <div class="col-5 p-0 me-2 text-start"><span
-                  class="fw-semibold text text-gray-light"> N/A </span>
-              </div>
-              <div class="col-3 ps-0">
-              </div>
-            </div>
-            <div class="row m-0 align-items-center ng-star-inserted">
-              <div class="col-1 p-0 me-1">
-                <img src="../../../assets/icons/file-na-sm.svg"
-                     alt="File checked icon"
-                     class="ng-star-inserted">
-              </div>
-              <div class="col-2 p-0">
-                <span class="text-secondary fw-semibold">NY</span></div>
-              <div class="col-5 p-0 me-2 text-start">
-                <span class="fw-semibold text text-gray-light"> N/A </span>
-              </div>
-              <div class="col-3 ps-0">
-              </div>
-            </div>
+            <PermitMiniCard v-for="item in PERMIT_NAMES" :type="item.key" :name="item.name"
+                :file="row?.permits.find(it => it.type===item.key && it.status === 'ACTIVE')"/>
           </div>
         </td>
       </template>
@@ -510,10 +414,6 @@ watch(
                :class="`bg-${row?.status === 'PASSIVE' ? 'danger' : 'primary'}-subtle`"> {{ row?.status }}</a>
           </div>
         </td>
-      </template>
-
-      <template #row_actions="{row}">
-        <td>❌</td>
       </template>
     </UTable>
   </div>
@@ -550,7 +450,7 @@ watch(
                 <!--            country-->
                 <div class="col-6">
                   <USelect v-model="data.countryId" :label="t('country')"
-                           :items="countries" name="country"
+                           :items="truckReferenceStore.countries" name="country"
                            option_name="name"
                            classes="mb-2"
                            :rules="(val) => (!val && $t('required'))"
@@ -585,7 +485,7 @@ watch(
                 <!--            modelMaker-->
                 <div class="col-6">
                   <USelect v-model="data.modelMakerId" :label="t('modelMakers')"
-                           :items="makers" name="modelMaker"
+                           :items="truckReferenceStore.makers" name="modelMaker"
                            option_name="name"
                            classes="mb-2"
                            :rules="(val) => (!val && $t('required'))"
@@ -602,7 +502,7 @@ watch(
                 <!--            fuelType-->
                 <div class="col-6">
                   <USelect v-model="data.fuelTypeId" :label="t('fuelTypes')"
-                           :items="fuelTypes" name="fuelType"
+                           :items="truckReferenceStore.fuelTypes" name="fuelType"
                            option_name="name"
                            classes="mb-2"
                            :rules="(val) => (!val && $t('required'))"
@@ -625,7 +525,7 @@ watch(
                 </div>
 
                 <!--            vin-->
-                <div class="col-12">
+                <div class="col-6">
                   <UInput v-model="data.vin" :label="t('vin')" :hint="t('vin')" :name="t('vin')"
                           :placeholder="t('enter_vin')" classes="mb-2"
                           :rules="(val) => (!val && $t('required'))"/>
@@ -640,7 +540,7 @@ watch(
                 <!--            ownershipType-->
                 <div class="col-12">
                   <USelect v-model="data.ownershipTypeId" :label="t('ownershipTypes')"
-                           :items="ownershipTypes" name="ownershipType"
+                           :items="truckReferenceStore.ownershipTypes" name="ownershipType"
                            option_name="name"
                            classes="mb-2"
                            :rules="(val) => (!val && $t('required'))"
@@ -672,7 +572,7 @@ watch(
                   <!--            purchaseType-->
                   <div class="col-12">
                     <USelect v-model="data.purchaseTypeId" :label="t('purchaseTypes')"
-                             :items="purchaseTypes" name="purchaseType"
+                             :items="truckReferenceStore.purchaseTypes" name="purchaseType"
                              option_name="name"
                              classes="mb-2"
                              :rules="(val) => (!val && $t('required'))"
@@ -727,7 +627,7 @@ watch(
   <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
     <template #header>
       <h4 class="fw-bold text-white bg-primary p-2 rounded-2 d-flex">{{
-          FILE_TYPE_NAMES[selectedFileSection.fileType]
+          DOCUMENT_TYPES[selectedFileSection.fileType]
         }}
         <span class="text-end u-end">
           <button class="btn-close" @click="selectedFileSection.dialog = false"></button>
@@ -735,7 +635,7 @@ watch(
       </h4>
     </template>
     <template #body>
-      <TruckFileOverlay :truck-id="selectedRow.id" :file-type="selectedFileSection.fileType"/>
+      <FileOverlay :url="`${URIS.TRUCK}/attach-file`" :truck-id="selectedRow.id" :file-type="selectedFileSection.fileType"/>
     </template>
   </URightOverlay>
 </template>
@@ -754,7 +654,7 @@ watch(
 
 .permit-box {
   min-height: 64px;
-  max-height: 68px;
+  max-height: 84px;
   line-height: 140%;
   font-size: 11px;
   padding-bottom: 1px;

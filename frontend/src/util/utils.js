@@ -4,22 +4,26 @@ import useUserStore from "@/store/UserStore.js";
 
 // toast store access
 const toasterStore = useToasterStore();
+
 export function showMessage(error) {
     console.log(error)
     const msg = error?.response?.data?.message, status = error?.response?.data?.status;
     if (status === 500) {
-        toasterStore.error({ text: msg ? msg : error })
+        toasterStore.error({text: msg ? msg : error})
     } else if (status === 400) {
-        toasterStore.warning({ text: msg ? msg : error })
+        toasterStore.warning({text: msg ? msg : error})
     } else {
-        toasterStore.success({ text: msg ? msg : error })
+        toasterStore.success({text: msg ? msg : error})
     }
 }
+
 // loader store access
 const loader = useLoaderStore();
+
 export function showLoader() {
     loader.show();
 }
+
 export function hideLoader() {
     loader.hide();
 }
@@ -67,7 +71,7 @@ export function longToDateTime(date) {
 export function dateToLong(stringDate) {
     const split = stringDate.split('-');
 
-    return new Date(split[0], split[1]-1, split[2]);
+    return new Date(split[0], split[1] - 1, split[2]);
 }
 
 export function toClockNumber(a) {
@@ -77,6 +81,62 @@ export function toClockNumber(a) {
 // user
 
 const userStore = useUserStore();
+
 export function checkUser() {
     return userStore.checkToken();
 }
+
+export const DOCUMENT_TYPES = {
+    "REG_CAB_CARD": "Registration (Cab Card)",
+    "ANN_INS": "Annual Inspection",
+    "PHYS_DAMAGE": "Physical Damage Insurance",
+    "LEASE_AGR": "Lease Agreement",
+    "OR": "Oregon",
+    "NM": "New Mexico",
+    "KY": "Kentucky",
+    "NY": "New York",
+    "CN": "Connecticut"
+}
+
+export const FILE_TYPE_NAMES = [
+    {
+        key: "REG_CAB_CARD",
+        value: "Registration (Cab Card)"
+    },
+    {
+        key: "ANN_INS",
+        value: "Annual Inspection"
+    },
+    {
+        key: "PHYS_DAMAGE",
+        value: "Physical Damage Insurance"
+    },
+    {
+        key: "LEASE_AGR",
+        value: "Lease Agreement"
+    },
+];
+
+export
+const PERMIT_NAMES = [
+    {
+        key: "OR",
+        value: "Oregon"
+    },
+    {
+        key: "NM",
+        value: "New Mexico"
+    },
+    {
+        key: "KY",
+        value: "Kentucky"
+    },
+    {
+        key: "NY",
+        value: "New York"
+    },
+    {
+        key: "CN",
+        value: "Connecticut"
+    },
+]

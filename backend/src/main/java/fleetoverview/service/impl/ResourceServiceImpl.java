@@ -72,7 +72,7 @@ public class ResourceServiceImpl implements ResourceService {
                 file.getOriginalFilename(),
                 split[split.length - 1],
                 file.getSize(),
-                resourceParams.getPath() + type + "/" + string,
+                resourceParams.getPath() + type + "//" + string,
                 file.getContentType()
         ));
 

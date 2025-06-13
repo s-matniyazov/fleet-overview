@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static fleetoverview.domain.enums.truck.TruckFileTypeEnum.*;
 import static fleetoverview.util.helper.Utils.isNull;
@@ -56,6 +57,8 @@ public class NotificationServiceImpl implements NotificationService {
         var companies = companyRepository.findAll();
 
         companies.forEach(it -> {
+            AtomicInteger counter = new AtomicInteger();
+
             StringBuilder text = new StringBuilder(String.format("""
                     Subject: 🔔 Compliance Alert: Upcoming Expirations & Missing Documents for %s
                                         
@@ -89,6 +92,8 @@ public class NotificationServiceImpl implements NotificationService {
                             text.append(expiresOnText(LEASE_AGR, tr.getLeaseAgrExp()));
 
                         text.append("\n");
+
+                        counter.getAndIncrement();
                     });
 
 
@@ -107,10 +112,14 @@ public class NotificationServiceImpl implements NotificationService {
                         if (isNull(tr.getLeaseAgrExp())) text.append(missingText(LEASE_AGR));
 
                         text.append("\n");
+
+                        counter.getAndIncrement();
                     });
 
-            sendToGmail(text.toString());
-            sendToTelegram(text.toString());
+            if (counter.get() != 0) {
+                sendToGmail(text.toString());
+                sendToTelegram(text.toString());
+            }
         });
     }
 

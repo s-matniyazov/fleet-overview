@@ -53,7 +53,7 @@ registerField(props.name, validate);
 </script>
 
 <template>
-  <div :class="`${classes} ${errorMessage && 'has-danger'} p-1`" :style="styles">
+  <div :class="[classes, errorMessage ? 'has-danger' : '', readonly ? 'readonly-mode' : '', 'p-1']" :style="styles">
     <label v-if="!noLabel" for="for-description" class="form-label">{{ label }}</label>
     <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-control font-size-12" id="for-phone" v-model="model" :placeholder="placeholder" :readonly="readonly">
 

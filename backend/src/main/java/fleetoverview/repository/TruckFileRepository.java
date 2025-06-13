@@ -1,11 +1,9 @@
 package fleetoverview.repository;
 
-import fleetoverview.domain.entity.CompanyEntity;
 import fleetoverview.domain.entity.truck.TruckFileEntity;
-import fleetoverview.domain.enums.truck.TruckFileStatusEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-import java.sql.Date;
 import java.util.List;
 
 /**
@@ -14,5 +12,6 @@ import java.util.List;
  * @created : 14 май 2025
  **/
 public interface TruckFileRepository extends JpaRepository<TruckFileEntity, Integer> {
-    List<TruckFileEntity> findAllByTruck_CompanyAndExpirationDateLessThanAndStatus(CompanyEntity truck_company, Date expirationDate, TruckFileStatusEnum status);
+    @Query(value = "select file from TruckFileEntity file where file.expirationDate < CURRENT_DATE and file.status = 'ACTIVE'")
+    List<TruckFileEntity> findExpiredFiles();
 }

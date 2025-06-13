@@ -1,10 +1,6 @@
 package fleetoverview.domain.entity.truck;
 
-import fleetoverview.domain.entity.CompanyEntity;
-import fleetoverview.domain.entity.DriverEntity;
-import fleetoverview.domain.entity.OwnershipTypeEntity;
-import fleetoverview.domain.entity.PurchaseTypeEntity;
-import fleetoverview.domain.entity.StateEntity;
+import fleetoverview.domain.entity.*;
 import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.enums.truck.TruckStatusEnum;
 
@@ -64,6 +60,9 @@ public class TruckEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "truck", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<TruckFileEntity> files = new HashSet<>();
+
+    @OneToMany(mappedBy = "truck", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<PermitEntity> permits = new HashSet<>();
 
     @ManyToOne
     private CompanyEntity company;
@@ -168,6 +167,14 @@ public class TruckEntity extends BaseEntity {
 
     public void setAxles(Integer axles) {
         this.axles = axles;
+    }
+
+    public Set<PermitEntity> getPermits() {
+        return permits;
+    }
+
+    public void setPermits(Set<PermitEntity> permits) {
+        this.permits = permits;
     }
 
     public String getVin() {

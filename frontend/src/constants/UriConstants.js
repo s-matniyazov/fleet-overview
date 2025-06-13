@@ -23,9 +23,11 @@ export const URIS = {
 
     // truck
     TRUCK: "/trucks",
+    TRUCK_FILES: "/trucks/files",
+    TRUCK_PERMITS: "/trucks/permits",
     TRUCK_MODEL_MAKER: "/truck/model-makers",
 
-    // truck
+    // trailer
     TRAILER: "/trailers",
     TRAILER_TYPE: "/trailer-types",
     TRAILER_MODEL_MAKER: "/trailer/model-makers",

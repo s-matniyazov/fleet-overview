@@ -29,13 +29,19 @@ const props = defineProps({
     default: ''
   },
   rules: Function,
+  readonly: {
+    type: Boolean,
+    required: false,
+    default: false
+  }
 })
 
 const model = defineModel({});
 const errorMessage = ref('');
 
 const formState = inject('formState', null);
-const registerField = inject('registerField', () => {});
+const registerField = inject('registerField', () => {
+});
 
 const validate = () => {
   errorMessage.value = props.rules ? props.rules(model.value) : '';
@@ -46,8 +52,8 @@ registerField(props.name, validate);
 </script>
 
 <template>
-  <div :class="`${classes} ${errorMessage && 'has-danger'}`" :style="styles">
-    <input class="form-check-input" type="checkbox" v-model="model" :checked="checked">
+  <div :class="[classes, errorMessage ? 'has-danger' : '', readonly ? 'readonly-mode' : '', 'p-1']" :style="styles">
+    <input class="form-check-input" type="checkbox" v-model="model" :checked="checked" :readonly="readonly">
     <label class="form-check-label px-2">
       {{ label }}
     </label>

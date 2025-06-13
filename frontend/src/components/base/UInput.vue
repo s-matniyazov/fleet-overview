@@ -16,12 +16,12 @@ const props = defineProps({
   placeholder: {
     type: String,
     required: false,
-    default: 'Please type input'
+    default: ''
   },
   hint: {
     type: String,
     required: false,
-    default: 'Please type input'
+    default: ''
   },
   rows: {
     type: Number,
@@ -44,6 +44,11 @@ const props = defineProps({
     default: 'text'
   },
   rules: Function,
+  readonly: {
+    type: Boolean,
+    required: false,
+    default: false
+  }
 })
 
 const model = defineModel({});
@@ -61,7 +66,7 @@ registerField(props.name, validate);
 </script>
 
 <template>
-  <div :class="`${classes} ${errorMessage && 'has-danger'} p-1`" :style="styles">
+  <div :class="[classes, errorMessage ? 'has-danger' : '', readonly ? 'readonly-mode' : '', 'p-1']" :style="styles">
     <label class="form-label">{{ label }}</label>
     <input class="form-control font-size-12" :placeholder="placeholder" :type="type" :name="name"
            v-model="model">
@@ -71,5 +76,4 @@ registerField(props.name, validate);
 </template>
 
 <style scoped>
-
 </style>

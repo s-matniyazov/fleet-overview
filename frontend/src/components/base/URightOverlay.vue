@@ -23,7 +23,6 @@ const close = () => emit("close");
 </script>
 
 <style scoped>
-/* Затемнённый, блюрнутый, но некликабельный фон */
 .dialog-overlay {
   position: fixed;
   inset: 0;
@@ -35,7 +34,6 @@ const close = () => emit("close");
   z-index: 9999;
 }
 
-/* Диалог */
 .dialog-content {
   width: 35%;
   height: 100%;
@@ -45,10 +43,9 @@ const close = () => emit("close");
   position: relative;
   display: flex;
   flex-direction: column;
-  pointer-events: auto; /* Включает клики ТОЛЬКО на диалог */
+  pointer-events: auto;
 }
 
-/* Кнопка закрытия */
 .close-btn {
   position: absolute;
   top: 15px;
@@ -59,7 +56,6 @@ const close = () => emit("close");
   cursor: pointer;
 }
 
-/* Анимация появления */
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 0.3s ease, opacity 0.3s ease;
