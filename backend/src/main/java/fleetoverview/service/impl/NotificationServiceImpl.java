@@ -71,7 +71,7 @@ public class NotificationServiceImpl implements NotificationService {
                        \
                     """, it.getName(), it.getName()));
 
-            var trucks = truckRepository.findTruck(it.getId());
+            var trucks = truckRepository.getTrucksWithDocInfo(it.getId());
 
             text.append("""
                     🚛 Truck Documents Expiring Soon
@@ -80,7 +80,7 @@ public class NotificationServiceImpl implements NotificationService {
                     .filter(tr -> isNearlyExpires(tr.getRegCabCardExp()) || isNearlyExpires(tr.getAnnsInsExp())
                             || isNearlyExpires(tr.getPhysDamageExp()) || isNearlyExpires(tr.getLeaseAgrExp()))
                     .forEach(tr -> {
-                        text.append(String.format("#%s (%s %s)\n", tr.getTruckUnit(), tr.getTruckMaker(), tr.getTruckFuelType()));
+                        text.append(String.format("#%s (%s %s - %s)\n", tr.getTruckUnit(), tr.getTruckMaker(), tr.getTruckFuelType(), tr.getTruckYear()));
 
                         if (isNearlyExpires(tr.getRegCabCardExp()))
                             text.append(expiresOnText(REG_CAB_CARD, tr.getRegCabCardExp()));
@@ -98,13 +98,14 @@ public class NotificationServiceImpl implements NotificationService {
 
 
             text.append("""
+                    
                     ❌ Missing Truck Documents
                     """);
             trucks.stream()
                     .filter(tr -> isNull(tr.getRegCabCardExp()) || isNull(tr.getAnnsInsExp())
                             || isNull(tr.getPhysDamageExp()) || isNull(tr.getLeaseAgrExp()))
                     .forEach(tr -> {
-                        text.append(String.format("#%s (%s %s)\n", tr.getTruckUnit(), tr.getTruckMaker(), tr.getTruckFuelType()));
+                        text.append(String.format("#%s (%s %s - %s)\n", tr.getTruckUnit(), tr.getTruckMaker(), tr.getTruckFuelType(), tr.getTruckYear()));
 
                         if (isNull(tr.getRegCabCardExp())) text.append(missingText(REG_CAB_CARD));
                         if (isNull(tr.getAnnsInsExp())) text.append(missingText(ANN_INS));
@@ -175,13 +176,12 @@ public class NotificationServiceImpl implements NotificationService {
 
     private void sendToGmail(String message) {
         try {
-
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
-            helper.setTo("sardorbekmatniyazov03@gmail.com");
-            helper.setSubject("fleet alert");
-            helper.setText(message, true);
+            helper.setFrom("sardorbekmatniyazov03@gmail.com");
+            helper.setSubject("⚠️ Fleet Alert");
+            helper.setText(message);
 
             if (mailParams.getSenders().isEmpty()) return;
 

@@ -398,7 +398,7 @@ public class InitData implements CommandLineRunner {
     }
 
     private void initPurchaseTypes() {
-        if (!purchaseTypeRepository.existsByName("Utility")) {
+        if (!purchaseTypeRepository.existsByName("N/A")) {
             purchaseTypeRepository.saveAll(
                     Arrays.stream(new String[]{
                                     "N/A", "Company owned", "Rental",

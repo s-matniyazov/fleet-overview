@@ -3,6 +3,9 @@ import {ref} from "vue";
 import {useAuthStore} from "@/store/UseAuthStore.js";
 import router from "@/router/index.js";
 import UTooltip from "@/components/base/UTooltip.vue";
+import {useRouterStore} from "@/store/RouterStore.js";
+
+const routerStore = useRouterStore();
 
 const currentOpenMenu = ref([]);
 const toggleSubmenu = (menu) => {
@@ -22,6 +25,11 @@ function pushPage(page) {
 function onLogout() {
   authStore.logout();
   pushPage('/login');
+}
+
+function getStroke(router) {
+  if (routerStore.currentRouter === `/${router}`) return "rgb(87,215,255)";
+  else return "currentColor";
 }
 
 defineProps({
@@ -177,7 +185,7 @@ defineProps({
           <router-link to="fleet-compliance" class="btn w-100 text-start p-0">
             <UTooltip position="right">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   :stroke="getStroke('fleet-compliance')" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-truck">
                 <rect x="1" y="3" width="15" height="13"></rect>
                 <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
@@ -192,7 +200,7 @@ defineProps({
           <router-link to="fleet-overview" class="btn w-100 text-start p-0">
             <UTooltip position="right">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   :stroke="getStroke('fleet-overview')" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-map-pin">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                 <circle cx="12" cy="10" r="3"></circle>
@@ -205,7 +213,7 @@ defineProps({
           <router-link to="maintenance" class="btn w-100 text-start p-0">
             <UTooltip position="right">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   :stroke="getStroke('maintenance')" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-tool">
                 <path
                     d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
@@ -220,7 +228,7 @@ defineProps({
           <router-link to="drivers" class="btn w-100 text-start p-0">
             <UTooltip position="right">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   :stroke="getStroke('drivers')" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-users">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                 <circle cx="9" cy="7" r="4"></circle>
@@ -237,7 +245,7 @@ defineProps({
           <router-link to="model-maker" class="btn w-100 text-start p-0">
             <UTooltip position="right">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   :stroke="getStroke('model-maker')" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-tool">
                 <path
                     d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
@@ -250,7 +258,7 @@ defineProps({
           <router-link to="ownership-type" class="btn w-100 text-start p-0">
             <UTooltip position="right">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   :stroke="getStroke('ownership-type')" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-tool">
                 <path
                     d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
@@ -263,7 +271,7 @@ defineProps({
           <router-link to="purchase-type" class="btn w-100 text-start p-0">
             <UTooltip position="right">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   :stroke="getStroke('purchase-type')" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-tool">
                 <path
                     d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>

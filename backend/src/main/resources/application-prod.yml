@@ -34,10 +34,10 @@ telegram:
   token: "6174384781:AAENYCRflrXFt6KERjQC1LhW6yd_zs-7Vbc"
   chatIds: ""
 mail:
-  senders: ""
+  senders: "sardorbekmatniyazov03@gmail.com"
   host: smtp.gmail.com
   username: sardorbekmatniyazov03@gmail.com
-  password: "jfus aawx krme uksx"
+  password: "rdlv svgm wzmn ymbx"
 
 resource:
   path: "d:\\resources\\"

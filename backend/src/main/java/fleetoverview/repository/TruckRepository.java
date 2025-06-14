@@ -39,9 +39,9 @@ public interface TruckRepository extends JpaRepository<TruckEntity, Integer> {
                                           left join trucks t on tf.truck_id = t.id
                                  where t.company_id = :companyId
                                    and tf.status = 'ACTIVE'
-                                   and tf.expiration_date < CURRENT_DATE + 5
+                                   and tf.expiration_date >= CURRENT_DATE
                                  group by tf.truck_id) tf on tf.truck_id = t.id
              where t.company_id = :companyId
              order by t.unit""", nativeQuery = true)
-    List<ExpirationTruckFilesProjection> findTruck(Integer companyId);
+    List<ExpirationTruckFilesProjection> getTrucksWithDocInfo(Integer companyId);
 }
