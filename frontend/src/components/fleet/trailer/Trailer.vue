@@ -6,30 +6,26 @@ import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
 import UInput from "@/components/base/UInput.vue";
 import {useI18n} from "vue-i18n";
-import {showMessage} from "@/util/utils.js";
+import {DOCUMENT_TYPES, showMessage} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
 import USelect from "@/components/base/USelect.vue";
 import UDateInput from "@/components/base/UDateInput.vue";
-import UCheckbox from "@/components/base/UCheckbox.vue";
 import UTextarea from "@/components/base/UTextarea.vue";
 import UScrollArea from "@/components/base/UScrollArea.vue";
 import UDialog from "@/components/base/UDialog.vue";
 import UTooltip from "@/components/base/UTooltip.vue";
-import TrailerFileMiniCard from "@/components/fleet/trailer/TrailerFileMiniCard.vue";
+import FileMiniCard from "@/components/fleet/FileMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
-import TrailerFileOverlay from "@/components/fleet/trailer/TrailerFileOverlay.vue";
 import TrailerCard from "@/components/fleet/trailer/TrailerCard.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
+import {useTrailerReferenceStore} from "@/store/TrailerReferencesStore.js";
+import FileOverlay from "@/components/fleet/FileOverlay.vue";
+import {useTrailerFileStore} from "@/store/TrailerFileStore.js";
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
-
-const FILE_TYPE_NAMES = {
-  "REG_CAB_CARD": "Registration (Cab Card)",
-  "ANN_INS": "Annual Inspection",
-  "PHYS_DAMAGE": "Physical Damage Insurance",
-  "LEASE_AGR": "Lease Agreement"
-}
+const trailerFileStore = useTrailerFileStore();
+const trailerReferenceStore = useTrailerReferenceStore();
 
 const columns = [
   {
@@ -88,13 +84,6 @@ const columns = [
     styles: '',
     classes: '',
   },
-  // {
-  //   key: 'actions',
-  //   name: 'actions',
-  //   label: t('actions'),
-  //   styles: '',
-  //   classes: '',
-  // },
 ]
 
 const newModel = () => {
@@ -121,7 +110,12 @@ const addModal = ref(false);
 const showModal = ref(false);
 const selectedFileSection = ref({
   dialog: false,
-  fileType: null
+  data: {
+    description: '',
+    expirationDate: new Date(),
+    type: '',
+    trailerId: ''
+  }
 });
 
 const apiUrl = URIS.TRAILER;
@@ -129,12 +123,7 @@ const dataList = ref([]);
 const selectedRow = ref();
 const data = ref(newModel())
 
-const countries = ref([]);
 const states = ref([]);
-const makers = ref([]);
-const types = ref([]);
-const ownershipTypes = ref([]);
-const purchaseTypes = ref([]);
 const drivers = ref([]);
 
 // FUNCTIONS
@@ -170,7 +159,11 @@ const onClose = () => {
 const selectFileSection = (type) => {
   selectedFileSection.value = {
     dialog: true,
-    fileType: type
+    data: {
+      ...selectedFileSection.value.data,
+      trailerId: selectedRow.value.id,
+      type: type
+    }
   };
 }
 const getOwnership = (row) => {
@@ -179,6 +172,11 @@ const getOwnership = (row) => {
   } else if (row?.ownershipType?.id === 2) {
     return row?.driver?.firstName
   } else return "N/A";
+}
+
+const reload = () => {
+  getData();
+  trailerReferenceStore.init();
 }
 
 // API FUNCTIONS
@@ -212,15 +210,6 @@ function getData() {
   });
 }
 
-function getCountry() {
-  axiosIns.get(URIS.COUNTRY)
-      .then(res => {
-        countries.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
-}
-
 function getState(countryId) {
   if (countryId) {
     axiosIns.get(`${URIS.STATE}?countryId=${countryId}`)
@@ -230,42 +219,6 @@ function getState(countryId) {
       showMessage(e)
     });
   }
-}
-
-function getMaker() {
-  axiosIns.get(URIS.TRAILER_MODEL_MAKER)
-      .then(res => {
-        makers.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
-}
-
-function getTypes() {
-  axiosIns.get(URIS.TRAILER_TYPE)
-      .then(res => {
-        types.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
-}
-
-function getOwnershipType() {
-  axiosIns.get(URIS.OWNERSHIP_TYPE)
-      .then(res => {
-        ownershipTypes.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
-}
-
-function getPurchaseType() {
-  axiosIns.get(URIS.PURCHASE_TYPE)
-      .then(res => {
-        purchaseTypes.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
 }
 
 function getDrivers() {
@@ -280,11 +233,7 @@ function getDrivers() {
 // HOOKS
 onMounted(() => {
   getData();
-  getCountry();
-  getMaker();
-  getTypes();
-  getOwnershipType();
-  getPurchaseType();
+  trailerReferenceStore.init();
   getDrivers();
 })
 
@@ -312,6 +261,14 @@ watch(
     }
 )
 
+watch(
+    () => showModal.value,
+    function (newValue) {
+      if (newValue) trailerFileStore.init(selectedRow.value.id)
+      else trailerFileStore.clear()
+    }
+)
+
 </script>
 
 <template>
@@ -329,7 +286,7 @@ watch(
         </button>
 
         <div class="align-items-center u-end">
-          <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
+          <button @click="reload" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
         </div>
       </div>
     </div>
@@ -342,7 +299,6 @@ watch(
               <span class="text-primary badge badge-pill badge-soft-primary" style="font-size: 15px">{{
                   row?.unit
                 }}</span>
-              <span class="badge badge-soft-success mx-1">{{ row?.includeIFTA ? 'IFTA' : '' }}</span>
             </div>
             <div class="col-12 d-flex align-items-center">
               <span class="text-gray-light f-700">{{ row?.vin }}</span>
@@ -398,96 +354,33 @@ watch(
 
       <template #row_registration="{row}">
         <td>
-          <TrailerFileMiniCard name="REG (CAB CARD)" type="REG_CAB_CARD"
-                             :file="row.files.find(it => it.type==='REG_CAB_CARD' && it.status === 'ACTIVE')"
+          <FileMiniCard name="REG (CAB CARD)" type="REG_CAB_CARD"
+                             :file="row?.files.find(it => it.type==='REG_CAB_CARD')"
                              @click="(e) => {selectedRow = row; selectFileSection('REG_CAB_CARD'); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_annual_inspection="{row}">
         <td>
-          <TrailerFileMiniCard name="ANN INS" type="ANN_INS"
-                             :file="row.files.find(it => it.type==='ANN_INS' && it.status === 'ACTIVE')"
+          <FileMiniCard name="ANN INS" type="ANN_INS"
+                             :file="row?.files.find(it => it.type==='ANN_INS')"
                              @click="(e) => {selectedRow = row; selectFileSection('ANN_INS'); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_physical_damage_inc="{row}">
         <td>
-          <TrailerFileMiniCard name="PHYS DAMAGE" type="PHYS_DAMAGE"
-                             :file="row.files.find(it => it.type==='PHYS_DAMAGE' && it.status === 'ACTIVE')"
+          <FileMiniCard name="PHYS DAMAGE" type="PHYS_DAMAGE"
+                             :file="row?.files.find(it => it.type==='PHYS_DAMAGE')"
                              @click="(e) => {selectedRow = row; selectFileSection('PHYS_DAMAGE'); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_lease_agreement="{row}">
         <td>
-          <TrailerFileMiniCard name="LEASE AGR" type="LEASE_AGR"
-                             :file="row.files.find(it => it.type==='LEASE_AGR' && it.status === 'ACTIVE')"
+          <FileMiniCard name="LEASE AGR" type="LEASE_AGR"
+                             :file="row?.files.find(it => it.type==='LEASE_AGR')"
                              @click="(e) => {selectedRow = row; selectFileSection('LEASE_AGR'); e.stopPropagation()}"/>
-        </td>
-      </template>
-
-      <template #row_permits="{row}">
-        <td>
-          <div class="qm-badge qm-badge--dim justify-content-start permit-box">
-            <div class="row m-0 align-items-center ng-star-inserted">
-              <div class="col-1 p-0 me-1">
-                <img src="../../../assets/icons/file-na-sm.svg"
-                     alt="File checked icon"
-                     class="ng-star-inserted"/>
-              </div>
-              <div class="col-2 p-0">
-                <span class="text-secondary fw-semibold">OR</span></div>
-              <div class="col-5 p-0 me-2 text-start"><span
-                  class="fw-semibold text text-gray-light"> N/A </span>
-              </div>
-              <div class="col-3 ps-0">
-              </div>
-            </div>
-            <div class="row m-0 align-items-center ng-star-inserted">
-              <div class="col-1 p-0 me-1">
-                <img src="../../../assets/icons/file-na-sm.svg"
-                     alt="File checked icon"
-                     class="ng-star-inserted"/>
-              </div>
-              <div class="col-2 p-0"><span
-                  class="text-secondary fw-semibold">NM</span></div>
-              <div class="col-5 p-0 me-2 text-start"><span
-                  class="fw-semibold text text-gray-light"> N/A </span>
-              </div>
-              <div class="col-3 ps-0">
-              </div>
-            </div>
-            <div class="row m-0 align-items-center ng-star-inserted">
-              <div class="col-1 p-0 me-1">
-                <img src="../../../assets/icons/file-na-sm.svg"
-                     alt="File checked icon"
-                     class="ng-star-inserted"/>
-              </div>
-              <div class="col-2 p-0"><span
-                  class="text-secondary fw-semibold">KY</span></div>
-              <div class="col-5 p-0 me-2 text-start"><span
-                  class="fw-semibold text text-gray-light"> N/A </span>
-              </div>
-              <div class="col-3 ps-0">
-              </div>
-            </div>
-            <div class="row m-0 align-items-center ng-star-inserted">
-              <div class="col-1 p-0 me-1">
-                <img src="../../../assets/icons/file-na-sm.svg"
-                     alt="File checked icon"
-                     class="ng-star-inserted">
-              </div>
-              <div class="col-2 p-0">
-                <span class="text-secondary fw-semibold">NY</span></div>
-              <div class="col-5 p-0 me-2 text-start">
-                <span class="fw-semibold text text-gray-light"> N/A </span>
-              </div>
-              <div class="col-3 ps-0">
-              </div>
-            </div>
-          </div>
         </td>
       </template>
 
@@ -498,10 +391,6 @@ watch(
                :class="`bg-${row?.status === 'PASSIVE' ? 'danger' : 'primary'}-subtle`"> {{ row?.status }}</a>
           </div>
         </td>
-      </template>
-
-      <template #row_actions="{row}">
-        <td>❌</td>
       </template>
     </UTable>
   </div>
@@ -553,7 +442,7 @@ watch(
                 <!--            modelMaker-->
                 <div class="col-6">
                   <USelect v-model="data.modelMakerId" :label="t('modelMakers')"
-                           :items="makers" name="modelMaker"
+                           :items="trailerReferenceStore.makers" name="modelMaker"
                            option_name="name"
                            classes="mb-2"
                            :rules="(val) => (!val && $t('required'))"
@@ -563,7 +452,7 @@ watch(
                 <!--            type-->
                 <div class="col-6">
                   <USelect v-model="data.typeId" :label="t('types')"
-                           :items="types" name="type"
+                           :items="trailerReferenceStore.types" name="type"
                            option_name="name"
                            classes="mb-2"
                            :rules="(val) => (!val && $t('required'))"
@@ -601,7 +490,7 @@ watch(
                 </div>
 
                 <!--            vin-->
-                <div class="col-12">
+                <div class="col-6">
                   <UInput v-model="data.vin" :label="t('vin')" :hint="t('vin')" :name="t('vin')"
                           :placeholder="t('enter_vin')" classes="mb-2"
                           :rules="(val) => (!val && $t('required'))"/>
@@ -616,7 +505,7 @@ watch(
                 <!--            ownershipType-->
                 <div class="col-12">
                   <USelect v-model="data.ownershipTypeId" :label="t('ownershipTypes')"
-                           :items="ownershipTypes" name="ownershipType"
+                           :items="trailerReferenceStore.ownershipTypes" name="ownershipType"
                            option_name="name"
                            classes="mb-2"
                            :rules="(val) => (!val && $t('required'))"
@@ -643,7 +532,7 @@ watch(
                   <!--            purchaseType-->
                   <div class="col-12">
                     <USelect v-model="data.purchaseTypeId" :label="t('purchaseTypes')"
-                             :items="purchaseTypes" name="purchaseType"
+                             :items="trailerReferenceStore.purchaseTypes" name="purchaseType"
                              option_name="name"
                              classes="mb-2"
                              :rules="(val) => (!val && $t('required'))"
@@ -699,7 +588,7 @@ watch(
   <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
     <template #header>
       <h4 class="fw-bold text-white bg-primary p-2 rounded-2 d-flex">{{
-          FILE_TYPE_NAMES[selectedFileSection.fileType]
+          DOCUMENT_TYPES[selectedFileSection.data.type]
         }}
         <span class="text-end u-end">
           <button class="btn-close" @click="selectedFileSection.dialog = false"></button>
@@ -707,7 +596,7 @@ watch(
       </h4>
     </template>
     <template #body>
-      <TrailerFileOverlay :trailer-id="selectedRow.id" :file-type="selectedFileSection.fileType"/>
+      <FileOverlay :data="selectedFileSection.data" :url="`${URIS.TRAILER}/attach-file`"/>
     </template>
   </URightOverlay>
 </template>

@@ -15,7 +15,7 @@ import UTextarea from "@/components/base/UTextarea.vue";
 import UScrollArea from "@/components/base/UScrollArea.vue";
 import UDialog from "@/components/base/UDialog.vue";
 import UTooltip from "@/components/base/UTooltip.vue";
-import TruckFileMiniCard from "@/components/fleet/FileMiniCard.vue";
+import FileMiniCard from "@/components/fleet/FileMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
 import FileOverlay from "@/components/fleet/FileOverlay.vue";
 import TruckCard from "@/components/fleet/truck/TruckCard.vue";
@@ -128,7 +128,12 @@ const addModal = ref(false);
 const showModal = ref(false);
 const selectedFileSection = ref({
   dialog: false,
-  fileType: null
+  data: {
+    description: '',
+    expirationDate: new Date(),
+    type: '',
+    truckId: ''
+  }
 });
 
 const apiUrl = URIS.TRUCK;
@@ -175,7 +180,11 @@ const onClose = () => {
 const selectFileSection = (type) => {
   selectedFileSection.value = {
     dialog: true,
-    fileType: type
+    data: {
+      ...selectedFileSection.value.data,
+      truckId: selectedRow.value.id,
+      type: type
+    }
   };
 }
 const getOwnership = (row) => {
@@ -368,7 +377,7 @@ watch(
 
       <template #row_registration="{row}">
         <td>
-          <TruckFileMiniCard name="REG (CAB CARD)" type="REG_CAB_CARD"
+          <FileMiniCard name="REG (CAB CARD)" type="REG_CAB_CARD"
                              :file="row?.files.find(it => it.type==='REG_CAB_CARD')"
                              @click="(e) => {selectedRow = row; selectFileSection('REG_CAB_CARD'); e.stopPropagation()}"/>
         </td>
@@ -376,7 +385,7 @@ watch(
 
       <template #row_annual_inspection="{row}">
         <td>
-          <TruckFileMiniCard name="ANN INS" type="ANN_INS"
+          <FileMiniCard name="ANN INS" type="ANN_INS"
                              :file="row?.files.find(it => it.type==='ANN_INS')"
                              @click="(e) => {selectedRow = row; selectFileSection('ANN_INS'); e.stopPropagation()}"/>
         </td>
@@ -384,15 +393,15 @@ watch(
 
       <template #row_physical_damage_inc="{row}">
         <td>
-          <TruckFileMiniCard name="PHYS DAMAGE" type="PHYS_DAMAGE"
-                             :file="row.files.find(it => it.type==='PHYS_DAMAGE' && it.status === 'ACTIVE')"
+          <FileMiniCard name="PHYS DAMAGE" type="PHYS_DAMAGE"
+                             :file="row?.files.find(it => it.type==='PHYS_DAMAGE')"
                              @click="(e) => {selectedRow = row; selectFileSection('PHYS_DAMAGE'); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_lease_agreement="{row}">
         <td>
-          <TruckFileMiniCard name="LEASE AGR" type="LEASE_AGR"
+          <FileMiniCard name="LEASE AGR" type="LEASE_AGR"
                              :file="row?.files.find(it => it.type==='LEASE_AGR')"
                              @click="(e) => {selectedRow = row; selectFileSection('LEASE_AGR'); e.stopPropagation()}"/>
         </td>
@@ -402,7 +411,7 @@ watch(
         <td>
           <div class="qm-badge qm-badge--dim justify-content-start permit-box">
             <PermitMiniCard v-for="item in PERMIT_NAMES" :type="item.key" :name="item.name"
-                :file="row?.permits.find(it => it.type===item.key && it.status === 'ACTIVE')"/>
+                            :file="row?.permits.find(it => it.type===item.key && it.status === 'ACTIVE')"/>
           </div>
         </td>
       </template>
@@ -627,7 +636,7 @@ watch(
   <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
     <template #header>
       <h4 class="fw-bold text-white bg-primary p-2 rounded-2 d-flex">{{
-          DOCUMENT_TYPES[selectedFileSection.fileType]
+          DOCUMENT_TYPES[selectedFileSection.data.type]
         }}
         <span class="text-end u-end">
           <button class="btn-close" @click="selectedFileSection.dialog = false"></button>
@@ -635,7 +644,7 @@ watch(
       </h4>
     </template>
     <template #body>
-      <FileOverlay :url="`${URIS.TRUCK}/attach-file`" :truck-id="selectedRow.id" :file-type="selectedFileSection.fileType"/>
+      <FileOverlay :url="`${URIS.TRUCK}/attach-file`" :data="selectedFileSection.data"/>
     </template>
   </URightOverlay>
 </template>

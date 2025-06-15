@@ -1,16 +1,13 @@
 package fleetoverview.service.impl;
 
-import fleetoverview.data.request.PermitRequest;
 import fleetoverview.data.request.TrailerFileRequest;
 import fleetoverview.data.request.TrailerRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
 import fleetoverview.domain.entity.CompanyEntity;
-import fleetoverview.domain.entity.PermitEntity;
 import fleetoverview.domain.entity.ResourceEntity;
 import fleetoverview.domain.entity.trailer.TrailerEntity;
 import fleetoverview.domain.entity.trailer.TrailerFileEntity;
-import fleetoverview.domain.enums.PermitStatusEnum;
 import fleetoverview.domain.enums.trailer.TrailerFileStatusEnum;
 import fleetoverview.repository.CompanyRepository;
 import fleetoverview.repository.DriverRepository;
@@ -173,28 +170,6 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
     }
 
     @Override
-    public ApiResponse attachPermit(int trailerId, PermitRequest data, MultipartFile file) {
-        TrailerEntity trailer = repository.findById(trailerId).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("trailer.not_found")));
-
-        ResourceEntity resource = resourceService.createResource(file, "trailer//permits");
-
-        trailer.getPermits().add(
-                new PermitEntity(
-                        resource,
-                        data.expirationDate(),
-                        data.description(),
-                        data.type(),
-                        PermitStatusEnum.ACTIVE,
-                        trailer
-                )
-        );
-
-        repository.save(trailer);
-
-        return ApiResponse.success();
-    }
-
-    @Override
     public DataResponse<List<TrailerFileEntity>> getFiles(Map<String, String> params) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<TrailerFileEntity> cq = cb.createQuery(TrailerFileEntity.class);
@@ -215,31 +190,6 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
 
         TypedQuery<TrailerFileEntity> query = entityManager.createQuery(cq);
         List<TrailerFileEntity> results = query.getResultList();
-
-        return DataResponse.success(results);
-    }
-
-    @Override
-    public DataResponse<List<PermitEntity>> getPermits(Map<String, String> params) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<PermitEntity> cq = cb.createQuery(PermitEntity.class);
-        Root<PermitEntity> permits = cq.from(PermitEntity.class);
-
-        List<Predicate> filters = new ArrayList<>();
-
-        if (params.containsKey("trailerId")) {
-            Join<PermitEntity, TrailerEntity> trailer = permits.join("trailer");
-            filters.add(cb.equal(trailer.get("id"), params.get("trailerId")));
-        } else {
-            throw new NotFoundException(mSourceBundle.apply("filter.trailer.missed"));
-        }
-
-        cq.select(permits)
-                .where(cb.and(filters.stream().filter(Objects::nonNull).toArray(Predicate[]::new)))
-                .orderBy(cb.desc(permits.get("id")));
-
-        TypedQuery<PermitEntity> query = entityManager.createQuery(cq);
-        List<PermitEntity> results = query.getResultList();
 
         return DataResponse.success(results);
     }

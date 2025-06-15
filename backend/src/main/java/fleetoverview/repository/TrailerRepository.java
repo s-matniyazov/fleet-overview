@@ -17,7 +17,6 @@ public interface TrailerRepository extends JpaRepository<TrailerEntity, Integer>
     @Query("""
             select t from TrailerEntity t
             left join fetch TrailerFileEntity tf on tf.trailer = t and tf.status = 'ACTIVE'
-            left join fetch PermitEntity tp on tp.trailer = t and tp.status = 'ACTIVE'
             """)
     List<TrailerEntity> findAll();
 }

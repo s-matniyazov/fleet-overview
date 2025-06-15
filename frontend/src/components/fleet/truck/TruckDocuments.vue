@@ -5,7 +5,6 @@ import URightOverlay from "@/components/base/URightOverlay.vue";
 import FileOverlay from "@/components/fleet/FileOverlay.vue";
 import {ref} from "vue";
 import {DOCUMENT_TYPES, downloadResource, FILE_TYPE_NAMES, PERMIT_NAMES} from "@/util/utils.js";
-import TruckFileMiniCard from "@/components/fleet/FileMiniCard.vue";
 import {URIS} from "@/constants/UriConstants.js";
 
 const truckFileStore = useTruckFileStore();
@@ -13,7 +12,11 @@ const truckFileStore = useTruckFileStore();
 const selectFileSection = (type) => {
   selectedFileSection.value = {
     dialog: true,
-    fileType: type
+    data: {
+      ...selectedFileSection.value.data,
+      truckId: props.data.id,
+      type: type
+    }
   };
 }
 
@@ -26,20 +29,25 @@ const props = defineProps({
 
 const selectedFileSection = ref({
   dialog: false,
-  fileType: null
+  data: {
+    description: '',
+    expirationDate: new Date(),
+    type: '',
+    truckId: ''
+  }
 });
 
-function downloadAll (type) {
+function downloadAll(type) {
   if (type === 'truckFiles') {
     FILE_TYPE_NAMES.forEach(item => {
-      const resource = truckFileStore.files.find(it => it.type===item.key)?.resource
+      const resource = truckFileStore.files.find(it => it.type === item.key)?.resource
       if (resource) {
         downloadResource(resource)
       }
     })
   } else if (type === 'permits') {
     PERMIT_NAMES.forEach(item => {
-      const resource = truckFileStore.permits.find(it => it.type===item.key)?.resource
+      const resource = truckFileStore.permits.find(it => it.type === item.key)?.resource
       if (resource) {
         downloadResource(resource)
       }
@@ -65,7 +73,7 @@ function downloadAll (type) {
       </div>
       <div class="row">
         <div v-for="item in FILE_TYPE_NAMES"
-            class="col-6 mb-8 mt-2 cursor-pointer ng-star-inserted">
+             class="col-6 mb-8 mt-2 cursor-pointer ng-star-inserted">
           <DocumentMiniCard
               :file="truckFileStore.files.find(it => it.type===item.key)"
               :type="item.key" :name="item.value"
@@ -102,7 +110,7 @@ function downloadAll (type) {
   <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
     <template #header>
       <h4 class="fw-bold text-white bg-primary p-2 rounded-2 d-flex">{{
-          DOCUMENT_TYPES[selectedFileSection.fileType]
+          DOCUMENT_TYPES[selectedFileSection.data.type]
         }}
         <span class="text-end u-end">
           <button class="btn-close" @click="truckFileStore.init(data.id); selectedFileSection.dialog = false"></button>
@@ -110,7 +118,7 @@ function downloadAll (type) {
       </h4>
     </template>
     <template #body>
-      <FileOverlay :url="`${URIS.TRUCK}/${data?.id}/attach-permit`" :truck-id="data?.id" :file-type="selectedFileSection.fileType"/>
+      <FileOverlay :url="`${URIS.TRUCK}/${data?.id}/attach-permit`" :data="selectedFileSection.data"/>
     </template>
   </URightOverlay>
 </template>

@@ -77,6 +77,9 @@ public class TruckServiceImpl extends BaseService implements TruckService {
             throw new NotFoundException(mSourceBundle.apply("filter.company.missed"));
         }
 
+//        Join<TruckEntity, TruckFileEntity> truckFile = trucks.join("files");
+//        filters.add(cb.equal(truckFile.get("status"), TruckFileStatusEnum.ACTIVE));
+
         cq.select(trucks)
                 .where(cb.and(filters.stream().filter(Objects::nonNull).toArray(Predicate[]::new)))
                 .orderBy(cb.desc(trucks.get("id")));

@@ -85,13 +85,16 @@ import UScrollArea from "@/components/base/UScrollArea.vue";
 const toastStore = useToastStore();
 
 const props = defineProps({
-  truckId: {
-    type: Number,
-    required: true
-  },
-  fileType: {
-    type: String,
-    required: true
+  data: {
+    type: Object,
+    required: true,
+    default: {
+      description: '',
+      expirationDate: new Date(),
+      type: '',
+      //truckId: '', // or
+      // trailerId: ''
+    }
   },
   url: {
     type: String,
@@ -116,10 +119,7 @@ const addFiles = (fileList) => {
     const upload = {
       file,
       progress: 0,
-      expirationDate: '',
-      description: '',
-      type: '',
-      truckId: props.truckId
+      data: {...props.data}
     };
     simulateUpload(upload);
     uploads.value.push(upload);
@@ -143,16 +143,9 @@ const removeFile = (index) => {
 const saveFile = (index) => {
   const fileIn = uploads.value[index]
 
-  const data = {
-    truckId: fileIn.truckId,
-    description: fileIn.description,
-    expirationDate: fileIn.expirationDate,
-    type: props.fileType,
-  }
-
   const formData = new FormData();
   formData.append("file", fileIn.file);
-  formData.append("data", new Blob([JSON.stringify(data)], {type: "application/json"}));
+  formData.append("data", new Blob([JSON.stringify(fileIn.data)], {type: "application/json"}));
 
   axiosIns.post(props.url, formData)
       .then(res => {

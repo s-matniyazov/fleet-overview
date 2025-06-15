@@ -3,10 +3,10 @@
 import UTable from "@/components/base/UTable.vue";
 import {ref} from "vue";
 import {useI18n} from "vue-i18n";
-import axiosIns from "@/plugins/axios.js";
-import {URIS} from "@/constants/UriConstants.js";
-import {longToDate, showMessage} from "@/util/utils.js";
+import {DOCUMENT_TYPES, downloadResource, longToDate} from "@/util/utils.js";
+import {useTrailerFileStore} from "@/store/TrailerFileStore.js";
 
+const trailerFileStore = useTrailerFileStore();
 const {t} = useI18n();
 
 const props = defineProps({
@@ -84,23 +84,6 @@ const columns = [
 
 const selectedRow = ref();
 
-function downloadDoc(row) {
-  axiosIns.get(URIS.RESOURCES + '/view/' + row.id, {
-    responseType: 'blob',
-  })
-      .then(res => {
-        console.log(row);
-        const blob = new Blob([res.data], {type: row.contentType})
-        const link = document.createElement('a')
-        link.href = URL.createObjectURL(blob)
-        link.download = row.fileName
-        link.click()
-        URL.revokeObjectURL(link.href)
-      }).catch(e => {
-    showMessage(e)
-  });
-}
-
 const formatSize = (size) => {
   return (size / 1024).toFixed(2) + ' KB';
 };
@@ -109,24 +92,30 @@ const formatSize = (size) => {
 
 <template>
   <div class="mb-0 p-2">
-    <UTable :items="data.files.sort((it, bit) => it.id <= bit.id ? 1 : -1)" :columns="columns" v-model="selectedRow"
+    <UTable :items="trailerFileStore.files" :columns="columns" v-model="selectedRow"
             height="calc(100vh - 258px)" hide-pagination>
+
+      <template #row_type="{row}">
+        <td>
+          {{ DOCUMENT_TYPES[row?.type] }}
+        </td>
+      </template>
 
       <template #row_file_name="{row}">
         <td>
-          {{ row.resource.fileName }}
+          {{ row?.resource?.fileName }}
         </td>
       </template>
 
       <template #row_file_size="{row}">
         <td>
-          {{ formatSize(row.resource.size) }}
+          {{ formatSize(row?.resource?.size) }}
         </td>
       </template>
 
       <template #row_expiration_date="{row}">
         <td>
-          {{ longToDate(row.expirationDate) }}
+          {{ longToDate(row?.expirationDate) }}
         </td>
       </template>
 
@@ -140,9 +129,15 @@ const formatSize = (size) => {
         </td>
       </template>
 
+      <template #row_operated_by="{row}">
+        <td>
+          {{row?.createdBy?.name}}
+        </td>
+      </template>
+
       <template #row_actions="{row}">
         <td>
-          <button @click="downloadDoc(row?.resource)" class="btn btn-primary btn-sm">
+          <button @click="downloadResource(row?.resource)" :disabled="!row?.resource" class="btn btn-primary btn-sm">
             <span class="mdi mdi-download"></span>
           </button>
         </td>

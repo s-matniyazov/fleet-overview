@@ -1,4 +1,60 @@
 <script setup>
+import DocumentMiniCard from "@/components/fleet/DocumentMiniCard.vue";
+import URightOverlay from "@/components/base/URightOverlay.vue";
+import FileOverlay from "@/components/fleet/FileOverlay.vue";
+import {ref} from "vue";
+import {DOCUMENT_TYPES, downloadResource, FILE_TYPE_NAMES, PERMIT_NAMES} from "@/util/utils.js";
+import {URIS} from "@/constants/UriConstants.js";
+import {useTrailerFileStore} from "@/store/TrailerFileStore.js";
+
+const trailerFileStore = useTrailerFileStore();
+
+const selectFileSection = (type) => {
+  selectedFileSection.value = {
+    dialog: true,
+    data: {
+      ...selectedFileSection.value.data,
+      trailerId: props.data.id,
+      type: type
+    }
+  };
+}
+
+const props = defineProps({
+  data: {
+    type: Object,
+    required: true
+  }
+})
+
+const selectedFileSection = ref({
+  dialog: false,
+  data: {
+    description: '',
+    expirationDate: new Date(),
+    type: '',
+    trailerId: ''
+  }
+});
+
+function downloadAll(type) {
+  if (type === 'trailerFiles') {
+    FILE_TYPE_NAMES.forEach(item => {
+      const resource = trailerFileStore?.files.find(it => it.type === item.key)?.resource
+      if (resource) {
+        downloadResource(resource)
+      }
+    })
+  }
+  // else if (type === 'permits') {
+  //   PERMIT_NAMES.forEach(item => {
+  //     const resource = trailerFileStore.permits.find(it => it.type === item.key)?.resource
+  //     if (resource) {
+  //       downloadResource(resource)
+  //     }
+  //   })
+  // }
+}
 
 </script>
 
@@ -10,362 +66,38 @@
           <div class="font-size-20 fw-bold text-secondary"> General Documents</div>
         </div>
         <div class="col-6 font-size-16 text-end">
-          <button class="btn btn-light cursor-pointer" disabled=""><span
-          >Download All Files</span><i
-              class="mdi mdi-cloud-download-outline ms-2"></i></button>
+          <button class="btn btn-light" @click="downloadAll('trailerFiles')">
+            <span>Download All Files</span>
+            <i class="mdi mdi-cloud-download-outline ms-2"></i>
+          </button>
         </div>
       </div>
       <div class="row">
-        <div class="col-6 mb-8 cursor-pointer ng-star-inserted">
-          <div class="qm-badge custom-light-shadow ng-star-inserted">
-            <div class="d-flex justify-content-between align-items-center mb-6">
-              <div>
-                <div class="font-size-16 fw-bold no-action"> Registration (Cab Card) <span
-                    class="comment me-2"><i
-                    class="fa-solid fa-comment no-action text-gray-light"></i></span>
-                </div>
-                <div class="d-flex align-items-center">
-                  <span class="font-size-10 text-gray-dark me-1 fw-semibold">Exp:</span>
-                  <span class="font-size-12 text-gray-light">N/A</span>
-                </div>
-              </div>
-
-            </div>
-            <div class="row">
-              <div class="col-6 d-flex"><img
-                  src="@/assets/icons/file-na-md.svg"
-                  alt="File NA icon"
-                  class="me-3 ng-star-inserted">
-
-                <div>
-                  <div class="font-size-10 text-gray-dark fw-semibold">Completed by</div>
-
-                  <div class="font-size-12 fw-semibold text-gray-light ng-star-inserted">N/A
-                  </div>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="font-size-10 text-gray-dark fw-semibold">Completed Date</div>
-                <div class="font-size-12 fw-semibold text-gray-light">
-                  N/A
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 mb-8 cursor-pointer ng-star-inserted">
-          <div class="qm-badge custom-light-shadow ng-star-inserted">
-            <div class="d-flex justify-content-between align-items-center mb-6">
-              <div>
-                <div class="font-size-16 fw-bold no-action"> Annual Inspection <span
-                    class="comment me-2"><i
-                    class="fa-solid fa-comment no-action text-gray-light"></i></span>
-                </div>
-                <div class="d-flex align-items-center">
-                  <span class="font-size-10 text-gray-dark me-1 fw-semibold">Exp:</span>
-                  <span class="font-size-12 text-gray-light">N/A</span>
-                </div>
-              </div>
-
-            </div>
-            <div class="row">
-              <div class="col-6 d-flex"><img
-                  src="@/assets/icons/file-na-md.svg"
-                  alt="File NA icon"
-                  class="me-3 ng-star-inserted">
-
-                <div>
-                  <div class="font-size-10 text-gray-dark fw-semibold">Completed by</div>
-
-                  <div class="font-size-12 fw-semibold text-gray-light ng-star-inserted">N/A
-                  </div>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="font-size-10 text-gray-dark fw-semibold">Completed Date</div>
-                <div class="font-size-12 fw-semibold text-gray-light">
-                  N/A
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 mb-8 cursor-pointer ng-star-inserted">
-          <div class="qm-badge custom-light-shadow ng-star-inserted">
-            <div class="d-flex justify-content-between align-items-center mb-6">
-              <div>
-                <div class="font-size-16 fw-bold no-action"> Physical Damage Insurance <span
-                    class="comment me-2"><i
-                    class="fa-solid fa-comment no-action text-gray-light"></i></span>
-                </div>
-                <div class="d-flex align-items-center">
-                  <span class="font-size-10 text-gray-dark me-1 fw-semibold">Exp:</span>
-                  <span class="font-size-12 text-gray-light">N/A</span>
-                </div>
-              </div>
-
-            </div>
-            <div class="row">
-              <div class="col-6 d-flex"><img
-                  src="@/assets/icons/file-na-md.svg"
-                  alt="File NA icon"
-                  class="me-3 ng-star-inserted">
-
-                <div>
-                  <div class="font-size-10 text-gray-dark fw-semibold">Completed by</div>
-
-                  <div class="font-size-12 fw-semibold text-gray-light ng-star-inserted">N/A
-                  </div>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="font-size-10 text-gray-dark fw-semibold">Completed Date</div>
-                <div class="font-size-12 fw-semibold text-gray-light">
-                  N/A
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 mb-8 cursor-pointer ng-star-inserted">
-          <div class="qm-badge custom-light-shadow ng-star-inserted">
-            <div class="d-flex justify-content-between align-items-center mb-6">
-              <div>
-                <div class="font-size-16 fw-bold no-action"> Lease Agreement <span
-                    class="comment me-2"><i
-                    class="fa-solid fa-comment no-action text-gray-light"></i></span>
-                </div>
-                <div class="d-flex align-items-center">
-                  <span class="font-size-10 text-gray-dark me-1 fw-semibold">Exp:</span>
-                  <span class="font-size-12 text-gray-light">N/A</span>
-                </div>
-              </div>
-
-            </div>
-            <div class="row">
-              <div class="col-6 d-flex"><img
-                  src="@/assets/icons/file-na-md.svg"
-                  alt="File NA icon"
-                  class="me-3 ng-star-inserted">
-
-                <div>
-                  <div class="font-size-10 text-gray-dark fw-semibold">Completed by</div>
-
-                  <div class="font-size-12 fw-semibold text-gray-light ng-star-inserted">N/A
-                  </div>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="font-size-10 text-gray-dark fw-semibold">Completed Date</div>
-                <div class="font-size-12 fw-semibold text-gray-light">
-                  N/A
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="files-container ng-star-inserted">
-      <div class="row justify-content-center align-items-center mb-3">
-        <div class="col-6">
-          <div class="font-size-20 fw-bold text-secondary"> Permits</div>
-        </div>
-        <div class="col-6 font-size-16 text-end">
-          <button class="btn btn-light cursor-pointer" disabled=""><span
-          >Download All Files</span><i
-              class="mdi mdi-cloud-download-outline ms-2"></i></button>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-6 mb-8 cursor-pointer ng-star-inserted">
-          <div class="qm-badge custom-light-shadow ng-star-inserted">
-            <div class="d-flex justify-content-between align-items-center mb-6">
-              <div>
-                <div class="font-size-16 fw-bold no-action"> Oregon <span
-                    class="comment me-2"><i
-                    class="fa-solid fa-comment no-action text-gray-light"></i></span>
-                </div>
-                <div class="d-flex align-items-center">
-                  <span class="font-size-10 text-gray-dark me-1 fw-semibold">Exp:</span>
-                  <span class="font-size-12 text-gray-light">N/A</span>
-                </div>
-              </div>
-
-            </div>
-            <div class="row">
-              <div class="col-6 d-flex"><img
-                  src="@/assets/icons/file-na-md.svg"
-                  alt="File NA icon"
-                  class="me-3 ng-star-inserted">
-
-                <div>
-                  <div class="font-size-10 text-gray-dark fw-semibold">Completed by</div>
-
-                  <div class="font-size-12 fw-semibold text-gray-light ng-star-inserted">N/A
-                  </div>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="font-size-10 text-gray-dark fw-semibold">Completed Date</div>
-                <div class="font-size-12 fw-semibold text-gray-light">
-                  N/A
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 mb-8 cursor-pointer ng-star-inserted">
-          <div class="qm-badge custom-light-shadow ng-star-inserted">
-            <div class="d-flex justify-content-between align-items-center mb-6">
-              <div>
-                <div class="font-size-16 fw-bold no-action"> New Mexico <span
-                    class="comment me-2"><i
-                    class="fa-solid fa-comment no-action text-gray-light"></i></span>
-                </div>
-                <div class="d-flex align-items-center">
-                  <span class="font-size-10 text-gray-dark me-1 fw-semibold">Exp:</span>
-                  <span class="font-size-12 text-gray-light">N/A</span>
-                </div>
-              </div>
-
-            </div>
-            <div class="row">
-              <div class="col-6 d-flex"><img
-                  src="@/assets/icons/file-na-md.svg"
-                  alt="File NA icon"
-                  class="me-3 ng-star-inserted">
-
-                <div>
-                  <div class="font-size-10 text-gray-dark fw-semibold">Completed by</div>
-
-                  <div class="font-size-12 fw-semibold text-gray-light ng-star-inserted">N/A
-                  </div>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="font-size-10 text-gray-dark fw-semibold">Completed Date</div>
-                <div class="font-size-12 fw-semibold text-gray-light">
-                  N/A
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 mb-8 cursor-pointer ng-star-inserted">
-          <div class="qm-badge custom-light-shadow ng-star-inserted">
-            <div class="d-flex justify-content-between align-items-center mb-6">
-              <div>
-                <div class="font-size-16 fw-bold no-action"> Kentucky <span
-                    class="comment me-2"><i
-                    class="fa-solid fa-comment no-action text-gray-light"></i></span>
-                </div>
-                <div class="d-flex align-items-center">
-                  <span class="font-size-10 text-gray-dark me-1 fw-semibold">Exp:</span>
-                  <span class="font-size-12 text-gray-light">N/A</span>
-                </div>
-              </div>
-
-            </div>
-            <div class="row">
-              <div class="col-6 d-flex"><img
-                  src="@/assets/icons/file-na-md.svg"
-                  alt="File NA icon"
-                  class="me-3 ng-star-inserted">
-
-                <div>
-                  <div class="font-size-10 text-gray-dark fw-semibold">Completed by</div>
-
-                  <div class="font-size-12 fw-semibold text-gray-light ng-star-inserted">N/A
-                  </div>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="font-size-10 text-gray-dark fw-semibold">Completed Date</div>
-                <div class="font-size-12 fw-semibold text-gray-light">
-                  N/A
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 mb-8 cursor-pointer ng-star-inserted">
-          <div class="qm-badge custom-light-shadow ng-star-inserted">
-            <div class="d-flex justify-content-between align-items-center mb-6">
-              <div>
-                <div class="font-size-16 fw-bold no-action"> New York <span
-                    class="comment me-2"><i
-                    class="fa-solid fa-comment no-action text-gray-light"></i></span>
-                </div>
-                <div class="d-flex align-items-center">
-                  <span class="font-size-10 text-gray-dark me-1 fw-semibold">Exp:</span>
-                  <span class="font-size-12 text-gray-light">N/A</span>
-                </div>
-              </div>
-
-            </div>
-            <div class="row">
-              <div class="col-6 d-flex"><img
-                  src="@/assets/icons/file-na-md.svg"
-                  alt="File NA icon"
-                  class="me-3 ng-star-inserted">
-
-                <div>
-                  <div class="font-size-10 text-gray-dark fw-semibold">Completed by</div>
-
-                  <div class="font-size-12 fw-semibold text-gray-light ng-star-inserted">N/A
-                  </div>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="font-size-10 text-gray-dark fw-semibold">Completed Date</div>
-                <div class="font-size-12 fw-semibold text-gray-light">
-                  N/A
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 mb-8 cursor-pointer ng-star-inserted">
-          <div class="qm-badge custom-light-shadow ng-star-inserted">
-            <div class="d-flex justify-content-between align-items-center mb-6">
-              <div>
-                <div class="font-size-16 fw-bold no-action"> Connecticut <span
-                    class="comment me-2"><i
-                    class="fa-solid fa-comment no-action text-gray-light"></i></span>
-                </div>
-                <div class="d-flex align-items-center">
-                  <span class="font-size-10 text-gray-dark me-1 fw-semibold">Exp:</span>
-                  <span class="font-size-12 text-gray-light">N/A</span>
-                </div>
-              </div>
-
-            </div>
-            <div class="row">
-              <div class="col-6 d-flex"><img
-                  src="@/assets/icons/file-na-md.svg"
-                  alt="File NA icon"
-                  class="me-3 ng-star-inserted">
-
-                <div>
-                  <div class="font-size-10 text-gray-dark fw-semibold">Completed by</div>
-
-                  <div class="font-size-12 fw-semibold text-gray-light ng-star-inserted">N/A
-                  </div>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="font-size-10 text-gray-dark fw-semibold">Completed Date</div>
-                <div class="font-size-12 fw-semibold text-gray-light">
-                  N/A
-                </div>
-              </div>
-            </div>
-          </div>
+        <div v-for="item in FILE_TYPE_NAMES"
+             class="col-6 mb-8 mt-2 cursor-pointer ng-star-inserted">
+          <DocumentMiniCard
+              :file="trailerFileStore.files.find(it => it.type===item.key)"
+              :type="item.key" :name="item.value"
+          />
         </div>
       </div>
     </div>
   </div>
+
+  <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
+    <template #header>
+      <h4 class="fw-bold text-white bg-primary p-2 rounded-2 d-flex">{{
+          DOCUMENT_TYPES[selectedFileSection.data.type]
+        }}
+        <span class="text-end u-end">
+          <button class="btn-close" @click="trailerFileStore.init(data.id); selectedFileSection.dialog = false"></button>
+        </span>
+      </h4>
+    </template>
+    <template #body>
+      <FileOverlay :url="`${URIS.TRAILER}/${data?.id}/attach-permit`" :data="selectedFileSection.data"/>
+    </template>
+  </URightOverlay>
 </template>
 
 <style scoped>
