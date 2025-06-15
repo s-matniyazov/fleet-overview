@@ -2,6 +2,7 @@ package fleetoverview.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fleetoverview.domain.entity.base.BaseEntity;
+import fleetoverview.domain.entity.trailer.TrailerEntity;
 import fleetoverview.domain.entity.truck.TruckEntity;
 import fleetoverview.domain.enums.PermitStatusEnum;
 import fleetoverview.domain.enums.PermitTypeEnum;
@@ -35,6 +36,10 @@ public class PermitEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private TruckEntity truck;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    private TrailerEntity trailer;
+
     public PermitEntity() {
     }
 
@@ -45,6 +50,15 @@ public class PermitEntity extends BaseEntity {
         this.type = type;
         this.status = status;
         this.truck = truck;
+    }
+
+    public PermitEntity(ResourceEntity resource, Date expirationDate, String description, PermitTypeEnum type, PermitStatusEnum status, TrailerEntity trailer) {
+        this.resource = resource;
+        this.expirationDate = expirationDate;
+        this.description = description;
+        this.type = type;
+        this.status = status;
+        this.trailer = trailer;
     }
 
     public ResourceEntity getResource() {
@@ -93,5 +107,13 @@ public class PermitEntity extends BaseEntity {
 
     public void setTruck(TruckEntity truck) {
         this.truck = truck;
+    }
+
+    public TrailerEntity getTrailer() {
+        return trailer;
+    }
+
+    public void setTrailer(TrailerEntity trailer) {
+        this.trailer = trailer;
     }
 }

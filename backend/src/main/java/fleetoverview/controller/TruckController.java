@@ -32,12 +32,12 @@ public class TruckController extends CrudController<TruckEntity, TruckRequest> {
 
     @PostMapping("attach-file")
     public HttpEntity<ApiResponse> attachFile(@RequestPart(name = "data") TruckFileRequest data, @RequestPart(name = "file") MultipartFile file) {
-        return ResponseEntity.ok(service.attachFileToTruck(data, file));
+        return ResponseEntity.ok(service.attachFile(data, file));
     }
 
     @PostMapping("{id}/attach-permit")
     public HttpEntity<ApiResponse> attachPermit(@PathVariable("id") int id, @RequestPart(name = "data") PermitRequest data, @RequestPart(name = "file") MultipartFile file) {
-        return ResponseEntity.ok(service.attachPermitToTruck(id, data, file));
+        return ResponseEntity.ok(service.attachPermit(id, data, file));
     }
 
     @GetMapping("files")

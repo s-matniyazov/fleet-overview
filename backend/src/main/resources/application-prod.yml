@@ -34,7 +34,7 @@ telegram:
   token: "6174384781:AAENYCRflrXFt6KERjQC1LhW6yd_zs-7Vbc"
   chatIds: ""
 mail:
-  senders: "sardorbekmatniyazov03@gmail.com"
+  senders: ""
   host: smtp.gmail.com
   username: sardorbekmatniyazov03@gmail.com
   password: "rdlv svgm wzmn ymbx"

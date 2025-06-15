@@ -1,9 +1,6 @@
 package fleetoverview.domain.entity.trailer;
 
-import fleetoverview.domain.entity.CompanyEntity;
-import fleetoverview.domain.entity.DriverEntity;
-import fleetoverview.domain.entity.OwnershipTypeEntity;
-import fleetoverview.domain.entity.PurchaseTypeEntity;
+import fleetoverview.domain.entity.*;
 import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.enums.trailer.TrailerStatusEnum;
 
@@ -60,6 +57,9 @@ public class TrailerEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "trailer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<TrailerFileEntity> files = new HashSet<>();
+
+    @OneToMany(mappedBy = "trailer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<PermitEntity> permits = new HashSet<>();
 
     @ManyToOne
     private CompanyEntity company;
@@ -211,6 +211,14 @@ public class TrailerEntity extends BaseEntity {
 
     public Double getLength() {
         return length;
+    }
+
+    public Set<PermitEntity> getPermits() {
+        return permits;
+    }
+
+    public void setPermits(Set<PermitEntity> permits) {
+        this.permits = permits;
     }
 
     public void setLength(Double length) {

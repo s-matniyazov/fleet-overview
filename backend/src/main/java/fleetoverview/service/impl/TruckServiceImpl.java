@@ -143,7 +143,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
     }
 
     @Override
-    public ApiResponse attachFileToTruck(TruckFileRequest data, MultipartFile file) {
+    public ApiResponse attachFile(TruckFileRequest data, MultipartFile file) {
         TruckEntity truck = repository.findById(data.truckId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("truck.not_found")));
 
         ResourceEntity resource = resourceService.createResource(file, "truck");
@@ -165,7 +165,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
     }
 
     @Override
-    public ApiResponse attachPermitToTruck(int truckId, PermitRequest data, MultipartFile file) {
+    public ApiResponse attachPermit(int truckId, PermitRequest data, MultipartFile file) {
         TruckEntity truck = repository.findById(truckId).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("truck.not_found")));
 
         ResourceEntity resource = resourceService.createResource(file, "truck//permits");
