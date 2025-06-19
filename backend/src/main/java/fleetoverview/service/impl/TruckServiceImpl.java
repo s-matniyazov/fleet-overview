@@ -5,7 +5,9 @@ import fleetoverview.data.request.TruckFileRequest;
 import fleetoverview.data.request.TruckRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
-import fleetoverview.domain.entity.*;
+import fleetoverview.domain.entity.CompanyEntity;
+import fleetoverview.domain.entity.PermitEntity;
+import fleetoverview.domain.entity.ResourceEntity;
 import fleetoverview.domain.entity.truck.TruckEntity;
 import fleetoverview.domain.entity.truck.TruckFileEntity;
 import fleetoverview.domain.enums.PermitStatusEnum;
@@ -15,13 +17,13 @@ import fleetoverview.service.ResourceService;
 import fleetoverview.service.TruckService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.NotFoundException;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -71,23 +73,25 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         List<Predicate> filters = new ArrayList<>();
 
         if (params.containsKey("companyId")) {
-            Join<TruckEntity, CompanyEntity> company = trucks.join("company");
+            Join<TruckEntity, CompanyEntity> company = trucks.join("company", JoinType.INNER);
             filters.add(cb.equal(company.get("id"), params.get("companyId")));
         } else {
             throw new NotFoundException(mSourceBundle.apply("filter.company.missed"));
         }
 
-//        Join<TruckEntity, TruckFileEntity> truckFile = trucks.join("files");
-//        filters.add(cb.equal(truckFile.get("status"), TruckFileStatusEnum.ACTIVE));
+// LEFT JOIN + ON orqali statusni filtrlaymiz
+        Join<TruckEntity, TruckFileEntity> truckFile = trucks.join("files", JoinType.LEFT);
+        truckFile.on(cb.notEqual(truckFile.get("status"), TruckFileStatusEnum.PASSIVE));
 
-        cq.select(trucks)
-                .where(cb.and(filters.stream().filter(Objects::nonNull).toArray(Predicate[]::new)))
+        cq.select(trucks).distinct(true)
+                .where(cb.and(filters.toArray(new Predicate[0])))
                 .orderBy(cb.desc(trucks.get("id")));
 
         TypedQuery<TruckEntity> query = entityManager.createQuery(cq);
         List<TruckEntity> results = query.getResultList();
 
         return DataResponse.success(results);
+
     }
 
     @Override

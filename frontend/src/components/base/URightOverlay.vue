@@ -2,7 +2,7 @@
   <Teleport to="body">
     <Transition name="slide">
       <div v-if="isOpen" class="dialog-overlay">
-        <div class="dialog-content">
+        <div class="dialog-content" :style="`width: ${width}`">
           <slot name="header">
             <button @click="close" class="close-btn">×</button>
           </slot>
@@ -16,7 +16,13 @@
 <script setup>
 import {defineProps, defineEmits} from "vue";
 
-defineProps({isOpen: Boolean});
+defineProps({
+  isOpen: Boolean,
+  width: {
+    type: String,
+    default: "35%"
+  }
+});
 const emit = defineEmits(["close"]);
 
 const close = () => emit("close");
@@ -35,7 +41,6 @@ const close = () => emit("close");
 }
 
 .dialog-content {
-  width: 35%;
   height: 100%;
   background: white;
   padding: 20px;

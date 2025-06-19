@@ -95,8 +95,7 @@ const formatSize = (size) => {
 <template>
   <div class="mb-0 p-2">
     <UTable :items="truckFileStore.allDocuments()" :columns="columns" v-model="selectedRow"
-            height="calc(100vh - 258px)" hide-pagination>
-
+            height="calc(100vh - 108px)" hide-pagination>
       <template #row_type="{row}">
         <td>
           {{ DOCUMENT_TYPES[row?.type] }}

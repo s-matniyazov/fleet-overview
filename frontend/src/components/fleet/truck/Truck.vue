@@ -378,32 +378,32 @@ watch(
       <template #row_registration="{row}">
         <td>
           <FileMiniCard name="REG (CAB CARD)" type="REG_CAB_CARD"
-                             :file="row?.files.find(it => it.type==='REG_CAB_CARD')"
-                             @click="(e) => {selectedRow = row; selectFileSection('REG_CAB_CARD'); e.stopPropagation()}"/>
+                        :file="row?.files.find(it => it.type==='REG_CAB_CARD')"
+                        @click="(e) => {selectedRow = row; selectFileSection('REG_CAB_CARD'); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_annual_inspection="{row}">
         <td>
           <FileMiniCard name="ANN INS" type="ANN_INS"
-                             :file="row?.files.find(it => it.type==='ANN_INS')"
-                             @click="(e) => {selectedRow = row; selectFileSection('ANN_INS'); e.stopPropagation()}"/>
+                        :file="row?.files.find(it => it.type==='ANN_INS')"
+                        @click="(e) => {selectedRow = row; selectFileSection('ANN_INS'); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_physical_damage_inc="{row}">
         <td>
           <FileMiniCard name="PHYS DAMAGE" type="PHYS_DAMAGE"
-                             :file="row?.files.find(it => it.type==='PHYS_DAMAGE')"
-                             @click="(e) => {selectedRow = row; selectFileSection('PHYS_DAMAGE'); e.stopPropagation()}"/>
+                        :file="row?.files.find(it => it.type==='PHYS_DAMAGE')"
+                        @click="(e) => {selectedRow = row; selectFileSection('PHYS_DAMAGE'); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_lease_agreement="{row}">
         <td>
           <FileMiniCard name="LEASE AGR" type="LEASE_AGR"
-                             :file="row?.files.find(it => it.type==='LEASE_AGR')"
-                             @click="(e) => {selectedRow = row; selectFileSection('LEASE_AGR'); e.stopPropagation()}"/>
+                        :file="row?.files.find(it => it.type==='LEASE_AGR')"
+                        @click="(e) => {selectedRow = row; selectFileSection('LEASE_AGR'); e.stopPropagation()}"/>
         </td>
       </template>
 
@@ -615,7 +615,7 @@ watch(
 
   <!--  truck card-->
   <Teleport to="body">
-    <UDialog :show="showModal" width="calc(100vw - 200px)" class="">
+    <UDialog :show="showModal && false" width="calc(100vw - 200px)" class="">
       <template #header>
         <div class="d-flex w-100">
           Truck Card
@@ -632,6 +632,25 @@ watch(
       </template>
     </UDialog>
   </Teleport>
+
+  <!--  truck card-->
+  <URightOverlay :isOpen="showModal" @close="showModal = false"
+                 width="calc(100vw - 500px)" class="">
+    <template #header>
+      <div class="d-flex w-100">
+        Truck Card
+        <div class="text-end u-end">
+          <button class="btn-close" @click="showModal = false"></button>
+        </div>
+      </div>
+    </template>
+
+    <template #body>
+      <UScrollArea height="calc(100vh - 50px)">
+        <TruckCard :data="selectedRow"/>
+      </UScrollArea>
+    </template>
+  </URightOverlay>
 
   <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
     <template #header>
