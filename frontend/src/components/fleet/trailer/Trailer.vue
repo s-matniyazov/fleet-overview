@@ -21,6 +21,7 @@ import {useFilterStore} from "@/store/FilterStore.js";
 import {useTrailerReferenceStore} from "@/store/TrailerReferencesStore.js";
 import FileOverlay from "@/components/fleet/FileOverlay.vue";
 import {useTrailerFileStore} from "@/store/TrailerFileStore.js";
+import TruckCard from "@/components/fleet/truck/TruckCard.vue";
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
@@ -567,7 +568,7 @@ watch(
 
   <!--  trailer card-->
   <Teleport to="body">
-    <UDialog :show="showModal" width="calc(100vw - 200px)" class="">
+    <UDialog :show="showModal && false" width="calc(100vw - 200px)" class="">
       <template #header>
         <div class="d-flex w-100">
           Trailer Card
@@ -584,6 +585,25 @@ watch(
       </template>
     </UDialog>
   </Teleport>
+
+  <!--  trailer card-->
+  <URightOverlay :isOpen="showModal" @close="showModal = false"
+                 width="calc(100vw - 500px)" class="">
+    <template #header>
+      <div class="d-flex w-100">
+        Trailer Card
+        <div class="text-end u-end">
+          <button class="btn-close" @click="showModal = false"></button>
+        </div>
+      </div>
+    </template>
+
+    <template #body>
+      <UScrollArea height="calc(100vh - 50px)">
+        <TrailerCard :data="selectedRow"/>
+      </UScrollArea>
+    </template>
+  </URightOverlay>
 
   <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
     <template #header>
@@ -602,34 +622,6 @@ watch(
 </template>
 
 <style scoped>
-
-.qm-badge {
-  border: 1px solid transparent;
-  border-radius: 3px;
-  padding: 5px;
-}
-
-.custom-light-shadow {
-  box-shadow: 0 0 2px #00000040 !important;
-}
-
-.permit-box {
-  min-height: 64px;
-  max-height: 68px;
-  line-height: 140%;
-  font-size: 11px;
-  padding-bottom: 1px;
-  padding-top: 1px;
-}
-
-.qm-badge--dim {
-  background: #f6f6f6;
-  padding: 3px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 .justify-content-start {
   justify-content: flex-start !important;
 }
