@@ -622,6 +622,33 @@ watch(
 </template>
 
 <style scoped>
+.qm-badge {
+  border: 1px solid transparent;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+.custom-light-shadow {
+  box-shadow: 0 0 2px #00000040 !important;
+}
+
+.permit-box {
+  min-height: 64px;
+  max-height: 68px;
+  line-height: 140%;
+  font-size: 11px;
+  padding-bottom: 1px;
+  padding-top: 1px;
+}
+
+.qm-badge--dim {
+  background: #f6f6f6;
+  padding: 3px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .justify-content-start {
   justify-content: flex-start !important;
 }
