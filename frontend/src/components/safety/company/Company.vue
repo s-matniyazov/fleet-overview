@@ -1,23 +1,29 @@
 <script setup>
 import {onMounted, ref} from "vue";
 
-import modal from '../base/UDialog.vue'
+import modal from '../../base/UDialog.vue'
 import axiosIns from "@/plugins/axios.js";
 import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
 import UInput from "@/components/base/UInput.vue";
-import UTextarea from "@/components/base/UTextarea.vue";
 import {useI18n} from "vue-i18n";
 import {longToDateTime, showMessage} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
 import router from "@/router/index.js";
-import UPhoneField from "@/components/base/UPhoneField.vue";
 import USelect from "@/components/base/USelect.vue";
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
 
+
+const props = defineProps({
+  layout: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+})
 const columns = [
   {
     key: 'id',
@@ -32,7 +38,7 @@ const columns = [
     label: t('usdot'),
     styles: '',
     classes: '',
-  },{
+  }, {
     key: 'name',
     name: 'name',
     label: t('name'),
@@ -96,7 +102,6 @@ const onAdd = () => {
   addModal.value = true;
 }
 
-
 const onEdit = (d) => {
 
   data.value = {...d};
@@ -108,7 +113,7 @@ const onClose = () => {
 }
 
 const handleDoubleClick = (row) => {
-  setTimeout(() => {
+  if (props.layout) setTimeout(() => {
     filterStore.setCompanyId(row.id)
 
     router.push("/");
@@ -165,27 +170,39 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mb-0 p-2 bg-light rounded-4 shadow-dark" >
+  <div :class="`mb-0 p-2 ${layout && 'bg-light rounded-4 shadow-dark'}`">
     <div class="col-12">
-      <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-3">
-        <div class="d-flex">
-          <button @click="onAdd" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-plus"></span> {{ t('add') }}
-          </button>
-          <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-              class="mdi mdi-pen"></span> {{ t('edit') }}
-          </button>
-          <button @click="onDelete(selectedRow)" class="btn btn-primary btn-sm mx-1" :disabled="!selectedRow"><span
-              class="mdi mdi-delete"></span> {{ t('delete') }}
-          </button>
+      <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
+        <button @click="onAdd" class="btn btn-primary btn-sm"><span class="mdi mdi-plus"></span> {{
+            t("add")
+          }}
+        </button>
+        <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
+            class="mdi mdi-pen"></span> {{ t("edit") }}
+        </button>
+        <button @click="onDelete(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
+            class="mdi mdi-delete"></span> {{ t("delete") }}
+        </button>
+
+        <div class="align-items-center" style="right: 2px; margin-left: auto">
           <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
         </div>
       </div>
     </div>
 
-    <UTable :items="dataList" :columns="columns" v-model="selectedRow" height="calc(100vh - 190px)" hide-pagination
+    <UTable :items="dataList" :columns="columns" v-model="selectedRow" height="calc(100vh - 248px)"
             @row-dblclick="handleDoubleClick">
       <template #row_created="{row}">
         <td>{{ longToDateTime(row?.created) }}</td>
+      </template>
+
+      <template #row_status="{row}">
+        <td>
+          <div class="d-flex gap-2">
+            <a class="badge bg-primary-subtle text-primary"
+               :class="`bg-${row?.status === 'PASSIVE' ? 'danger' : 'primary'}-subtle`"> {{ row?.status }}</a>
+          </div>
+        </td>
       </template>
     </UTable>
   </div>
@@ -224,7 +241,8 @@ onMounted(() => {
                       :placeholder="t('enter_phone_number')" classes="mb-3"/>
             </div>
             <div class="col-6">
-              <UInput v-model="data.address" :label="t('company_address')" :hint="t('company_address')" :name="t('company_address')"
+              <UInput v-model="data.address" :label="t('company_address')" :hint="t('company_address')"
+                      :name="t('company_address')"
                       :placeholder="t('enter_company_address')" classes="mb-3"/>
             </div>
             <div class="col-6">
@@ -238,11 +256,11 @@ onMounted(() => {
             </div>
           </div>
 
-        <div class="modal-footer">
-          <div class="d-flex text-end align-items-end mt-2">
-            <button type="submit" class="btn btn-primary">Save</button>
+          <div class="modal-footer">
+            <div class="d-flex text-end align-items-end mt-2">
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
           </div>
-        </div>
         </UForm>
       </template>
     </modal>

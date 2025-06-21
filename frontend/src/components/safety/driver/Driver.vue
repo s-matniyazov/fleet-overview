@@ -1,7 +1,7 @@
 <script setup>
 import {onMounted, ref, watch} from "vue";
 
-import modal from '../base/UDialog.vue'
+import modal from '../../base/UDialog.vue'
 import axiosIns from "@/plugins/axios.js";
 import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
@@ -232,7 +232,7 @@ watch(
       </div>
     </div>
 
-    <UTable :items="dataList" :columns="columns" v-model="selectedRow" styles="height: calc(100vh - 141px)">
+    <UTable :items="dataList" :columns="columns" v-model="selectedRow" height="calc(100vh - 248px)">
       <template #row_created="{row}">
         <td>{{ longToDateTime(row?.created) }}</td>
       </template>

@@ -2,8 +2,7 @@
 
 const routes = [
     {path: '/login', name: "Login", meta: {requiresAuth: false}, component: () => import('@/layouts/LoginLayout.vue')},
-    {path: '/company', name: "Company", meta: {requiresAuth: true}, component: () => import('@/components/company/Company.vue')},
-    {path: '/company-layout', name: "Company", meta: {requiresAuth: true}, component: () => import('@/components/company/CompanyLayout.vue')},
+    {path: '/company-layout', name: "Company", meta: {requiresAuth: true}, component: () => import('@/layouts/CompanyLayout.vue')},
     {
         path: '/',
         meta: {requiresAuth: false},
@@ -13,11 +12,13 @@ const routes = [
             {path: '/dashboard', name: "Dashboard", meta: {requiresAuth: true}, component: () => import('@/components/Dashboard.vue')},
 
             // fleet
-            {
-                path: '/fleet-compliance', name: "Fleet Compliance", meta: {requiresAuth: true}, component: () => import('@/components/fleet/FleetCompliance.vue'),
-            },
+            {path: '/fleet-compliance', name: "Fleet Compliance", meta: {requiresAuth: true}, component: () => import('@/components/fleet/FleetCompliance.vue')},
             {path: '/fleet-overview', name: "Fleet Overview", meta: {requiresAuth: true}, component: () => import('@/components/fleet/FleetOverview.vue')},
             {path: '/maintenance', name: "Maintenance", meta: {requiresAuth: true}, component: () => import('@/components/fleet/Maintenance.vue')},
+
+            // safety
+            {path: '/safety-compliance', name: "Safety Compliance", meta: {requiresAuth: true}, component: () => import('@/components/safety/SafetyCompliance.vue')},
+            {path: '/dot-inspections', name: "Dot inspections", meta: {requiresAuth: true}, component: () => import('@/components/safety/DotInspections.vue')},
 
 
             // references
@@ -30,11 +31,6 @@ const routes = [
 
             {path: '/settings', name: "Settings", meta: {requiresAuth: true}, component: () => import('@/components/setting/SettingsPage.vue')},
             {path: '/user-profile', name: "User Profile", meta: {requiresAuth: true}, component: () => import('@/components/profile/UserProfile.vue')},
-
-            // drivers
-            {
-                path: '/drivers', name: "Drivers", meta: {requiresAuth: true}, component: () => import('@/components/driver/Driver.vue'),
-            },
         ]
     }
 ]
