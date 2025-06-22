@@ -79,7 +79,16 @@ public class TruckServiceImpl extends BaseService implements TruckService {
             throw new NotFoundException(mSourceBundle.apply("filter.company.missed"));
         }
 
-// LEFT JOIN + ON orqali statusni filtrlaymiz
+        if (params.containsKey("vinOrUnit")) {
+            filters.add(
+                    cb.or(
+                            cb.like(trucks.get("vin"), "%" + params.get("vinOrUnit") + "%"),
+                            cb.like(trucks.get("unit"), "%" + params.get("vinOrUnit") + "%")
+                    )
+            );
+        }
+
+        // LEFT JOIN + ON orqali statusni filtrlaymiz
         Join<TruckEntity, TruckFileEntity> truckFile = trucks.join("files", JoinType.LEFT);
         truckFile.on(cb.notEqual(truckFile.get("status"), TruckFileStatusEnum.PASSIVE));
 

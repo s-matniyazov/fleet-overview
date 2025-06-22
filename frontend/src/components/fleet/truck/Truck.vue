@@ -6,7 +6,7 @@ import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
 import UInput from "@/components/base/UInput.vue";
 import {useI18n} from "vue-i18n";
-import {DOCUMENT_TYPES, PERMIT_NAMES, showMessage} from "@/util/utils.js";
+import {DOCUMENT_TYPES, filterString, PERMIT_NAMES, showMessage} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
 import USelect from "@/components/base/USelect.vue";
 import UDateInput from "@/components/base/UDateInput.vue";
@@ -137,6 +137,9 @@ const selectedFileSection = ref({
 });
 
 const apiUrl = URIS.TRUCK;
+const filter = ref({
+  vinOrUnit: null
+});
 const dataList = ref([]);
 const selectedRow = ref();
 const data = ref(newModel())
@@ -222,7 +225,7 @@ const onSave = () => {
 }
 
 function getData() {
-  axiosIns.get(`${apiUrl}?companyId=${filterStore.companyId}`)
+  axiosIns.get(`${apiUrl}${filterString({companyId: filterStore.companyId, ...filter.value})}`)
       .then(res => {
         dataList.value = res.data.data;
         selectedRow.value = null;
@@ -306,6 +309,10 @@ watch(
         <button @click="showModal = true" class="btn btn-primary btn-sm" :disabled="!selectedRow">
           <span class="mdi mdi-eye"></span>
         </button>
+
+        <UInput v-model="filter.vinOrUnit" style="min-width: 23vw"
+                :hint="t('vin')" :placeholder="t('search_by_vin_or_unit')"/>
+        <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-magnify"></span></button>
 
         <div class="align-items-center u-end">
           <button @click="reload" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>

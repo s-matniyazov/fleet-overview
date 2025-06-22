@@ -8,7 +8,6 @@ import {URIS} from "@/constants/UriConstants.js";
 const toasterStore = useToasterStore();
 
 export function showMessage(error) {
-    console.log(error)
     const msg = error?.response?.data?.message, status = error?.response?.data?.status;
     if (status === 500) {
         toasterStore.error({text: msg ? msg : error})
@@ -158,4 +157,22 @@ export function downloadResource(resource) {
         }).catch(e => {
         showMessage(e)
     });
+}
+
+export function filterString(filter) {
+    let filterStr = '?', isNotFirst = false
+    for (const [key, value] of Object.entries(filter)) {
+        if (value) {
+            if (!isNotFirst) {
+                isNotFirst = true;
+            } else {
+                filterStr += '&';
+            }
+
+            if (typeof value === 'object') filterStr += key + '=' + valuesString(value);
+            else filterStr += key + '=' + value;
+        }
+    }
+
+    return filterStr
 }

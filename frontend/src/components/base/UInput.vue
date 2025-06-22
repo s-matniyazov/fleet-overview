@@ -6,12 +6,12 @@ const props = defineProps({
   name: {
     type: String,
     required: false,
-    default: 'input'
+    default: ''
   },
   label: {
     type: String,
     required: false,
-    default: 'input'
+    default: ''
   },
   placeholder: {
     type: String,
@@ -67,7 +67,7 @@ registerField(props.name, validate);
 
 <template>
   <div :class="[classes, errorMessage ? 'has-danger' : '', readonly ? 'readonly-mode' : '', 'p-1']" :style="styles">
-    <label class="form-label">{{ label }}</label>
+    <label v-if="label" class="form-label">{{ label }}</label>
     <input class="form-control font-size-12" :placeholder="placeholder" :type="type" :name="name"
            v-model="model">
     <div class="invalid-feedback">{{ hint }}</div>
