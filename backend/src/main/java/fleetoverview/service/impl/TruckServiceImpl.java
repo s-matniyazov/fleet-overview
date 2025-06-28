@@ -66,41 +66,21 @@ public class TruckServiceImpl extends BaseService implements TruckService {
 
     @Override
     public DataResponse<List<TruckEntity>> get(Map<String, String> params) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<TruckEntity> cq = cb.createQuery(TruckEntity.class);
-        Root<TruckEntity> trucks = cq.from(TruckEntity.class);
-
-        List<Predicate> filters = new ArrayList<>();
-
-        if (params.containsKey("companyId")) {
-            Join<TruckEntity, CompanyEntity> company = trucks.join("company", JoinType.INNER);
-            filters.add(cb.equal(company.get("id"), params.get("companyId")));
-        } else {
+        if (!params.containsKey("companyId")) {
             throw new NotFoundException(mSourceBundle.apply("filter.company.missed"));
         }
 
+        String vinOrUnit = "%%";
         if (params.containsKey("vinOrUnit")) {
-            filters.add(
-                    cb.or(
-                            cb.like(trucks.get("vin"), "%" + params.get("vinOrUnit") + "%"),
-                            cb.like(trucks.get("unit"), "%" + params.get("vinOrUnit") + "%")
-                    )
-            );
+            vinOrUnit = "%" + params.get("vinOrUnit") + "%";
         }
 
-        // LEFT JOIN + ON orqali statusni filtrlaymiz
-        Join<TruckEntity, TruckFileEntity> truckFile = trucks.join("files", JoinType.LEFT);
-        truckFile.on(cb.notEqual(truckFile.get("status"), TruckFileStatusEnum.PASSIVE));
-
-        cq.select(trucks).distinct(true)
-                .where(cb.and(filters.toArray(new Predicate[0])))
-                .orderBy(cb.desc(trucks.get("id")));
-
-        TypedQuery<TruckEntity> query = entityManager.createQuery(cq);
-        List<TruckEntity> results = query.getResultList();
-
-        return DataResponse.success(results);
-
+        return DataResponse.success(
+                repository.findAllByCompanyId(
+                        Integer.parseInt(params.get("companyId")),
+                        vinOrUnit
+                )
+        );
     }
 
     @Override

@@ -2,7 +2,7 @@ package fleetoverview.controller;
 
 import fleetoverview.controller.base.CrudController;
 import fleetoverview.data.request.DriverRequest;
-import fleetoverview.domain.entity.DriverEntity;
+import fleetoverview.domain.entity.driver.DriverEntity;
 import fleetoverview.service.DriverService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

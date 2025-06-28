@@ -1,7 +1,9 @@
 package fleetoverview.domain.entity.trailer;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fleetoverview.domain.entity.*;
 import fleetoverview.domain.entity.base.BaseEntity;
+import fleetoverview.domain.entity.driver.DriverEntity;
 import fleetoverview.domain.enums.trailer.TrailerStatusEnum;
 
 import javax.persistence.CascadeType;
@@ -31,8 +33,10 @@ public class TrailerEntity extends BaseEntity {
     private String licensePlate;
     private Date inServiceDate;
     @ManyToOne(targetEntity = TrailerModelMakerEntity.class)
+    @JsonIgnoreProperties({"createdBy", "created"})
     private TrailerModelMakerEntity modelMaker;
     @ManyToOne(targetEntity = TrailerTypeEntity.class)
+    @JsonIgnoreProperties({"createdBy", "created"})
     private TrailerTypeEntity type;
     private Integer year;
     private Integer axles;
@@ -41,12 +45,15 @@ public class TrailerEntity extends BaseEntity {
     @Column(length = 50)
     private String vin;
     @ManyToOne(targetEntity = OwnershipTypeEntity.class)
+    @JsonIgnoreProperties({"createdBy", "created"})
     private OwnershipTypeEntity ownershipType;
 
     @ManyToOne(targetEntity = PurchaseTypeEntity.class)
+    @JsonIgnoreProperties({"createdBy", "created"})
     private PurchaseTypeEntity purchaseType;
 
-    @ManyToOne(targetEntity = DriverEntity.class)
+    @ManyToOne(targetEntity = DriverEntity.class, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"createdBy", "created", "truck", "state", "files", "company"})
     private DriverEntity driver;
 
     @Column(length = 4000)
@@ -55,7 +62,8 @@ public class TrailerEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TrailerStatusEnum status = TrailerStatusEnum.ACTIVE;
 
-    @OneToMany(mappedBy = "trailer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "trailer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"createdBy", "created"})
     private Set<TrailerFileEntity> files = new HashSet<>();
 
     @ManyToOne

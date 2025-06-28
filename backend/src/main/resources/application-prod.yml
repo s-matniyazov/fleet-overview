@@ -18,6 +18,9 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 
 server:
   port: 8088

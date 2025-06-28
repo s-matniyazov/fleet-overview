@@ -1,7 +1,9 @@
 package fleetoverview.domain.entity.truck;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fleetoverview.domain.entity.*;
 import fleetoverview.domain.entity.base.BaseEntity;
+import fleetoverview.domain.entity.driver.DriverEntity;
 import fleetoverview.domain.enums.truck.TruckStatusEnum;
 
 import javax.persistence.CascadeType;
@@ -32,24 +34,30 @@ public class TruckEntity extends BaseEntity {
     @Column(length = 50)
     private String licensePlate;
     @ManyToOne(targetEntity = StateEntity.class)
+    @JsonIgnoreProperties({"createdBy", "created"})
     private StateEntity state;
     @ManyToOne(targetEntity = TruckModelMakerEntity.class)
+    @JsonIgnoreProperties({"createdBy", "created"})
     private TruckModelMakerEntity modelMaker;
     private Integer year;
     @ManyToOne(targetEntity = FuelTypeEntity.class)
+    @JsonIgnoreProperties({"createdBy", "created"})
     private FuelTypeEntity fuelType;
     private Double grossWeight;
     private Integer axles;
     @Column(length = 50)
     private String vin;
     @ManyToOne(targetEntity = OwnershipTypeEntity.class)
+    @JsonIgnoreProperties({"createdBy", "created"})
     private OwnershipTypeEntity ownershipType;
 
     private Boolean includeIFTA;
     @ManyToOne(targetEntity = PurchaseTypeEntity.class)
+    @JsonIgnoreProperties({"createdBy", "created"})
     private PurchaseTypeEntity purchaseType;
 
-    @ManyToOne(targetEntity = DriverEntity.class)
+    @ManyToOne(targetEntity = DriverEntity.class, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"createdBy", "created", "truck", "state", "files", "company"})
     private DriverEntity driver;
 
     @Column(length = 4000)
@@ -58,10 +66,12 @@ public class TruckEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TruckStatusEnum status = TruckStatusEnum.ACTIVE;
 
-    @OneToMany(mappedBy = "truck", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "truck", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"createdBy", "created"})
     private Set<TruckFileEntity> files = new HashSet<>();
 
-    @OneToMany(mappedBy = "truck", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "truck", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"createdBy", "created"})
     private Set<PermitEntity> permits = new HashSet<>();
 
     @ManyToOne

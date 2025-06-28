@@ -50,12 +50,4 @@ public abstract class BaseEntity extends BaseIdEntity {
     public UserEntity getCreatedBy() {
         return createdBy;
     }
-
-    public Date getUpdated() {
-        return updated;
-    }
-
-    public UserEntity getUpdatedBy() {
-        return updatedBy;
-    }
 }

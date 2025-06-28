@@ -4,11 +4,12 @@ import fleetoverview.data.request.DriverRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
 import fleetoverview.domain.entity.CompanyEntity;
-import fleetoverview.domain.entity.DriverEntity;
+import fleetoverview.domain.entity.driver.DriverEntity;
 import fleetoverview.domain.enums.DriverStatusEnum;
 import fleetoverview.repository.CompanyRepository;
 import fleetoverview.repository.DriverRepository;
 import fleetoverview.repository.StateRepository;
+import fleetoverview.repository.TruckRepository;
 import fleetoverview.service.DriverService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.NotFoundException;
@@ -29,6 +30,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
     private final DriverRepository repository;
     private final StateRepository stateRepository;
     private final CompanyRepository companyRepository;
+    private final TruckRepository truckRepository;
 
 
     @Autowired
@@ -36,35 +38,22 @@ public class DriverServiceImpl extends BaseService implements DriverService {
 
 
     @Autowired
-    public DriverServiceImpl(DriverRepository repository, StateRepository stateRepository, CompanyRepository companyRepository) {
+    public DriverServiceImpl(DriverRepository repository, StateRepository stateRepository, CompanyRepository companyRepository, TruckRepository truckRepository) {
         this.repository = repository;
         this.stateRepository = stateRepository;
         this.companyRepository = companyRepository;
+        this.truckRepository = truckRepository;
     }
 
     @Override
     public DataResponse<List<DriverEntity>> get(Map<String, String> params) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<DriverEntity> cq = cb.createQuery(DriverEntity.class);
-        Root<DriverEntity> drivers = cq.from(DriverEntity.class);
-
-        List<Predicate> filters = new ArrayList<>();
-
-        if (params.containsKey("companyId")) {
-            Join<DriverEntity, CompanyEntity> company = drivers.join("company");
-            filters.add(cb.equal(company.get("id"), params.get("companyId")));
-        } else {
+        if (!params.containsKey("companyId")) {
             throw new NotFoundException(mSourceBundle.apply("filter.company.missed"));
         }
 
-        cq.select(drivers)
-                .where(cb.and(filters.stream().filter(Objects::nonNull).toArray(Predicate[]::new)))
-                .orderBy(cb.desc(drivers.get("id")));
-
-        TypedQuery<DriverEntity> query = entityManager.createQuery(cq);
-        List<DriverEntity> results = query.getResultList();
-
-        return DataResponse.success(results);
+        return DataResponse.success(
+                repository.findAllByCompanyId(Integer.parseInt(params.get("companyId")))
+        );
     }
 
     @Override
@@ -83,7 +72,9 @@ public class DriverServiceImpl extends BaseService implements DriverService {
                         data.zipCode(),
                         data.email(),
                         data.phone(),
-                        DriverStatusEnum.valueOf(data.status().toUpperCase())
+                        data.status(),
+                        data.type(),
+                        truckRepository.findById(data.truckId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("truck.not_found")))
                 )
         );
         return ApiResponse.success();
@@ -104,7 +95,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
         driver.setCompany(companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))));
         driver.setHireDate(data.hireDate());
         driver.setDateOfBirth(data.dateOfBirth());
-        driver.setStatus(DriverStatusEnum.valueOf(data.status().toUpperCase()));
+        driver.setStatus(data.status());
         driver.setState(stateRepository.findById(data.stateId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("state.not_found"))));
 
         return ApiResponse.success();

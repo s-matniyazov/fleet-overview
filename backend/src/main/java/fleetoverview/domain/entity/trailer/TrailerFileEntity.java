@@ -15,7 +15,7 @@ import java.sql.Date;
  * @created : 24 май 2025
  **/
 @Entity
-@Table(name = "truck_files")
+@Table(name = "trailer_files")
 public class TrailerFileEntity extends BaseEntity {
     @OneToOne
     private ResourceEntity resource;

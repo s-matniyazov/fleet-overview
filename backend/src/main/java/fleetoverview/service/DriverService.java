@@ -1,7 +1,7 @@
 package fleetoverview.service;
 
 import fleetoverview.data.request.DriverRequest;
-import fleetoverview.domain.entity.DriverEntity;
+import fleetoverview.domain.entity.driver.DriverEntity;
 import fleetoverview.service.base.CrudService;
 
 

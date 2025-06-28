@@ -1,15 +1,17 @@
-package fleetoverview.domain.entity;
+package fleetoverview.domain.entity.driver;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import fleetoverview.domain.entity.CompanyEntity;
+import fleetoverview.domain.entity.StateEntity;
 import fleetoverview.domain.entity.base.BaseEntity;
+import fleetoverview.domain.entity.truck.TruckEntity;
 import fleetoverview.domain.enums.DriverStatusEnum;
+import fleetoverview.domain.enums.driver.DriverTypeEnum;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "drivers")
@@ -27,6 +29,7 @@ public class DriverEntity extends BaseEntity {
     @Column
     private Date dateOfBirth;
     @ManyToOne(targetEntity = StateEntity.class)
+    @JsonIgnoreProperties({"createdBy", "created"})
     private StateEntity state;
 
     @Column(length = 500)
@@ -42,10 +45,21 @@ public class DriverEntity extends BaseEntity {
     private String phone;
     @Enumerated(EnumType.STRING)
     private DriverStatusEnum status = DriverStatusEnum.ACTIVE;
+    @Enumerated(EnumType.STRING)
+    private DriverTypeEnum type;
+
+    @ManyToOne(targetEntity = TruckEntity.class, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"createdBy", "created", "driver", "state", "files", "permits", "company"})
+    private TruckEntity truck;
+
+    @OneToMany(mappedBy = "driver", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"createdBy", "created"})
+    private Set<DriverFileEntity> files = new HashSet<>();
 
     public DriverEntity(CompanyEntity company,String firstName, String lastName, String middleName, Date hireDate,
-                        Date dateOfBirth, StateEntity state, String address,
-                        String city, int zipCode, String email, String phone, DriverStatusEnum status) {
+                        Date dateOfBirth, StateEntity state, String address, String city, int zipCode,
+                        String email, String phone, DriverStatusEnum status, DriverTypeEnum type,
+                        TruckEntity truck) {
         this.company = company;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -59,18 +73,21 @@ public class DriverEntity extends BaseEntity {
         this.phone = phone;
         this.status = status;
         this.state = state;
+        this.type = type;
+        this.truck = truck;
     }
 
     public DriverEntity() {
 
     }
+
     public CompanyEntity getCompany() {
         return company;
     }
+
     public void setCompany(CompanyEntity company) {
         this.company = company;
     }
-
 
     public String getFirstName() {
         return firstName;
@@ -166,5 +183,29 @@ public class DriverEntity extends BaseEntity {
 
     public void setStatus(DriverStatusEnum status) {
         this.status = status;
+    }
+
+    public Set<DriverFileEntity> getFiles() {
+        return files;
+    }
+
+    public void setFiles(Set<DriverFileEntity> files) {
+        this.files = files;
+    }
+
+    public DriverTypeEnum getType() {
+        return type;
+    }
+
+    public void setType(DriverTypeEnum type) {
+        this.type = type;
+    }
+
+    public TruckEntity getTruck() {
+        return truck;
+    }
+
+    public void setTruck(TruckEntity truck) {
+        this.truck = truck;
     }
 }

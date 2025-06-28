@@ -1,5 +1,6 @@
 package fleetoverview.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fleetoverview.domain.entity.base.BaseEntity;
 
 import javax.persistence.CascadeType;
@@ -22,6 +23,7 @@ public class StateEntity extends BaseEntity {
     @Column(length = 50)
     private String name;
     @ManyToOne(targetEntity = CountryEntity.class)
+    @JsonIgnoreProperties({"createdBy", "created"})
     private CountryEntity country;
 
     public StateEntity() {
