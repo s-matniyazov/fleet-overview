@@ -80,5 +80,3 @@ java -jar fleetoverview-1.jar --spring.config.location=/root/fleet/config/config
 
 
 
-
-

@@ -43,7 +43,12 @@ const props = defineProps({
   rules: Function,
   placeholder: {
     type: String,
-    default: 'Tanlang'
+    default: 'Select multiple'
+  },
+  readonly: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 });
 
@@ -109,7 +114,7 @@ const handleClickOutside = (event) => {
 </script>
 
 <template>
-  <div :class="`${classes} ${errorMessage && 'has-danger'} p-1 relative`" :style="styles" ref="el">
+  <div :class="[classes, errorMessage ? 'has-danger' : '', readonly ? 'readonly-mode' : '', 'p-1']" :style="styles" ref="el">
     <label v-if="label" class="form-label">{{ label }}</label>
     <div class="form-control form-select font-size-12 cursor-pointer" @click="toggleOpen">
       {{ displaySelected }}

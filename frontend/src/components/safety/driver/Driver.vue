@@ -18,10 +18,14 @@ import URightOverlay from "@/components/base/URightOverlay.vue";
 import FileOverlay from "@/components/FileOverlay.vue";
 import {useStateStore} from "@/store/StateStore.js";
 import {useDriverReferenceStore} from "@/store/DriverReferenceStore.js";
+import UScrollArea from "@/components/base/UScrollArea.vue";
+import DriverCard from "@/components/safety/driver/DriverCard.vue";
+import {useDriverFileStore} from "@/store/DriverFileStore.js";
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
 const driverReferenceStore = useDriverReferenceStore();
+const driverFileStore = useDriverFileStore();
 const stateStore = useStateStore();
 
 const columns = [
@@ -116,6 +120,8 @@ const dataList = ref([]);
 const data = ref(newModel())
 const selectedRow = ref();
 
+const showModal = ref(false);
+
 const selectedFileSection = ref({
   dialog: false,
   data: {
@@ -177,18 +183,6 @@ const onSave = () => {
     });
   }
 }
-const onDelete = (d) => {
-  if (d.id) {
-    axiosIns.delete(apiUrl, {data: d})
-        .then(res => {
-          getData();
-          onClose();
-        }).catch(e => {
-      showMessage(e)
-    });
-  }
-}
-
 function getData() {
   axiosIns.get(`${apiUrl}?companyId=${filterStore.companyId}`)
       .then(res => {
@@ -207,6 +201,20 @@ onMounted(() => {
   stateStore.init();
 })
 
+watch(
+    () => selectedFileSection.value.dialog,
+    function (newValue) {
+      if (!newValue) getData()
+    }
+)
+
+watch(
+    () => showModal.value,
+    function (newValue) {
+      if (newValue) driverFileStore.init(selectedRow.value.id)
+      else driverFileStore.clear()
+    }
+)
 </script>
 
 <template>
@@ -219,6 +227,9 @@ onMounted(() => {
         </button>
         <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
             class="mdi mdi-pen"></span> {{ t("edit") }}
+        </button>
+        <button @click="showModal = true" class="btn btn-primary btn-sm" :disabled="!selectedRow">
+          <span class="mdi mdi-eye"></span>
         </button>
 
         <div class="align-items-center" style="right: 2px; margin-left: auto">
@@ -336,7 +347,7 @@ onMounted(() => {
     </UTable>
   </div>
 
-  <!--  driver card-->
+  <!--  driver modal-->
   <Teleport to="body">
     <modal :show="addModal" @close="addModal = false" width="calc(100vw - 400px)">
       <template #header>
@@ -466,6 +477,36 @@ onMounted(() => {
       </template>
     </modal>
   </Teleport>
+
+  <!--  driver card-->
+  <URightOverlay :isOpen="showModal" @close="showModal = false"
+                 width="calc(50vw)" class="">
+    <template #header>
+      <div class="d-flex w-100">
+        <div class="row">
+          <div class="col-12 d-flex align-items-center">
+            <span class="text-gray-light f-700 font-size-15">
+                {{ `${selectedRow?.firstName} ${selectedRow?.lastName}` }}
+              </span>
+          </div>
+          <div class="col-12 d-flex align-items-center">
+            <span class="text-gray-light font-size-11">
+                {{ `Driver ID: ${selectedRow?.id}` }}
+            </span>
+          </div>
+        </div>
+        <div class="text-end u-end">
+          <button class="btn-close" @click="showModal = false"></button>
+        </div>
+      </div>
+    </template>
+
+    <template #body>
+      <UScrollArea height="calc(100vh - 50px)">
+        <DriverCard :data="selectedRow"/>
+      </UScrollArea>
+    </template>
+  </URightOverlay>
 
   <!--  file overlay-->
   <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">

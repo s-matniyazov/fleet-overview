@@ -195,7 +195,6 @@ export function downloadResource(resource) {
         responseType: 'blob',
     })
         .then(res => {
-            console.log(resource);
             const blob = new Blob([res.data], {type: resource.contentType})
             const link = document.createElement('a')
             link.href = URL.createObjectURL(blob)

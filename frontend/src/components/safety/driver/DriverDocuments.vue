@@ -1,13 +1,13 @@
 <script setup>
-import {useTruckFileStore} from "@/store/TruckFileStore.js";
 import DocumentMiniCard from "@/components/DocumentMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
 import FileOverlay from "@/components/FileOverlay.vue";
 import {ref} from "vue";
-import {DOCUMENT_TYPES, downloadResource, FLEET_TYPE_NAMES, PERMIT_NAMES} from "@/util/utils.js";
+import {DOCUMENT_TYPES, downloadResource, FLEET_TYPE_NAMES, PERMIT_NAMES, SAFETY_TYPE_NAMES} from "@/util/utils.js";
 import {URIS} from "@/constants/UriConstants.js";
+import {useDriverFileStore} from "@/store/DriverFileStore.js";
 
-const truckFileStore = useTruckFileStore();
+const driverFileStore = useDriverFileStore();
 
 const selectFileSection = (type, url) => {
   selectedFileSection.value = {
@@ -15,7 +15,7 @@ const selectFileSection = (type, url) => {
     url: url,
     data: {
       ...selectedFileSection.value.data,
-      truckId: props.data.id,
+      driverId: props.data.id,
       type: type
     }
   };
@@ -42,14 +42,7 @@ const selectedFileSection = ref({
 function downloadAll(type) {
   if (type === 'truckFiles') {
     FLEET_TYPE_NAMES.forEach(item => {
-      const resource = truckFileStore.files.find(it => it.type === item.key)?.resource
-      if (resource) {
-        downloadResource(resource)
-      }
-    })
-  } else if (type === 'permits') {
-    PERMIT_NAMES.forEach(item => {
-      const resource = truckFileStore.permits.find(it => it.type === item.key)?.resource
+      const resource = driverFileStore.files.find(it => it.type === item.key)?.resource
       if (resource) {
         downloadResource(resource)
       }
@@ -74,35 +67,11 @@ function downloadAll(type) {
         </div>
       </div>
       <div class="row">
-        <div v-for="item in FLEET_TYPE_NAMES"
+        <div v-for="item in SAFETY_TYPE_NAMES"
              class="col-6 mb-8 mt-2 cursor-pointer ng-star-inserted">
           <DocumentMiniCard
-              @click="(e) => {selectFileSection(item.key, `${URIS.TRUCK}/attach-file`); e.stopPropagation()}"
-              :file="truckFileStore.files.find(it => it.type===item.key)"
-              :type="item.key" :name="item.value"
-          />
-        </div>
-      </div>
-    </div>
-
-    <div class="files-container ng-star-inserted mt-4">
-      <div class="row justify-content-center align-items-center mb-3">
-        <div class="col-6">
-          <div class="font-size-20 fw-bold text-secondary"> Permits</div>
-        </div>
-        <div class="col-6 font-size-16 text-end">
-          <button class="btn btn-light" @click="downloadAll('permits')">
-            <span>Download All Files</span>
-            <i class="mdi mdi-cloud-download-outline ms-2"></i>
-          </button>
-        </div>
-      </div>
-      <div class="row">
-        <div v-for="item in PERMIT_NAMES"
-             class="col-6 mb-8 mt-2 cursor-pointer ng-star-inserted">
-          <DocumentMiniCard
-              @click="(e) => {selectFileSection(item.key, `${URIS.TRUCK}/${data?.id}/attach-permit`); e.stopPropagation()}"
-              :file="truckFileStore.permits.find(it => it.type===item.key)"
+              @click="(e) => {selectFileSection(item.key, `${URIS.DRIVER}/attach-file`); e.stopPropagation()}"
+              :file="driverFileStore.files.find(it => it.type===item.key)"
               :type="item.key" :name="item.value"
           />
         </div>
@@ -116,7 +85,7 @@ function downloadAll(type) {
           DOCUMENT_TYPES[selectedFileSection.data.type]
         }}
         <span class="text-end u-end">
-          <button class="btn-close" @click="truckFileStore.init(data.id); selectedFileSection.dialog = false"></button>
+          <button class="btn-close" @click="driverFileStore.init(data.id); selectedFileSection.dialog = false"></button>
         </span>
       </h4>
     </template>
