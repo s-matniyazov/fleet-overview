@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "endorsements")
 public class EndorsementEntity  extends BaseEntity {
-    @Column(length = 50)
+    @Column(length = 100)
     private String name;
 
     public EndorsementEntity() {

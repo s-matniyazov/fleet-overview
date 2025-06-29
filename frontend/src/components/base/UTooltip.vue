@@ -17,10 +17,10 @@ const tooltipVisible = ref(false);
        @mouseenter="tooltipVisible = true"
        @mouseleave="tooltipVisible = false">
 
-    <slot></slot> <!-- Button or any element -->
+    <slot></slot>
 
     <div v-if="tooltipVisible" class="tooltip bg-primary-subtle text-primary" :class="position">
-      <slot name="content"></slot> <!-- Tooltip text -->
+      <slot name="content"></slot>
     </div>
   </div>
 </template>

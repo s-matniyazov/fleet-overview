@@ -14,14 +14,13 @@ import UTextarea from "@/components/base/UTextarea.vue";
 import UScrollArea from "@/components/base/UScrollArea.vue";
 import UDialog from "@/components/base/UDialog.vue";
 import UTooltip from "@/components/base/UTooltip.vue";
-import FileMiniCard from "@/components/fleet/FileMiniCard.vue";
+import FileMiniCard from "@/components/FileMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
 import TrailerCard from "@/components/fleet/trailer/TrailerCard.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
 import {useTrailerReferenceStore} from "@/store/TrailerReferencesStore.js";
-import FileOverlay from "@/components/fleet/FileOverlay.vue";
+import FileOverlay from "@/components/FileOverlay.vue";
 import {useTrailerFileStore} from "@/store/TrailerFileStore.js";
-import TruckCard from "@/components/fleet/truck/TruckCard.vue";
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
@@ -124,7 +123,6 @@ const dataList = ref([]);
 const selectedRow = ref();
 const data = ref(newModel())
 
-const states = ref([]);
 const drivers = ref([]);
 
 // FUNCTIONS
@@ -211,19 +209,8 @@ function getData() {
   });
 }
 
-function getState(countryId) {
-  if (countryId) {
-    axiosIns.get(`${URIS.STATE}?countryId=${countryId}`)
-        .then(res => {
-          states.value = res.data.data;
-        }).catch(e => {
-      showMessage(e)
-    });
-  }
-}
-
 function getDrivers() {
-  axiosIns.get(`${URIS.DRIVERS}?companyId=${filterStore.companyId}`)
+  axiosIns.get(`${URIS.DRIVER}?companyId=${filterStore.companyId}`)
       .then(res => {
         drivers.value = res.data.data;
       }).catch(e => {
@@ -237,15 +224,6 @@ onMounted(() => {
   trailerReferenceStore.init();
   getDrivers();
 })
-
-watch(
-    () => data.value.countryId,
-    function (newValue) {
-      data.stateId = null;
-      states.value = [];
-      getState(newValue)
-    }
-)
 
 watch(
     () => data.value.ownershipTypeId,

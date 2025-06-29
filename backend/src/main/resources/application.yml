@@ -4,6 +4,12 @@ spring:
   profiles:
     active: "prod"
 
+mybatis:
+  mapper-locations:
+    - "classpath*:/db/sqlMaps/**/*.xml"
+    - "classpath*:/db/sqlMaps/*.xml"
+  config-location: classpath:mybatis-config.xml
+
 # swagger-ui custom path
 springdoc:
   swagger-ui:

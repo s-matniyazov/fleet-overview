@@ -35,11 +35,11 @@ defineProps({
     <div class="row">
       <div class="col-6 d-flex">
         <template v-if="file?.status === 'ACTIVE'">
-          <img src="../../assets/icons/file-check-md.svg" alt="File checked icon"
+          <img src="../assets/icons/file-check-md.svg" alt="File checked icon"
                class="me-2 ng-star-inserted"/>
         </template>
         <template v-else>
-          <img src="../../assets/icons/file-na-md.svg" alt="File na icon"
+          <img src="../assets/icons/file-na-md.svg" alt="File na icon"
                class="me-2 ng-star-inserted"/>
         </template>
 

@@ -3,7 +3,7 @@ package fleetoverview.data.request;
 import fleetoverview.domain.enums.DriverStatusEnum;
 import fleetoverview.domain.enums.driver.DriverTypeEnum;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public record DriverRequest(
         int id,
@@ -11,8 +11,9 @@ public record DriverRequest(
         String firstName,
         String lastName,
         String middleName,
-        Date hireDate,
-        Date dateOfBirth,
+        LocalDate hireDate,
+        LocalDate dateOfBirth,
+        LocalDate terminationDate,
         int stateId,
         String address,
         String city,

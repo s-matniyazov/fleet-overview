@@ -1,10 +1,10 @@
 <script setup>
 import {useTruckFileStore} from "@/store/TruckFileStore.js";
-import DocumentMiniCard from "@/components/fleet/DocumentMiniCard.vue";
+import DocumentMiniCard from "@/components/DocumentMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
-import FileOverlay from "@/components/fleet/FileOverlay.vue";
+import FileOverlay from "@/components/FileOverlay.vue";
 import {ref} from "vue";
-import {DOCUMENT_TYPES, downloadResource, FILE_TYPE_NAMES, PERMIT_NAMES} from "@/util/utils.js";
+import {DOCUMENT_TYPES, downloadResource, FLEET_TYPE_NAMES, PERMIT_NAMES} from "@/util/utils.js";
 import {URIS} from "@/constants/UriConstants.js";
 
 const truckFileStore = useTruckFileStore();
@@ -39,7 +39,7 @@ const selectedFileSection = ref({
 
 function downloadAll(type) {
   if (type === 'truckFiles') {
-    FILE_TYPE_NAMES.forEach(item => {
+    FLEET_TYPE_NAMES.forEach(item => {
       const resource = truckFileStore.files.find(it => it.type === item.key)?.resource
       if (resource) {
         downloadResource(resource)
@@ -72,7 +72,7 @@ function downloadAll(type) {
         </div>
       </div>
       <div class="row">
-        <div v-for="item in FILE_TYPE_NAMES"
+        <div v-for="item in FLEET_TYPE_NAMES"
              class="col-6 mb-8 mt-2 cursor-pointer ng-star-inserted">
           <DocumentMiniCard
               :file="truckFileStore.files.find(it => it.type===item.key)"

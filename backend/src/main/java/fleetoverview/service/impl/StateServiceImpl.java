@@ -59,8 +59,6 @@ public class StateServiceImpl extends BaseService implements StateService {
         if (params.containsKey("countryId")) {
             Join<StateEntity, CountryEntity> country = states.join("country");
             filters.add(cb.equal(country.get("id"), params.get("countryId")));
-        } else {
-            throw new NotFoundException(mSourceBundle.apply("filter.country.missed"));
         }
 
         cq.select(states)

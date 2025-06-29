@@ -5,20 +5,10 @@ import {URIS} from "@/constants/UriConstants.js";
 import {showMessage} from "@/util/utils.js";
 
 export const useTrailerReferenceStore = defineStore("trailer-references", () => {
-    const countries = ref([]);
     const makers = ref([]);
     const types = ref([]);
     const ownershipTypes = ref([]);
     const purchaseTypes = ref([]);
-
-    function reloadCountries() {
-        axiosIns.get(URIS.COUNTRY)
-            .then(res => {
-                countries.value.splice(0, countries.value.length, ...res.data.data);
-            }).catch(e => {
-            showMessage(e)
-        });
-    }
 
     function reloadMakers() {
         axiosIns.get(URIS.TRAILER_MODEL_MAKER)
@@ -57,7 +47,6 @@ export const useTrailerReferenceStore = defineStore("trailer-references", () => 
     }
 
     function init() {
-        reloadCountries();
         reloadMakers();
         getTypes();
         reloadOwnershipTypes();
@@ -65,7 +54,6 @@ export const useTrailerReferenceStore = defineStore("trailer-references", () => 
     }
 
     function clear() {
-        countries.value = []
         makers.value = []
         types.value = []
         ownershipTypes.value = []
@@ -74,7 +62,6 @@ export const useTrailerReferenceStore = defineStore("trailer-references", () => 
 
 
     return {
-        countries,
         makers,
         types,
         ownershipTypes,

@@ -7,70 +7,77 @@ import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
 import UInput from "@/components/base/UInput.vue";
 import {useI18n} from "vue-i18n";
-import {longToDateTime, showMessage} from "@/util/utils.js";
+import {DOCUMENT_TYPES, showMessage} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
 import USelect from "@/components/base/USelect.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
 import UDateInput from "@/components/base/UDateInput.vue";
+import FileMiniCard from "@/components/FileMiniCard.vue";
+import UTooltip from "@/components/base/UTooltip.vue";
+import URightOverlay from "@/components/base/URightOverlay.vue";
+import FileOverlay from "@/components/FileOverlay.vue";
+import {useStateStore} from "@/store/StateStore.js";
+import {useDriverReferenceStore} from "@/store/DriverReferenceStore.js";
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
+const driverReferenceStore = useDriverReferenceStore();
+const stateStore = useStateStore();
 
 const columns = [
   {
-    key: 'id',
-    name: 'id',
-    label: '',
-    styles: 'width: 50px;',
+    key: 'name',
+    name: 'name',
+    label: 'name',
+    classes: 'min-width: 200px;',
+  },
+  {
+    key: 'contact',
+    name: 'contact',
+    label: t('contact'),
+    styles: 'min-width: 200px;',
     classes: '',
   },
   {
-    key: 'firstName',
-    name: 'firstName',
-    label: t('first_name'),
-    styles: '',
+    key: 'cdl',
+    name: 'cdl',
+    label: t('cdl'),
+    styles: 'min-width: 200px;',
     classes: '',
   },
   {
-    key: 'middleName',
-    name: 'middleName',
-    label: t('middle_name'),
-    styles: '',
+    key: 'medical_cert',
+    name: 'medical_cert',
+    label: t('medical_cert'),
+    styles: 'min-width: 200px;',
     classes: '',
   },
   {
-    key: 'lastName',
-    name: 'lastName',
-    label: t('last_name'),
-    styles: '',
+    key: 'mvr',
+    name: 'mvr',
+    label: t('mvr'),
+    styles: 'min-width: 200px;',
     classes: '',
   },
   {
-    key: 'email',
-    name: 'email',
-    label: t('email'),
-    styles: '',
+    key: 'clearing_house',
+    name: 'clearing_house',
+    label: t('clearing_house'),
+    styles: 'min-width: 200px;',
     classes: '',
   },
   {
-    key: 'phone',
-    name: 'phone',
-    label: t('phone'),
-    styles: '',
+    key: 'ssn',
+    name: 'ssn',
+    label: t('ssn'),
+    styles: 'min-width: 200px;',
     classes: '',
   },
   {
-    key: 'city',
-    name: 'city',
-    label: t('city'),
-    styles: '',
-    classes: '',
-  },
-  {
-    key: 'address',
-    name: 'address',
-    label: t('address'),
-    styles: '',
+    key: 'inspections',
+    name: 'inspections',
+    label: t('inspections'),
+    styles: 'min-width: 200px;',
     classes: '',
   },
   {
@@ -104,12 +111,20 @@ const newModel = () => {
 
 const addModal = ref(false);
 
-const apiUrl = URIS.DRIVERS;
+const apiUrl = URIS.DRIVER;
 const dataList = ref([]);
-const countries = ref([]);
-const states = ref([]);
 const data = ref(newModel())
 const selectedRow = ref();
+
+const selectedFileSection = ref({
+  dialog: false,
+  data: {
+    description: '',
+    expirationDate: new Date(),
+    type: '',
+    driverId: ''
+  }
+});
 
 // FUNCTIONS
 const onAdd = () => {
@@ -131,11 +146,22 @@ const onClose = () => {
   addModal.value = false;
 }
 
+const selectFileSection = (type) => {
+  selectedFileSection.value = {
+    dialog: true,
+    data: {
+      ...selectedFileSection.value.data,
+      driverId: selectedRow.value.id,
+      type: type
+    }
+  };
+}
+
 // API FUNCTIONS
 const onSave = () => {
   if (data.value.id) {
     axiosIns.put(apiUrl, data.value)
-        .then(res => {
+        .then(() => {
           getData();
           onClose();
         }).catch(e => {
@@ -143,7 +169,7 @@ const onSave = () => {
     });
   } else {
     axiosIns.post(apiUrl, data.value)
-        .then(res => {
+        .then(() => {
           getData();
           onClose();
         }).catch(e => {
@@ -173,41 +199,13 @@ function getData() {
   });
 }
 
-
-function getCountries() {
-  axiosIns.get(`${URIS.COUNTRY}`)
-      .then(res => {
-        countries.value = res.data.data;
-      }).catch(e => {
-    showMessage(e)
-  });
-}
-
-function getState(countryId) {
-  if (countryId) {
-    axiosIns.get(`${URIS.STATE}?countryId=${countryId}`)
-        .then(res => {
-          states.value = res.data.data;
-        }).catch(e => {
-      showMessage(e)
-    });
-  }
-}
-
 // HOOKS
 onMounted(() => {
   getData();
-  getCountries();
-})
 
-watch(
-    () => data.value.countryId,
-    function (newValue) {
-      data.stateId = null;
-      states.value = [];
-      getState(newValue)
-    }
-)
+  driverReferenceStore.init();
+  stateStore.init();
+})
 
 </script>
 
@@ -222,9 +220,6 @@ watch(
         <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
             class="mdi mdi-pen"></span> {{ t("edit") }}
         </button>
-        <button @click="onDelete(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-            class="mdi mdi-delete"></span> {{ t("delete") }}
-        </button>
 
         <div class="align-items-center" style="right: 2px; margin-left: auto">
           <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
@@ -233,8 +228,101 @@ watch(
     </div>
 
     <UTable :items="dataList" :columns="columns" v-model="selectedRow" height="calc(100vh - 248px)">
-      <template #row_created="{row}">
-        <td>{{ longToDateTime(row?.created) }}</td>
+      <template #row_name="{row}">
+        <td>
+          <div class="row">
+            <div class="col-12 d-flex align-items-center">
+              <span class="text-primary badge badge-pill badge-soft-primary" style="font-size: 15px">
+                {{ `${row?.firstName} ${row?.lastName} (${row?.id})` }}
+              </span>
+              <UTooltip>
+                <span class="text-primary" style="font-size: 15px">
+                  <i class="mdi mdi-comment"/>
+                </span>
+                <template #content>
+                  <div class="row">
+                    <div class="col-12 d-flex align-items-center f-700">
+                      {{ `First Name: ${row?.firstName}` }}
+                    </div>
+                    <div class="col-12 d-flex align-items-center f-700">
+                      {{ `Last Name: ${row?.lastName}` }}
+                    </div>
+                  </div>
+                </template>
+              </UTooltip>
+            </div>
+            <div class="col-12 d-flex align-items-center mt-1">
+              <img src="@/assets/icons/em/truck.svg" alt="Truck icon">
+              <span class="text-gray-light f-700">{{ row?.truckName }}</span>
+            </div>
+            <div class="col-12 d-flex align-items-center mt-1">
+              <span class="text-gray-light f-700">{{ row?.type }}</span>
+            </div>
+          </div>
+        </td>
+      </template>
+
+      <template #row_contact="{row}">
+        <td>
+          <div class="row">
+            <div class="col-12 d-flex align-items-center">
+              <span>{{row?.phone}}</span>
+            </div>
+            <div class="col-12 d-flex align-items-center">
+              <span class="text-gray-light f-700">{{ row?.email }}</span>
+            </div>
+          </div>
+        </td>
+      </template>
+
+      <template #row_cdl="{row}">
+        <td>
+          <FileMiniCard name="CDL (Front)" type="CDL"
+                        :file="row?.files.find(it => it.type==='CDL')"
+                        @click="(e) => {selectedRow = row; selectFileSection('CDL'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
+      <template #row_medical_cert="{row}">
+        <td>
+          <FileMiniCard name="MED/CERT" type="MEDICAL_CERT"
+                        :file="row?.files.find(it => it.type==='MEDICAL_CERT')"
+                        @click="(e) => {selectedRow = row; selectFileSection('MEDICAL_CERT'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
+      <template #row_mvr="{row}">
+        <td>
+          <FileMiniCard name="MVR" type="MVR"
+                        :file="row?.files.find(it => it.type==='MVR')"
+                        @click="(e) => {selectedRow = row; selectFileSection('MVR'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
+      <template #row_clearing_house="{row}">
+        <td>
+          <FileMiniCard name="C/HOUSE" type="CLEARING_HOUSE"
+                        :file="row?.files.find(it => it.type==='CLEARING_HOUSE')"
+                        @click="(e) => {selectedRow = row; selectFileSection('CLEARING_HOUSE'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
+      <template #row_ssn="{row}">
+        <td>
+          <FileMiniCard name="SSN" type="SSN"
+                        :file="row?.files.find(it => it.type==='SSN')"
+                        @click="(e) => {selectedRow = row; selectFileSection('SSN'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
+      <template #row_inspections="{row}">
+        <td>
+          <div class="qm-badge qm-badge--dim justify-content-start width-135px min-height-64">
+            <div class="m-auto text-center font-size-12 text text-dark-gray p-2">
+              No Inspections in the past 3 years
+            </div>
+          </div>
+        </td>
       </template>
 
       <template #row_status="{row}">
@@ -248,6 +336,7 @@ watch(
     </UTable>
   </div>
 
+  <!--  driver card-->
   <Teleport to="body">
     <modal :show="addModal" @close="addModal = false" width="calc(100vw - 400px)">
       <template #header>
@@ -319,7 +408,7 @@ watch(
               <div class="col-12 row">
                 <div class="col-6">
                   <USelect v-model="data.countryId" :label="t('country')"
-                           :items="countries" name="country"
+                           :items="stateStore.countries" name="country"
                            option_name="name"
                            classes="mb-2"
                            :rules="(val) => (!val && $t('required'))"
@@ -327,14 +416,13 @@ watch(
                 </div>
                 <div class="col-6">
                   <USelect v-model="data.stateId" :label="t('state')"
-                           :items="states" name="state"
+                           :items="stateStore.getStates(data.countryId)" name="state"
                            option_name="name"
                            classes="mb-2"
                            :rules="(val) => (!val && $t('required'))"
                   ></Uselect>
                 </div>
               </div>
-
 
               <!--            address-->
               <div class="col-12 row">
@@ -369,7 +457,6 @@ watch(
             </div>
           </div>
 
-
           <div class="modal-footer">
             <div class="d-flex text-end align-items-end mt-2">
               <button type="submit" class="btn btn-primary">Save</button>
@@ -379,8 +466,67 @@ watch(
       </template>
     </modal>
   </Teleport>
+
+  <!--  file overlay-->
+  <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
+    <template #header>
+      <div class="fw-bold text-white bg-primary p-2 rounded-2 d-flex p-2 mb-2">
+        <div class="row">
+          <div class="col-12 d-flex align-items-center font-size-14">
+            {{ DOCUMENT_TYPES[selectedFileSection.data.type] }}
+          </div>
+          <div class="col-12 d-flex align-items-center font-size-11">
+            {{ `${selectedRow?.firstName} ${selectedRow?.lastName}` }}
+          </div>
+        </div>
+        <span class="text-end u-end">
+          <button class="btn-close" @click="selectedFileSection.dialog = false"></button>
+        </span>
+      </div>
+    </template>
+    <template #body>
+      <FileOverlay :url="`${URIS.DRIVER}/attach-file`" :data="selectedFileSection.data"/>
+    </template>
+  </URightOverlay>
 </template>
 
 <style scoped>
+.qm-badge {
+  border: 1px solid transparent;
+  border-radius: 3px;
+  padding: 5px;
+}
 
+.custom-light-shadow {
+  box-shadow: 0 0 2px #00000040 !important;
+}
+
+.permit-box {
+  min-height: 64px;
+  max-height: 84px;
+  line-height: 140%;
+  font-size: 11px;
+  padding-bottom: 1px;
+  padding-top: 1px;
+}
+
+.qm-badge--dim {
+  background: #f6f6f6;
+  padding: 3px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.justify-content-start {
+  justify-content: flex-start !important;
+}
+
+.width-135px {
+  width: 135px;
+}
+
+.min-height-64 {
+  min-height: 64%;
+}
 </style>

@@ -1,6 +1,7 @@
 package fleetoverview.config;
 
 import fleetoverview.domain.entity.*;
+import fleetoverview.domain.entity.driver.EndorsementEntity;
 import fleetoverview.domain.entity.trailer.TrailerModelMakerEntity;
 import fleetoverview.domain.entity.trailer.TrailerTypeEntity;
 import fleetoverview.domain.entity.truck.FuelTypeEntity;
@@ -39,9 +40,10 @@ public class InitData implements CommandLineRunner {
     private final TrailerModelMakerRepository trailerModelMakerRepository;
     private final TrailerTypeRepository trailerTypeRepository;
     private final PurchaseTypeRepository purchaseTypeRepository;
+    private final EndorsementRepository endorsementRepository;
     private Set<ActionEntity> actions = new HashSet<>();
 
-    public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository, StateRepository stateRepository, FuelTypeRepository fuelRepository, CountryRepository countryRepository, TruckModelMakerRepository truckModelMakerRepository, TrailerModelMakerRepository trailerModelMakerRepository, TrailerTypeRepository trailerTypeRepository, PurchaseTypeRepository purchaseTypeRepository) {
+    public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository, StateRepository stateRepository, FuelTypeRepository fuelRepository, CountryRepository countryRepository, TruckModelMakerRepository truckModelMakerRepository, TrailerModelMakerRepository trailerModelMakerRepository, TrailerTypeRepository trailerTypeRepository, PurchaseTypeRepository purchaseTypeRepository, EndorsementRepository endorsementRepository) {
         this.actionRepository = actionRepository;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
@@ -54,6 +56,7 @@ public class InitData implements CommandLineRunner {
         this.trailerModelMakerRepository = trailerModelMakerRepository;
         this.trailerTypeRepository = trailerTypeRepository;
         this.purchaseTypeRepository = purchaseTypeRepository;
+        this.endorsementRepository = endorsementRepository;
     }
 
     @Override
@@ -69,6 +72,8 @@ public class InitData implements CommandLineRunner {
         initTrailerModelMakers();
         initTrailerTypes();
         initPurchaseTypes();
+
+        initEndorsements();
     }
 
     private void initActions() {
@@ -405,6 +410,29 @@ public class InitData implements CommandLineRunner {
                                     "Leased", "Lease to own"
                             })
                             .map(PurchaseTypeEntity::new)
+                            .toList()
+            );
+        }
+    }
+
+    private void initEndorsements() {
+        if (!endorsementRepository.existsByName("None")) {
+            endorsementRepository.saveAll(
+                    Arrays.stream(new String[]{
+                                    "None",
+                                    "Tractor-Trailers And Flatbeds",
+                                    "Tank Vehicle",
+                                    "Hazardous Materials",
+                                    "Tanker/HazMat Combination",
+                                    "Doubles/Triples",
+                                    "Passenger Transport",
+                                    "School Bus",
+                                    "Straight Trucks",
+                                    "City And Tourist Passenger Buses",
+                                    "Segmented Buses/Box Trucks (Designed For Delivery Services)",
+                                    "Dump Trucks With A Small Trailer",
+                            })
+                            .map(EndorsementEntity::new)
                             .toList()
             );
         }

@@ -1,51 +1,42 @@
-package fleetoverview.domain.entity.driver;
+package fleetoverview.domain.projection.driver;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import fleetoverview.domain.entity.ResourceEntity;
-import fleetoverview.domain.entity.StateEntity;
-import fleetoverview.domain.entity.base.BaseEntity;
+import fleetoverview.domain.entity.driver.EndorsementEntity;
 import fleetoverview.domain.enums.driver.DriverFileClassEnum;
 import fleetoverview.domain.enums.driver.DriverFileStatusEnum;
 import fleetoverview.domain.enums.driver.DriverFileTypeEnum;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 23 июнь 2025
+ * @created : 29 июнь 2025
  **/
-@Entity
-@Table(name = "driver_files")
-public class DriverFileEntity extends BaseEntity {
-    @OneToOne
-    private ResourceEntity resource;
+public class DriverFileProjection {
+    private int id;
+    private int resourcesId;
+    private String fileName;
+    private String extension;
+    private long size;
+    private String contentType;
 
     private LocalDate expirationDate;
 
-    @Column(length = 2000)
     private String description;
 
-    @Enumerated(EnumType.STRING)
     private DriverFileTypeEnum type;
 
-    @Enumerated(EnumType.STRING)
     private DriverFileStatusEnum status;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    private DriverEntity driver;
 
     // for CDL
     private String driversLicense;
-    @ManyToOne(targetEntity = StateEntity.class)
-    private StateEntity state;
-    @Enumerated(EnumType.STRING)
+    private Integer stateId;
+    private String stateName;
+    private Integer countryId;
+    private String countryName;
     private DriverFileClassEnum classType;
     private LocalDate issuedDate;
-    @ManyToMany(targetEntity = EndorsementEntity.class)
     private List<EndorsementEntity> endorsement;
 
     // for MEDICAL_CERT
@@ -54,27 +45,58 @@ public class DriverFileEntity extends BaseEntity {
     // for C/House
     private LocalDate lastCollectedOn;
 
-    // for SSN
+    // for C/House
     private String socialSecurityNumber;
 
-    public DriverFileEntity() {
+    public DriverFileProjection() {
     }
 
-    public DriverFileEntity(ResourceEntity resource, LocalDate expirationDate, String description, DriverFileTypeEnum type, DriverFileStatusEnum status, DriverEntity driver) {
-        this.resource = resource;
-        this.expirationDate = expirationDate;
-        this.description = description;
-        this.type = type;
-        this.status = status;
-        this.driver = driver;
+    public int getId() {
+        return id;
     }
 
-    public ResourceEntity getResource() {
-        return resource;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setResource(ResourceEntity resource) {
-        this.resource = resource;
+    public int getResourcesId() {
+        return resourcesId;
+    }
+
+    public void setResourcesId(int resourcesId) {
+        this.resourcesId = resourcesId;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     public LocalDate getExpirationDate() {
@@ -109,10 +131,6 @@ public class DriverFileEntity extends BaseEntity {
         this.status = status;
     }
 
-    public void setDriver(DriverEntity driver) {
-        this.driver = driver;
-    }
-
     public String getDriversLicense() {
         return driversLicense;
     }
@@ -121,12 +139,36 @@ public class DriverFileEntity extends BaseEntity {
         this.driversLicense = driversLicense;
     }
 
-    public StateEntity getState() {
-        return state;
+    public Integer getStateId() {
+        return stateId;
     }
 
-    public void setState(StateEntity state) {
-        this.state = state;
+    public void setStateId(Integer stateId) {
+        this.stateId = stateId;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public Integer getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(Integer countryId) {
+        this.countryId = countryId;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 
     public DriverFileClassEnum getClassType() {
@@ -145,6 +187,14 @@ public class DriverFileEntity extends BaseEntity {
         this.issuedDate = issuedDate;
     }
 
+    public List<EndorsementEntity> getEndorsement() {
+        return endorsement;
+    }
+
+    public void setEndorsement(List<EndorsementEntity> endorsement) {
+        this.endorsement = endorsement;
+    }
+
     public LocalDate getLastCollectedOn() {
         return lastCollectedOn;
     }
@@ -155,14 +205,6 @@ public class DriverFileEntity extends BaseEntity {
 
     public String getSocialSecurityNumber() {
         return socialSecurityNumber;
-    }
-
-    public List<EndorsementEntity> getEndorsement() {
-        return endorsement;
-    }
-
-    public void setEndorsement(List<EndorsementEntity> endorsement) {
-        this.endorsement = endorsement;
     }
 
     public void setSocialSecurityNumber(String socialSecurityNumber) {

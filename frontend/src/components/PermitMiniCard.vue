@@ -21,11 +21,11 @@ defineProps({
   <div class="row m-0 align-items-center ng-star-inserted" :class="file ? 'badge-soft-success' : 'badge-soft-danger'">
     <div class="col-1 p-0 me-1">
       <template v-if="file">
-        <img src="@/assets/icons/file-check-sm.svg" alt="File checked icon"
+        <img src="../assets/icons/file-check-sm.svg" alt="File checked icon"
              class="me-2 ng-star-inserted"/>
       </template>
       <template v-else>
-        <img src="@/assets/icons/file-na-sm.svg" alt="File na icon"
+        <img src="../assets/icons/file-na-sm.svg" alt="File na icon"
              class="me-2 ng-star-inserted"/>
       </template>
     </div>

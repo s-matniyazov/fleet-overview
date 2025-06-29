@@ -96,10 +96,17 @@ export const DOCUMENT_TYPES = {
     "NM": "New Mexico",
     "KY": "Kentucky",
     "NY": "New York",
-    "CN": "Connecticut"
+    "CN": "Connecticut",
+
+//     driver
+    "CDL": "CDL (Front)",
+    "MEDICAL_CERT": "Medical Certificate",
+    "MVR": "MVR",
+    "CLEARING_HOUSE": "Clearing House",
+    "SSN": "SSN"
 }
 
-export const FILE_TYPE_NAMES = [
+export const FLEET_TYPE_NAMES = [
     {
         key: "REG_CAB_CARD",
         value: "Registration (Cab Card)"
@@ -118,8 +125,30 @@ export const FILE_TYPE_NAMES = [
     },
 ];
 
-export
-const PERMIT_NAMES = [
+export const SAFETY_TYPE_NAMES = [
+    {
+        key: "CDL",
+        value: "CDL (Front)"
+    },
+    {
+        key: "MEDICAL_CERT",
+        value: "Medical Certificate"
+    },
+    {
+        key: "MVR",
+        value: "MVR"
+    },
+    {
+        key: "CLEARING_HOUSE",
+        value: "Clearing House"
+    },
+    {
+        key: "SSN",
+        value: "SSN"
+    },
+];
+
+export const PERMIT_NAMES = [
     {
         key: "OR",
         value: "Oregon"
@@ -139,6 +168,25 @@ const PERMIT_NAMES = [
     {
         key: "CN",
         value: "Connecticut"
+    },
+]
+
+export const DRIVER_FILE_CLASSES = [
+    {
+        key: "A",
+        value: "A Class"
+    },
+    {
+        key: "B",
+        value: "B Class"
+    },
+    {
+        key: "C",
+        value: "C Class"
+    },
+    {
+        key: "D",
+        value: "D Class"
     },
 ]
 

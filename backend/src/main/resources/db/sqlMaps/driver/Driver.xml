@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Driver">
+    <resultMap id="driverResultMap" type="fleetoverview.domain.projection.driver.DriverProjection">
+        <id property="id" column="id"/>
+
+        <id property="companyId" column="companyId"/>
+        <id property="companyName" column="companyName"/>
+        <id property="firstName" column="firstName"/>
+        <id property="lastName" column="lastName"/>
+        <id property="middleName" column="middleName"/>
+        <id property="hireDate" column="hireDate"/>
+        <id property="terminationDate" column="terminationDate"/>
+        <id property="dateOfBirth" column="dateOfBirth"/>
+        <id property="stateId" column="stateId"/>
+        <id property="stateName" column="stateName"/>
+        <id property="countryId" column="countryId"/>
+        <id property="countryName" column="countryName"/>
+        <id property="address" column="address"/>
+        <id property="city" column="city"/>
+        <id property="zipCode" column="zipCode"/>
+        <id property="email" column="email"/>
+        <id property="phone" column="phone"/>
+        <id property="status" column="status"/>
+        <id property="type" column="type"/>
+        <id property="truckId" column="truckId"/>
+        <id property="truckName" column="truckName"/>
+
+        <collection property="files" columnPrefix="df_"
+                    ofType="fleetoverview.domain.projection.driver.DriverFileProjection">
+            <id property="id" column="id"/>
+
+            <id property="resourcesId" column="resourcesId"/>
+            <id property="fileName" column="fileName"/>
+            <id property="extension" column="extension"/>
+            <id property="size" column="size"/>
+            <id property="contentType" column="contentType"/>
+
+            <id property="expirationDate" column="expirationDate"/>
+            <id property="description" column="description"/>
+            <id property="type" column="type"/>
+            <id property="status" column="status"/>
+            <id property="driversLicense" column="driversLicense"/>
+            <id property="stateId" column="stateId"/>
+            <id property="stateName" column="stateName"/>
+            <id property="countryId" column="countryId"/>
+            <id property="countryName" column="countryName"/>
+            <id property="classType" column="classType"/>
+            <id property="issuedDate" column="issuedDate"/>
+            <id property="lastCollectedOn" column="lastCollectedOn"/>
+            <id property="socialSecurityNumber" column="socialSecurityNumber"/>
+
+            <collection property="endorsement" columnPrefix="en_"
+                        ofType="fleetoverview.domain.entity.driver.EndorsementEntity">
+                <id property="id" column="id"/>
+                <result property="name" column="name"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="selectDriverCnt" resultType="int" parameterType="map">
+        select 1
+        from dual
+    </select>
+
+    <select id="selectDrivers" resultMap="driverResultMap" parameterType="map">
+        select t.*,
+
+            df.id as "df_id",
+            dfs.id as "df_resources_id",
+            dfs.file_name as "df_fileName",
+            dfs.extension as "df_extension",
+            dfs.size as "df_size",
+            dfs.content_type as "df_contentType",
+            df.expiration_date as "df_expirationDate",
+            df.description as "df_description",
+            df.type as "df_type",
+            df.status as "df_status",
+
+            df.drivers_license as "df_driversLicense",
+            dfst.id as "df_stateId",
+            dfst.name as "df_stateName",
+            dfc.id as "df_countryId",
+            dfc.name as "df_countryName",
+            df.class_type as "df_classType",
+            df.issued_date as "df_issuedDate",
+            df.last_collected_on as "df_lastCollectedOn",
+            df.social_security_number as "df_socialSecurityNumber",
+
+            en.id as "df_en_id",
+            en.name as "df_en_name"
+        from (
+            select
+                di.id as "id",
+                di.first_name as "firstName",
+                di.last_name as "lastName",
+                di.middle_name as "middleName",
+                di.hire_date as "hireDate",
+                di.termination_date as "terminationDate",
+                di.date_of_birth as "dateOfBirth",
+                di.address as "address",
+                di.city as "city",
+                di.zip_code as "zipCode",
+                di.email as "email",
+                di.phone as "phone",
+                di.status as "status",
+                di.type as "type",
+
+                s.id as "stateId",
+                s.name as "stateName",
+                c.id as "countryId",
+                c.name as "countryName",
+
+                tr.id as "truckId",
+                tr.unit || ' ' || tr.vin as "truckName",
+
+                com.id as "companyId",
+                com.name as "companyName",
+
+                u.id as "createdById",
+                u.name as "createdByName",
+
+                di.created as "created"
+            from drivers di
+                left join states s on s.id = di.state_id
+                left join countries c on c.id = s.country_id
+                left join trucks tr on tr.id = di.truck_id
+                left join companies com on com.id = di.company_id
+                left join users u on u.id = di.created_by_id
+            where 1=1
+                <if test="companyId != null">
+                    and di.company_id||'' = #{companyId}
+                </if>
+        ) t
+        left join driver_files df on df.driver_id = t.id and df.status = 'ACTIVE'
+        left join states dfst on dfst.id = df.state_id
+        left join countries dfc on dfc.id = dfst.country_id
+        left join driver_files_endorsement dfe on dfe.driver_file_entity_id = df.id
+        left join endorsements en on en.id = dfe.endorsement_id
+        left join resources dfs on dfs.id = df.resource_id
+    </select>
+</mapper>

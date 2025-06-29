@@ -5,20 +5,10 @@ import {URIS} from "@/constants/UriConstants.js";
 import {showMessage} from "@/util/utils.js";
 
 export const useTruckReferenceStore = defineStore("truck-references", () => {
-    const countries = ref([]);
     const makers = ref([]);
     const fuelTypes = ref([]);
     const ownershipTypes = ref([]);
     const purchaseTypes = ref([]);
-
-    function reloadCountries() {
-        axiosIns.get(URIS.COUNTRY)
-            .then(res => {
-                countries.value.splice(0, countries.value.length, ...res.data.data);
-            }).catch(e => {
-            showMessage(e)
-        });
-    }
 
     function reloadMakers() {
         axiosIns.get(URIS.TRUCK_MODEL_MAKER)
@@ -57,7 +47,6 @@ export const useTruckReferenceStore = defineStore("truck-references", () => {
     }
 
     function init() {
-        reloadCountries();
         reloadMakers();
         reloadFuelTypes();
         reloadOwnershipTypes();
@@ -65,7 +54,6 @@ export const useTruckReferenceStore = defineStore("truck-references", () => {
     }
 
     function clear() {
-        countries.value = []
         makers.value = []
         fuelTypes.value = []
         ownershipTypes.value = []
@@ -74,7 +62,6 @@ export const useTruckReferenceStore = defineStore("truck-references", () => {
 
 
     return {
-        countries,
         makers,
         fuelTypes,
         ownershipTypes,

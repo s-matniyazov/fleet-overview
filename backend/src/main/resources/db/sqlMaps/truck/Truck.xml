@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Truck">
+    <resultMap id="truckResultMap" type="fleetoverview.domain.projection.truck.TruckProjection">
+        <id property="id" column="id"/>
+
+        <result property="unit" column="unit"/>
+        <result property="inServiceDate" column="inServiceDate"/>
+        <result property="licensePlate" column="licensePlate"/>
+        <result property="stateId" column="stateId"/>
+        <result property="stateName" column="stateName"/>
+        <result property="countryId" column="countryId"/>
+        <result property="countryName" column="countryName"/>
+        <result property="modelMakerId" column="modelMakerId"/>
+        <result property="modelMakerName" column="modelMakerName"/>
+        <result property="year" column="year"/>
+        <result property="fuelTypeId" column="fuelTypeId"/>
+        <result property="fuelTypeName" column="fuelTypeName"/>
+        <result property="grossWeight" column="grossWeight"/>
+        <result property="axles" column="axles"/>
+        <result property="vin" column="vin"/>
+        <result property="ownershipTypeId" column="ownershipTypeId"/>
+        <result property="ownershipTypeName" column="ownershipTypeName"/>
+        <result property="includeIFTA" column="includeIFTA"/>
+        <result property="purchaseTypeId" column="purchaseTypeId"/>
+        <result property="purchaseTypeName" column="purchaseTypeName"/>
+        <result property="driverId" column="driverId"/>
+        <result property="driverName" column="driverName"/>
+        <result property="description" column="description"/>
+        <result property="status" column="status"/>
+
+        <result property="companyId" column="companyId"/>
+        <result property="companyName" column="companyName"/>
+
+        <result property="createdById" column="createdById"/>
+        <result property="createdByName" column="createdByName"/>
+
+        <result property="created" column="created"/>
+
+        <collection property="files" columnPrefix="tf_"
+                    ofType="fleetoverview.domain.projection.truck.TruckFileProjection">
+            <id property="id" column="id"/>
+
+            <result property="resourcesId" column="resources_id"/>
+            <result property="fileName" column="fileName"/>
+            <result property="extension" column="extension"/>
+            <result property="size" column="size"/>
+            <result property="contentType" column="contentType"/>
+            <result property="expirationDate" column="expirationDate"/>
+            <result property="description" column="description"/>
+            <result property="type" column="type"/>
+            <result property="status" column="status"/>
+        </collection>
+
+        <collection property="permits" columnPrefix="tp_"
+                    ofType="fleetoverview.domain.projection.PermitProjection">
+            <id property="id" column="id"/>
+
+            <result property="resourcesId" column="resourcesId"/>
+            <result property="fileName" column="fileName"/>
+            <result property="extension" column="extension"/>
+            <result property="size" column="size"/>
+            <result property="contentType" column="contentType"/>
+            <result property="expirationDate" column="expirationDate"/>
+            <result property="description" column="description"/>
+            <result property="type" column="type"/>
+            <result property="status" column="status"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectTruckCnt" resultType="int" parameterType="map">
+        select 1
+        from dual
+    </select>
+
+    <select id="selectTrucks" resultMap="truckResultMap" parameterType="map">
+        select t.*,
+
+            tf.id as "tf_id",
+            tfs.id as "tf_resourcesId",
+            tfs.file_name as "tf_fileName",
+            tfs.extension as "tf_extension",
+            tfs.size as "tf_size",
+            tfs.content_type as "tf_contentType",
+            tf.expiration_date as "tf_expirationDate",
+            tf.description as "tf_description",
+            tf.type as "tf_type",
+            tf.status as "tf_status",
+
+            tp.id as "tp_id",
+            tps.id as "tp_resourcesId",
+            tps.file_name as "tp_fileName",
+            tps.extension as "tp_extension",
+            tps.size as "tp_size",
+            tps.content_type as "tp_contentType",
+            tp.expiration_date as "tp_expirationDate",
+            tp.description as "tp_description",
+            tp.type as "tp_type",
+            tp.status as "tp_status"
+        from (
+            select
+                ti.id as "id",
+                ti.unit as "unit",
+                ti.in_service_date as "inServiceDate",
+                ti.license_plate as "licensePlate",
+                ti.year as "year",
+                ti.gross_weight as "grossWeight",
+                ti.axles as "axles",
+                ti.vin as "vin",
+                ti.includeifta as "includeIFTA",
+                ti.description as "description",
+                ti.status as "status",
+
+                s.id as "stateId",
+                s.name as "stateName",
+                c.id as "countryId",
+                c.name as "countryName",
+
+                tmk.id as "modelMakerId",
+                tmk.name as "modelMakerName",
+
+                ft.id as "fuelTypeId",
+                ft.name as "fuelTypeName",
+
+                ot.id as "ownershipTypeId",
+                ot.name as "ownershipTypeName",
+
+                dr.id as "driverId",
+                dr.first_name || ' ' || dr.last_name as "driverName",
+
+                com.id as "companyId",
+                com.name as "companyName",
+
+                u.id as "createdById",
+                u.name as "createdByName",
+
+                ti.created as "created"
+            from trucks ti
+                left join states s on s.id = ti.state_id
+                left join countries c on c.id = s.country_id
+                left join truck_model_makers tmk on tmk.id = ti.model_maker_id
+                left join fuel_types ft on ft.id = ti.fuel_type_id
+                left join ownership_types ot on ot.id = ti.ownership_type_id
+                left join drivers dr on dr.id = ti.driver_id
+                left join companies com on com.id = ti.company_id
+                left join users u on u.id = ti.created_by_id
+            where 1=1
+                <if test="companyId != null">
+                    and ti.company_id||'' = #{companyId}
+                </if>
+        ) t
+        left join truck_files tf on tf.truck_id = t.id and tf.status = 'ACTIVE'
+        left join resources tfs on tfs.id = tf.resource_id
+        left join permits tp on tp.truck_id = t.id and tp.status = 'ACTIVE'
+        left join resources tps on tps.id = tp.resource_id
+    </select>
+</mapper>

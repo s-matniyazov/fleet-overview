@@ -15,19 +15,21 @@ import UTextarea from "@/components/base/UTextarea.vue";
 import UScrollArea from "@/components/base/UScrollArea.vue";
 import UDialog from "@/components/base/UDialog.vue";
 import UTooltip from "@/components/base/UTooltip.vue";
-import FileMiniCard from "@/components/fleet/FileMiniCard.vue";
+import FileMiniCard from "@/components/FileMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
-import FileOverlay from "@/components/fleet/FileOverlay.vue";
+import FileOverlay from "@/components/FileOverlay.vue";
 import TruckCard from "@/components/fleet/truck/TruckCard.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
 import {useTruckFileStore} from "@/store/TruckFileStore.js";
-import PermitMiniCard from "@/components/fleet/PermitMiniCard.vue";
+import PermitMiniCard from "@/components/PermitMiniCard.vue";
 import {useTruckReferenceStore} from "@/store/TruckReferencesStore.js";
+import {useStateStore} from "@/store/StateStore.js";
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
 const truckFileStore = useTruckFileStore();
 const truckReferenceStore = useTruckReferenceStore();
+const stateStore = useStateStore();
 
 const columns = [
   {
@@ -144,7 +146,6 @@ const dataList = ref([]);
 const selectedRow = ref();
 const data = ref(newModel())
 
-const states = ref([]);
 const drivers = ref([]);
 
 // FUNCTIONS
@@ -159,18 +160,18 @@ const onEdit = (d) => {
     unit: d.unit,
     inServiceDate: d.inServiceDate,
     licensePlate: d.licensePlate,
-    countryId: d?.state?.country.id,
-    stateId: d?.state?.id,
-    modelMakerId: d?.modelMaker?.id,
+    countryId: d?.countryId,
+    stateId: d?.stateId,
+    modelMakerId: d?.modelMakerId,
     year: d.year,
-    fuelTypeId: d?.fuelType.id,
+    fuelTypeId: d?.fuelTypeId,
     grossWeight: d.grossWeight,
     axles: d.axles,
     vin: d.vin,
-    ownershipTypeId: d?.ownershipType?.id,
+    ownershipTypeId: d?.ownershipTypeId,
     includeIFTA: d.includeIFTA,
-    purchaseTypeId: d?.purchaseType?.id,
-    driverId: d?.driver?.id,
+    purchaseTypeId: d?.purchaseTypeId,
+    driverId: d?.driverId,
     description: d.description,
     companyId: filterStore.companyId
   };
@@ -191,10 +192,10 @@ const selectFileSection = (type) => {
   };
 }
 const getOwnership = (row) => {
-  if (row?.ownershipType?.id === 1) {
-    return row?.purchaseType?.name
-  } else if (row?.ownershipType?.id === 2) {
-    return row?.driver?.firstName
+  if (row?.ownershipTypeId === 1) {
+    return row?.purchaseTypeName
+  } else if (row?.ownershipTypeId === 2) {
+    return row?.driverName
   } else return "N/A";
 }
 
@@ -234,19 +235,8 @@ function getData() {
   });
 }
 
-function getState(countryId) {
-  if (countryId) {
-    axiosIns.get(`${URIS.STATE}?countryId=${countryId}`)
-        .then(res => {
-          states.value = res.data.data;
-        }).catch(e => {
-      showMessage(e)
-    });
-  }
-}
-
 function getDrivers() {
-  axiosIns.get(`${URIS.DRIVERS}?companyId=${filterStore.companyId}`)
+  axiosIns.get(`${URIS.DRIVER}?companyId=${filterStore.companyId}`)
       .then(res => {
         drivers.value = res.data.data;
       }).catch(e => {
@@ -260,16 +250,8 @@ onMounted(() => {
   getDrivers();
 
   truckReferenceStore.init();
+  stateStore.init();
 })
-
-watch(
-    () => data.value?.countryId,
-    function (newValue) {
-      data.stateId = null;
-      states.value = [];
-      getState(newValue)
-    }
-)
 
 watch(
     () => data.value.ownershipTypeId,
@@ -343,18 +325,18 @@ watch(
             <div class="col-12 d-flex align-items-center">
               <UTooltip>
                 <span class="text-primary" style="font-size: 15px">
-                  {{ row?.company?.name }}
+                  {{ row?.companyName }}
                 </span>
                 <template #content>
-                  {{ row?.company?.name }}
+                  {{ row?.companyName }}
                 </template>
               </UTooltip>
             </div>
             <div class="col-12 d-flex align-items-center">
               <UTooltip>
-                <span class="text-gray-light f-700">{{ row?.createdBy?.name }}</span>
+                <span class="text-gray-light f-700">{{ row?.createdByName }}</span>
                 <template #content>
-                  {{ row?.createdBy?.name }}
+                  {{ row?.createdByName }}
                 </template>
               </UTooltip>
             </div>
@@ -368,10 +350,10 @@ watch(
             <div class="col-12 d-flex align-items-center">
               <UTooltip>
                 <span class="text-primary" style="font-size: 15px">
-                  {{ row?.ownershipType?.name }}
+                  {{ row?.ownershipTypeName }}
                 </span>
                 <template #content>
-                  {{ row?.ownershipType?.name }}
+                  {{ row?.ownershipTypeName }}
                 </template>
               </UTooltip>
             </div>
@@ -466,7 +448,7 @@ watch(
                 <!--            country-->
                 <div class="col-6">
                   <USelect v-model="data.countryId" :label="t('country')"
-                           :items="truckReferenceStore.countries" name="country"
+                           :items="stateStore.countries" name="country"
                            option_name="name"
                            classes="mb-2"
                            :rules="(val) => (!val && $t('required'))"
@@ -476,7 +458,7 @@ watch(
                 <!--            state-->
                 <div class="col-6">
                   <USelect v-model="data.stateId" :label="t('states')"
-                           :items="states" name="state"
+                           :items="stateStore.getStates(data.countryId)" name="state"
                            option_name="name"
                            classes="mb-2"
                            :rules="(val) => (!val && $t('required'))"
@@ -659,6 +641,7 @@ watch(
     </template>
   </URightOverlay>
 
+<!--  file overlay-->
   <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
     <template #header>
       <h4 class="fw-bold text-white bg-primary p-2 rounded-2 d-flex">{{
@@ -676,7 +659,6 @@ watch(
 </template>
 
 <style scoped>
-
 .qm-badge {
   border: 1px solid transparent;
   border-radius: 3px;

@@ -16,12 +16,10 @@ public interface TruckRepository extends JpaRepository<TruckEntity, Integer> {
     @Query("""
                     select distinct t from TruckEntity t
                         left join fetch t.driver d
-                        left join fetch t.files tf
-                        left join fetch t.permits p
+                        left join t.files tf on tf.status = 'ACTIVE'
+                        left join t.permits p on p.status = 'ACTIVE'
                     where t.company.id = :companyId
-                      and (t.vin like :vinOrUnit or t.unit like :vinOrUnit)
-                      and (tf is null or tf.status = 'ACTIVE')
-                      and (p is null or p.status = 'ACTIVE')
+                      and (t.vin like :vinOrUnit or t.unit like :vinOrUnit or 1=1)
             """)
     List<TruckEntity> findAllByCompanyId(int companyId, String vinOrUnit);
 

@@ -7,7 +7,7 @@ export const URIS = {
     // company
     COMPANIES: 'companies',
     //driver
-    DRIVERS: 'drivers',
+    DRIVER: 'drivers',
 
     CLIENTS: 'clients',
     USERS: 'users',

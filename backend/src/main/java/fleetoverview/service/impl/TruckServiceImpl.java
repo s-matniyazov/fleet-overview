@@ -17,6 +17,8 @@ import fleetoverview.service.ResourceService;
 import fleetoverview.service.TruckService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.NotFoundException;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,10 +51,12 @@ public class TruckServiceImpl extends BaseService implements TruckService {
     @Autowired
     private EntityManager entityManager;
 
+    private final SqlSessionFactory db;
+
     @Autowired
     public TruckServiceImpl(ResourceService resourceService, TruckRepository repository, StateRepository stateRepository, TruckModelMakerRepository makerRepository,
                             FuelTypeRepository fuelTypeRepository, OwnershipTypeRepository ownershipTypeRepository,
-                            PurchaseTypeRepository purchaseTypeRepository, DriverRepository driverRepository, CompanyRepository companyRepository) {
+                            PurchaseTypeRepository purchaseTypeRepository, DriverRepository driverRepository, CompanyRepository companyRepository, SqlSessionFactory db) {
         this.resourceService = resourceService;
         this.repository = repository;
         this.stateRepository = stateRepository;
@@ -62,6 +66,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         this.purchaseTypeRepository = purchaseTypeRepository;
         this.driverRepository = driverRepository;
         this.companyRepository = companyRepository;
+        this.db = db;
     }
 
     @Override
@@ -70,17 +75,11 @@ public class TruckServiceImpl extends BaseService implements TruckService {
             throw new NotFoundException(mSourceBundle.apply("filter.company.missed"));
         }
 
-        String vinOrUnit = "%%";
-        if (params.containsKey("vinOrUnit")) {
-            vinOrUnit = "%" + params.get("vinOrUnit") + "%";
+        try (SqlSession sqlSession = db.openSession()) {
+            return DataResponse.success(
+                    sqlSession.selectList("selectTrucks", params)
+            );
         }
-
-        return DataResponse.success(
-                repository.findAllByCompanyId(
-                        Integer.parseInt(params.get("companyId")),
-                        vinOrUnit
-                )
-        );
     }
 
     @Override

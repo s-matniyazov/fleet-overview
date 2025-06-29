@@ -9,7 +9,7 @@ import fleetoverview.domain.enums.DriverStatusEnum;
 import fleetoverview.domain.enums.driver.DriverTypeEnum;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,9 +25,11 @@ public class DriverEntity extends BaseEntity {
     @Column(length = 100)
     private String middleName;
     @Column
-    private Date hireDate;
+    private LocalDate hireDate;
     @Column
-    private Date dateOfBirth;
+    private LocalDate terminationDate;
+    @Column
+    private LocalDate dateOfBirth;
     @ManyToOne(targetEntity = StateEntity.class)
     @JsonIgnoreProperties({"createdBy", "created"})
     private StateEntity state;
@@ -37,7 +39,7 @@ public class DriverEntity extends BaseEntity {
 
     @Column(length = 100)
     private String city;
-    @Column(length = 100)
+    @Column
     private int zipCode;
     @Column(length = 100)
     private String email;
@@ -56,8 +58,8 @@ public class DriverEntity extends BaseEntity {
     @JsonIgnoreProperties({"createdBy", "created"})
     private Set<DriverFileEntity> files = new HashSet<>();
 
-    public DriverEntity(CompanyEntity company,String firstName, String lastName, String middleName, Date hireDate,
-                        Date dateOfBirth, StateEntity state, String address, String city, int zipCode,
+    public DriverEntity(CompanyEntity company,String firstName, String lastName, String middleName, LocalDate hireDate,
+                        LocalDate terminationDate, LocalDate dateOfBirth, StateEntity state, String address, String city, int zipCode,
                         String email, String phone, DriverStatusEnum status, DriverTypeEnum type,
                         TruckEntity truck) {
         this.company = company;
@@ -65,6 +67,7 @@ public class DriverEntity extends BaseEntity {
         this.lastName = lastName;
         this.middleName = middleName;
         this.hireDate = hireDate;
+        this.terminationDate = terminationDate;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
         this.city = city;
@@ -77,9 +80,7 @@ public class DriverEntity extends BaseEntity {
         this.truck = truck;
     }
 
-    public DriverEntity() {
-
-    }
+    public DriverEntity() {}
 
     public CompanyEntity getCompany() {
         return company;
@@ -113,19 +114,27 @@ public class DriverEntity extends BaseEntity {
         this.middleName = middleName;
     }
 
-    public Date getHireDate() {
+    public LocalDate getHireDate() {
         return hireDate;
     }
 
-    public void setHireDate(Date hireDate) {
+    public void setHireDate(LocalDate hireDate) {
         this.hireDate = hireDate;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getTerminationDate() {
+        return terminationDate;
+    }
+
+    public void setTerminationDate(LocalDate terminationDate) {
+        this.terminationDate = terminationDate;
+    }
+
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -185,14 +194,6 @@ public class DriverEntity extends BaseEntity {
         this.status = status;
     }
 
-    public Set<DriverFileEntity> getFiles() {
-        return files;
-    }
-
-    public void setFiles(Set<DriverFileEntity> files) {
-        this.files = files;
-    }
-
     public DriverTypeEnum getType() {
         return type;
     }
@@ -207,5 +208,13 @@ public class DriverEntity extends BaseEntity {
 
     public void setTruck(TruckEntity truck) {
         this.truck = truck;
+    }
+
+    public Set<DriverFileEntity> getFiles() {
+        return files;
+    }
+
+    public void setFiles(Set<DriverFileEntity> files) {
+        this.files = files;
     }
 }
