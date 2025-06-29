@@ -141,8 +141,8 @@ const onAdd = () => {
 const onEdit = (d) => {
   data.value = {
     ...d,
-    countryId: d?.state?.country.id,
-    stateId: d?.state?.id,
+    countryId: d?.countryId,
+    stateId: d?.stateId,
     companyId: filterStore.companyId
   };
 
