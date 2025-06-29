@@ -88,7 +88,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
                         data.phone(),
                         data.status(),
                         data.type(),
-                        truckRepository.findById(data.truckId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("truck.not_found")))
+                        truckRepository.findById(data.truckId()).orElse(null)
                 )
         );
         return ApiResponse.success();
@@ -98,6 +98,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
     public ApiResponse put(DriverRequest data) {
         DriverEntity driver = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("driver.not_found")));
 
+        driver.setCompany(companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))));
         driver.setFirstName(data.firstName());
         driver.setMiddleName(data.middleName());
         driver.setLastName(data.lastName());
@@ -106,11 +107,13 @@ public class DriverServiceImpl extends BaseService implements DriverService {
         driver.setEmail(data.email());
         driver.setPhone(data.phone());
         driver.setZipCode(data.zipCode());
-        driver.setCompany(companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))));
         driver.setHireDate(data.hireDate());
+        driver.setTerminationDate(data.terminationDate());
         driver.setDateOfBirth(data.dateOfBirth());
-        driver.setStatus(data.status());
         driver.setState(stateRepository.findById(data.stateId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("state.not_found"))));
+        driver.setStatus(data.status());
+        driver.setType(data.type());
+        driver.setTruck(truckRepository.findById(data.truckId()).orElse(null));
 
         return ApiResponse.success();
     }

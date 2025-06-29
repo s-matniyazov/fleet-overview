@@ -143,14 +143,14 @@ function dataOrTire(d) {
 }
 
 .tw-shadow-default {
-  --darkreader-bg--tw-shadow: 0px 0px 2px 0px #00000040;
+  --tw-shadow: 0px 0px 2px 0px #00000040;
   --tw-shadow-colored: 0px 0px 2px 0px;
-  box-shadow: var(--darkreader-bg--tw-ring-offset-shadow, 0 0 #0000), 0 0 rgba(0, 0, 0, 0), var(--darkreader-bg--tw-shadow);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), 0 0 #0000, var(--tw-shadow);
 }
 
 .tw-bg-light-primary {
-  --darkreader-bg--tw-bg-opacity: 1;
-  background-color: #181a1b;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
 }
 
 .tw-p-\[7px\] {
@@ -162,8 +162,8 @@ function dataOrTire(d) {
 }
 
 .tw-text-gray-dark {
-  --darkreader-text--tw-text-opacity: 1;
-  color: #a1988c;
+  --tw-text-opacity: 1;
+  color: rgb(113 113 113 / var(--tw-text-opacity, 1));
 }
 
 .tw-text-\[12px\] {
@@ -171,8 +171,8 @@ function dataOrTire(d) {
 }
 
 .tw-text-dark-primary {
-  --darkreader-text--tw-text-opacity: 1;
-  color: #cdc8c2;
+  --tw-text-opacity: 1;
+  color: rgb(33 42 54 / var(--tw-text-opacity, 1));
 }
 
 .tw-font-bold {
@@ -210,8 +210,8 @@ function dataOrTire(d) {
 }
 
 .tw-bg-gray-extra-light {
-  --darkreader-bg--tw-bg-opacity: 1;
-  background-color: #1f2223;
+  --tw-bg-opacity: 1;
+  background-color: rgb(242 242 242 / var(--tw-bg-opacity, 1));
 }
 
 .tw-p-1 {
