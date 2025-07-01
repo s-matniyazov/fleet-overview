@@ -1,5 +1,6 @@
 <script setup>
 import {useI18n} from "vue-i18n";
+import {dataOrTire} from "@/util/utils.js";
 
 const {t} = useI18n();
 
@@ -12,66 +13,67 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="d-flex ng-star-inserted">
-    <div class="width-50 d-flex flex-column px-3"><span class="title mb-5">Unit Details</span>
+  <div class="d-flex ng-star-inserted mt-1">
+    <div class="width-50 d-flex flex-column px-3">
+      <span class="title mb-3">Unit Details</span>
       <div class="two-column-content">
         <div class="contents">
           <span class="left"> Operated By: </span>
-          <span class="right"> {{ data?.company?.name }} </span>
+          <span class="right"> {{ dataOrTire(data?.companyName) }} </span>
         </div>
         <div class="contents">
           <span class="left">Current Driver(S):</span>
-          <span class="right"> {{ `${data?.driver?.firstName} ${data?.driver?.lastName}` }} </span>
+          <span class="right"> {{ `${dataOrTire(data?.driverName)}` }} </span>
         </div>
       </div>
       <div class="two-column-content">
         <div class="contents">
           <span class="left"> Unit #: </span>
-          <span class="right"> {{ data?.unit }} </span>
+          <span class="right"> {{ dataOrTire(data?.unit) }} </span>
         </div>
         <div class="contents">
           <span class="left"> License Plate #:</span>
-          <span class="right"> {{ data?.licensePlate }} </span>
+          <span class="right"> {{ dataOrTire(data?.licensePlate) }} </span>
         </div>
         <div class="contents">
           <span class="left"> Make: </span>
-          <span class="right"> {{ data?.modelMaker?.name }} </span>
+          <span class="right"> {{ dataOrTire(data?.modelMakerName) }} </span>
         </div>
         <div class="contents">
           <span class="left"> Trailer Type: </span>
-          <span class="right"> {{ data?.type?.name }} </span>
+          <span class="right"> {{ dataOrTire(data?.typeName) }} </span>
         </div>
         <div class="contents">
           <span class="left"> Year: </span>
-          <span class="right"> {{ data?.year }} </span>
+          <span class="right"> {{ dataOrTire(data?.year) }} </span>
         </div>
         <div class="contents">
           <span class="left"> Number of Axles:</span>
-          <span class="right"> {{ data?.axles }} </span>
+          <span class="right"> {{ dataOrTire(data?.axles) }} </span>
         </div>
         <div class="contents">
           <span class="left"> Length:</span>
-          <span class="right"> {{ data?.length }} </span>
+          <span class="right"> {{ dataOrTire(data?.length) }} </span>
         </div>
         <div class="contents">
           <span class="left"> Height:</span>
-          <span class="right"> {{ data?.height }} </span>
+          <span class="right"> {{ dataOrTire(data?.height) }} </span>
         </div>
         <div class="contents">
           <span class="left"> VIN #: </span>
-          <span class="right"> {{ data?.vin }} </span>
+          <span class="right"> {{ dataOrTire(data?.vin) }} </span>
         </div>
       </div>
       <span class="title">Ownership Details</span>
       <div class="two-column-content">
         <div class="contents">
           <div class="left">Ownership:</div>
-          <div class="right"> {{ data?.ownershipType?.name }} </div>
+          <div class="right"> {{ dataOrTire(data?.ownershipTypeName) }} </div>
         </div>
       </div>
     </div>
     <div class="width-50 d-flex flex-column px-3">
-      <span class="title mb-5">AdditionalNotes</span>
+      <span class="title mb-3">AdditionalNotes</span>
       <div class="note-container overflow-y">{{ data?.description || 'N/A' }}</div>
     </div>
   </div>

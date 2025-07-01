@@ -206,6 +206,14 @@ export function downloadResource(resource) {
     });
 }
 
+function valuesString(arr) {
+    let str = ''
+    for (const el of arr) {
+        str += el + ','
+    }
+
+    return str.substring(0, str.length - 1)
+}
 export function filterString(filter) {
     let filterStr = '?', isNotFirst = false
     for (const [key, value] of Object.entries(filter)) {
@@ -222,4 +230,10 @@ export function filterString(filter) {
     }
 
     return filterStr
+}
+
+
+export function dataOrTire(d) {
+    if (d === 'null') return '-';
+    return d ? d : '-';
 }

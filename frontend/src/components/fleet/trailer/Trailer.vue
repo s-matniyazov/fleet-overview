@@ -137,15 +137,16 @@ const onEdit = (d) => {
     unit: d.unit,
     licensePlate: d.licensePlate,
     inServiceDate: d.inServiceDate,
-    modelMakerId: d?.modelMaker?.id,
-    typeId: d?.type?.id,
+    modelMakerId: d?.modelMakerId,
+    typeId: d?.typeId,
     year: d.year,
     axles: d.axles,
     length: d.length,
+    height: d.height,
     vin: d.vin,
-    ownershipTypeId: d?.ownershipType?.id,
-    purchaseTypeId: d?.purchaseType?.id,
-    driverId: d?.driver?.id,
+    ownershipTypeId: d?.ownershipTypeId,
+    purchaseTypeId: d?.purchaseTypeId,
+    driverId: d?.driverId,
     description: d.description,
     companyId: filterStore.companyId
   };
@@ -166,9 +167,9 @@ const selectFileSection = (type) => {
   };
 }
 const getOwnership = (row) => {
-  if (row?.ownershipType?.id === 1) {
-    return row?.purchaseType?.name
-  } else if (row?.ownershipType?.id === 2) {
+  if (row?.ownershipTypeId === 1) {
+    return row?.purchaseTypeName
+  } else if (row?.ownershipTypeId === 2) {
     return row?.driver?.firstName
   } else return "N/A";
 }
@@ -292,18 +293,18 @@ watch(
             <div class="col-12 d-flex align-items-center">
               <UTooltip>
                 <span class="text-primary" style="font-size: 15px">
-                  {{ row?.company?.name }}
+                  {{ row?.companyName }}
                 </span>
                 <template #content>
-                  {{ row?.company?.name }}
+                  {{ row?.companyName }}
                 </template>
               </UTooltip>
             </div>
             <div class="col-12 d-flex align-items-center">
               <UTooltip>
-                <span class="text-gray-light f-700">{{ row?.createdBy?.name }}</span>
+                <span class="text-gray-light f-700">{{ row?.createdByName }}</span>
                 <template #content>
-                  {{ row?.createdBy?.name }}
+                  {{ row?.createdByName }}
                 </template>
               </UTooltip>
             </div>
@@ -317,10 +318,10 @@ watch(
             <div class="col-12 d-flex align-items-center">
               <UTooltip>
                 <span class="text-primary" style="font-size: 15px">
-                  {{ row?.ownershipType?.name }}
+                  {{ row?.ownershipTypeName }}
                 </span>
                 <template #content>
-                  {{ row?.ownershipType?.name }}
+                  {{ row?.ownershipTypeName }}
                 </template>
               </UTooltip>
             </div>

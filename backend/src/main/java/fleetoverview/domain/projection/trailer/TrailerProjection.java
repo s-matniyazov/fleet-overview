@@ -1,7 +1,7 @@
-package fleetoverview.domain.projection.truck;
+package fleetoverview.domain.projection.trailer;
 
 import fleetoverview.domain.enums.truck.TruckStatusEnum;
-import fleetoverview.domain.projection.PermitProjection;
+import fleetoverview.domain.projection.truck.TruckFileProjection;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -10,36 +10,29 @@ import java.util.Set;
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 29 июнь 2025
+ * @created : 30 июнь 2025
  **/
-public class TruckProjection {
+public class TrailerProjection {
     private Integer id;
     private String unit;
-    private Date inServiceDate;
     private String licensePlate;
-
-    private Integer stateId;
-    private String stateName;
-
-    private Integer countryId;
-    private String countryName;
+    private Date inServiceDate;
 
     private Integer modelMakerId;
     private String modelMakerName;
 
+    private Integer typeId;
+    private String typeName;
+
     private Integer year;
 
-    private Integer fuelTypeId;
-    private String fuelTypeName;
-
-    private Double grossWeight;
     private Integer axles;
+    private Double length;
+    private Double height;
     private String vin;
 
     private Integer ownershipTypeId;
     private String ownershipTypeName;
-
-    private Boolean includeIFTA;
 
     private Integer purchaseTypeId;
     private String purchaseTypeName;
@@ -53,8 +46,6 @@ public class TruckProjection {
 
     private Set<TruckFileProjection> files;
 
-    private Set<PermitProjection> permits;
-
     private Integer companyId;
     private String companyName;
 
@@ -62,7 +53,7 @@ public class TruckProjection {
     private String createdByName;
     private LocalDate created;
 
-    public TruckProjection() {
+    public TrailerProjection() {
     }
 
     public Integer getId() {
@@ -81,14 +72,6 @@ public class TruckProjection {
         this.unit = unit;
     }
 
-    public Date getInServiceDate() {
-        return inServiceDate;
-    }
-
-    public void setInServiceDate(Date inServiceDate) {
-        this.inServiceDate = inServiceDate;
-    }
-
     public String getLicensePlate() {
         return licensePlate;
     }
@@ -97,36 +80,12 @@ public class TruckProjection {
         this.licensePlate = licensePlate;
     }
 
-    public Integer getStateId() {
-        return stateId;
+    public Date getInServiceDate() {
+        return inServiceDate;
     }
 
-    public void setStateId(Integer stateId) {
-        this.stateId = stateId;
-    }
-
-    public Integer getCountryId() {
-        return countryId;
-    }
-
-    public void setCountryId(Integer countryId) {
-        this.countryId = countryId;
-    }
-
-    public String getCountryName() {
-        return countryName;
-    }
-
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
-    }
-
-    public String getStateName() {
-        return stateName;
-    }
-
-    public void setStateName(String stateName) {
-        this.stateName = stateName;
+    public void setInServiceDate(Date inServiceDate) {
+        this.inServiceDate = inServiceDate;
     }
 
     public Integer getModelMakerId() {
@@ -145,6 +104,22 @@ public class TruckProjection {
         this.modelMakerName = modelMakerName;
     }
 
+    public Integer getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
     public Integer getYear() {
         return year;
     }
@@ -153,36 +128,28 @@ public class TruckProjection {
         this.year = year;
     }
 
-    public Integer getFuelTypeId() {
-        return fuelTypeId;
-    }
-
-    public void setFuelTypeId(Integer fuelTypeId) {
-        this.fuelTypeId = fuelTypeId;
-    }
-
-    public String getFuelTypeName() {
-        return fuelTypeName;
-    }
-
-    public void setFuelTypeName(String fuelTypeName) {
-        this.fuelTypeName = fuelTypeName;
-    }
-
-    public Double getGrossWeight() {
-        return grossWeight;
-    }
-
-    public void setGrossWeight(Double grossWeight) {
-        this.grossWeight = grossWeight;
-    }
-
     public Integer getAxles() {
         return axles;
     }
 
     public void setAxles(Integer axles) {
         this.axles = axles;
+    }
+
+    public Double getLength() {
+        return length;
+    }
+
+    public void setLength(Double length) {
+        this.length = length;
+    }
+
+    public Double getHeight() {
+        return height;
+    }
+
+    public void setHeight(Double height) {
+        this.height = height;
     }
 
     public String getVin() {
@@ -207,14 +174,6 @@ public class TruckProjection {
 
     public void setOwnershipTypeName(String ownershipTypeName) {
         this.ownershipTypeName = ownershipTypeName;
-    }
-
-    public Boolean getIncludeIFTA() {
-        return includeIFTA;
-    }
-
-    public void setIncludeIFTA(Boolean includeIFTA) {
-        this.includeIFTA = includeIFTA;
     }
 
     public Integer getPurchaseTypeId() {
@@ -271,14 +230,6 @@ public class TruckProjection {
 
     public void setFiles(Set<TruckFileProjection> files) {
         this.files = files;
-    }
-
-    public Set<PermitProjection> getPermits() {
-        return permits;
-    }
-
-    public void setPermits(Set<PermitProjection> permits) {
-        this.permits = permits;
     }
 
     public Integer getCompanyId() {

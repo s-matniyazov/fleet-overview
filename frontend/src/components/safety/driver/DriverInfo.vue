@@ -1,6 +1,6 @@
 <script setup>
 import {useI18n} from "vue-i18n";
-import {longToDate} from "../../../util/utils.js";
+import {dataOrTire, longToDate} from "@/util/utils.js";
 
 const {t} = useI18n();
 
@@ -10,10 +10,6 @@ const props = defineProps({
     required: true
   }
 });
-
-function dataOrTire(d) {
-  return d ? d : '-';
-}
 </script>
 <template>
   <div class="tw-w-full tw-flex tw-justify-between tw-gap-x-4 mx-1 mt-3">

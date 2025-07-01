@@ -30,7 +30,7 @@ public interface TruckRepository extends JpaRepository<TruckEntity, Integer> {
                     ft.name as truckFuelType,
                     tf.*
              from trucks t
-                      left join public.model_makers mm on mm.id = t.model_maker_id
+                      left join public.truck_model_makers mm on mm.id = t.model_maker_id
                       left join public.fuel_types ft on ft.id = t.fuel_type_id
                       left join (select tf.truck_id,
                                         min(case tf.type when 'REG_CAB_CARD' then tf.expiration_date end) as regCabCardExp,
