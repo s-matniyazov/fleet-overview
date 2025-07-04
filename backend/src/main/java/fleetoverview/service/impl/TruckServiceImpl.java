@@ -47,6 +47,8 @@ public class TruckServiceImpl extends BaseService implements TruckService {
     private final PurchaseTypeRepository purchaseTypeRepository;
     private final DriverRepository driverRepository;
     private final CompanyRepository companyRepository;
+    private final TruckFileRepository truckFileRepository;
+    private final PermitRepository permitRepository;
 
     @Autowired
     private EntityManager entityManager;
@@ -56,7 +58,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
     @Autowired
     public TruckServiceImpl(ResourceService resourceService, TruckRepository repository, StateRepository stateRepository, TruckModelMakerRepository makerRepository,
                             FuelTypeRepository fuelTypeRepository, OwnershipTypeRepository ownershipTypeRepository,
-                            PurchaseTypeRepository purchaseTypeRepository, DriverRepository driverRepository, CompanyRepository companyRepository, SqlSessionFactory db) {
+                            PurchaseTypeRepository purchaseTypeRepository, DriverRepository driverRepository, CompanyRepository companyRepository, TruckFileRepository truckFileRepository, PermitRepository permitRepository, SqlSessionFactory db) {
         this.resourceService = resourceService;
         this.repository = repository;
         this.stateRepository = stateRepository;
@@ -66,6 +68,8 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         this.purchaseTypeRepository = purchaseTypeRepository;
         this.driverRepository = driverRepository;
         this.companyRepository = companyRepository;
+        this.truckFileRepository = truckFileRepository;
+        this.permitRepository = permitRepository;
         this.db = db;
     }
 
@@ -143,7 +147,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
 
         ResourceEntity resource = resourceService.createResource(file, "truck");
 
-        truck.getFiles().add(
+        truckFileRepository.save(
                 new TruckFileEntity(
                         resource,
                         data.expirationDate(),
@@ -154,8 +158,6 @@ public class TruckServiceImpl extends BaseService implements TruckService {
                 )
         );
 
-        repository.save(truck);
-
         return ApiResponse.success();
     }
 
@@ -165,7 +167,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
 
         ResourceEntity resource = resourceService.createResource(file, "truck//permits");
 
-        truck.getPermits().add(
+        permitRepository.save(
                 new PermitEntity(
                         resource,
                         data.expirationDate(),

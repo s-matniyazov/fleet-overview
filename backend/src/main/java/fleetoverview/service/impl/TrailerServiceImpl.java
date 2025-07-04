@@ -8,13 +8,7 @@ import fleetoverview.domain.entity.ResourceEntity;
 import fleetoverview.domain.entity.trailer.TrailerEntity;
 import fleetoverview.domain.entity.trailer.TrailerFileEntity;
 import fleetoverview.domain.enums.trailer.TrailerFileStatusEnum;
-import fleetoverview.repository.CompanyRepository;
-import fleetoverview.repository.DriverRepository;
-import fleetoverview.repository.OwnershipTypeRepository;
-import fleetoverview.repository.PurchaseTypeRepository;
-import fleetoverview.repository.TrailerModelMakerRepository;
-import fleetoverview.repository.TrailerRepository;
-import fleetoverview.repository.TrailerTypeRepository;
+import fleetoverview.repository.*;
 import fleetoverview.service.ResourceService;
 import fleetoverview.service.TrailerService;
 import fleetoverview.service.base.BaseService;
@@ -52,6 +46,7 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
     private final PurchaseTypeRepository purchaseTypeRepository;
     private final DriverRepository driverRepository;
     private final CompanyRepository companyRepository;
+    private final TrailerFileRepository trailerFileRepository;
 
     @Autowired
     private EntityManager entityManager;
@@ -61,7 +56,7 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
     public TrailerServiceImpl(ResourceService resourceService, TrailerRepository repository, TrailerTypeRepository trailerTypeRepository,
                               TrailerModelMakerRepository makerRepository, OwnershipTypeRepository ownershipTypeRepository,
                               PurchaseTypeRepository purchaseTypeRepository, DriverRepository driverRepository,
-                              CompanyRepository companyRepository, SqlSessionFactory db) {
+                              CompanyRepository companyRepository, TrailerFileRepository trailerFileRepository, SqlSessionFactory db) {
         this.resourceService = resourceService;
         this.repository = repository;
         this.trailerTypeRepository = trailerTypeRepository;
@@ -70,6 +65,7 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
         this.purchaseTypeRepository = purchaseTypeRepository;
         this.driverRepository = driverRepository;
         this.companyRepository = companyRepository;
+        this.trailerFileRepository = trailerFileRepository;
         this.db = db;
     }
 
@@ -145,7 +141,7 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
 
         ResourceEntity resource = resourceService.createResource(file, "trailer");
 
-        trailer.getFiles().add(
+        trailerFileRepository.save(
                 new TrailerFileEntity(
                         resource,
                         data.expirationDate(),
@@ -155,8 +151,6 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
                         trailer
                 )
         );
-
-        repository.save(trailer);
 
         return ApiResponse.success();
     }

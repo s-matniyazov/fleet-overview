@@ -194,10 +194,6 @@ public class TrailerEntity extends BaseEntity {
         this.status = status;
     }
 
-    public Set<TrailerFileEntity> getFiles() {
-        return files;
-    }
-
     public void setFiles(Set<TrailerFileEntity> files) {
         this.files = files;
     }

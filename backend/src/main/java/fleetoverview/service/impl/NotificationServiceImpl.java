@@ -4,6 +4,7 @@ import fleetoverview.config.MailConfigurationParams;
 import fleetoverview.config.TelegramConfigurationParams;
 import fleetoverview.domain.enums.truck.TruckFileTypeEnum;
 import fleetoverview.repository.CompanyRepository;
+import fleetoverview.repository.TrailerRepository;
 import fleetoverview.repository.TruckRepository;
 import fleetoverview.service.NotificationService;
 import org.slf4j.Logger;
@@ -37,16 +38,18 @@ public class NotificationServiceImpl implements NotificationService {
     private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
     private final CompanyRepository companyRepository;
     private final TruckRepository truckRepository;
+    private final TrailerRepository trailerRepository;
     private final JavaMailSender mailSender;
     private final TelegramConfigurationParams telegramParams;
     private final MailConfigurationParams mailParams;
 
     @Autowired
     public NotificationServiceImpl(TruckRepository truckRepository,
-                                   CompanyRepository companyRepository,
+                                   CompanyRepository companyRepository, TrailerRepository trailerRepository,
                                    JavaMailSender mailSender, TelegramConfigurationParams telegramParams, MailConfigurationParams mailParams) {
         this.truckRepository = truckRepository;
         this.companyRepository = companyRepository;
+        this.trailerRepository = trailerRepository;
         this.mailSender = mailSender;
         this.telegramParams = telegramParams;
         this.mailParams = mailParams;
@@ -68,28 +71,25 @@ public class NotificationServiceImpl implements NotificationService {
                     This is an automated compliance notification from your Efficient management regarding %s.
                                         
                     Please review the following compliance alerts:
-                       \
+                    
                     """, it.getName(), it.getName()));
 
-            var trucks = truckRepository.getTrucksWithDocInfo(it.getId());
-
-            text.append("""
-                    🚛 Truck Documents Expiring Soon
-                    """);
+            var trucks = truckRepository.getTrucksWithExpirationInfo(it.getId());
+            text.append("-------------------------------------------\n🚛 Truck Documents Expiring Soon\n");
             trucks.stream()
                     .filter(tr -> isNearlyExpires(tr.getRegCabCardExp()) || isNearlyExpires(tr.getAnnsInsExp())
                             || isNearlyExpires(tr.getPhysDamageExp()) || isNearlyExpires(tr.getLeaseAgrExp()))
                     .forEach(tr -> {
-                        text.append(String.format("#%s (%s %s - %s)\n", tr.getTruckUnit(), tr.getTruckMaker(), tr.getTruckFuelType(), tr.getTruckYear()));
+                        text.append(String.format("#%s (%s %s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getFuelType(), tr.getYear()));
 
                         if (isNearlyExpires(tr.getRegCabCardExp()))
-                            text.append(expiresOnText(REG_CAB_CARD, tr.getRegCabCardExp()));
+                            text.append(expiresOnText(REG_CAB_CARD.getDescription(), tr.getRegCabCardExp()));
                         if (isNearlyExpires(tr.getAnnsInsExp()))
-                            text.append(expiresOnText(ANN_INS, tr.getAnnsInsExp()));
+                            text.append(expiresOnText(ANN_INS.getDescription(), tr.getAnnsInsExp()));
                         if (isNearlyExpires(tr.getPhysDamageExp()))
-                            text.append(expiresOnText(PHYS_DAMAGE, tr.getPhysDamageExp()));
+                            text.append(expiresOnText(PHYS_DAMAGE.getDescription(), tr.getPhysDamageExp()));
                         if (isNearlyExpires(tr.getLeaseAgrExp()))
-                            text.append(expiresOnText(LEASE_AGR, tr.getLeaseAgrExp()));
+                            text.append(expiresOnText(LEASE_AGR.getDescription(), tr.getLeaseAgrExp()));
 
                         text.append("\n");
 
@@ -97,20 +97,57 @@ public class NotificationServiceImpl implements NotificationService {
                     });
 
 
-            text.append("""
-                    
-                    ❌ Missing Truck Documents
-                    """);
+            text.append("\n❌ Missing Truck Documents\n");
             trucks.stream()
                     .filter(tr -> isNull(tr.getRegCabCardExp()) || isNull(tr.getAnnsInsExp())
                             || isNull(tr.getPhysDamageExp()) || isNull(tr.getLeaseAgrExp()))
                     .forEach(tr -> {
-                        text.append(String.format("#%s (%s %s - %s)\n", tr.getTruckUnit(), tr.getTruckMaker(), tr.getTruckFuelType(), tr.getTruckYear()));
+                        text.append(String.format("#%s (%s %s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getFuelType(), tr.getYear()));
 
-                        if (isNull(tr.getRegCabCardExp())) text.append(missingText(REG_CAB_CARD));
-                        if (isNull(tr.getAnnsInsExp())) text.append(missingText(ANN_INS));
-                        if (isNull(tr.getPhysDamageExp())) text.append(missingText(PHYS_DAMAGE));
-                        if (isNull(tr.getLeaseAgrExp())) text.append(missingText(LEASE_AGR));
+                        if (isNull(tr.getRegCabCardExp())) text.append(missingText(REG_CAB_CARD.getDescription()));
+                        if (isNull(tr.getAnnsInsExp())) text.append(missingText(ANN_INS.getDescription()));
+                        if (isNull(tr.getPhysDamageExp())) text.append(missingText(PHYS_DAMAGE.getDescription()));
+                        if (isNull(tr.getLeaseAgrExp())) text.append(missingText(LEASE_AGR.getDescription()));
+
+                        text.append("\n");
+
+                        counter.getAndIncrement();
+                    });
+
+            var trailers = trailerRepository.getTrailersWithExpirationInfo(it.getId());
+            text.append("-------------------------------------------\n🚃 Trailer Documents Expiring Soon\n");
+            trailers.stream()
+                    .filter(tr -> isNearlyExpires(tr.getRegCabCardExp()) || isNearlyExpires(tr.getAnnsInsExp())
+                            || isNearlyExpires(tr.getPhysDamageExp()) || isNearlyExpires(tr.getLeaseAgrExp()))
+                    .forEach(tr -> {
+                        text.append(String.format("#%s (%s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getYear()));
+
+                        if (isNearlyExpires(tr.getRegCabCardExp()))
+                            text.append(expiresOnText(REG_CAB_CARD.getDescription(), tr.getRegCabCardExp()));
+                        if (isNearlyExpires(tr.getAnnsInsExp()))
+                            text.append(expiresOnText(ANN_INS.getDescription(), tr.getAnnsInsExp()));
+                        if (isNearlyExpires(tr.getPhysDamageExp()))
+                            text.append(expiresOnText(PHYS_DAMAGE.getDescription(), tr.getPhysDamageExp()));
+                        if (isNearlyExpires(tr.getLeaseAgrExp()))
+                            text.append(expiresOnText(LEASE_AGR.getDescription(), tr.getLeaseAgrExp()));
+
+                        text.append("\n");
+
+                        counter.getAndIncrement();
+                    });
+
+
+            text.append("\n❌ Missing Trailer Documents\n");
+            trailers.stream()
+                    .filter(tr -> isNull(tr.getRegCabCardExp()) || isNull(tr.getAnnsInsExp())
+                            || isNull(tr.getPhysDamageExp()) || isNull(tr.getLeaseAgrExp()))
+                    .forEach(tr -> {
+                        text.append(String.format("#%s (%s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getYear()));
+
+                        if (isNull(tr.getRegCabCardExp())) text.append(missingText(REG_CAB_CARD.getDescription()));
+                        if (isNull(tr.getAnnsInsExp())) text.append(missingText(ANN_INS.getDescription()));
+                        if (isNull(tr.getPhysDamageExp())) text.append(missingText(PHYS_DAMAGE.getDescription()));
+                        if (isNull(tr.getLeaseAgrExp())) text.append(missingText(LEASE_AGR.getDescription()));
 
                         text.append("\n");
 
@@ -142,12 +179,12 @@ public class NotificationServiceImpl implements NotificationService {
         return date.isBefore(today);
     }
 
-    private String expiresOnText(TruckFileTypeEnum type, LocalDate date) {
-        return String.format("%s - %s\n", type.getDescription(), date);
+    private String expiresOnText(String type, LocalDate date) {
+        return String.format("%s - %s\n", type, date);
     }
 
-    private String missingText(TruckFileTypeEnum type) {
-        return type.getDescription() + "\n";
+    private String missingText(String type) {
+        return type + "\n";
     }
 
     private void sendToTelegram(String message) {

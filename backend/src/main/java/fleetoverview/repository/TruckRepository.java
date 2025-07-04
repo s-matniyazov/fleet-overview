@@ -24,10 +24,10 @@ public interface TruckRepository extends JpaRepository<TruckEntity, Integer> {
     List<TruckEntity> findAllByCompanyId(int companyId, String vinOrUnit);
 
     @Query(value = """
-            select t.unit  as truckUnit,
-                    t.year as truckYear,
-                    mm.name as truckMaker,
-                    ft.name as truckFuelType,
+            select t.unit  as unit,
+                    t.year as "year",
+                    mm.name as maker,
+                    ft.name as fuelType,
                     tf.*
              from trucks t
                       left join public.truck_model_makers mm on mm.id = t.model_maker_id
@@ -45,5 +45,5 @@ public interface TruckRepository extends JpaRepository<TruckEntity, Integer> {
                                  group by tf.truck_id) tf on tf.truck_id = t.id
              where t.company_id = :companyId
              order by t.unit""", nativeQuery = true)
-    List<ExpirationTruckFilesProjection> getTrucksWithDocInfo(Integer companyId);
+    List<ExpirationTruckFilesProjection> getTrucksWithExpirationInfo(Integer companyId);
 }

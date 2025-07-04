@@ -210,10 +210,6 @@ public class DriverEntity extends BaseEntity {
         this.truck = truck;
     }
 
-    public Set<DriverFileEntity> getFiles() {
-        return files;
-    }
-
     public void setFiles(Set<DriverFileEntity> files) {
         this.files = files;
     }

@@ -179,10 +179,6 @@ public class TruckEntity extends BaseEntity {
         this.axles = axles;
     }
 
-    public Set<PermitEntity> getPermits() {
-        return permits;
-    }
-
     public void setPermits(Set<PermitEntity> permits) {
         this.permits = permits;
     }
@@ -241,10 +237,6 @@ public class TruckEntity extends BaseEntity {
 
     public void setStatus(TruckStatusEnum status) {
         this.status = status;
-    }
-
-    public Set<TruckFileEntity> getFiles() {
-        return files;
     }
 
     public void setFiles(Set<TruckFileEntity> files) {

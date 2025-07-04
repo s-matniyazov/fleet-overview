@@ -39,6 +39,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
     private final TruckRepository truckRepository;
     private final ResourceService resourceService;
     private final EndorsementRepository endorsementRepository;
+    private final DriverFileRepository driverFileRepository;
 
     @Autowired
     private EntityManager entityManager;
@@ -46,13 +47,14 @@ public class DriverServiceImpl extends BaseService implements DriverService {
     private final SqlSessionFactory db;
 
     @Autowired
-    public DriverServiceImpl(DriverRepository repository, StateRepository stateRepository, CompanyRepository companyRepository, TruckRepository truckRepository, ResourceService resourceService, EndorsementRepository endorsementRepository, SqlSessionFactory db) {
+    public DriverServiceImpl(DriverRepository repository, StateRepository stateRepository, CompanyRepository companyRepository, TruckRepository truckRepository, ResourceService resourceService, EndorsementRepository endorsementRepository, DriverFileRepository driverFileRepository, SqlSessionFactory db) {
         this.repository = repository;
         this.stateRepository = stateRepository;
         this.companyRepository = companyRepository;
         this.truckRepository = truckRepository;
         this.resourceService = resourceService;
         this.endorsementRepository = endorsementRepository;
+        this.driverFileRepository = driverFileRepository;
         this.db = db;
     }
 
@@ -157,11 +159,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
             driverFile.setSocialSecurityNumber(data.socialSecurityNumber());
         }
 
-        driver.getFiles().add(
-                driverFile
-        );
-
-        repository.save(driver);
+        driverFileRepository.save(driverFile);
 
         return ApiResponse.success();
     }

@@ -35,7 +35,7 @@ server:
 
 telegram:
   token: "6174384781:AAENYCRflrXFt6KERjQC1LhW6yd_zs-7Vbc"
-  chatIds: ""
+  chatIds: "-1002554948125"
 mail:
   senders: ""
   host: smtp.gmail.com
