@@ -1,7 +1,7 @@
 package fleetoverview.domain.entity.driver;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import fleetoverview.domain.entity.CompanyEntity;
+import fleetoverview.domain.entity.company.CompanyEntity;
 import fleetoverview.domain.entity.StateEntity;
 import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.entity.truck.TruckEntity;

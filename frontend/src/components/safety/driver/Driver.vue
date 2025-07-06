@@ -7,7 +7,7 @@ import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
 import UInput from "@/components/base/UInput.vue";
 import {useI18n} from "vue-i18n";
-import {DOCUMENT_TYPES, showMessage} from "@/util/utils.js";
+import {DOCUMENT_TYPES, DRIVER_TYPES, showMessage} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
 import USelect from "@/components/base/USelect.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
@@ -353,7 +353,7 @@ watch(
       <template #header>
         <div class="d-flex" style="width: 100%">
           <div class="text-dark">
-            {{ data.id ? t('edit') : t('add') }} New {{ t('driver') }}
+            {{ data.id ? t('edit') : t('add') }} {{ t('driver') }} : ({{ data.id }})
           </div>
           <div class="text-end u-end">
             <button class="btn-close" @click="onClose"></button>
@@ -454,6 +454,17 @@ watch(
                           :placeholder="t('enter_zip_code')" classes="mb-3" type="number"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
+
+                <div class="col-3">
+                  <USelect v-model="data.type" :label="t('type')"
+                           :items="DRIVER_TYPES" name="type"
+                           option_name="value"
+                           option_value="key"
+                           classes="mb-2"
+                           :rules="(val) => (!val && $t('required'))"
+                  ></USelect>
+                </div>
+
                 <div class="col-3">
                   <USelect v-model="data.status" :label="t('status')"
                            :items="[{name:'ACTIVE'},{name:'PASSIVE'}]" name="status"
@@ -468,7 +479,7 @@ watch(
             </div>
           </div>
 
-          <div class="modal-footer">
+          <div class="modal-footer bg-light">
             <div class="d-flex text-end align-items-end mt-2">
               <button type="submit" class="btn btn-primary">Save</button>
             </div>

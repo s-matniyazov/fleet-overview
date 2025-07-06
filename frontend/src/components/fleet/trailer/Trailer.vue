@@ -535,7 +535,7 @@ watch(
             </div>
           </UScrollArea>
 
-          <div class="modal-footer">
+          <div class="modal-footer bg-light">
             <div class="d-flex text-end align-items-end mt-2">
               <button type="submit" class="btn btn-primary">Save</button>
             </div>

@@ -190,6 +190,21 @@ export const DRIVER_FILE_CLASSES = [
     },
 ]
 
+export const DRIVER_TYPES = [
+    {
+        key: "OWNER_OPERATOR",
+        value: "OWNER OPERATOR"
+    },
+    {
+        key: "COMPANY_DRIVER",
+        value: "COMPANY DRIVER"
+    },
+    {
+        key: "INDEPENDENT_CONTRACTOR",
+        value: "INDEPENDENT CONTRACTOR"
+    },
+]
+
 export function downloadResource(resource) {
     axiosIns.get(URIS.RESOURCES + '/view/' + resource.id, {
         responseType: 'blob',
@@ -214,6 +229,7 @@ function valuesString(arr) {
 
     return str.substring(0, str.length - 1)
 }
+
 export function filterString(filter) {
     let filterStr = '?', isNotFirst = false
     for (const [key, value] of Object.entries(filter)) {
@@ -231,7 +247,6 @@ export function filterString(filter) {
 
     return filterStr
 }
-
 
 export function dataOrTire(d) {
     if (d === 'null') return '-';

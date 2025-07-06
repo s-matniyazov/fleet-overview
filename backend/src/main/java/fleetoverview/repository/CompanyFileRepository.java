@@ -1,12 +1,12 @@
 package fleetoverview.repository;
 
-import fleetoverview.domain.entity.company.CompanyEntity;
+import fleetoverview.domain.entity.company.CompanyFileEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 03 май 2025
+ * @created : 06 июль 2025
  **/
-public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer> {
+public interface CompanyFileRepository extends JpaRepository<CompanyFileEntity, Integer> {
 }

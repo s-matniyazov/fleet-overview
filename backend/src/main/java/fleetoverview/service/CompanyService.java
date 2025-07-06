@@ -1,8 +1,16 @@
 package fleetoverview.service;
 
+import fleetoverview.data.request.CompanyFileRequest;
 import fleetoverview.data.request.CompanyRequest;
-import fleetoverview.domain.entity.CompanyEntity;
+import fleetoverview.data.response.ApiResponse;
+import fleetoverview.data.response.DataResponse;
+import fleetoverview.domain.entity.company.CompanyEntity;
+import fleetoverview.domain.entity.company.CompanyFileEntity;
 import fleetoverview.service.base.CrudService;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author :  Sardor Matniyazov
@@ -10,4 +18,7 @@ import fleetoverview.service.base.CrudService;
  * @created : 03 май 2025
  **/
 public interface CompanyService extends CrudService<CompanyEntity, CompanyRequest> {
+    ApiResponse attachFile(CompanyFileRequest data, MultipartFile file);
+
+    DataResponse<List<CompanyFileEntity>> getFiles(Map<String, String> params);
 }

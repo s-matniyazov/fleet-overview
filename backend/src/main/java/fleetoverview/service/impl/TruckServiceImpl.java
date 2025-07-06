@@ -5,7 +5,6 @@ import fleetoverview.data.request.TruckFileRequest;
 import fleetoverview.data.request.TruckRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
-import fleetoverview.domain.entity.CompanyEntity;
 import fleetoverview.domain.entity.PermitEntity;
 import fleetoverview.domain.entity.ResourceEntity;
 import fleetoverview.domain.entity.truck.TruckEntity;

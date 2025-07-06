@@ -2,10 +2,16 @@ package fleetoverview.controller;
 
 import fleetoverview.controller.base.CrudController;
 import fleetoverview.data.request.CompanyRequest;
-import fleetoverview.domain.entity.CompanyEntity;
+import fleetoverview.data.request.CompanyFileRequest;
+import fleetoverview.data.response.ApiResponse;
+import fleetoverview.domain.entity.company.CompanyEntity;
 import fleetoverview.service.CompanyService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 import static fleetoverview.util.constants.UriConstants.COMPANIES;
 
@@ -18,7 +24,19 @@ import static fleetoverview.util.constants.UriConstants.COMPANIES;
 @RestController
 @RequestMapping(COMPANIES)
 public class CompanyController extends CrudController<CompanyEntity, CompanyRequest> {
+    private final CompanyService service;
     protected CompanyController(CompanyService service) {
         super(service);
+        this.service = service;
+    }
+
+    @PostMapping("attach-file")
+    public HttpEntity<ApiResponse> attachFile(@RequestPart(name = "data") CompanyFileRequest data, @RequestPart(name = "file") MultipartFile file) {
+        return ResponseEntity.ok(service.attachFile(data, file));
+    }
+
+    @GetMapping("files")
+    protected HttpEntity<ApiResponse> getFiles(@RequestParam Map<String,String> params) {
+        return ResponseEntity.ok(service.getFiles(params));
     }
 }

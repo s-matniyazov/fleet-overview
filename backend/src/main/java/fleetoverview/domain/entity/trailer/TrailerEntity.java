@@ -3,6 +3,7 @@ package fleetoverview.domain.entity.trailer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fleetoverview.domain.entity.*;
 import fleetoverview.domain.entity.base.BaseEntity;
+import fleetoverview.domain.entity.company.CompanyEntity;
 import fleetoverview.domain.entity.driver.DriverEntity;
 import fleetoverview.domain.enums.trailer.TrailerStatusEnum;
 
