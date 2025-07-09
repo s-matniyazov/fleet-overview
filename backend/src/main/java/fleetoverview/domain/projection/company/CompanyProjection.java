@@ -1,79 +1,52 @@
-package fleetoverview.domain.entity.company;
+package fleetoverview.domain.projection.company;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import fleetoverview.domain.entity.StateEntity;
-import fleetoverview.domain.entity.base.BaseEntity;
-import fleetoverview.domain.enums.company.CompanyStatusEnum;
 import fleetoverview.domain.enums.TimeZoneEnum;
+import fleetoverview.domain.enums.company.CompanyStatusEnum;
+import fleetoverview.domain.projection.company.CompanyFileProjection;
 
-import javax.persistence.*;
-import java.util.HashSet;
+import java.time.LocalDate;
 import java.util.Set;
 
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 05 апр. 2025
+ * @created : 09 июль 2025
  **/
-@Entity
-@Table(name = "companies")
-public class CompanyEntity extends BaseEntity {
-    @Column(length = 500)
+public class CompanyProjection {
+    Integer id;
     private String name;
-    @Column(length = 20)
     private String dot;
-    @Column(length = 20)
     private String mc;
-    @Column(length = 500)
     private String dba;
-    @Column(length = 500)
     private String fein;
-    @ManyToOne(targetEntity = StateEntity.class)
-    @JsonIgnoreProperties({"createdBy", "created"})
-    private StateEntity state;
-    @Column(length = 2000)
+    private Integer stateId;
+    private String stateName;
+    private Integer countryId;
+    private String countryName;
     private String address1;
-    @Column(length = 2000)
     private String address2;
-    @Column(length = 200)
     private String city;
-    @Column(length = 20)
     private Integer zipcode;
-    @Column(length = 100)
     private String email;
-    @Column(length = 100)
     private String phone;
-
-    @Enumerated(EnumType.STRING)
     private TimeZoneEnum timeZone;
-
-    @Enumerated(EnumType.STRING)
     private CompanyStatusEnum status;
 
-    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnoreProperties({"createdBy", "created"})
-    private Set<CompanyFileEntity> files = new HashSet<>();
+    private Integer createdById;
+    private String createdByName;
+    private LocalDate created;
 
-    public CompanyEntity() {
+    private Set<CompanyFileProjection> files;
+
+    public CompanyProjection() {
     }
 
-    public CompanyEntity(String name, String dot, String mc, String dba, String fein,
-                         StateEntity state, String address1, String address2, String city,
-                         Integer zipcode, String email, String phone, TimeZoneEnum timeZone, CompanyStatusEnum status) {
-        this.name = name;
-        this.dot = dot;
-        this.mc = mc;
-        this.dba = dba;
-        this.fein = fein;
-        this.state = state;
-        this.address1 = address1;
-        this.address2 = address2;
-        this.city = city;
-        this.zipcode = zipcode;
-        this.email = email;
-        this.phone = phone;
-        this.timeZone = timeZone;
-        this.status = status;
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -116,12 +89,36 @@ public class CompanyEntity extends BaseEntity {
         this.fein = fein;
     }
 
-    public StateEntity getState() {
-        return state;
+    public Integer getStateId() {
+        return stateId;
     }
 
-    public void setState(StateEntity state) {
-        this.state = state;
+    public void setStateId(Integer stateId) {
+        this.stateId = stateId;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public Integer getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(Integer countryId) {
+        this.countryId = countryId;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 
     public String getAddress1() {
@@ -188,7 +185,35 @@ public class CompanyEntity extends BaseEntity {
         this.status = status;
     }
 
-    public void setFiles(Set<CompanyFileEntity> files) {
+    public Integer getCreatedById() {
+        return createdById;
+    }
+
+    public void setCreatedById(Integer createdById) {
+        this.createdById = createdById;
+    }
+
+    public String getCreatedByName() {
+        return createdByName;
+    }
+
+    public void setCreatedByName(String createdByName) {
+        this.createdByName = createdByName;
+    }
+
+    public LocalDate getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDate created) {
+        this.created = created;
+    }
+
+    public Set<CompanyFileProjection> getFiles() {
+        return files;
+    }
+
+    public void setFiles(Set<CompanyFileProjection> files) {
         this.files = files;
     }
 }

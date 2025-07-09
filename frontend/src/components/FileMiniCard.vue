@@ -18,6 +18,9 @@ const props = defineProps({
 
 function getDataTitle(type) {
   switch (type) {
+    case "HVUT_2290": return "Next Final Filing Date"
+    case "W_9": return "Next Update Date"
+    case "MCS_150": return "Next Filing Date"
     case "SSN": return "Social Security Number"
     case "CLEARING_HOUSE":
     case "MVR":

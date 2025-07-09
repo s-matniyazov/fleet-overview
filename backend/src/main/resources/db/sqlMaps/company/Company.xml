@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Company">
+    <resultMap id="companyResultMap" type="fleetoverview.domain.projection.company.CompanyProjection">
+        <id property="id" column="id"/>
+
+        <result property="name" column="name"/>
+        <result property="dot" column="dot"/>
+        <result property="mc" column="mc"/>
+        <result property="dba" column="dba"/>
+        <result property="fein" column="fein"/>
+        <result property="stateId" column="stateId"/>
+        <result property="stateName" column="stateName"/>
+        <result property="countryId" column="countryId"/>
+        <result property="countryName" column="countryName"/>
+        <result property="address1" column="address1"/>
+        <result property="address2" column="address2"/>
+        <result property="city" column="city"/>
+        <result property="zipcode" column="zipcode"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="timeZone" column="timeZone"/>
+        <result property="status" column="status"/>
+
+        <result property="createdById" column="createdById"/>
+        <result property="createdByName" column="createdByName"/>
+
+        <result property="created" column="created"/>
+
+        <collection property="files" columnPrefix="cf_"
+                    ofType="fleetoverview.domain.projection.company.CompanyFileProjection">
+            <id property="id" column="id"/>
+
+            <result property="resourcesId" column="resources_id"/>
+            <result property="fileName" column="fileName"/>
+            <result property="extension" column="extension"/>
+            <result property="size" column="size"/>
+            <result property="contentType" column="contentType"/>
+            <result property="expirationDate" column="expirationDate"/>
+            <result property="filedPeriod" column="filedPeriod"/>
+            <result property="nextUpdateDate" column="nextUpdateDate"/>
+            <result property="description" column="description"/>
+            <result property="type" column="type"/>
+            <result property="status" column="status"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectCompanyCnt" resultType="int" parameterType="map">
+        select 1
+        from dual
+    </select>
+
+    <select id="selectCompanies" resultMap="companyResultMap" parameterType="map">
+        select t.*,
+
+               cf.id as "cf_id",
+               cfs.id as "cf_resourcesId",
+               cfs.file_name as "cf_fileName",
+               cfs.extension as "cf_extension",
+               cfs.size as "cf_size",
+               cfs.content_type as "cf_contentType",
+               cf.expiration_date as "cf_expirationDate",
+               cf.description as "cf_description",
+               cf.type as "cf_type",
+               cf.status as "cf_status"
+        from (
+                 select
+                     ci.id as "id",
+                     ci.name as "name",
+                     ci.dot as "dot",
+                     ci.mc as "mc",
+                     ci.dba as "dba",
+                     ci.fein as "fein",
+                     ci.address1 as "address1",
+                     ci.address2 as "address2",
+                     ci.city as "city",
+                     ci.zipcode as "zipcode",
+                     ci.email as "email",
+                     ci.phone as "phone",
+                     ci.time_zone as "timeZone",
+                     ci.status as "status",
+
+                     s.id as "stateId",
+                     s.name as "stateName",
+                     c.id as "countryId",
+                     c.name as "countryName",
+
+                     u.id as "createdById",
+                     u.name as "createdByName",
+
+                     ci.created as "created"
+                 from companies ci
+                          left join states s on s.id = ci.state_id
+                          left join countries c on c.id = s.country_id
+                          left join users u on u.id = ci.created_by_id
+                 where 1=1
+             ) t
+                 left join company_files cf on cf.company_id = t.id and cf.status = 'ACTIVE'
+                 left join resources cfs on cfs.id = cf.resource_id
+    </select>
+</mapper>

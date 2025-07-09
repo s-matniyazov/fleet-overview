@@ -6,6 +6,7 @@ import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
 import fleetoverview.domain.entity.company.CompanyEntity;
 import fleetoverview.domain.entity.company.CompanyFileEntity;
+import fleetoverview.domain.projection.company.CompanyProjection;
 import fleetoverview.service.base.CrudService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,4 +22,6 @@ public interface CompanyService extends CrudService<CompanyEntity, CompanyReques
     ApiResponse attachFile(CompanyFileRequest data, MultipartFile file);
 
     DataResponse<List<CompanyFileEntity>> getFiles(Map<String, String> params);
+
+    DataResponse<List<CompanyProjection>> getWithFiles(Map<String, String> params);
 }

@@ -64,7 +64,8 @@ defineProps({
             </li>
           </button>
           <li v-show="currentOpenMenu.includes('fleet')">
-            <router-link to="fleet-compliance" class="btn w-100 text-start p-0" :style="`color: ${getSelectedRouterColor('fleet-compliance')}`">
+            <router-link to="fleet-compliance" class="btn w-100 text-start p-0"
+                         :style="`color: ${getSelectedRouterColor('fleet-compliance')}`">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-truck">
@@ -75,7 +76,8 @@ defineProps({
               </svg>
               <span>Fleet Compliance</span>
             </router-link>
-            <router-link to="fleet-overview" class="btn w-100 text-start p-0" :style="`color: ${getSelectedRouterColor('fleet-overview')}`">
+            <router-link to="fleet-overview" class="btn w-100 text-start p-0"
+                         :style="`color: ${getSelectedRouterColor('fleet-overview')}`">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-map-pin">
@@ -84,7 +86,8 @@ defineProps({
               </svg>
               <span>Fleet overview</span>
             </router-link>
-            <router-link to="maintenance" class="btn w-100 text-start p-0" :style="`color: ${getSelectedRouterColor('maintenance')}`">
+            <router-link to="maintenance" class="btn w-100 text-start p-0"
+                         :style="`color: ${getSelectedRouterColor('maintenance')}`">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-tool">
@@ -116,11 +119,13 @@ defineProps({
             </li>
           </button>
           <li v-show="currentOpenMenu.includes('safety')">
-            <router-link to="safety-compliance" class="btn w-100 text-start p-0" :style="`color: ${getSelectedRouterColor('safety-compliance')}`">
+            <router-link to="safety-compliance" class="btn w-100 text-start p-0"
+                         :style="`color: ${getSelectedRouterColor('safety-compliance')}`">
               <i class="mdi mdi-account-circle-outline"/>
               <span>Safety Compliance</span>
             </router-link>
-            <router-link to="dot-inspections" class="btn w-100 text-start p-0" :style="`color: ${getSelectedRouterColor('dot-inspections')}`">
+            <router-link to="dot-inspections" class="btn w-100 text-start p-0"
+                         :style="`color: ${getSelectedRouterColor('dot-inspections')}`">
               <i class="mdi mdi-account-circle-outline"/>
               <span>Dot Inspections</span>
             </router-link>
@@ -153,7 +158,8 @@ defineProps({
             </li>
           </button>
           <li v-show="currentOpenMenu.includes('references')">
-            <router-link to="model-maker" class="btn w-100 text-start p-0" :style="`color: ${getSelectedRouterColor('model-maker')}`">
+            <router-link to="model-maker" class="btn w-100 text-start p-0"
+                         :style="`color: ${getSelectedRouterColor('model-maker')}`">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-tool">
@@ -162,7 +168,8 @@ defineProps({
               </svg>
               <span>Model maker</span>
             </router-link>
-            <router-link to="ownership-type" class="btn w-100 text-start p-0" :style="`color: ${getSelectedRouterColor('ownership-type')}`">
+            <router-link to="ownership-type" class="btn w-100 text-start p-0"
+                         :style="`color: ${getSelectedRouterColor('ownership-type')}`">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-tool">
@@ -171,7 +178,8 @@ defineProps({
               </svg>
               <span>Ownership type</span>
             </router-link>
-            <router-link to="purchase-type" class="btn w-100 text-start p-0" :style="`color: ${getSelectedRouterColor('purchase-type')}`">
+            <router-link to="purchase-type" class="btn w-100 text-start p-0"
+                         :style="`color: ${getSelectedRouterColor('purchase-type')}`">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-tool">
@@ -184,26 +192,26 @@ defineProps({
           </li>
         </ul>
         <ul v-else class="metismenu list-unstyled">
-          <router-link to="fleet-compliance" class="btn w-100 text-start p-0">
-            <UTooltip position="right">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   :stroke="getSelectedRouterColor('fleet-compliance')" stroke-width="2" stroke-linecap="round"
-                   stroke-linejoin="round"
-                   class="feather feather-truck">
-                <rect x="1" y="3" width="15" height="13"></rect>
-                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-                <circle cx="5.5" cy="18.5" r="2.5"></circle>
-                <circle cx="18.5" cy="18.5" r="2.5"></circle>
-              </svg>
-              <template #content>
-                <span>Fleet Compliance</span>
-              </template>
-            </UTooltip>
-          </router-link>
+          <UTooltip position="right" class="btn w-100 text-start p-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 :stroke="getSelectedRouterColor('fleet-compliance')" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="feather feather-truck">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+            <template #content>
+              <router-link to="fleet-compliance">Fleet Compliance</router-link><br>
+              <router-link to="fleet-overview">Fleet Overview</router-link>
+            </template>
+          </UTooltip>
           <router-link to="fleet-overview" class="btn w-100 text-start p-0">
             <UTooltip position="right">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   :stroke="getSelectedRouterColor('fleet-overview')" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   :stroke="getSelectedRouterColor('fleet-overview')" stroke-width="2" stroke-linecap="round"
+                   stroke-linejoin="round"
                    class="feather feather-map-pin">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                 <circle cx="12" cy="10" r="3"></circle>
@@ -216,7 +224,8 @@ defineProps({
           <router-link to="maintenance" class="btn w-100 text-start p-0">
             <UTooltip position="right">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   :stroke="getSelectedRouterColor('maintenance')" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   :stroke="getSelectedRouterColor('maintenance')" stroke-width="2" stroke-linecap="round"
+                   stroke-linejoin="round"
                    class="feather feather-tool">
                 <path
                     d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
@@ -265,7 +274,8 @@ defineProps({
           <router-link to="model-maker" class="btn w-100 text-start p-0">
             <UTooltip position="right">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   :stroke="getSelectedRouterColor('model-maker')" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   :stroke="getSelectedRouterColor('model-maker')" stroke-width="2" stroke-linecap="round"
+                   stroke-linejoin="round"
                    class="feather feather-tool">
                 <path
                     d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
@@ -278,7 +288,8 @@ defineProps({
           <router-link to="ownership-type" class="btn w-100 text-start p-0">
             <UTooltip position="right">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   :stroke="getSelectedRouterColor('ownership-type')" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   :stroke="getSelectedRouterColor('ownership-type')" stroke-width="2" stroke-linecap="round"
+                   stroke-linejoin="round"
                    class="feather feather-tool">
                 <path
                     d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
@@ -291,7 +302,8 @@ defineProps({
           <router-link to="purchase-type" class="btn w-100 text-start p-0">
             <UTooltip position="right">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   :stroke="getSelectedRouterColor('purchase-type')" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   :stroke="getSelectedRouterColor('purchase-type')" stroke-width="2" stroke-linecap="round"
+                   stroke-linejoin="round"
                    class="feather feather-tool">
                 <path
                     d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>

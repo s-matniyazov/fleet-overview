@@ -9,7 +9,6 @@ import UInput from "@/components/base/UInput.vue";
 import {useI18n} from "vue-i18n";
 import {longToDateTime, showMessage} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
-import USelect from "@/components/base/USelect.vue";
 
 const {t} = useI18n();
 

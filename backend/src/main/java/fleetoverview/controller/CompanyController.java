@@ -39,4 +39,9 @@ public class CompanyController extends CrudController<CompanyEntity, CompanyRequ
     protected HttpEntity<ApiResponse> getFiles(@RequestParam Map<String,String> params) {
         return ResponseEntity.ok(service.getFiles(params));
     }
+
+    @GetMapping("with-files")
+    protected HttpEntity<ApiResponse> getWithFiles(@RequestParam Map<String,String> params) {
+        return ResponseEntity.ok(service.getWithFiles(params));
+    }
 }

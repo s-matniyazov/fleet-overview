@@ -6,6 +6,7 @@ import TabPanels from "@/components/base/UTabPanels.vue";
 import Tabs from "@/components/base/UTabs.vue";
 import Driver from "@/components/safety/driver/Driver.vue";
 import Company from "@/components/safety/company/Company.vue";
+import CompanyFiles from "@/components/safety/company/CompanyFiles.vue";
 
 const {t} = useI18n();
 
@@ -18,9 +19,9 @@ const TABS = [
   },
   {
     key: 'com',
-    name: t('companies'),
+    name: t('company_files'),
     description: '',
-    component: Company
+    component: CompanyFiles
   },
 ];
 const activeTab = ref(TABS[0].key);

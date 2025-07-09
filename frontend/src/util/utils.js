@@ -205,6 +205,25 @@ export const DRIVER_TYPES = [
     },
 ]
 
+export const TIME_ZONES = [
+    {
+        key: "est",
+        value: "EST"
+    },
+    {
+        key: "cst",
+        value: "CST"
+    },
+    {
+        key: "mst",
+        value: "MST"
+    },
+    {
+        key: "pst",
+        value: "PST"
+    },
+]
+
 export function downloadResource(resource) {
     axiosIns.get(URIS.RESOURCES + '/view/' + resource.id, {
         responseType: 'blob',

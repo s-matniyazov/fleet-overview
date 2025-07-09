@@ -8,6 +8,7 @@ import fleetoverview.domain.entity.ResourceEntity;
 import fleetoverview.domain.entity.company.CompanyEntity;
 import fleetoverview.domain.entity.company.CompanyFileEntity;
 import fleetoverview.domain.enums.company.CompanyFileStatusEnum;
+import fleetoverview.domain.projection.company.CompanyProjection;
 import fleetoverview.repository.CompanyFileRepository;
 import fleetoverview.repository.CompanyRepository;
 import fleetoverview.repository.StateRepository;
@@ -15,6 +16,8 @@ import fleetoverview.service.CompanyService;
 import fleetoverview.service.ResourceService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.NotFoundException;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -43,17 +46,29 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
     @Autowired
     private EntityManager entityManager;
 
+    private final SqlSessionFactory db;
+
     @Autowired
-    public CompanyServiceImpl(CompanyRepository repository, StateRepository stateRepository, ResourceService resourceService, CompanyFileRepository companyFileRepository) {
+    public CompanyServiceImpl(CompanyRepository repository, StateRepository stateRepository, ResourceService resourceService, CompanyFileRepository companyFileRepository, SqlSessionFactory db) {
         this.repository = repository;
         this.stateRepository = stateRepository;
         this.resourceService = resourceService;
         this.companyFileRepository = companyFileRepository;
+        this.db = db;
     }
 
     @Override
     public DataResponse<List<CompanyEntity>> get(Map<String, String> params) {
         return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
+    }
+
+    @Override
+    public DataResponse<List<CompanyProjection>> getWithFiles(Map<String, String> params) {
+        try (SqlSession sqlSession = db.openSession()) {
+            return DataResponse.success(
+                    sqlSession.selectList("selectCompanies", params)
+            );
+        }
     }
 
     @Override
