@@ -16,7 +16,6 @@ import USelect from "@/components/base/USelect.vue";
 const {t} = useI18n();
 const filterStore = useFilterStore();
 
-
 const props = defineProps({
   layout: {
     type: Boolean,
@@ -33,9 +32,9 @@ const columns = [
     classes: '',
   },
   {
-    key: 'usdot',
-    name: 'usdot',
-    label: t('usdot'),
+    key: 'dot',
+    name: 'dot',
+    label: t('dot'),
     styles: '',
     classes: '',
   }, {
@@ -43,13 +42,6 @@ const columns = [
     name: 'name',
     label: t('name'),
     styles: 'width: 400px;',
-    classes: '',
-  },
-  {
-    key: 'address',
-    name: 'address',
-    label: t('address'),
-    styles: '',
     classes: '',
   },
   {
@@ -170,23 +162,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div :class="`mb-0 p-2 ${layout && 'bg-light rounded-4 shadow-dark'}`">
+  <div class="mb-0 p-2 bg-light rounded-4 shadow-dark">
     <div class="col-12">
       <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
-        <button @click="onAdd" class="btn btn-primary btn-sm"><span class="mdi mdi-plus"></span> {{
-            t("add")
-          }}
-        </button>
-        <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-            class="mdi mdi-pen"></span> {{ t("edit") }}
-        </button>
-        <button @click="onDelete(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-            class="mdi mdi-delete"></span> {{ t("delete") }}
-        </button>
-
-        <div class="align-items-center" style="right: 2px; margin-left: auto">
-          <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
-        </div>
       </div>
     </div>
 

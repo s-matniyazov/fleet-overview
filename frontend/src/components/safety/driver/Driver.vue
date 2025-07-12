@@ -215,6 +215,17 @@ watch(
       else driverFileStore.clear()
     }
 )
+
+watch(
+    () => showModal.value,
+    function (newValue) {
+      if (newValue) driverFileStore.init(selectedRow.value.id)
+      else {
+        driverFileStore.clear();
+        getData();
+      }
+    }
+)
 </script>
 
 <template>

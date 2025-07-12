@@ -3,6 +3,7 @@ import {useLoaderStore} from "@/store/LoaderStore.js";
 import useUserStore from "@/store/UserStore.js";
 import axiosIns from "@/plugins/axios.js";
 import {URIS} from "@/constants/UriConstants.js";
+import en from "@/i18/en/messages.js";
 
 // toast store access
 const toasterStore = useToasterStore();
@@ -103,7 +104,15 @@ export const DOCUMENT_TYPES = {
     "MEDICAL_CERT": "Medical Certificate",
     "MVR": "MVR",
     "CLEARING_HOUSE": "Clearing House",
-    "SSN": "SSN"
+    "SSN": "SSN",
+
+//     company
+    "INS_CERT": "Company Insurance Certificate",
+    "IFTA_LICENSE": "IFTA License",
+    "UCR": "UCR (Unified Carrier Registration)",
+    "HVUT_2290": "HVUT 2290",
+    "W_9": "W-9",
+    "MCS_150": "MCS-150 (Biennial)",
 }
 
 export const FLEET_TYPE_NAMES = [
@@ -145,6 +154,33 @@ export const SAFETY_TYPE_NAMES = [
     {
         key: "SSN",
         value: "SSN"
+    },
+];
+
+export const COMPANY_TYPE_NAMES = [
+    {
+        key: "INS_CERT",
+        value: "Company Insurance Certificate"
+    },
+    {
+        key: "IFTA_LICENSE",
+        value: "IFTA License"
+    },
+    {
+        key: "UCR",
+        value: "UCR (Unified Carrier Registration)"
+    },
+    {
+        key: "HVUT_2290",
+        value: "HVUT 2290"
+    },
+    {
+        key: "W_9",
+        value: "W-9"
+    },
+    {
+        key: "MCS_150",
+        value: "MCS-150 (Biennial)"
     },
 ];
 
@@ -270,4 +306,13 @@ export function filterString(filter) {
 export function dataOrTire(d) {
     if (d === 'null') return '-';
     return d ? d : '-';
+}
+
+export function filePeriods() {
+    const start = 2025, end = new Date().getFullYear() + 2;
+    const periods = [];
+
+    for (let i = start; i <= end; i ++) periods.push({ name: `${i - 1} - ${i}` });
+
+    return periods;
 }

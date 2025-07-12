@@ -3,7 +3,7 @@ import {ref} from 'vue';
 import UTextarea from "@/components/base/UTextarea.vue";
 import UDateInput from "@/components/base/UDateInput.vue";
 import axiosIns from "@/plugins/axios.js";
-import {DRIVER_FILE_CLASSES, showMessage} from "@/util/utils.js";
+import {DRIVER_FILE_CLASSES, filePeriods, showMessage} from "@/util/utils.js";
 import useToastStore from "@/store/ToastStore.js";
 import UForm from "@/components/base/UForm.vue";
 import UScrollArea from "@/components/base/UScrollArea.vue";
@@ -28,7 +28,9 @@ const props = defineProps({
       expirationDate: new Date(),
       type: '',
       //truckId: '', // or
-      // trailerId: ''
+      //trailerId: '', // or
+      //driverId: '', // or
+      // companyId: ''
     }
   },
   url: {
@@ -212,6 +214,22 @@ const formatSize = (size) => {
                 <UInput v-model="upload.data.socialSecurityNumber" placeholder="Social Security Number"
                             label="Social Security Number *" :readonly="upload.deleted"
                             :rules="(val) => (!val && $t('required'))" type="number"/>
+              </div>
+            </template>
+            <template v-else-if="['HVUT_2290'].includes(data.type)">
+              <div class="col-6">
+                <USelect v-model="upload.data.filedPeriod" :label="t('filedPeriod')"
+                         :items="filePeriods()" name="filedPeriod"
+                         option_name="name" option_value="name" :readonly="upload.deleted"
+                         :rules="(val) => (!val && $t('required'))"
+                ></Uselect>
+              </div>
+            </template>
+            <template v-else-if="['W_9', 'MCS_150'].includes(data.type)">
+              <div class="col-6">
+                <UDateInput v-model="upload.data.nextUpdateDate" placeholder="dd.mm.yyyy"
+                            label="Next Update Date *" :readonly="upload.deleted"
+                            :rules="(val) => (!val && $t('required'))"/>
               </div>
             </template>
             <template v-else>

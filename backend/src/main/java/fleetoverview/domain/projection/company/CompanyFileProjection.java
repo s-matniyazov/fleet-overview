@@ -1,7 +1,7 @@
 package fleetoverview.domain.projection.company;
 
-import fleetoverview.domain.enums.truck.TruckFileStatusEnum;
-import fleetoverview.domain.enums.truck.TruckFileTypeEnum;
+import fleetoverview.domain.enums.company.CompanyFileStatusEnum;
+import fleetoverview.domain.enums.company.CompanyFileTypeEnum;
 
 import java.time.LocalDate;
 
@@ -25,9 +25,9 @@ public class CompanyFileProjection {
 
     private String description;
 
-    private TruckFileTypeEnum type;
+    private CompanyFileTypeEnum type;
 
-    private TruckFileStatusEnum status;
+    private CompanyFileStatusEnum status;
 
     public CompanyFileProjection() {
     }
@@ -112,19 +112,19 @@ public class CompanyFileProjection {
         this.description = description;
     }
 
-    public TruckFileTypeEnum getType() {
+    public CompanyFileTypeEnum getType() {
         return type;
     }
 
-    public void setType(TruckFileTypeEnum type) {
+    public void setType(CompanyFileTypeEnum type) {
         this.type = type;
     }
 
-    public TruckFileStatusEnum getStatus() {
+    public CompanyFileStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(TruckFileStatusEnum status) {
+    public void setStatus(CompanyFileStatusEnum status) {
         this.status = status;
     }
 }

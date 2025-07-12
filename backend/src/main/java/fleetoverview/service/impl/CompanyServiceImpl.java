@@ -100,7 +100,6 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
     public ApiResponse put(CompanyRequest data) {
         CompanyEntity company = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not.found")));
 
-
         company.setName(data.name());
         company.setDot(data.dot());
         company.setMc(data.mc());

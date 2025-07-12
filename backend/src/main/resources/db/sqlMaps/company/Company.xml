@@ -62,6 +62,8 @@
                cfs.size as "cf_size",
                cfs.content_type as "cf_contentType",
                cf.expiration_date as "cf_expirationDate",
+               cf.filed_period as "cf_filedPeriod",
+               cf.next_update_date as "cf_nextUpdateDate",
                cf.description as "cf_description",
                cf.type as "cf_type",
                cf.status as "cf_status"

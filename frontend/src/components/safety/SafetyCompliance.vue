@@ -6,7 +6,7 @@ import TabPanels from "@/components/base/UTabPanels.vue";
 import Tabs from "@/components/base/UTabs.vue";
 import Driver from "@/components/safety/driver/Driver.vue";
 import Company from "@/components/safety/company/Company.vue";
-import CompanyFiles from "@/components/safety/company/CompanyFiles.vue";
+import CompanyFiles from "@/components/safety/company/CompanyWithFiles.vue";
 
 const {t} = useI18n();
 

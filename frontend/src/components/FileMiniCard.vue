@@ -32,6 +32,9 @@ function getDataTitle(type) {
 function getData(type) {
   if(!props.file) return 'N/A'
   switch (type) {
+    case "HVUT_2290": return props.file.filedPeriod
+    case "W_9": return longToDate(props.file.nextUpdateDate || 1)
+    case "MCS_150": return longToDate(props.file.nextUpdateDate || 1)
     case "SSN": return props.file.socialSecurityNumber
     case "CLEARING_HOUSE":
     case "MVR":
@@ -58,7 +61,7 @@ function getData(type) {
              class="me-2 ng-star-inserted"/>
       </template>
       <template v-else>
-        <img src="../assets/icons/file-na.svg" alt="File na icon"
+        <img src="@/assets/icons/file-na.svg" alt="File na icon"
              class="me-2 ng-star-inserted"/>
       </template>
 

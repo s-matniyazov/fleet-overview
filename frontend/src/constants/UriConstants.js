@@ -6,6 +6,9 @@ export const URIS = {
 
     // company
     COMPANIES: 'companies',
+    COMPANIES_WITH_FILES: 'companies/with-files',
+    COMPANY_FILES: 'companies/files',
+
     //driver
     DRIVER: 'drivers',
     DRIVER_FILES: 'drivers/files',
