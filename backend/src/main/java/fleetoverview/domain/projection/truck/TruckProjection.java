@@ -5,6 +5,7 @@ import fleetoverview.domain.projection.PermitProjection;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -48,6 +49,9 @@ public class TruckProjection {
     private String driverName;
 
     private String description;
+
+    private String carrierResponsibleForSafety;
+    private LocalDateTime deActivationDate;
 
     private TruckStatusEnum status;
 
@@ -319,5 +323,21 @@ public class TruckProjection {
 
     public void setCreated(LocalDate created) {
         this.created = created;
+    }
+
+    public String getCarrierResponsibleForSafety() {
+        return carrierResponsibleForSafety;
+    }
+
+    public void setCarrierResponsibleForSafety(String carrierResponsibleForSafety) {
+        this.carrierResponsibleForSafety = carrierResponsibleForSafety;
+    }
+
+    public LocalDateTime getDeActivationDate() {
+        return deActivationDate;
+    }
+
+    public void setDeActivationDate(LocalDateTime deActivationDate) {
+        this.deActivationDate = deActivationDate;
     }
 }

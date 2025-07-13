@@ -12,7 +12,9 @@ import fleetoverview.domain.enums.company.CompanyStatusEnum;
 public record CompanyRequest(
         int id,
         String name,
+        String ownerName,
         String dot,
+        String pinNumber,
         String mc,
         String dba,
         String fein,

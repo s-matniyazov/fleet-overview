@@ -88,6 +88,7 @@ export function checkUser() {
 }
 
 export const DOCUMENT_TYPES = {
+//      truck trailer
     "REG_CAB_CARD": "Registration (Cab Card)",
     "ANN_INS": "Annual Inspection",
     "PHYS_DAMAGE": "Physical Damage Insurance",
@@ -97,6 +98,8 @@ export const DOCUMENT_TYPES = {
     "KY": "Kentucky",
     "NY": "New York",
     "CN": "Connecticut",
+    "NON_TRUCKING_LIABILITY": "Non-Trucking Liability",
+    "CLEAN_TRUCK_CHECK_PERMIT": "Clean Truck Check Permit",
 
 //     driver
     "CDL": "CDL (Front)",
@@ -133,6 +136,14 @@ export const FLEET_TYPE_NAMES = [
     {
         key: "LEASE_AGR",
         value: "Lease Agreement"
+    },
+    {
+        key: "NON_TRUCKING_LIABILITY",
+        value: "Non-Trucking Liability"
+    },
+    {
+        key: "CLEAN_TRUCK_CHECK_PERMIT",
+        value: "Clean Truck Check Permit"
     },
 ];
 

@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -78,13 +79,16 @@ public class TruckEntity extends BaseEntity {
     @ManyToOne
     private CompanyEntity company;
 
+    private String carrierResponsibleForSafety;
+    private LocalDateTime deActivationDate;
+
     public TruckEntity() {
     }
 
     public TruckEntity(String unit, Date inServiceDate, String licensePlate, StateEntity state, TruckModelMakerEntity modelMaker,
                        Integer year, FuelTypeEntity fuelType, Double grossWeight, Integer axles, String vin,
                        OwnershipTypeEntity ownershipType, Boolean includeIFTA, PurchaseTypeEntity purchaseType,
-                       DriverEntity driver, String description, CompanyEntity company) {
+                       DriverEntity driver, String description, CompanyEntity company, String carrierResponsibleForSafety) {
         this.unit = unit;
         this.inServiceDate = inServiceDate;
         this.licensePlate = licensePlate;
@@ -102,6 +106,7 @@ public class TruckEntity extends BaseEntity {
         this.description = description;
         this.company = company;
         this.status = TruckStatusEnum.ACTIVE;
+        this.carrierResponsibleForSafety = carrierResponsibleForSafety;
     }
 
     public String getUnit() {
@@ -246,5 +251,21 @@ public class TruckEntity extends BaseEntity {
 
     public void setCompany(CompanyEntity company) {
         this.company = company;
+    }
+
+    public String getCarrierResponsibleForSafety() {
+        return carrierResponsibleForSafety;
+    }
+
+    public void setCarrierResponsibleForSafety(String carrierResponsibleForSafety) {
+        this.carrierResponsibleForSafety = carrierResponsibleForSafety;
+    }
+
+    public LocalDateTime getDeActivationDate() {
+        return deActivationDate;
+    }
+
+    public void setDeActivationDate(LocalDateTime deActivationDate) {
+        this.deActivationDate = deActivationDate;
     }
 }

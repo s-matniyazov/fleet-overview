@@ -13,11 +13,9 @@ import USelect from "@/components/base/USelect.vue";
 import {useStateStore} from "@/store/StateStore.js";
 import UScrollArea from "@/components/base/UScrollArea.vue";
 import FileMiniCard from "@/components/FileMiniCard.vue";
-import UTooltip from "@/components/base/UTooltip.vue";
 import FileOverlay from "@/components/FileOverlay.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
 import {useCompanyFileStore} from "@/store/CompanyFileStore.js";
-import DriverCard from "@/components/safety/driver/DriverCard.vue";
 import CompanyCard from "@/components/safety/company/CompanyCard.vue";
 
 const {t} = useI18n();
@@ -73,7 +71,9 @@ const newModel = () => {
   return {
     id: null,
     name: null,
+    ownerName: null,
     dot: null,
+    pinNumber: null,
     mc: null,
     dba: null,
     fein: null,
@@ -241,20 +241,21 @@ watch(
           <div class="row">
             <div class="col-12 d-flex align-items-center">
                 <span class="text-primary" style="font-size: 15px">
-                  {{row.name}}
+                  {{ row.name }}
                 </span>
             </div>
             <div class="col-12 d-flex align-items-center mt-1">
                 <span class="text-gray f-500" style="font-size: 12px">
-                  MC: {{row.mc}}
+                  MC: {{ row.mc }}
                 </span>
             </div>
             <div class="col-12 d-flex align-items-center mt-1">
                 <span class="text-gray f-500" style="font-size: 12px">
-                  DOT: {{row.dot}}
+                  DOT: {{ row.dot }}
                 </span>
             </div>
-          </div></td>
+          </div>
+        </td>
       </template>
 
       <template #row_insurance_cert="{row}">
@@ -300,7 +301,7 @@ watch(
     </UTable>
   </div>
 
-<!--  company modal-->
+  <!--  company modal-->
   <Teleport to="body">
     <modal :show="addModal" @close="addModal = false" width="calc(100vw - 400px)">
       <template #header>
@@ -316,34 +317,43 @@ watch(
 
       <template #body>
         <UForm @submit="onSave">
-          <UScrollArea height="calc(100vh - 400px)">
+          <UScrollArea height="calc(100vh - 300px)">
             <div class="row">
               <!--            name-->
-              <div class="col-4">
+              <div class="col-3">
                 <UInput v-model="data.name" :label="t('company_name')" :hint="t('company_name')"
                         :name="t('company_name')"
                         :placeholder="t('enter_company_name')" classes=""/>
               </div>
-              <div class="col-4">
+              <div class="col-3">
+                <UInput v-model="data.ownerName" :label="t('company_ownerName')" :hint="t('company_ownerName')"
+                        :name="t('company_ownerName')"
+                        :placeholder="t('enter_company_ownerName')" classes=""/>
+              </div>
+              <div class="col-3">
                 <UInput v-model="data.dot" :label="t('dot')" :hint="t('dot')" :name="t('dot')"
                         :placeholder="t('enter_dot')" classes=""/>
               </div>
-              <div class="col-4">
+              <div class="col-3">
+                <UInput v-model="data.pinNumber" :label="t('pinNumber')" :hint="t('pinNumber')" :name="t('pinNumber')"
+                        :placeholder="t('enter_pinNumber')" classes=""/>
+              </div>
+              <div class="col-3">
                 <UInput v-model="data.mc" :label="t('mc')" :hint="t('mc')" :name="t('mc')"
                         :placeholder="t('enter_mc')" classes=""/>
               </div>
-              <div class="col-4">
+              <div class="col-3">
                 <UInput v-model="data.dba" :label="t('dba')" :hint="t('dba')" :name="t('dba')"
                         :placeholder="t('enter_dba')" classes=""/>
               </div>
-              <div class="col-4">
+              <div class="col-3">
                 <UInput v-model="data.fein" :label="t('fein')" :hint="t('fein')" :name="t('fein')"
                         :placeholder="t('enter_fein')" classes=""/>
               </div>
 
-              <div class="col-4"/>
+              <div class="col-3"/>
 
-              <div class="col-4">
+              <div class="col-3">
                 <USelect v-model="data.countryId" :label="t('country')"
                          :items="stateStore.countries" name="country"
                          option_name="name"
@@ -351,7 +361,7 @@ watch(
                          :rules="(val) => (!val && $t('required'))"
                 ></Uselect>
               </div>
-              <div class="col-4">
+              <div class="col-3">
                 <USelect v-model="data.stateId" :label="t('state')"
                          :items="stateStore.getStates(data.countryId)" name="state"
                          option_name="name"
@@ -359,21 +369,30 @@ watch(
                          :rules="(val) => (!val && $t('required'))"
                 ></Uselect>
               </div>
-              <div class="col-4">
+              <div class="col-3">
                 <UInput v-model="data.city" :label="t('city')" :hint="t('city')" :name="t('city')"
                         :placeholder="t('enter_city')" classes=""/>
               </div>
-                <div class="col-4">
+              <div class="col-3">
+                <UInput v-model="data.zipcode" type="number" :label="t('zipcode')" :hint="t('zipcode')"
+                        :name="t('zipcode')"
+                        :placeholder="t('enter_zipcode')" classes=""/>
+              </div>
+              <div class="col-3">
                 <UInput v-model="data.address1" :label="t('address1')" :hint="t('address1')" :name="t('address1')"
                         :placeholder="t('enter_address1')" classes=""/>
               </div>
-              <div class="col-4">
+              <div class="col-3">
                 <UInput v-model="data.address2" :label="t('address2')" :hint="t('address2')" :name="t('address2')"
                         :placeholder="t('enter_address2')" classes=""/>
               </div>
-              <div class="col-4">
-                <UInput v-model="data.zipcode" type="number" :label="t('zipcode')" :hint="t('zipcode')" :name="t('zipcode')"
-                        :placeholder="t('enter_zipcode')" classes=""/>
+              <div class="col-3">
+                <USelect v-model="data.timeZone" :label="t('timeZone')"
+                         :items="TIME_ZONES" name="timeZone"
+                         option_name="key"
+                         option_value="value"
+                         :rules="(val) => (!val && $t('required'))"
+                ></USelect>
               </div>
               <div class="col-4">
                 <UInput v-model="data.email" type="email" :label="t('email')" :hint="t('email')" :name="t('email')"
@@ -383,16 +402,7 @@ watch(
                 <UInput v-model="data.phone" :label="t('phone')" :hint="t('phone')" :name="t('phone')"
                         :placeholder="t('enter_phone_number')" classes=""/>
               </div>
-              <div class="col-4"/>
-              <div class="col-4">
-                <USelect v-model="data.timeZone" :label="t('timeZone')"
-                         :items="TIME_ZONES" name="timeZone"
-                         option_name="key"
-                         option_value="value"
-                         :rules="(val) => (!val && $t('required'))"
-                ></USelect>
-              </div>
-              <div class="col-4">
+              <div class="col-3">
                 <USelect v-model="data.status" :label="t('status')"
                          :items="[{name:'ACTIVE'},{name:'INACTIVE'}]" name="status"
                          option_name="name"
