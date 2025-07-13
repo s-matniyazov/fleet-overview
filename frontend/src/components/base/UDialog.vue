@@ -9,8 +9,8 @@ defineProps({
 </script>
 <template>
   <Transition name="modal">
-    <div v-if="show" class="modal-mask">
-      <div class="modal-container bg-light rounded-4 shadow-dark" :style="`width: ${width}`">
+    <div v-if="show" class="modal-mask text-white">
+      <div style="background: #06273d" class="modal-container rounded-4 shadow-dark" :style="`width: ${width}`">
         <div class="modal-header pb-3 border-bottom-0 text-primary" style="font-weight: 1000; font-size: 16px">
           <slot name="header">
             <h5 class="modal-title">Создание</h5>

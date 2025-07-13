@@ -31,15 +31,14 @@ function onLogin() {
 </script>
 
 <template>
-  <div class="d-flex justify-content-center align-items-center min-vh-100 bg-light rounded-4">
-    <div class="p-4 shadow rounded bg-white" style="width: 100%; max-width: 420px">
+  <div class="d-flex justify-content-center align-items-center min-vh-100 main_with_gradient" >
+    <div class="p-4 shadow-lg rounded-3 login" >
       <div class="text-center mb-4">
-        <img src="../assets/icons/em_logo.png" alt="EM Fleet Logo" style="height: 80px;" />
-        <h2 class="mt-3">EFFICIENT MANAGEMENT FLEET</h2>
+        <h2 class="mt-3 text-white">EFFICIENT MANAGEMENT FLEET</h2>
       </div>
       <div class="text-center mb-4">
-        <h5>Welcome to EM Fleet!</h5>
-        <p class="text-muted">Login to continue using EM Fleet..</p>
+        <h5 class="text-white">Welcome to EM Fleet!</h5>
+        <p class="text-white">Login to continue using EM Fleet..</p>
       </div>
       <form>
         <div class="mb-3">
@@ -49,8 +48,8 @@ function onLogin() {
           <UInput v-model="password" placeholder="Введите пароль" label="Password" type="password" />
         </div>
         <div class="mb-3">
-          <button
-              class="btn btn-primary w-100"
+          <button style="background-color: #0891B2; "
+              class="btn w-100 text-white"
               type="button"
               @click="e => { onLogin(); e.stopPropagation(); }"
           >
@@ -66,5 +65,14 @@ function onLogin() {
 body {
   margin: 0;
   background-color: #4e749d;
+}
+.main_with_gradient{
+  background: linear-gradient(135deg, #24334b, rgb(2, 6, 23), #0f172a, #24334b);
+}
+.login{
+  width: 100%;max-width: 420px; background: rgba(30, 41, 59, 0.58);
+  backdrop-filter: blur(6px);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 </style>

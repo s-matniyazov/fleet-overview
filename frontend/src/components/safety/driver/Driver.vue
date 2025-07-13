@@ -363,7 +363,7 @@ watch(
     <modal :show="addModal" @close="addModal = false" width="calc(100vw - 400px)">
       <template #header>
         <div class="d-flex" style="width: 100%">
-          <div class="text-dark">
+          <div class="text-white">
             {{ data.id ? t('edit') : t('add') }} {{ t('driver') }} : ({{ data.id }})
           </div>
           <div class="text-end u-end">
@@ -374,10 +374,10 @@ watch(
 
       <template #body>
         <UForm @submit="onSave">
-          <div class="row p-4 border border-1">
+          <div class="row p-4">
             <!--            company-->
             <div class="col-6 pe-5">
-              <div class="col-12 text-primary mb-3" style="font-weight: 1000; font-size: 16px">
+              <div class="col-12 text-white mb-3" style="font-weight: 1000; font-size: 16px">
                 Personal Details
               </div>
               <!--            name-->
@@ -424,7 +424,7 @@ watch(
               </div>
             </div>
             <div class="col-6">
-              <div class="col-12 text-primary mb-3" style="font-weight: 1000; font-size: 16px">
+              <div class="col-12 text-white mb-3" style="font-weight: 1000; font-size: 16px">
                 Current Address
               </div>
               <div class="col-12 row">
@@ -490,9 +490,9 @@ watch(
             </div>
           </div>
 
-          <div class="modal-footer bg-light">
+          <div class="modal-footer">
             <div class="d-flex text-end align-items-end mt-2">
-              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="submit" style="background-color:#0891B2;" class="btn text-white">Save</button>
             </div>
           </div>
         </UForm>

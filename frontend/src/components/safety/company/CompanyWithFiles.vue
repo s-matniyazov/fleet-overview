@@ -305,7 +305,7 @@ watch(
     <modal :show="addModal" @close="addModal = false" width="calc(100vw - 400px)">
       <template #header>
         <div class="d-flex" style="width: 100%">
-          <div class="text-primary">
+          <div class="text-white">
             {{ data.id ? t('edit') : t('add') }} Company
           </div>
           <div class="text-end u-end">
@@ -402,9 +402,9 @@ watch(
               </div>
             </div>
 
-            <div class="modal-footer bg-light">
+            <div class="modal-footer">
               <div class="d-flex text-end align-items-end mt-2">
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" style="background-color:#0891B2;" class="btn text-white">Save</button>
               </div>
             </div>
           </UScrollArea>

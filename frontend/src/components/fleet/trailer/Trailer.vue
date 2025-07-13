@@ -380,7 +380,7 @@ watch(
     <UDialog :show="addModal" @close="addModal = false" width="calc(100vw - 400px)">
       <template #header>
         <div class="d-flex w-100">
-          <div class="text-primary" style="font-weight: 1000; font-size: 16px">
+          <div class="text-white" style="font-weight: 1000; font-size: 16px">
             {{ data.id ? t('edit') : t('add') }} {{ t('trailer') }}
           </div>
           <div class="text-end u-end">
@@ -394,7 +394,7 @@ watch(
           <UScrollArea height="calc(100vh - 300px)">
             <div class="row">
               <div class="col-6 row">
-                <div class="col-12 text-primary mb-3" style="font-weight: 1000; font-size: 16px">
+                <div class="col-12 text-white mb-3" style="font-weight: 1000; font-size: 16px">
                   Unit details
                 </div>
                 <!--            unit-->
@@ -478,7 +478,7 @@ watch(
               </div>
 
               <div class="col-6">
-                <div class="col-12 text-primary mb-3" style="font-weight: 1000; font-size: 16px">
+                <div class="col-12 text-white mb-3" style="font-weight: 1000; font-size: 16px">
                   Ownership details
                 </div>
 
@@ -505,7 +505,7 @@ watch(
                 </template>
 
                 <template v-if="[1, 3].includes(data.ownershipTypeId)">
-                  <div class="col-12 text-primary my-3" style="font-weight: 1000; font-size: 16px">
+                  <div class="col-12 text-white my-3" style="font-weight: 1000; font-size: 16px">
                     Other Details
                   </div>
 
@@ -520,7 +520,7 @@ watch(
                   </div>
                 </template>
 
-                <div class="col-12 text-primary my-3" style="font-weight: 1000; font-size: 16px">
+                <div class="col-12 text-white my-3" style="font-weight: 1000; font-size: 16px">
                   Additional Notes
                 </div>
 
@@ -535,9 +535,9 @@ watch(
             </div>
           </UScrollArea>
 
-          <div class="modal-footer bg-light">
+          <div class="modal-footer">
             <div class="d-flex text-end align-items-end mt-2">
-              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="submit" style="background-color:#0891B2;" class="btn text-white">Save</button>
             </div>
           </div>
         </UForm>

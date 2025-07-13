@@ -38,10 +38,15 @@ defineProps({
     required: true
   }
 });
+const isHovered = ref(false)
+
+// Load image paths correctly for Vite/Webpack (works in both)
+const defaultIcon = new URL('../assets/icons/logout.png', import.meta.url).href
+const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).href
 </script>
 
 <template>
-  <div class="vertical-menu">
+  <div class="vertical-menu verticalMenu" style="color: #919191">
     <div class="h-100">
       <div id="sidebar-menu" :class="{'sidebar-collapsed': collapsed}">
         <ul v-if="!collapsed" class="metismenu list-unstyled">
@@ -318,10 +323,13 @@ defineProps({
       </div>
 
       <div class="w-100 position-absolute d-flex align-items-center p-1"
-           style="margin-top: auto; bottom: 0; background: #385a8a">
-        <button class="btn btn btn-outline-light" style="height: 50px; width: 50px; /*margin-left: auto; right: 0*/"
-                @click="e => {onLogout(); e.stopPropagation()}">
-          <img src="@/assets/icons/logout.png" alt="logout" height="24"/>
+           style="margin-top: auto; bottom: 0;">
+        <button class="btn btn-outline-light"
+                style="height: 50px; width: 50px;"
+                @click="e => { onLogout(); e.stopPropagation() }"
+                @mouseover="isHovered = true"
+                @mouseleave="isHovered = false">
+          <img :src="isHovered ? hoverIcon : defaultIcon" alt="logout" height="24" />
         </button>
       </div>
     </div>
@@ -368,5 +376,14 @@ hr {
   height: 50px;
 }
 
+.verticalMenu{
+  background: #06273d;
+}
+.login{
+  width: 100%;max-width: 420px; background: rgba(30, 41, 59, 0.58);
+  backdrop-filter: blur(6px);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
 
 </style>

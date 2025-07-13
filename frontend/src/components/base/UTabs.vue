@@ -24,7 +24,7 @@ const activeTab = defineModel()
 .nav-tabs .nav-item.show .nav-link,
 .nav-tabs .nav-link.active {
   color: #fff;
-  background-color: #385a8a;
+  background-color: #0891B2;
 }
 
 .nav-tabs {

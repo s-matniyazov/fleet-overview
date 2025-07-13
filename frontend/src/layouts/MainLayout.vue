@@ -56,32 +56,30 @@ watch(
   <div id="layout-wrapper">
 
     <header id="page-topbar">
-      <div class="navbar-header">
+      <div class="navbar-header" style="background: #06273d;">
         <div class="d-flex items-center">
-          <div class="navbar-brand-box" :style="collapsed ? 'padding: 0 0.5rem;' : 'padding: 0 1.5rem;'">
+          <div class="navbar-brand-box" :style="collapsed ? 'padding: 0 0.5rem;' : 'padding: 0 1.5rem;'" >
             <template v-if="!collapsed">
               <router-link to="/" class="logo logo-dark">
-                <span class="logo-lg"> <img src="@/assets/icons/em_logo.png" alt="fleet logo" size="12"
-                                            style="height: 50px">
-                  <span class="logo-txt">EM Fleet</span>
-                </span>
+<!--                <span class="logo-lg"> <img src="@/assets/icons/em_logo.png" alt="fleet logo" size="12" style="height: 50px">-->
+                  <span class="logo-txt font-size-13" >Efficient Management Fleet</span>
+<!--                </span>-->
               </router-link>
             </template>
             <template v-else>
-                <span class="logo-sm"> <img src="@/assets/icons/em_logo.png" alt="fleet logo" size="8"
-                                            style="height: 50px"/> </span>
-              <span class="logo-txt"></span>
+<!--                <span class="logo-sm"> <img src="@/assets/icons/em_logo.png" alt="fleet logo" size="8" style="height: 50px"/> </span>-->
+              <span class="logo-txt font-size-15">EM Fleet</span>
             </template>
           </div>
         </div>
 
-        <button class="btn btn bg-light btn-outline-light mx-1" style="height: 50px; width: 50px;"
+        <button class="btn btn  mx-1" style="height: 50px; width: 50px;"
                 @click="e => {toggleSidebar(); e.stopPropagation()}">
-          <img src="@/assets/icons/resize.png" alt="resize" height="24"/>
+          <img src="@/assets/icons/resize.png" alt="resize" height="20"/>
         </button>
 
         <div class="d-flex px-3" style="justify-content: space-around">
-          <span class="text-primary" style="font-size: 18px; font-weight: 1000">{{
+          <span class="text-white" style="font-size: 18px; font-weight: 1000">{{
               routerStore.currentRouterName
             }}</span>
         </div>
