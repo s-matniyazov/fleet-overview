@@ -46,7 +46,7 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
 </script>
 
 <template>
-  <div class="vertical-menu verticalMenu" style="color: #919191">
+  <div class="vertical-menu verticalMenu text-light" style="color: #919191">
     <div class="h-100">
       <div id="sidebar-menu" :class="{'sidebar-collapsed': collapsed}">
         <ul v-if="!collapsed" class="metismenu list-unstyled">
@@ -59,7 +59,7 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
                 <path
                     d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path>
               </svg>
-              <span data-key="t-fleet" class="m-2">Fleet</span>
+              <span data-key="t-fleet" class="m-2 text-light">Fleet</span>
               <span class="ml-auto" v-if="currentOpenMenu.includes('fleet')">
                 <i class="mdi mdi-arrow-down-drop-circle-outline"/>
               </span>
@@ -114,7 +114,7 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
                 <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
               </svg>
 
-              <span data-key="t-safety" class="m-2">Safety</span>
+              <span data-key="t-safety" class="m-2 text-light">Safety</span>
               <span class="ml-auto" v-if="currentOpenMenu.includes('safety')">
                 <i class="mdi mdi-arrow-down-drop-circle-outline"/>
               </span>
@@ -153,7 +153,7 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
                 <line x1="9" y1="8" x2="15" y2="8"></line>
                 <line x1="17" y1="16" x2="23" y2="16"></line>
               </svg>
-              <span class="m-2">References</span>
+              <span class="m-2 text-light">References</span>
               <span class="ml-auto" v-if="currentOpenMenu.includes('references')">
                 <i class="mdi mdi-arrow-down-drop-circle-outline"/>
               </span>

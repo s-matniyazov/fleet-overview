@@ -115,6 +115,7 @@ const newModel = () => {
   return {
     id: null,
     unit: null,
+    carrierResponsibleForSafety: null,
     inServiceDate: null,
     licensePlate: null,
     stateId: null,
@@ -462,9 +463,15 @@ watch(
                   Unit details
                 </div>
                 <!--            unit-->
-                <div class="col-12">
+                <div class="col-6">
                   <UInput v-model="data.unit" :label="t('unit')" :hint="t('unit')" :name="t('unit')"
                           :placeholder="t('enter_unit')" classes="mb-2"
+                          :rules="(val) => (!val && $t('required'))"/>
+                </div>
+                <!--            unit-->
+                <div class="col-6">
+                  <UInput v-model="data.carrierResponsibleForSafety" :label="t('carrierResponsibleForSafety')" :hint="t('carrierResponsibleForSafety')" :name="t('carrierResponsibleForSafety')"
+                          :placeholder="t('enter_carrierResponsibleForSafety')" classes="mb-2"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
 

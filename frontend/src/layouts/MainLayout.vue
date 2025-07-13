@@ -58,7 +58,7 @@ watch(
     <header id="page-topbar">
       <div class="navbar-header" style="background: #06273d;">
         <div class="d-flex items-center">
-          <div class="navbar-brand-box" :style="collapsed ? 'padding: 0 0.5rem;' : 'padding: 0 1.5rem;'" >
+          <div class="text-light" :style="collapsed ? 'padding: 0 0.5rem;' : 'padding: 0 1.5rem;'"  style="background: #06273d;">
             <template v-if="!collapsed">
               <router-link to="/" class="logo logo-dark">
 <!--                <span class="logo-lg"> <img src="@/assets/icons/em_logo.png" alt="fleet logo" size="12" style="height: 50px">-->
