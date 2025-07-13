@@ -20,8 +20,12 @@ import java.util.Set;
 public class CompanyEntity extends BaseEntity {
     @Column(length = 500)
     private String name;
+    @Column(length = 500)
+    private String ownerName;
     @Column(length = 20)
     private String dot;
+    @Column(length = 20)
+    private String pinNumber;
     @Column(length = 20)
     private String mc;
     @Column(length = 500)
@@ -57,10 +61,11 @@ public class CompanyEntity extends BaseEntity {
     public CompanyEntity() {
     }
 
-    public CompanyEntity(String name, String dot, String mc, String dba, String fein,
+    public CompanyEntity(String name, String ownerName, String dot, String pinNumber, String mc, String dba, String fein,
                          StateEntity state, String address1, String address2, String city,
                          Integer zipcode, String email, String phone, TimeZoneEnum timeZone, CompanyStatusEnum status) {
         this.name = name;
+        this.ownerName = ownerName;
         this.dot = dot;
         this.mc = mc;
         this.dba = dba;

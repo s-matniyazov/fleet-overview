@@ -25,6 +25,11 @@ function getDataTitle(type) {
     case "CLEARING_HOUSE":
     case "MVR":
       return "Last Collected On: "
+    case "ARTICLES_OF_INCORPORATION":
+    case "MC_CERTIFICATE":
+    case "OWNER_OPERATOR_AGREEMENT":
+    case "DRIVER_AGREEMENT":
+      return ''
     default: return "Expiration Date: "
   }
 }
@@ -39,6 +44,11 @@ function getData(type) {
     case "CLEARING_HOUSE":
     case "MVR":
       return longToDate(props.file.lastCollectedOn || 1)
+    case "ARTICLES_OF_INCORPORATION":
+    case "MC_CERTIFICATE":
+    case "OWNER_OPERATOR_AGREEMENT":
+    case "DRIVER_AGREEMENT":
+      return ''
     default: return longToDate(props.file.expirationDate || 1);
   }
 }

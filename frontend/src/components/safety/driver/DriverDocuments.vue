@@ -3,7 +3,7 @@ import DocumentMiniCard from "@/components/DocumentMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
 import FileOverlay from "@/components/FileOverlay.vue";
 import {ref} from "vue";
-import {DOCUMENT_TYPES, downloadResource, FLEET_TYPE_NAMES, SAFETY_TYPE_NAMES} from "@/util/utils.js";
+import {DOCUMENT_TYPES, downloadResource, SAFETY_TYPE_NAMES} from "@/util/utils.js";
 import {URIS} from "@/constants/UriConstants.js";
 import {useDriverFileStore} from "@/store/DriverFileStore.js";
 
@@ -41,7 +41,7 @@ const selectedFileSection = ref({
 
 function downloadAll(type) {
   if (type === 'driverFiles') {
-    FLEET_TYPE_NAMES.forEach(item => {
+    SAFETY_TYPE_NAMES.forEach(item => {
       const resource = driverFileStore.files.find(it => it.type === item.key)?.resource
       if (resource) {
         downloadResource(resource)

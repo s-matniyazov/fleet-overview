@@ -29,7 +29,7 @@ const columns = [
     key: 'company_name',
     name: 'company_name',
     label: t('company_name'),
-    styles: 'width: 250px;',
+    styles: '',
     classes: '',
   },
   {
@@ -50,20 +50,6 @@ const columns = [
     key: 'ucr',
     name: 'ucr',
     label: t('ucr'),
-    styles: 'width: 200px;',
-    classes: '',
-  },
-  {
-    key: 'hvut_2290',
-    name: 'hvut_2290',
-    label: t('hvut_2290'),
-    styles: 'width: 200px;',
-    classes: '',
-  },
-  {
-    key: 'w_9',
-    name: 'w_9',
-    label: t('w_9'),
     styles: 'width: 200px;',
     classes: '',
   },
@@ -292,22 +278,6 @@ watch(
           <FileMiniCard name="UCR" type="UCR"
                         :file="row?.files.find(it => it.type==='UCR')"
                         @click="(e) => {if(!row?.files.find(it => it.type==='UCR')){ selectedRow = row; selectFileSection('UCR');} e.stopPropagation()}"/>
-        </td>
-      </template>
-
-      <template #row_hvut_2290="{row}">
-        <td>
-          <FileMiniCard name="HVUT_2290" type="HVUT_2290"
-                        :file="row?.files.find(it => it.type==='HVUT_2290')"
-                        @click="(e) => {if(!row?.files.find(it => it.type==='HVUT_2290')){ selectedRow = row; selectFileSection('HVUT_2290');} e.stopPropagation()}"/>
-        </td>
-      </template>
-
-      <template #row_w_9="{row}">
-        <td>
-          <FileMiniCard name="W_9" type="W_9"
-                        :file="row?.files.find(it => it.type==='W_9')"
-                        @click="(e) => {if(!row?.files.find(it => it.type==='W_9')){ selectedRow = row; selectFileSection('W_9');} e.stopPropagation()}"/>
         </td>
       </template>
 

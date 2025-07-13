@@ -9,9 +9,13 @@ public enum CompanyFileTypeEnum {
     INS_CERT("Company Insurance Certificate"),
     IFTA_LICENSE("IFTA License"),
     UCR("UCR (Unified Carrier Registration)"),
-    HVUT_2290("HVUT 2290"),
-    W_9("W-9"),
-    MCS_150("MCS-150 (Biennial)");
+    MCS_150("MCS-150 (Biennial)"),
+
+    // other documents
+    ARTICLES_OF_INCORPORATION("Articles of Incorporation"),
+    MC_CERTIFICATE("MC Certificate"),
+    OWNER_OPERATOR_AGREEMENT("Owner operator Agreement"),
+    DRIVER_AGREEMENT("Driver Agreement");
 
     private final  String description;
 

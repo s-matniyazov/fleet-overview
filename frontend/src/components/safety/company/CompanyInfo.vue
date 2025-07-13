@@ -10,6 +10,7 @@ const props = defineProps({
   }
 });
 </script>
+
 <template>
   <div class="tw-m-auto tw-w-[80%] ng-star-inserted p-2">
     <div class="!tw-shadow-default dark:!tw-bg-dark-primary tw-bg-white tw-rounded">
@@ -29,7 +30,7 @@ const props = defineProps({
                 </div>
                 <div
                     class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
-                  <p class="tw-m-0">3574434</p>
+                  <p class="tw-m-0">{{ data.dot }}</p>
                 </div>
               </div>
               <div class="tw-grid tw-grid-cols-[240px_auto] tw-gap-[33px] tw-gap-y-0 tw-items-start">
@@ -38,7 +39,7 @@ const props = defineProps({
                 </div>
                 <div
                     class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
-                  <p class="tw-m-0">1205167</p>
+                  <p class="tw-m-0">{{ data.mc }}</p>
                 </div>
               </div>
             </div>
@@ -50,7 +51,7 @@ const props = defineProps({
                 </div>
                 <div
                     class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
-                  <p class="tw-m-0">Wenze Investments LLC</p>
+                  <p class="tw-m-0">{{ data.name }}</p>
                 </div>
               </div>
               <div class="tw-grid tw-grid-cols-[240px_auto] tw-gap-[33px] tw-gap-y-0 tw-items-start">
@@ -59,7 +60,7 @@ const props = defineProps({
                 </div>
                 <div
                     class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
-                  <p class="tw-m-0">Wenze Transport Services </p>
+                  <p class="tw-m-0">{{ data.dba }}</p>
                 </div>
               </div>
               <div class="tw-grid tw-grid-cols-[240px_auto] tw-gap-[33px] tw-gap-y-0 tw-items-start">
@@ -68,7 +69,7 @@ const props = defineProps({
                 </div>
                 <div
                     class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
-                  <p class="tw-m-0">-</p>
+                  <p class="tw-m-0">{{ data.fein }}</p>
                 </div>
               </div>
               <div class="tw-grid tw-grid-cols-[240px_auto] tw-gap-[33px] tw-gap-y-0 tw-items-start">
@@ -77,7 +78,7 @@ const props = defineProps({
                 </div>
                 <div
                     class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
-                  <p class="tw-m-0">2040 lily stem trail Auburn, Georgia 30011 US</p>
+                  <p class="tw-m-0">{{ `${data.address1} ${data.address2} ` }}</p>
                 </div>
               </div>
               <div class="tw-grid tw-grid-cols-[240px_auto] tw-gap-[33px] tw-gap-y-0 tw-items-start">
@@ -86,7 +87,7 @@ const props = defineProps({
                 </div>
                 <div
                     class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
-                  <p class="tw-m-0">Eastern</p>
+                  <p class="tw-m-0">{{ data.timeZone }}</p>
                 </div>
               </div>
               <div class="tw-grid tw-grid-cols-[240px_auto] tw-gap-[33px] tw-gap-y-0 tw-items-start">
@@ -95,7 +96,7 @@ const props = defineProps({
                 </div>
                 <div
                     class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
-                  <p class="tw-m-0">freight@wenzellc.com</p>
+                  <p class="tw-m-0">{{ data.email }}</p>
                 </div>
               </div>
               <div class="tw-grid tw-grid-cols-[240px_auto] tw-gap-[33px] tw-gap-y-0 tw-items-start">
@@ -104,7 +105,7 @@ const props = defineProps({
                 </div>
                 <div
                     class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
-                  <p class="tw-m-0">470-964-1248</p>
+                  <p class="tw-m-0">{{ data.phone }}</p>
                 </div>
               </div>
             </div>
@@ -114,7 +115,6 @@ const props = defineProps({
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .tw-justify-between {

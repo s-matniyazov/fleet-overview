@@ -25,7 +25,7 @@ const props = defineProps({
     required: true,
     default: {
       description: '',
-      expirationDate: new Date(),
+      expirationDate: null,
       type: '',
       //truckId: '', // or
       //trailerId: '', // or
@@ -212,8 +212,8 @@ const formatSize = (size) => {
             <template v-else-if="['SSN'].includes(data.type)">
               <div class="col-6">
                 <UInput v-model="upload.data.socialSecurityNumber" placeholder="Social Security Number"
-                            label="Social Security Number *" :readonly="upload.deleted"
-                            :rules="(val) => (!val && $t('required'))" type="number"/>
+                        label="Social Security Number *" :readonly="upload.deleted"
+                        :rules="(val) => (!val && $t('required'))" type="number"/>
               </div>
             </template>
             <template v-else-if="['HVUT_2290'].includes(data.type)">
@@ -232,6 +232,10 @@ const formatSize = (size) => {
                             :rules="(val) => (!val && $t('required'))"/>
               </div>
             </template>
+            <template
+                v-else-if="['ARTICLES_OF_INCORPORATION', 'MC_CERTIFICATE', 'OWNER_OPERATOR_AGREEMENT', 'DRIVER_AGREEMENT'].includes(data.type)">
+<!--              no data-->
+            </template>
             <template v-else>
               <div v-if="['MVR', 'CLEARING_HOUSE'].includes(data.type)" class="col-6">
                 <UDateInput v-model="upload.data.lastCollectedOn" placeholder="dd.mm.yyyy"
@@ -247,7 +251,8 @@ const formatSize = (size) => {
             </template>
 
             <div class="col-md-12">
-              <UTextarea v-model="upload.data.description" placeholder="description"  :readonly="upload.deleted" :noLabel="true" rows="1"/>
+              <UTextarea v-model="upload.data.description" placeholder="description" :readonly="upload.deleted"
+                         :noLabel="true" rows="1"/>
             </div>
 
             <div class="mt-3 text-end" v-if="!upload.deleted">

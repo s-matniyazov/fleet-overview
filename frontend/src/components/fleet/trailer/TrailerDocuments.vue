@@ -3,7 +3,7 @@ import DocumentMiniCard from "@/components/DocumentMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
 import FileOverlay from "@/components/FileOverlay.vue";
 import {ref} from "vue";
-import {DOCUMENT_TYPES, downloadResource, FLEET_TYPE_NAMES, PERMIT_NAMES} from "@/util/utils.js";
+import {DOCUMENT_TYPES, downloadResource, FLEET_TYPE_NAMES} from "@/util/utils.js";
 import {URIS} from "@/constants/UriConstants.js";
 import {useTrailerFileStore} from "@/store/TrailerFileStore.js";
 
@@ -46,14 +46,6 @@ function downloadAll(type) {
       }
     })
   }
-  // else if (type === 'permits') {
-  //   PERMIT_NAMES.forEach(item => {
-  //     const resource = trailerFileStore.permits.find(it => it.type === item.key)?.resource
-  //     if (resource) {
-  //       downloadResource(resource)
-  //     }
-  //   })
-  // }
 }
 
 </script>
