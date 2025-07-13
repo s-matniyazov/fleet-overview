@@ -10,7 +10,12 @@ public enum DriverFileTypeEnum {
     MEDICAL_CERT("Medical Certificate"),
     MVR("MVR"),
     CLEARING_HOUSE("Clearing House"),
-    SSN("SSN");
+    SSN("SSN"),
+
+    CCF("CCF"),
+    DRUG_TEST_RESULT("DRUG TEST RESULT"),
+    DRIVER_APPLICATION("DRIVER APPLICATION"),
+    PEV("PEV");
 
     private String description;
 

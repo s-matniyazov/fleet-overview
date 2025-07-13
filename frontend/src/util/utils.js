@@ -108,6 +108,11 @@ export const DOCUMENT_TYPES = {
     "CLEARING_HOUSE": "Clearing House",
     "SSN": "SSN",
 
+    "CCF": "CCF",
+    "DRUG_TEST_RESULT": "Drug Test Result",
+    "DRIVER_APPLICATION": "Driver Application",
+    "PEV": "PEV",
+
 //     company
     "INS_CERT": "Company Insurance Certificate",
     "IFTA_LICENSE": "IFTA License",
@@ -167,6 +172,22 @@ export const SAFETY_TYPE_NAMES = [
     {
         key: "SSN",
         value: "SSN"
+    },
+    {
+        key: "CCF",
+        value: "CCF"
+    },
+    {
+        key: "DRUG_TEST_RESULT",
+        value: "Drug Test Result"
+    },
+    {
+        key: "DRIVER_APPLICATION",
+        value: "Driver Application"
+    },
+    {
+        key: "PEV",
+        value: "PEV"
     },
 ];
 
