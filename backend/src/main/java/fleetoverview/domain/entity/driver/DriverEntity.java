@@ -50,18 +50,13 @@ public class DriverEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private DriverTypeEnum type;
 
-    @ManyToOne(targetEntity = TruckEntity.class, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"createdBy", "created", "driver", "state", "files", "permits", "company"})
-    private TruckEntity truck;
-
     @OneToMany(mappedBy = "driver", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"createdBy", "created"})
     private Set<DriverFileEntity> files = new HashSet<>();
 
     public DriverEntity(CompanyEntity company,String firstName, String lastName, String middleName, LocalDate hireDate,
                         LocalDate terminationDate, LocalDate dateOfBirth, StateEntity state, String address, String city, int zipCode,
-                        String email, String phone, DriverStatusEnum status, DriverTypeEnum type,
-                        TruckEntity truck) {
+                        String email, String phone, DriverStatusEnum status, DriverTypeEnum type) {
         this.company = company;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -77,7 +72,6 @@ public class DriverEntity extends BaseEntity {
         this.status = status;
         this.state = state;
         this.type = type;
-        this.truck = truck;
     }
 
     public DriverEntity() {}
@@ -200,14 +194,6 @@ public class DriverEntity extends BaseEntity {
 
     public void setType(DriverTypeEnum type) {
         this.type = type;
-    }
-
-    public TruckEntity getTruck() {
-        return truck;
-    }
-
-    public void setTruck(TruckEntity truck) {
-        this.truck = truck;
     }
 
     public void setFiles(Set<DriverFileEntity> files) {

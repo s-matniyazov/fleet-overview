@@ -77,7 +77,9 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
         repository.save(
                 new CompanyEntity(
                         data.name(),
+                        data.ownerName(),
                         data.dot(),
+                        data.pinNumber(),
                         data.mc(),
                         data.dba(),
                         data.fein(),
@@ -101,7 +103,9 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
         CompanyEntity company = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not.found")));
 
         company.setName(data.name());
+        company.setOwnerName(data.ownerName());
         company.setDot(data.dot());
+        company.setPinNumber(data.pinNumber());
         company.setMc(data.mc());
         company.setDba(data.dba());
         company.setFein(data.fein());

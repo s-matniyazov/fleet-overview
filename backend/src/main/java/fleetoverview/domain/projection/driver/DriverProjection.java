@@ -40,6 +40,9 @@ public class DriverProjection {
     private Integer truckId;
     private String truckName;
 
+    private Integer trailerId;
+    private String trailerName;
+
     private Set<DriverFileProjection> files;
 
     public DriverProjection() {
@@ -227,5 +230,21 @@ public class DriverProjection {
 
     public void setFiles(Set<DriverFileProjection> files) {
         this.files = files;
+    }
+
+    public Integer getTrailerId() {
+        return trailerId;
+    }
+
+    public void setTrailerId(Integer trailerId) {
+        this.trailerId = trailerId;
+    }
+
+    public String getTrailerName() {
+        return trailerName;
+    }
+
+    public void setTrailerName(String trailerName) {
+        this.trailerName = trailerName;
     }
 }

@@ -95,7 +95,7 @@ const props = defineProps({
 
     </div>
     <div
-        class="tw-flex-1 tw-rounded tw-bg-light-primary  tw-shadow-default tw-p-[7px] tw-flex tw-flex-col ">
+        class="tw-flex-1 tw-rounded tw-bg-light-primary  tw-shadow-default tw-p-[7px] tw-flex tw-flex-col">
       <div class="tw-flex tw-justify-between"><span
           class="tw-w-[21px] tw-h-[21px] tw-rounded-full tw-flex tw-items-center tw-justify-center tw-bg-secondary tw-text-light-primary ">
           3 </span></div>
@@ -103,10 +103,10 @@ const props = defineProps({
           class="tw-mt-4 tw-text-lg tw-font-bold tw-text-dark-primary "> Operation Equipment
       </span>
       <div class="tw-mt-4 tw-flex tw-flex-col "><span class="tw-text-gray-dark tw-text-[12px]">Truck</span><span
-          class="tw-w-fit tw-bg-secondary tw-px-2 tw-rounded tw-text-light-primary  tw-text-[14px] ">
+          :class="`tw-w-fit ${data?.truckId && 'tw-text-light-primary tw-bg-secondary'} tw-px-2 tw-rounded tw-text-[14px] px-2`">
           {{ dataOrTire(data?.truckName) }} </span></div>
       <div class="tw-mt-2 tw-flex tw-flex-col "><span class="tw-text-gray-dark tw-text-[12px]">Trailer</span><span
-          class="tw-text-dark-primary  tw-text-[14px] ">
+          :class="`tw-w-fit ${data?.trailerId && 'tw-text-light-primary tw-bg-secondary'} tw-px-2 tw-rounded tw-text-[14px] px-2`">
           {{ dataOrTire(data?.trailerName) }} </span></div>
     </div>
   </div>

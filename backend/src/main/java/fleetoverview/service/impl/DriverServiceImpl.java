@@ -89,8 +89,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
                         data.email(),
                         data.phone(),
                         data.status(),
-                        data.type(),
-                        truckRepository.findById(data.truckId()).orElse(null)
+                        data.type()
                 )
         );
         return ApiResponse.success();
@@ -115,7 +114,6 @@ public class DriverServiceImpl extends BaseService implements DriverService {
         driver.setState(stateRepository.findById(data.stateId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("state.not_found"))));
         driver.setStatus(data.status());
         driver.setType(data.type());
-        driver.setTruck(truckRepository.findById(data.truckId()).orElse(null));
 
         return ApiResponse.success();
     }

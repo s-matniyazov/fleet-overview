@@ -27,6 +27,8 @@
         <id property="type" column="type"/>
         <id property="truckId" column="truckId"/>
         <id property="truckName" column="truckName"/>
+        <id property="trailerId" column="trailerId"/>
+        <id property="trailerName" column="trailerName"/>
 
         <collection property="files" columnPrefix="df_"
                     ofType="fleetoverview.domain.projection.driver.DriverFileProjection">
@@ -116,6 +118,9 @@
                 tr.id as "truckId",
                 tr.unit || ' ' || tr.vin as "truckName",
 
+                tra.id as "trailerId",
+                tra.unit || ' ' || tra.vin as "trailerName",
+
                 com.id as "companyId",
                 com.name as "companyName",
 
@@ -126,7 +131,8 @@
             from drivers di
                 left join states s on s.id = di.state_id
                 left join countries c on c.id = s.country_id
-                left join trucks tr on tr.id = di.truck_id
+                left join trucks tr on tr.driver_id = di.id
+                left join trailers tra on tra.driver_id = di.id
                 left join companies com on com.id = di.company_id
                 left join users u on u.id = di.created_by_id
             where 1=1

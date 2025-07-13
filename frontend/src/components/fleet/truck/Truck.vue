@@ -82,6 +82,20 @@ const columns = [
     classes: '',
   },
   {
+    key: 'non_trucking_liability',
+    name: 'non_trucking_liability',
+    label: t('non_trucking_liability'),
+    styles: 'min-width: 250px;',
+    classes: '',
+  },
+  {
+    key: 'clean_truck_check_permit',
+    name: 'clean_truck_check_permit',
+    label: t('clean_truck_check_permit'),
+    styles: 'min-width: 250px;',
+    classes: '',
+  },
+  {
     key: 'permits',
     name: 'permits',
     label: t('permits'),
@@ -95,13 +109,6 @@ const columns = [
     styles: '',
     classes: '',
   },
-  // {
-  //   key: 'actions',
-  //   name: 'actions',
-  //   label: t('actions'),
-  //   styles: '',
-  //   classes: '',
-  // },
 ]
 
 const newModel = () => {
@@ -393,6 +400,22 @@ watch(
           <FileMiniCard name="LEASE AGR" type="LEASE_AGR"
                         :file="row?.files.find(it => it.type==='LEASE_AGR')"
                         @click="(e) => {selectedRow = row; selectFileSection('LEASE_AGR'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
+      <template #row_non_trucking_liability="{row}">
+        <td>
+          <FileMiniCard name="NON TRUCKING LIABILITY" type="NON_TRUCKING_LIABILITY"
+                        :file="row?.files.find(it => it.type==='NON_TRUCKING_LIABILITY')"
+                        @click="(e) => {selectedRow = row; selectFileSection('NON_TRUCKING_LIABILITY'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
+      <template #row_clean_truck_check_permit="{row}">
+        <td>
+          <FileMiniCard name="CLEAN TRUCK CHECK PERMIT" type="CLEAN_TRUCK_CHECK_PERMIT"
+                        :file="row?.files.find(it => it.type==='CLEAN_TRUCK_CHECK_PERMIT')"
+                        @click="(e) => {selectedRow = row; selectFileSection('CLEAN_TRUCK_CHECK_PERMIT'); e.stopPropagation()}"/>
         </td>
       </template>
 

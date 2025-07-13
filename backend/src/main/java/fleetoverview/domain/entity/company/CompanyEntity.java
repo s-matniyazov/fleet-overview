@@ -67,6 +67,7 @@ public class CompanyEntity extends BaseEntity {
         this.name = name;
         this.ownerName = ownerName;
         this.dot = dot;
+        this.pinNumber = pinNumber;
         this.mc = mc;
         this.dba = dba;
         this.fein = fein;
@@ -195,5 +196,21 @@ public class CompanyEntity extends BaseEntity {
 
     public void setFiles(Set<CompanyFileEntity> files) {
         this.files = files;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getPinNumber() {
+        return pinNumber;
+    }
+
+    public void setPinNumber(String pinNumber) {
+        this.pinNumber = pinNumber;
     }
 }

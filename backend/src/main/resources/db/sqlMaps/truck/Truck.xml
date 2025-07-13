@@ -29,6 +29,8 @@
         <result property="driverId" column="driverId"/>
         <result property="driverName" column="driverName"/>
         <result property="description" column="description"/>
+        <result property="carrierResponsibleForSafety" column="carrierResponsibleForSafety"/>
+        <result property="deActivationDate" column="deActivationDate"/>
         <result property="status" column="status"/>
 
         <result property="companyId" column="companyId"/>
@@ -111,6 +113,8 @@
                 ti.vin as "vin",
                 ti.includeifta as "includeIFTA",
                 ti.description as "description",
+                ti.carrier_responsible_for_safety as "carrierResponsibleForSafety",
+                ti.de_activation_date as "deActivationDate",
                 ti.status as "status",
 
                 s.id as "stateId",
