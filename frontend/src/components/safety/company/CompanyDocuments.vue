@@ -7,7 +7,7 @@ import {
   COMPANY_OTHER_TYPE_NAMES,
   COMPANY_TYPE_NAMES,
   DOCUMENT_TYPES,
-  downloadResource,
+  downloadResource, makeResourceEntity,
 } from "@/util/utils.js";
 import {URIS} from "@/constants/UriConstants.js";
 import {useCompanyFileStore} from "@/store/CompanyFileStore.js";
@@ -47,14 +47,14 @@ const selectedFileSection = ref({
 function downloadAll(type) {
   if (type === 'companyFiles') {
     COMPANY_TYPE_NAMES.forEach(item => {
-      const resource = companyFileStore.files.find(it => it.type === item.key)?.resource
+      const resource = makeResourceEntity(companyFileStore?.files.find(it => it.type === item.key))
       if (resource) {
         downloadResource(resource)
       }
     })
   } else if (type === 'companyOtherFiles') {
     COMPANY_OTHER_TYPE_NAMES.forEach(item => {
-      const resource = companyFileStore.files.find(it => it.type === item.key)?.resource
+      const resource = makeResourceEntity(companyFileStore?.files.find(it => it.type === item.key))
       if (resource) {
         downloadResource(resource)
       }

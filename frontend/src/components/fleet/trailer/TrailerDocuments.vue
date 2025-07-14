@@ -3,15 +3,16 @@ import DocumentMiniCard from "@/components/DocumentMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
 import FileOverlay from "@/components/FileOverlay.vue";
 import {ref} from "vue";
-import {DOCUMENT_TYPES, downloadResource, FLEET_TYPE_NAMES} from "@/util/utils.js";
+import {DOCUMENT_TYPES, downloadResource, FLEET_TYPE_NAMES, makeResourceEntity} from "@/util/utils.js";
 import {URIS} from "@/constants/UriConstants.js";
 import {useTrailerFileStore} from "@/store/TrailerFileStore.js";
 
 const trailerFileStore = useTrailerFileStore();
 
-const selectFileSection = (type) => {
+const selectFileSection = (type, url) => {
   selectedFileSection.value = {
     dialog: true,
+    url: url,
     data: {
       ...selectedFileSection.value.data,
       trailerId: props.data.id,
@@ -29,6 +30,7 @@ const props = defineProps({
 
 const selectedFileSection = ref({
   dialog: false,
+  url: '',
   data: {
     description: '',
     expirationDate: new Date(),
@@ -40,7 +42,7 @@ const selectedFileSection = ref({
 function downloadAll(type) {
   if (type === 'trailerFiles') {
     FLEET_TYPE_NAMES.forEach(item => {
-      const resource = trailerFileStore?.files.find(it => it.type === item.key)?.resource
+      const resource = makeResourceEntity(trailerFileStore?.files.find(it => it.type === item.key))
       if (resource) {
         downloadResource(resource)
       }
@@ -68,6 +70,7 @@ function downloadAll(type) {
         <div v-for="item in FLEET_TYPE_NAMES"
              class="col-6 mb-8 mt-2 cursor-pointer ng-star-inserted">
           <DocumentMiniCard
+              @click="(e) => {selectFileSection(item.key, `${URIS.TRAILER}/attach-file`); e.stopPropagation()}"
               :file="trailerFileStore.files.find(it => it.type===item.key)"
               :type="item.key" :name="item.value"
           />
@@ -87,7 +90,7 @@ function downloadAll(type) {
       </h4>
     </template>
     <template #body>
-      <FileOverlay :url="`${URIS.TRAILER}/${data?.id}/attach-permit`" :data="selectedFileSection.data"/>
+      <FileOverlay :url="selectedFileSection.url" :data="selectedFileSection.data"/>
     </template>
   </URightOverlay>
 </template>

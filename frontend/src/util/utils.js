@@ -63,8 +63,8 @@ export function longToDateTime(date) {
     res += toClockNumber(a.getMonth() + 1) + '.';
     res += a.getFullYear() + ' ';
     res += toClockNumber(a.getHours()) + ':'
-    res += toClockNumber(a.getMinutes()) + ':'
-    res += toClockNumber(a.getSeconds())
+    res += toClockNumber(a.getMinutes())/* + ':'
+    res += toClockNumber(a.getSeconds())*/
 
     return res;
 }
@@ -305,7 +305,17 @@ export const TIME_ZONES = [
     },
 ]
 
+export function makeResourceEntity(file) {
+    return {
+        id: file?.resourcesId,
+        fileName: file?.fileName,
+        extension: file?.extension,
+        size: file?.size,
+        contentType: file?.contentType
+    }
+}
 export function downloadResource(resource) {
+    if (!resource.id) return
     axiosIns.get(URIS.RESOURCES + '/view/' + resource.id, {
         responseType: 'blob',
     })

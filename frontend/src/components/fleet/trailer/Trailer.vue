@@ -6,7 +6,7 @@ import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
 import UInput from "@/components/base/UInput.vue";
 import {useI18n} from "vue-i18n";
-import {DOCUMENT_TYPES, showMessage} from "@/util/utils.js";
+import {DOCUMENT_TYPES, filterString, showMessage} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
 import USelect from "@/components/base/USelect.vue";
 import UDateInput from "@/components/base/UDateInput.vue";
@@ -32,7 +32,7 @@ const columns = [
     key: 'unit_details',
     name: 'unit_details',
     label: t('unit_details'),
-    styles: 'width: 200px;',
+    styles: 'min-width: 120px;',
     classes: '',
   },
   {
@@ -76,7 +76,7 @@ const columns = [
     label: t('lease_agreement'),
     styles: 'min-width: 200px;',
     classes: '',
-  },  
+  },
   {
     key: 'status',
     name: 'status',
@@ -119,6 +119,9 @@ const selectedFileSection = ref({
 });
 
 const apiUrl = URIS.TRAILER;
+const filter = ref({
+  vinOrUnit: null
+});
 const dataList = ref([]);
 const selectedRow = ref();
 const data = ref(newModel())
@@ -201,7 +204,7 @@ const onSave = () => {
 }
 
 function getData() {
-  axiosIns.get(`${apiUrl}?companyId=${filterStore.companyId}`)
+  axiosIns.get(`${apiUrl}${filterString({companyId: filterStore.companyId, ...filter.value})}`)
       .then(res => {
         dataList.value = res.data.data;
         selectedRow.value = null;
@@ -264,6 +267,10 @@ watch(
         <button @click="showModal = true" class="btn btn-primary btn-sm" :disabled="!selectedRow">
           <span class="mdi mdi-eye"></span>
         </button>
+
+        <UInput v-model="filter.vinOrUnit" style="min-width: 23vw"
+                :hint="t('vin')" :placeholder="t('search_by_vin_or_unit')"/>
+        <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-magnify"></span></button>
 
         <div class="align-items-center u-end">
           <button @click="reload" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
@@ -335,32 +342,32 @@ watch(
       <template #row_registration="{row}">
         <td>
           <FileMiniCard name="REG (CAB CARD)" type="REG_CAB_CARD"
-                             :file="row?.files.find(it => it.type==='REG_CAB_CARD')"
-                             @click="(e) => {selectedRow = row; selectFileSection('REG_CAB_CARD'); e.stopPropagation()}"/>
+                        :file="row?.files.find(it => it.type==='REG_CAB_CARD')"
+                        @click="(e) => {selectedRow = row; selectFileSection('REG_CAB_CARD'); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_annual_inspection="{row}">
         <td>
           <FileMiniCard name="ANN INS" type="ANN_INS"
-                             :file="row?.files.find(it => it.type==='ANN_INS')"
-                             @click="(e) => {selectedRow = row; selectFileSection('ANN_INS'); e.stopPropagation()}"/>
+                        :file="row?.files.find(it => it.type==='ANN_INS')"
+                        @click="(e) => {selectedRow = row; selectFileSection('ANN_INS'); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_physical_damage_inc="{row}">
         <td>
           <FileMiniCard name="PHYS DAMAGE" type="PHYS_DAMAGE"
-                             :file="row?.files.find(it => it.type==='PHYS_DAMAGE')"
-                             @click="(e) => {selectedRow = row; selectFileSection('PHYS_DAMAGE'); e.stopPropagation()}"/>
+                        :file="row?.files.find(it => it.type==='PHYS_DAMAGE')"
+                        @click="(e) => {selectedRow = row; selectFileSection('PHYS_DAMAGE'); e.stopPropagation()}"/>
         </td>
       </template>
 
       <template #row_lease_agreement="{row}">
         <td>
           <FileMiniCard name="LEASE AGR" type="LEASE_AGR"
-                             :file="row?.files.find(it => it.type==='LEASE_AGR')"
-                             @click="(e) => {selectedRow = row; selectFileSection('LEASE_AGR'); e.stopPropagation()}"/>
+                        :file="row?.files.find(it => it.type==='LEASE_AGR')"
+                        @click="(e) => {selectedRow = row; selectFileSection('LEASE_AGR'); e.stopPropagation()}"/>
         </td>
       </template>
 

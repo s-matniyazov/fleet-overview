@@ -80,7 +80,7 @@ public class TruckEntity extends BaseEntity {
     private CompanyEntity company;
 
     private String carrierResponsibleForSafety;
-    private LocalDateTime deActivationDate;
+    private LocalDateTime statusDate;
 
     public TruckEntity() {
     }
@@ -106,6 +106,7 @@ public class TruckEntity extends BaseEntity {
         this.description = description;
         this.company = company;
         this.status = TruckStatusEnum.ACTIVE;
+        this.statusDate = LocalDateTime.now();
         this.carrierResponsibleForSafety = carrierResponsibleForSafety;
     }
 
@@ -261,11 +262,11 @@ public class TruckEntity extends BaseEntity {
         this.carrierResponsibleForSafety = carrierResponsibleForSafety;
     }
 
-    public LocalDateTime getDeActivationDate() {
-        return deActivationDate;
+    public LocalDateTime getStatusDate() {
+        return statusDate;
     }
 
-    public void setDeActivationDate(LocalDateTime deActivationDate) {
-        this.deActivationDate = deActivationDate;
+    public void setStatusDate(LocalDateTime deActivationDate) {
+        this.statusDate = deActivationDate;
     }
 }

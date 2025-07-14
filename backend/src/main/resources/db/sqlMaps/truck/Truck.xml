@@ -30,8 +30,8 @@
         <result property="driverName" column="driverName"/>
         <result property="description" column="description"/>
         <result property="carrierResponsibleForSafety" column="carrierResponsibleForSafety"/>
-        <result property="deActivationDate" column="deActivationDate"/>
         <result property="status" column="status"/>
+        <result property="statusDate" column="statusDate"/>
 
         <result property="companyId" column="companyId"/>
         <result property="companyName" column="companyName"/>
@@ -114,8 +114,8 @@
                 ti.includeifta as "includeIFTA",
                 ti.description as "description",
                 ti.carrier_responsible_for_safety as "carrierResponsibleForSafety",
-                ti.de_activation_date as "deActivationDate",
                 ti.status as "status",
+                ti.status_date as "statusDate",
 
                 s.id as "stateId",
                 s.name as "stateName",
@@ -157,6 +157,9 @@
             where 1=1
                 <if test="companyId != null">
                     and ti.company_id||'' = #{companyId}
+                </if>
+                <if test="vinOrUnit != null">
+                    and (ti.vin like '%'||#{vinOrUnit}||'%' or ti.unit like '%'||#{vinOrUnit}||'%')
                 </if>
         ) t
         left join truck_files tf on tf.truck_id = t.id and tf.status = 'ACTIVE'

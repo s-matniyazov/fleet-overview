@@ -4,7 +4,7 @@ import DocumentMiniCard from "@/components/DocumentMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
 import FileOverlay from "@/components/FileOverlay.vue";
 import {ref} from "vue";
-import {DOCUMENT_TYPES, downloadResource, FLEET_TYPE_NAMES, PERMIT_NAMES} from "@/util/utils.js";
+import {DOCUMENT_TYPES, downloadResource, FLEET_TYPE_NAMES, makeResourceEntity, PERMIT_NAMES} from "@/util/utils.js";
 import {URIS} from "@/constants/UriConstants.js";
 
 const truckFileStore = useTruckFileStore();
@@ -42,14 +42,14 @@ const selectedFileSection = ref({
 function downloadAll(type) {
   if (type === 'truckFiles') {
     FLEET_TYPE_NAMES.forEach(item => {
-      const resource = truckFileStore.files.find(it => it.type === item.key)?.resource
+      const resource = makeResourceEntity(truckFileStore?.files.find(it => it.type === item.key))
       if (resource) {
         downloadResource(resource)
       }
     })
   } else if (type === 'permits') {
     PERMIT_NAMES.forEach(item => {
-      const resource = truckFileStore.permits.find(it => it.type === item.key)?.resource
+      const resource = makeResourceEntity(truckFileStore?.permits.find(it => it.type === item.key))
       if (resource) {
         downloadResource(resource)
       }

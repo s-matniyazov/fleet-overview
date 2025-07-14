@@ -117,6 +117,9 @@
                 <if test="companyId != null">
                     and ti.company_id||'' = #{companyId}
                 </if>
+                <if test="vinOrUnit != null">
+                    and (ti.vin like '%'||#{vinOrUnit}||'%' or ti.unit like '%'||#{vinOrUnit}||'%')
+                </if>
         ) t
         left join trailer_files tf on tf.trailer_id = t.id and tf.status = 'ACTIVE'
         left join resources tfs on tfs.id = tf.resource_id

@@ -51,9 +51,9 @@ public class TruckProjection {
     private String description;
 
     private String carrierResponsibleForSafety;
-    private LocalDateTime deActivationDate;
 
     private TruckStatusEnum status;
+    private LocalDateTime statusDate;
 
     private Set<TruckFileProjection> files;
 
@@ -333,11 +333,11 @@ public class TruckProjection {
         this.carrierResponsibleForSafety = carrierResponsibleForSafety;
     }
 
-    public LocalDateTime getDeActivationDate() {
-        return deActivationDate;
+    public LocalDateTime getStatusDate() {
+        return statusDate;
     }
 
-    public void setDeActivationDate(LocalDateTime deActivationDate) {
-        this.deActivationDate = deActivationDate;
+    public void setStatusDate(LocalDateTime statusDate) {
+        this.statusDate = statusDate;
     }
 }

@@ -30,6 +30,16 @@ public class TruckController extends CrudController<TruckEntity, TruckRequest> {
         this.service = service;
     }
 
+    @PostMapping("{id}/deactivate")
+    public HttpEntity<ApiResponse> deactivate(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.deactivate(id));
+    }
+
+    @PostMapping("{id}/activate")
+    public HttpEntity<ApiResponse> activate(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.activate(id));
+    }
+
     @PostMapping("attach-file")
     public HttpEntity<ApiResponse> attachFile(@RequestPart(name = "data") TruckFileRequest data, @RequestPart(name = "file") MultipartFile file) {
         return ResponseEntity.ok(service.attachFile(data, file));

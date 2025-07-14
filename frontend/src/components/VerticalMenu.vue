@@ -54,7 +54,7 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
                   class="btn w-100 text-start p-0">
             <li class="menu-title cursor-pointer flex align-items-center justify-content-between text-gray-light font-size-14">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-command">
                 <path
                     d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path>
@@ -72,7 +72,7 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
             <router-link to="fleet-compliance" class="btn w-100 text-start p-0"
                          :style="`color: ${getSelectedRouterColor('fleet-compliance')}`">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-truck">
                 <rect x="1" y="3" width="15" height="13"></rect>
                 <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
@@ -84,7 +84,7 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
             <router-link to="fleet-overview" class="btn w-100 text-start p-0"
                          :style="`color: ${getSelectedRouterColor('fleet-overview')}`">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-map-pin">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                 <circle cx="12" cy="10" r="3"></circle>
@@ -94,7 +94,7 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
             <router-link to="maintenance" class="btn w-100 text-start p-0"
                          :style="`color: ${getSelectedRouterColor('maintenance')}`">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-tool">
                 <path
                     d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
@@ -108,7 +108,7 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
                   class="btn w-100 text-start p-0">
             <li class="menu-title cursor-pointer flex align-items-center justify-content-between text-gray-light font-size-14">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-briefcase">
                 <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
                 <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
@@ -141,7 +141,7 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
           <button @click="e => {toggleSubmenu('references'); e.stopPropagation()}" class="btn w-100 text-start p-0">
             <li class="menu-title cursor-pointer flex align-items-center justify-content-between text-gray-light font-size-14">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-sliders">
                 <line x1="4" y1="21" x2="4" y2="14"></line>
                 <line x1="4" y1="10" x2="4" y2="3"></line>
@@ -166,7 +166,7 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
             <router-link to="model-maker" class="btn w-100 text-start p-0"
                          :style="`color: ${getSelectedRouterColor('model-maker')}`">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-tool">
                 <path
                     d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
@@ -176,7 +176,7 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
             <router-link to="ownership-type" class="btn w-100 text-start p-0"
                          :style="`color: ${getSelectedRouterColor('ownership-type')}`">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-tool">
                 <path
                     d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
@@ -186,7 +186,7 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
             <router-link to="purchase-type" class="btn w-100 text-start p-0"
                          :style="`color: ${getSelectedRouterColor('purchase-type')}`">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                    class="feather feather-tool">
                 <path
                     d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>

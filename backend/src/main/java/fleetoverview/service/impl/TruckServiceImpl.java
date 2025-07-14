@@ -11,6 +11,7 @@ import fleetoverview.domain.entity.truck.TruckEntity;
 import fleetoverview.domain.entity.truck.TruckFileEntity;
 import fleetoverview.domain.enums.PermitStatusEnum;
 import fleetoverview.domain.enums.truck.TruckFileStatusEnum;
+import fleetoverview.domain.enums.truck.TruckStatusEnum;
 import fleetoverview.repository.*;
 import fleetoverview.service.ResourceService;
 import fleetoverview.service.TruckService;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -131,6 +133,30 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         truck.setDriver(driverRepository.findById(data.driverId()).orElse(null));
         truck.setDescription(data.description());
         truck.setCompany(companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))));
+
+        return ApiResponse.success();
+    }
+
+    @Override
+    public ApiResponse deactivate(Integer id) {
+        TruckEntity truck = repository.findById(id).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("truck.not_found")));
+
+        truck.setStatus(TruckStatusEnum.PASSIVE);
+        truck.setStatusDate(LocalDateTime.now());
+
+        repository.save(truck);
+
+        return ApiResponse.success();
+    }
+
+    @Override
+    public ApiResponse activate(Integer id) {
+        TruckEntity truck = repository.findById(id).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("truck.not_found")));
+
+        truck.setStatus(TruckStatusEnum.ACTIVE);
+        truck.setStatusDate(LocalDateTime.now());
+
+        repository.save(truck);
 
         return ApiResponse.success();
     }

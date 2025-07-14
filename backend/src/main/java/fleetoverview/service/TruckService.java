@@ -20,6 +20,8 @@ import java.util.Map;
  * @created : 16 март 2025
  **/
 public interface TruckService extends CrudService<TruckEntity, TruckRequest> {
+    ApiResponse deactivate(Integer id);
+    ApiResponse activate(Integer id);
     ApiResponse attachFile(TruckFileRequest data, MultipartFile file);
     ApiResponse attachPermit(int truckId, PermitRequest data, MultipartFile file);
     DataResponse<List<TruckFileEntity>> getFiles(Map<String, String> params);

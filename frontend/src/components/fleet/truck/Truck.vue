@@ -6,7 +6,7 @@ import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
 import UInput from "@/components/base/UInput.vue";
 import {useI18n} from "vue-i18n";
-import {DOCUMENT_TYPES, filterString, PERMIT_NAMES, showMessage} from "@/util/utils.js";
+import {DOCUMENT_TYPES, filterString, longToDateTime, PERMIT_NAMES, showMessage} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
 import USelect from "@/components/base/USelect.vue";
 import UDateInput from "@/components/base/UDateInput.vue";
@@ -33,6 +33,13 @@ const stateStore = useStateStore();
 
 const columns = [
   {
+    key: 'status',
+    name: 'status',
+    label: t('status'),
+    styles: 'min-width: 160px;',
+    classes: '',
+  },
+  {
     key: 'unit_details',
     name: 'unit_details',
     label: t('unit_details'),
@@ -43,7 +50,7 @@ const columns = [
     key: 'operated_by',
     name: 'operated_by',
     label: t('operated_by'),
-    styles: 'min-width: 160px;',
+    styles: 'min-width: 200px;',
     classes: '',
   },
   {
@@ -100,13 +107,6 @@ const columns = [
     name: 'permits',
     label: t('permits'),
     styles: 'min-width: 200px;',
-    classes: '',
-  },
-  {
-    key: 'status',
-    name: 'status',
-    label: t('status'),
-    styles: '',
     classes: '',
   },
 ]
@@ -206,6 +206,16 @@ const getOwnership = (row) => {
     return row?.driverName
   } else return "N/A";
 }
+const deactivate = (row) => {
+  if (confirm("Are you sure to deactivate this truck?")) {
+    onDeactivate(row)
+  }
+}
+const activate = (row) => {
+  if (confirm("Are you sure to activate this truck?")) {
+    onActivate(row)
+  }
+}
 
 const reload = () => {
   getData();
@@ -231,6 +241,22 @@ const onSave = () => {
       showMessage(e)
     });
   }
+}
+const onDeactivate = (row) => {
+  axiosIns.post(`${apiUrl}/${row.id}/deactivate`)
+      .then(() => {
+        row.status = 'PASSIVE'
+      }).catch(e => {
+    showMessage(e)
+  });
+}
+const onActivate = (row) => {
+  axiosIns.post(`${apiUrl}/${row.id}/activate`)
+      .then(() => {
+        row.status = 'ACTIVE'
+      }).catch(e => {
+    showMessage(e)
+  });
 }
 
 function getData() {
@@ -431,9 +457,14 @@ watch(
 
       <template #row_status="{row}">
         <td>
-          <div class="d-flex gap-2">
-            <a class="badge bg-primary-subtle text-primary"
-               :class="`bg-${row?.status === 'PASSIVE' ? 'danger' : 'primary'}-subtle`"> {{ row?.status }}</a>
+          <div class="row">
+            <div class="col-12 d-flex align-items-center">
+              <a class="badge bg-primary-subtle text-primary"
+                 :class="`bg-${row?.status === 'PASSIVE' ? 'danger' : 'primary'}-subtle`"> {{ row?.status }}</a>
+            </div>
+            <div class="col-12 d-flex align-items-center mt-1">
+              {{ longToDateTime(row.statusDate) }}
+            </div>
           </div>
         </td>
       </template>
@@ -636,8 +667,8 @@ watch(
   <Teleport to="body">
     <UDialog :show="showModal && false" width="calc(100vw - 200px)" class="">
       <template #header>
-        <div class="d-flex w-100">
-          Truck Card
+        <div class="d-flex w-100 f-700">
+          TR: {{selectedRow.unit}}
           <div class="text-end u-end">
             <button class="btn-close" @click="showModal = false"></button>
           </div>
@@ -656,9 +687,15 @@ watch(
   <URightOverlay :isOpen="showModal" @close="showModal = false"
                  width="calc(100vw - 500px)" class="">
     <template #header>
-      <div class="d-flex w-100">
-        Truck Card
+      <div class="d-flex w-100 f-700">
+        TR: {{selectedRow.unit}}
         <div class="text-end u-end">
+          <button v-if="selectedRow.status === 'ACTIVE'" @click="deactivate(selectedRow)" class="btn btn-outline-danger btn-sm mx-3">
+            {{ t("deactivate") }}
+          </button>
+          <button v-else @click="activate(selectedRow)" class="btn btn-outline-success btn-sm mx-3">
+            {{ t("activate") }}
+          </button>
           <button class="btn-close" @click="showModal = false"></button>
         </div>
       </div>
