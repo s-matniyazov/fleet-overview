@@ -133,6 +133,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         truck.setDriver(driverRepository.findById(data.driverId()).orElse(null));
         truck.setDescription(data.description());
         truck.setCompany(companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))));
+        truck.setCarrierResponsibleForSafety(data.carrierResponsibleForSafety());
 
         return ApiResponse.success();
     }

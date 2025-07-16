@@ -4,6 +4,7 @@ import fleetoverview.domain.enums.DriverStatusEnum;
 import fleetoverview.domain.enums.driver.DriverTypeEnum;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -20,7 +21,8 @@ public class DriverProjection {
     private String lastName;
     private String middleName;
     private LocalDate hireDate;
-    private LocalDate terminationDate;
+    private LocalDateTime terminationDate;
+    private String terminationReason;
     private LocalDate dateOfBirth;
 
     private Integer stateId;
@@ -104,12 +106,20 @@ public class DriverProjection {
         this.hireDate = hireDate;
     }
 
-    public LocalDate getTerminationDate() {
+    public LocalDateTime getTerminationDate() {
         return terminationDate;
     }
 
-    public void setTerminationDate(LocalDate terminationDate) {
+    public void setTerminationDate(LocalDateTime terminationDate) {
         this.terminationDate = terminationDate;
+    }
+
+    public String getTerminationReason() {
+        return terminationReason;
+    }
+
+    public void setTerminationReason(String terminationReason) {
+        this.terminationReason = terminationReason;
     }
 
     public LocalDate getDateOfBirth() {

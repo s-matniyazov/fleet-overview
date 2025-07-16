@@ -167,7 +167,7 @@ const formatSize = (size) => {
               <div class="col-6">
                 <UInput v-model="upload.data.driversLicense" placeholder="Driver Licence"
                         label="Driver Licence *" :readonly="upload.deleted"
-                        :rules="(val) => (!val && $t('required'))" type="number"/>
+                        :rules="(val) => (!val && $t('required'))" type="text"/>
               </div>
               <div class="col-6">
                 <USelect v-model="upload.data.countryId" :label="t('country')"

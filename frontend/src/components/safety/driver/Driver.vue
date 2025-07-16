@@ -151,6 +151,15 @@ const onEdit = (d) => {
 const onClose = () => {
   addModal.value = false;
 }
+const terminate = (row) => {
+  let reason = prompt("Are you sure to deactivate this truck?");
+
+  if (reason)
+    onTerminate({
+      driverId: row?.id,
+      reason: reason
+    })
+}
 
 const selectFileSection = (type) => {
   selectedFileSection.value = {
@@ -183,6 +192,17 @@ const onSave = () => {
     });
   }
 }
+const onTerminate = (terminationData) => {
+  axiosIns.post(`${apiUrl}/terminate`, terminationData)
+      .then(() => {
+        selectedRow.value.terminationDate = new Date();
+        selectedRow.value.terminationReason = terminationData.reason;
+
+      }).catch(e => {
+    showMessage(e)
+  });
+}
+
 function getData() {
   axiosIns.get(`${apiUrl}?companyId=${filterStore.companyId}`)
       .then(res => {
@@ -288,7 +308,7 @@ watch(
         <td>
           <div class="row">
             <div class="col-12 d-flex align-items-center">
-              <span>{{row?.phone}}</span>
+              <span>{{ row?.phone }}</span>
             </div>
             <div class="col-12 d-flex align-items-center">
               <span class="text-gray-light f-700">{{ row?.email }}</span>
@@ -502,7 +522,7 @@ watch(
 
   <!--  driver card-->
   <URightOverlay :isOpen="showModal" @close="showModal = false"
-                 width="calc(50vw)" class="">
+                 width="calc(100vw - 500px)">
     <template #header>
       <div class="d-flex w-100">
         <div class="row">
@@ -518,6 +538,10 @@ watch(
           </div>
         </div>
         <div class="text-end u-end">
+          <button v-if="!selectedRow.terminationDate" @click="terminate(selectedRow)"
+                  class="btn btn-outline-danger btn-sm mx-3">
+            {{ t("terminate") }}
+          </button>
           <button class="btn-close" @click="showModal = false"></button>
         </div>
       </div>

@@ -3,6 +3,7 @@ package fleetoverview.controller;
 import fleetoverview.controller.base.CrudController;
 import fleetoverview.data.request.DriverFileRequest;
 import fleetoverview.data.request.DriverRequest;
+import fleetoverview.data.request.TerminationRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.domain.entity.driver.DriverEntity;
 import fleetoverview.service.DriverService;
@@ -22,6 +23,11 @@ public class DriverController extends CrudController<DriverEntity, DriverRequest
     protected DriverController(DriverService service) {
         super(service);
         this.service = service;
+    }
+
+    @PostMapping("terminate")
+    public HttpEntity<ApiResponse> terminate(@RequestBody TerminationRequest data) {
+        return ResponseEntity.ok(service.terminate(data));
     }
 
     @PostMapping("attach-file")

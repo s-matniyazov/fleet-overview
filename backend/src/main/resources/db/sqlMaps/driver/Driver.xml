@@ -13,6 +13,7 @@
         <id property="middleName" column="middleName"/>
         <id property="hireDate" column="hireDate"/>
         <id property="terminationDate" column="terminationDate"/>
+        <id property="terminationReason" column="terminationReason"/>
         <id property="dateOfBirth" column="dateOfBirth"/>
         <id property="stateId" column="stateId"/>
         <id property="stateName" column="stateName"/>
@@ -101,6 +102,7 @@
                 di.middle_name as "middleName",
                 di.hire_date as "hireDate",
                 di.termination_date as "terminationDate",
+                di.termination_reason as "terminationReason",
                 di.date_of_birth as "dateOfBirth",
                 di.address as "address",
                 di.city as "city",

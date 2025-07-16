@@ -4,6 +4,7 @@ import fleetoverview.domain.enums.DriverStatusEnum;
 import fleetoverview.domain.enums.driver.DriverTypeEnum;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record DriverRequest(
         int id,
@@ -13,7 +14,7 @@ public record DriverRequest(
         String middleName,
         LocalDate hireDate,
         LocalDate dateOfBirth,
-        LocalDate terminationDate,
+        LocalDateTime terminationDate,
         int stateId,
         String address,
         String city,

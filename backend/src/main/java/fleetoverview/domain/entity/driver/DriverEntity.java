@@ -10,6 +10,7 @@ import fleetoverview.domain.enums.driver.DriverTypeEnum;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,7 +28,9 @@ public class DriverEntity extends BaseEntity {
     @Column
     private LocalDate hireDate;
     @Column
-    private LocalDate terminationDate;
+    private LocalDateTime terminationDate;
+    @Column(length = 500)
+    private String terminationReason;
     @Column
     private LocalDate dateOfBirth;
     @ManyToOne(targetEntity = StateEntity.class)
@@ -55,7 +58,7 @@ public class DriverEntity extends BaseEntity {
     private Set<DriverFileEntity> files = new HashSet<>();
 
     public DriverEntity(CompanyEntity company,String firstName, String lastName, String middleName, LocalDate hireDate,
-                        LocalDate terminationDate, LocalDate dateOfBirth, StateEntity state, String address, String city, int zipCode,
+                        LocalDateTime terminationDate, LocalDate dateOfBirth, StateEntity state, String address, String city, int zipCode,
                         String email, String phone, DriverStatusEnum status, DriverTypeEnum type) {
         this.company = company;
         this.firstName = firstName;
@@ -116,11 +119,11 @@ public class DriverEntity extends BaseEntity {
         this.hireDate = hireDate;
     }
 
-    public LocalDate getTerminationDate() {
+    public LocalDateTime getTerminationDate() {
         return terminationDate;
     }
 
-    public void setTerminationDate(LocalDate terminationDate) {
+    public void setTerminationDate(LocalDateTime terminationDate) {
         this.terminationDate = terminationDate;
     }
 
@@ -182,6 +185,14 @@ public class DriverEntity extends BaseEntity {
 
     public DriverStatusEnum getStatus() {
         return status;
+    }
+
+    public String getTerminationReason() {
+        return terminationReason;
+    }
+
+    public void setTerminationReason(String terminationReason) {
+        this.terminationReason = terminationReason;
     }
 
     public void setStatus(DriverStatusEnum status) {

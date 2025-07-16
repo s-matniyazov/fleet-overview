@@ -1,6 +1,6 @@
 <script setup>
 import {useI18n} from "vue-i18n";
-import {dataOrTire, longToDate} from "@/util/utils.js";
+import {dataOrTire, longToDate, longToDateTime} from "@/util/utils.js";
 
 const {t} = useI18n();
 
@@ -25,34 +25,30 @@ const props = defineProps({
         <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
           <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Terminated Date</span><span
               class="tw-text-dark-primary  tw-text-[14px]"><span
-              class="tw-text-dark-primary  tw-text-[14px] "> {{ dataOrTire(data?.terminationDate) }}
+              class="tw-text-dark-primary  tw-text-[14px] "> {{ dataOrTire(longToDateTime(data?.terminationDate)) }}
               </span></span></div>
           <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Terminated Reason</span><span
               class="tw-text-dark-primary  tw-text-[14px]"><span
               class="tw-text-dark-primary  tw-text-[14px] "> {{ dataOrTire(data?.terminationReason) }}
               </span></span></div>
-          <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Rehired Date</span><span
-              class="tw-text-dark-primary  tw-text-[14px]"><span
-              class="tw-text-dark-primary  tw-text-[14px] "> {{ dataOrTire(data?.reHireDate) }}
-              </span></span></div>
         </div>
       </div>
     </div>
-    <div
-        class="tw-w-1/2 tw-p-[7px] tw-rounded tw-bg-light-primary  tw-shadow-default tw-flex tw-flex-col">
-      <div class="tw-flex tw-justify-between"><span
-          class="tw-text-lg tw-font-bold tw-text-dark-primary "> Special Notes </span><span
-          class="tw-cursor-pointer tw-text-base tw-text-gray-dark  "><i
-          class="fa-solid fa-pen"></i></span></div>
-      <div class="tw-mt-2 tw-w-full tw-h-[150px] tw-relative">
-        <form novalidate="" class="tw-w-full tw-h-full ng-untouched ng-pristine ng-valid">
-          <div
-              class="tw-rounded tw-p-1 tw-bg-gray-extra-light tw-w-full tw-h-full tw-min-h-full tw-max-h-full tw-overflow-y-auto">
-            N/A
-          </div>
-        </form>
-      </div>
-    </div>
+<!--    <div-->
+<!--        class="tw-w-1/2 tw-p-[7px] tw-rounded tw-bg-light-primary  tw-shadow-default tw-flex tw-flex-col">-->
+<!--      <div class="tw-flex tw-justify-between"><span-->
+<!--          class="tw-text-lg tw-font-bold tw-text-dark-primary "> Special Notes </span><span-->
+<!--          class="tw-cursor-pointer tw-text-base tw-text-gray-dark  "><i-->
+<!--          class="fa-solid fa-pen"></i></span></div>-->
+<!--      <div class="tw-mt-2 tw-w-full tw-h-[150px] tw-relative">-->
+<!--        <form novalidate="" class="tw-w-full tw-h-full ng-untouched ng-pristine ng-valid">-->
+<!--          <div-->
+<!--              class="tw-rounded tw-p-1 tw-bg-gray-extra-light tw-w-full tw-h-full tw-min-h-full tw-max-h-full tw-overflow-y-auto">-->
+<!--            N/A-->
+<!--          </div>-->
+<!--        </form>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 
   <div class="tw-w-full tw-flex tw-items-start tw-gap-x-4 mx-1 mt-3">

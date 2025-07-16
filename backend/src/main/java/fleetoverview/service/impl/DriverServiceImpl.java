@@ -2,6 +2,7 @@ package fleetoverview.service.impl;
 
 import fleetoverview.data.request.DriverFileRequest;
 import fleetoverview.data.request.DriverRequest;
+import fleetoverview.data.request.TerminationRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
 import fleetoverview.domain.entity.ResourceEntity;
@@ -25,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -121,6 +124,17 @@ public class DriverServiceImpl extends BaseService implements DriverService {
     @Override
     public ApiResponse delete(DriverRequest data) {
         // not implemented yet
+
+        return ApiResponse.success();
+    }
+
+    @Override
+    public ApiResponse terminate(TerminationRequest data) {
+        // not implemented yet
+        DriverEntity driver = repository.findById(data.driverId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("driver.not_found")));
+
+        driver.setTerminationDate(LocalDateTime.now());
+        driver.setTerminationReason(data.reason());
 
         return ApiResponse.success();
     }

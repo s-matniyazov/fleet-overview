@@ -31,6 +31,10 @@ const props = defineProps({
           <span class="right"> {{ dataOrTire(data?.unit) }} </span>
         </div>
         <div class="contents">
+          <span class="left"> Carrier Responsibility #: </span>
+          <span class="right"> {{ dataOrTire(data?.carrierResponsibleForSafety) }} </span>
+        </div>
+        <div class="contents">
           <span class="left"> License Plate #:</span>
           <span class="right"> {{ dataOrTire(data?.licensePlate) }} </span>
         </div>
