@@ -147,7 +147,7 @@ onMounted(() => {
     <modal :show="addModal" @close="addModal = false">
       <template #header>
         <div class="d-flex" style="width: 100%">
-          <div class="text-dark">
+          <div class="text-white">
             {{ data.id ? t('edit') : t('add') }} {{ t('model_maker') }}
           </div>
           <div class="text-end u-end">
@@ -167,9 +167,9 @@ onMounted(() => {
             </div>
           </div>
 
-          <div class="modal-footer bg-light">
+          <div class="modal-footer">
             <div class="d-flex text-end align-items-end mt-2">
-              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="submit" style="background-color:#0891B2;" class="btn text-white">Save</button>
             </div>
           </div>
         </UForm>

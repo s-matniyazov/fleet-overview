@@ -33,13 +33,6 @@ const stateStore = useStateStore();
 
 const columns = [
   {
-    key: 'status',
-    name: 'status',
-    label: t('status'),
-    styles: 'min-width: 160px;',
-    classes: '',
-  },
-  {
     key: 'unit_details',
     name: 'unit_details',
     label: t('unit_details'),
@@ -109,13 +102,20 @@ const columns = [
     styles: 'min-width: 200px;',
     classes: '',
   },
+  {
+    key: 'status',
+    name: 'status',
+    label: t('status'),
+    styles: 'min-width: 160px;',
+    classes: '',
+  }
 ]
 
 const newModel = () => {
   return {
     id: null,
     unit: null,
-    carrierResponsibleForSafety: null,
+    carrier_responsible_for_safety: null,
     inServiceDate: null,
     licensePlate: null,
     stateId: null,
@@ -501,8 +501,8 @@ watch(
                 </div>
                 <!--            unit-->
                 <div class="col-6">
-                  <UInput v-model="data.carrierResponsibleForSafety" :label="t('carrierResponsibleForSafety')" :hint="t('carrierResponsibleForSafety')" :name="t('carrierResponsibleForSafety')"
-                          :placeholder="t('enter_carrierResponsibleForSafety')" classes="mb-2"
+                  <UInput v-model="data.carrier_responsible_for_safety" :label="t('carrier_responsible_for_safety')" :hint="t('carrier_responsible_for_safety')" :name="t('carrier_responsible_for_safety')"
+                          :placeholder="t('enter_carrier_responsible_for_safety')" classes="mb-2"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
 

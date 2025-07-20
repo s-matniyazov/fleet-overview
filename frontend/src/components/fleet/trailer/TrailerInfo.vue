@@ -73,7 +73,7 @@ const props = defineProps({
       </div>
     </div>
     <div class="width-50 d-flex flex-column px-3">
-      <span class="title mb-3">AdditionalNotes</span>
+      <span class="title mb-3">Additional Notes</span>
       <div class="note-container overflow-y">{{ data?.description || 'N/A' }}</div>
     </div>
   </div>
