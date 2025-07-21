@@ -127,10 +127,12 @@ const onClose = () => {
 }
 
 const selectFileSection = (type) => {
+  const file = selectedRow.value?.files.find(it => it.type === type) || {}
+
   selectedFileSection.value = {
     dialog: true,
     data: {
-      ...selectedFileSection.value.data,
+      ...file,
       companyId: selectedRow.value.id,
       type: type
     }
@@ -262,7 +264,7 @@ watch(
         <td>
           <FileMiniCard name="INS_CERT" type="INS_CERT"
                         :file="row?.files.find(it => it.type==='INS_CERT')"
-                        @click="(e) => {if(!row?.files.find(it => it.type==='INS_CERT')){ selectedRow = row; selectFileSection('INS_CERT');} e.stopPropagation()}"/>
+                        @click="(e) => {selectedRow = row; selectFileSection('INS_CERT'); e.stopPropagation()}"/>
         </td>
       </template>
 
@@ -270,7 +272,7 @@ watch(
         <td>
           <FileMiniCard name="IFTA_LICENSE" type="IFTA_LICENSE"
                         :file="row?.files.find(it => it.type==='IFTA_LICENSE')"
-                        @click="(e) => {if(!row?.files.find(it => it.type==='IFTA_LICENSE')){ selectedRow = row; selectFileSection('IFTA_LICENSE');} e.stopPropagation()}"/>
+                        @click="(e) => { selectedRow = row; selectFileSection('IFTA_LICENSE'); e.stopPropagation()}"/>
         </td>
       </template>
 
@@ -278,7 +280,7 @@ watch(
         <td>
           <FileMiniCard name="UCR" type="UCR"
                         :file="row?.files.find(it => it.type==='UCR')"
-                        @click="(e) => {if(!row?.files.find(it => it.type==='UCR')){ selectedRow = row; selectFileSection('UCR');} e.stopPropagation()}"/>
+                        @click="(e) => { selectedRow = row; selectFileSection('UCR'); e.stopPropagation()}"/>
         </td>
       </template>
 
@@ -286,7 +288,7 @@ watch(
         <td>
           <FileMiniCard name="MCS_150" type="MCS_150"
                         :file="row?.files.find(it => it.type==='MCS_150')"
-                        @click="(e) => {if(!row?.files.find(it => it.type==='MCS_150')){ selectedRow = row; selectFileSection('MCS_150');} e.stopPropagation()}"/>
+                        @click="(e) => { selectedRow = row; selectFileSection('MCS_150'); e.stopPropagation()}"/>
         </td>
       </template>
 

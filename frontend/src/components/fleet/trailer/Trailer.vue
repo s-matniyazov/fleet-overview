@@ -160,10 +160,12 @@ const onClose = () => {
   addModal.value = false;
 }
 const selectFileSection = (type) => {
+  const file = selectedRow.value?.files.find(it => it.type === type) || {}
+
   selectedFileSection.value = {
     dialog: true,
     data: {
-      ...selectedFileSection.value.data,
+      ...file,
       trailerId: selectedRow.value.id,
       type: type
     }

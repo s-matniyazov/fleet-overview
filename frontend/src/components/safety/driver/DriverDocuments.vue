@@ -10,11 +10,15 @@ import {useDriverFileStore} from "@/store/DriverFileStore.js";
 const driverFileStore = useDriverFileStore();
 
 const selectFileSection = (type, url) => {
+  const file = driverFileStore.allDocuments().find(it => it.type===type) || {}
+
   selectedFileSection.value = {
     dialog: true,
     url: url,
     data: {
-      ...selectedFileSection.value.data,
+      ...file,
+      fileName: file.resource?.fileName,
+      size: file.resource?.size,
       driverId: props.data.id,
       type: type
     }

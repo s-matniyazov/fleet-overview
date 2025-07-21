@@ -8,7 +8,7 @@ const routes = [
         meta: {requiresAuth: false},
         component: () => import('@/layouts/MainLayout.vue'),
         children: [
-            {path: '/', name: "Home", meta: {requiresAuth: true}, redirect: "/dashboard"},
+            {path: '/', name: "Home", meta: {requiresAuth: true}, redirect: "/fleet-compliance"},
             {path: '/dashboard', name: "Dashboard", meta: {requiresAuth: true}, component: () => import('@/components/Dashboard.vue')},
 
             // fleet

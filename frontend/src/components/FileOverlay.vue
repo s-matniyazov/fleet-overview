@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import UTextarea from "@/components/base/UTextarea.vue";
 import UDateInput from "@/components/base/UDateInput.vue";
 import axiosIns from "@/plugins/axios.js";
@@ -13,6 +13,12 @@ import {useStateStore} from "@/store/StateStore.js";
 import {useI18n} from "vue-i18n";
 import UMultipleSelect from "@/components/base/UMultipleSelect.vue";
 import {useDriverReferenceStore} from "@/store/DriverReferenceStore.js";
+
+let INDEX_COUNTER = 0;
+const FILE_STATUS = {
+  DELETED: 1,
+  UPLOADED: 2
+}
 
 const {t} = useI18n();
 const toastStore = useToastStore();
@@ -37,6 +43,10 @@ const props = defineProps({
     type: String,
     required: true
   },
+  file: {
+    type: Object,
+    required: false
+  }
 })
 
 const isDragging = ref(false);
@@ -54,9 +64,17 @@ const handleDrop = (e) => {
 const addFiles = (fileList) => {
   [...fileList].forEach(file => {
     const upload = {
+      id: INDEX_COUNTER++,
       file,
       progress: 0,
-      data: {...props.data}
+      data: {
+        expirationDate: new Date(),
+        type: props.data.type,
+        truckId: props.data.truckId,
+        trailerId: props.data.trailerId,
+        driverId: props.data.driverId,
+        companyId: props.data.companyId
+      }
     };
     simulateUpload(upload);
     uploads.value.push(upload);
@@ -74,7 +92,11 @@ const simulateUpload = (upload) => {
 };
 
 const removeFile = (index) => {
-  uploads.value[index].deleted = true;
+  uploads.value.splice(index, 1);
+};
+
+const uploadFile = (index) => {
+  uploads.value[index].status = FILE_STATUS.UPLOADED;
 };
 
 const saveFile = (index) => {
@@ -99,7 +121,7 @@ const saveFile = (index) => {
           text: "File successfully uploaded"
         })
 
-        removeFile(index);
+        uploadFile(index);
       }).catch(e => {
     showMessage(e)
   })
@@ -108,6 +130,21 @@ const saveFile = (index) => {
 const formatSize = (size) => {
   return (size / 1024).toFixed(2) + ' KB';
 };
+
+onMounted(() => {
+  if (props.data.id) {
+    uploads.value.push({
+      id: INDEX_COUNTER++,
+      file: {
+        name: props.data.fileName,
+        size: props.data.size,
+
+      },
+      data: props.data,
+      status: FILE_STATUS.UPLOADED
+    });
+  }
+})
 </script>
 
 <template>
@@ -139,9 +176,9 @@ const formatSize = (size) => {
     <!-- Uploaded Files List -->
     <UScrollArea height="calc(100vh - 290px)">
       <div
-          v-for="(upload, index) in uploads"
+          v-for="(upload, index) in uploads.sort((a, b) => a.id > b.id ? -1 : 1)"
           :key="index"
-          class="card mb-3" :class="upload.deleted && 'bg-light'"
+          class="card mb-3" :class="[FILE_STATUS.UPLOADED].includes(upload.status) && 'bg-light'"
       >
         <UForm @submit="saveFile(index)">
           <div class="card-body row">
@@ -149,13 +186,14 @@ const formatSize = (size) => {
               <i class="bi bi-file-earmark-text fs-4 text-primary me-2"></i>
               <strong>{{ upload.file.name }}</strong>
               <span class="text-muted small"> - {{ formatSize(upload.file.size) }}</span>
-              <div class="progress mt-2" v-if="!upload.deleted" style="height: 6px;">
+              <div class="progress mt-2" v-if="![FILE_STATUS.UPLOADED].includes(upload.status)" style="height: 6px;">
                 <div
                     class="progress-bar progress-bar-striped progress-bar-animated bg-info"
                     :style="{ width: upload.progress + '%' }"
                 ></div>
               </div>
-              <p class="small text-end mt-1 mb-1 text-muted" v-if="!upload.deleted">{{ upload.progress }}%</p>
+              <p class="small text-end mt-1 mb-1 text-muted" v-if="![FILE_STATUS.UPLOADED].includes(upload.status)">
+                {{ upload.progress }}%</p>
             </div>
 
             <div class="d-flex flex-column align-items-center">
@@ -166,20 +204,20 @@ const formatSize = (size) => {
             <template v-if="['CDL'].includes(data.type)">
               <div class="col-6">
                 <UInput v-model="upload.data.driversLicense" placeholder="Driver Licence"
-                        label="Driver Licence *" :readonly="upload.deleted"
+                        label="Driver Licence *" :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"
                         :rules="(val) => (!val && $t('required'))" type="text"/>
               </div>
               <div class="col-6">
                 <USelect v-model="upload.data.countryId" :label="t('country')"
                          :items="stateStore.countries" name="country"
-                         option_name="name" :readonly="upload.deleted"
+                         option_name="name" :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"
                          :rules="(val) => (!val && $t('required'))"
                 ></Uselect>
               </div>
               <div class="col-6">
                 <USelect v-model="upload.data.stateId" :label="t('state')"
                          :items="stateStore.getStates(upload.data.countryId)" name="state"
-                         option_name="name" :readonly="upload.deleted"
+                         option_name="name" :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"
                          :rules="(val) => (!val && $t('required'))"
                 ></Uselect>
               </div>
@@ -187,18 +225,18 @@ const formatSize = (size) => {
                 <USelect v-model="upload.data.classType" :label="t('class')"
                          :items="DRIVER_FILE_CLASSES" name="class"
                          option_name="value" option_value="key"
-                         :readonly="upload.deleted"
+                         :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"
                          :rules="(val) => (!val && $t('required'))"
                 ></Uselect>
               </div>
               <div class="col-6">
                 <UDateInput v-model="upload.data.issuedDate" placeholder="dd.mm.yyyy"
-                            label="Issued Date *" :readonly="upload.deleted"
+                            label="Issued Date *" :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"
                             :rules="(val) => (!val && $t('required'))"/>
               </div>
               <div class="col-6">
                 <UDateInput v-model="upload.data.expirationDate" placeholder="dd.mm.yyyy"
-                            label="Expiration Date *" :readonly="upload.deleted"
+                            label="Expiration Date *" :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"
                             :rules="(val) => (!val && $t('required'))"/>
               </div>
               <div class="col-12">
@@ -212,7 +250,7 @@ const formatSize = (size) => {
             <template v-else-if="['SSN'].includes(data.type)">
               <div class="col-6">
                 <UInput v-model="upload.data.socialSecurityNumber" placeholder="Social Security Number"
-                        label="Social Security Number *" :readonly="upload.deleted"
+                        label="Social Security Number *" :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"
                         :rules="(val) => (!val && $t('required'))" type="number"/>
               </div>
             </template>
@@ -220,7 +258,8 @@ const formatSize = (size) => {
               <div class="col-6">
                 <USelect v-model="upload.data.filedPeriod" :label="t('filedPeriod')"
                          :items="filePeriods()" name="filedPeriod"
-                         option_name="name" option_value="name" :readonly="upload.deleted"
+                         option_name="name" option_value="name"
+                         :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"
                          :rules="(val) => (!val && $t('required'))"
                 ></Uselect>
               </div>
@@ -228,35 +267,37 @@ const formatSize = (size) => {
             <template v-else-if="['W_9', 'MCS_150'].includes(data.type)">
               <div class="col-6">
                 <UDateInput v-model="upload.data.nextUpdateDate" placeholder="dd.mm.yyyy"
-                            label="Next Update Date *" :readonly="upload.deleted"
+                            label="Next Update Date *" :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"
                             :rules="(val) => (!val && $t('required'))"/>
               </div>
             </template>
             <template
                 v-else-if="['ARTICLES_OF_INCORPORATION', 'MC_CERTIFICATE', 'OWNER_OPERATOR_AGREEMENT', 'DRIVER_AGREEMENT'].includes(data.type)">
-<!--              no data-->
+              <!--              no data-->
             </template>
             <template v-else>
               <div v-if="['MVR', 'CLEARING_HOUSE'].includes(data.type)" class="col-6">
                 <UDateInput v-model="upload.data.lastCollectedOn" placeholder="dd.mm.yyyy"
-                            label="Last Collected On *" :readonly="upload.deleted"
+                            label="Last Collected On *" :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"
                             :rules="(val) => (!val && $t('required'))"/>
               </div>
 
               <div class="col-6">
                 <UDateInput v-model="upload.data.expirationDate" placeholder="dd.mm.yyyy"
-                            label="Expiration Date *" :readonly="upload.deleted"
+                            label="Expiration Date *" :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"
                             :rules="(val) => (!val && $t('required'))"/>
               </div>
             </template>
 
             <div class="col-md-12">
-              <UTextarea v-model="upload.data.description" placeholder="description" :readonly="upload.deleted"
+              <UTextarea v-model="upload.data.description" placeholder="description"
+                         :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"
                          :noLabel="true" rows="1"/>
             </div>
 
-            <div class="mt-3 text-end" v-if="!upload.deleted">
-              <button class="btn btn-secondary me-2" @click="removeFile(index)">Cancel</button>
+            <div class="mt-3 text-end" v-if="![FILE_STATUS.UPLOADED].includes(upload.status)">
+              <button class="btn btn-secondary me-2" @click="(e) => {removeFile(index); e.stopPropagation()}">Cancel
+              </button>
               <button class="btn btn-success" type="submit">Save</button>
             </div>
           </div>

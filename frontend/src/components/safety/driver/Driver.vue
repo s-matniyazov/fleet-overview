@@ -162,10 +162,12 @@ const terminate = (row) => {
 }
 
 const selectFileSection = (type) => {
+  const file = selectedRow.value?.files.find(it => it.type === type) || {}
+
   selectedFileSection.value = {
     dialog: true,
     data: {
-      ...selectedFileSection.value.data,
+      ...file,
       driverId: selectedRow.value.id,
       type: type
     }

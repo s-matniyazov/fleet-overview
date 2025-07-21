@@ -15,11 +15,15 @@ import {useCompanyFileStore} from "@/store/CompanyFileStore.js";
 const companyFileStore = useCompanyFileStore();
 
 const selectFileSection = (type, url) => {
+  const file = companyFileStore.allDocuments().find(it => it.type===type) || {}
+
   selectedFileSection.value = {
     dialog: true,
     url: url,
     data: {
-      ...selectedFileSection.value.data,
+      ...file,
+      fileName: file.resource?.fileName,
+      size: file.resource?.size,
       companyId: props.data.id,
       type: type
     }

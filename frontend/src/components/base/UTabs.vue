@@ -14,7 +14,7 @@ const activeTab = defineModel()
   <ul class="nav nav-tabs">
     <li class="nav-item" v-for="tab in tabs" @click="activeTab = tab.key">
       <button class="nav-link btn-default mx-1" :class="activeTab === tab.key ? 'active' : 'bg-light'">
-        <span class="d-none d-sm-block  fw-bold"> {{ tab.name }} </span>
+        <span class="d-none d-sm-block fw-bold"> {{ tab.name }} </span>
       </button>
     </li>
   </ul>

@@ -190,12 +190,14 @@ const onClose = () => {
   addModal.value = false;
 }
 const selectFileSection = (type) => {
+  const file = selectedRow.value?.files.find(it => it.type === type) || {}
+
   selectedFileSection.value = {
     dialog: true,
     data: {
-      ...selectedFileSection.value.data,
+      ...file,
       truckId: selectedRow.value.id,
-      type: type
+      type: type,
     }
   };
 }
@@ -720,7 +722,7 @@ watch(
       </h4>
     </template>
     <template #body>
-      <FileOverlay :url="`${URIS.TRUCK}/attach-file`" :data="selectedFileSection.data"/>
+      <FileOverlay :url="`${URIS.TRUCK}/attach-file`" :data="selectedFileSection.data" :file="selectedFileSection.file"/>
     </template>
   </URightOverlay>
 </template>

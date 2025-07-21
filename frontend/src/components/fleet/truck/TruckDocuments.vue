@@ -10,11 +10,15 @@ import {URIS} from "@/constants/UriConstants.js";
 const truckFileStore = useTruckFileStore();
 
 const selectFileSection = (type, url) => {
+  const file = truckFileStore.allDocuments().find(it => it.type===type) || {}
+
   selectedFileSection.value = {
     dialog: true,
     url: url,
     data: {
-      ...selectedFileSection.value.data,
+      ...file,
+      fileName: file.resource?.fileName,
+      size: file.resource?.size,
       truckId: props.data.id,
       type: type
     }

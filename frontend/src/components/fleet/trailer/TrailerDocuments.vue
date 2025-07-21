@@ -10,11 +10,14 @@ import {useTrailerFileStore} from "@/store/TrailerFileStore.js";
 const trailerFileStore = useTrailerFileStore();
 
 const selectFileSection = (type, url) => {
+  const file = trailerFileStore.files.find(it => it.type===type) || {}
   selectedFileSection.value = {
     dialog: true,
     url: url,
     data: {
-      ...selectedFileSection.value.data,
+      ...file,
+      fileName: file.resource?.fileName,
+      size: file.resource?.size,
       trailerId: props.data.id,
       type: type
     }
