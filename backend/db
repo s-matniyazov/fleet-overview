@@ -32,10 +32,13 @@ server {
     }
 }
 
+efficientmanllc.com
+
 sudo ln -s /etc/nginx/sites-available/fleet.tt64295.tw1.ru /etc/nginx/sites-enabled/
 
 sudo apt install certbot python3-certbot-nginx
 sudo certbot --nginx -d fleet.tt64295.tw1.ru -d www.fleet.tt64295.tw1.ru
+sudo certbot --nginx -d efficientmanllc.com -d www.efficientmanllc.com
 
 https://fleet.tt64295.tw1.ru
 

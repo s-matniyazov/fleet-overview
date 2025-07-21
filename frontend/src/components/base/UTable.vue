@@ -64,7 +64,7 @@ const onRowDoubleClick = (row) => {
         <table class="table align-middle datatable dt-responsive table-check nowrap table-hover rounded-4">
           <thead>
           <tr>
-            <slot v-for="col in columns" :col="col" :name="`col_${col.name}`" :key="col.key">
+            <slot v-for="col in columns" :col="col" :name="`col_${col.name}`" :key="col.key" class="bg-light">
               <th scope="col" :style="col.styles" :class="col.classes" style="font-style: italic">
                 {{ col.label }}
               </th>
@@ -88,15 +88,15 @@ const onRowDoubleClick = (row) => {
       </UScrollArea>
     </div>
 
-    <div v-if="!hidePagination" class="col-12 d-flex align-items-center px-2">
-      <div class="d-flex align-items-center gap-2" style="right: 0; margin-left: auto">
-        <ul class="pagination pagination-sm ul-style">
-          <li class="page-item cursor-pointer"><a class="page-link">&laquo;</a></li>
-          <li class="page-item active cursor-not-allowed"><a class="page-link">1</a></li>
-          <li class="page-item cursor-pointer"><a class="page-link">&raquo;</a></li>
-        </ul>
-      </div>
-    </div>
+<!--    <div v-if="!hidePagination" class="col-12 px-2">-->
+<!--      <div class="d-flex align-items-center gap-2" style="right: 0; margin-left: auto">-->
+<!--        <ul class="pagination pagination-sm ul-style">-->
+<!--          <li class="page-item cursor-pointer"><a class="page-link">&laquo;</a></li>-->
+<!--          <li class="page-item active cursor-not-allowed"><a class="page-link">1</a></li>-->
+<!--          <li class="page-item cursor-pointer"><a class="page-link">&raquo;</a></li>-->
+<!--        </ul>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </template>
 

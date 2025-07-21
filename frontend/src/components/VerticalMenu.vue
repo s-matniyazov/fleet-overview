@@ -334,7 +334,6 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
       </div>
     </div>
   </div>
-
 </template>
 
 <style scoped>

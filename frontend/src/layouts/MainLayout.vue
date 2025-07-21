@@ -93,13 +93,12 @@ watch(
 
     <vertical-menu :collapsed="collapsed" @toggle-sidebar="toggleSidebar"/>
 
-    <div class="main-content flex-fill">
+    <div class="main-content flex-fill h-100">
       <div class="page-content">
         <div class="container-fluid"
              style="border: 1px dashed #eae1e1; border-radius: 5px; height: calc(100vh - 90px); overflow: hidden; overflow-y: auto">
           <router-view/>
         </div>
-
       </div>
     </div>
 
@@ -109,4 +108,3 @@ watch(
 <style scoped>
 
 </style>
-`
