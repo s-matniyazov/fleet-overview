@@ -1,6 +1,6 @@
 <script setup>
 import {useI18n} from "vue-i18n";
-import {dataOrTire} from "@/util/utils.js";
+import {dataOrTire, longToDateTime} from "@/util/utils.js";
 
 const {t} = useI18n();
 
@@ -24,15 +24,15 @@ const props = defineProps({
           <span class="left">Current Driver(S):</span>
           <span class="right"> {{ `${dataOrTire(data?.driverName)}` }} </span>
         </div>
+        <div class="contents">
+          <span class="left"> Carrier Responsibility #: </span>
+          <span class="right"> {{ dataOrTire(data?.carrierResponsibleForSafety) }} </span>
+        </div>
       </div>
       <div class="two-column-content">
         <div class="contents">
           <span class="left"> Unit #: </span>
           <span class="right"> {{ dataOrTire(data?.unit) }} </span>
-        </div>
-        <div class="contents">
-          <span class="left"> Carrier Responsibility #: </span>
-          <span class="right"> {{ dataOrTire(data?.carrierResponsibleForSafety) }} </span>
         </div>
         <div class="contents">
           <span class="left"> License Plate #:</span>
@@ -83,6 +83,14 @@ const props = defineProps({
         <div class="contents">
           <div class="left">Purchase Type:</div>
           <div class="right"> {{ dataOrTire(data?.purchaseTypeName) }} </div>
+        </div>
+        <div class="contents">
+          <div class="left">Status:</div>
+          <div class="right"> {{ dataOrTire(data?.status) }} </div>
+        </div>
+        <div class="contents">
+          <div class="left">Status from:</div>
+          <div class="right"> {{ dataOrTire(longToDateTime(data?.statusDate || 1)) }} </div>
         </div>
       </div>
     </div>

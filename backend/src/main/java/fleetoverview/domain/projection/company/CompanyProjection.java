@@ -15,6 +15,7 @@ import java.util.Set;
 public class CompanyProjection {
     Integer id;
     private String name;
+    private String ownerName;
     private String dot;
     private String mc;
     private String dba;
@@ -29,6 +30,7 @@ public class CompanyProjection {
     private Integer zipcode;
     private String email;
     private String phone;
+    private String pinNumber;
     private TimeZoneEnum timeZone;
     private CompanyStatusEnum status;
 
@@ -215,5 +217,21 @@ public class CompanyProjection {
 
     public void setFiles(Set<CompanyFileProjection> files) {
         this.files = files;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public String getPinNumber() {
+        return pinNumber;
+    }
+
+    public void setPinNumber(String pinNumber) {
+        this.pinNumber = pinNumber;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 }

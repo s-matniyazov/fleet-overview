@@ -7,6 +7,7 @@
         <id property="id" column="id"/>
 
         <result property="name" column="name"/>
+        <result property="ownerName" column="ownerName"/>
         <result property="dot" column="dot"/>
         <result property="mc" column="mc"/>
         <result property="dba" column="dba"/>
@@ -21,6 +22,7 @@
         <result property="zipcode" column="zipcode"/>
         <result property="email" column="email"/>
         <result property="phone" column="phone"/>
+        <result property="pinNumber" column="pinNumber"/>
         <result property="timeZone" column="timeZone"/>
         <result property="status" column="status"/>
 
@@ -71,6 +73,7 @@
                  select
                      ci.id as "id",
                      ci.name as "name",
+                     ci.owner_name as "ownerName",
                      ci.dot as "dot",
                      ci.mc as "mc",
                      ci.dba as "dba",
@@ -81,6 +84,7 @@
                      ci.zipcode as "zipcode",
                      ci.email as "email",
                      ci.phone as "phone",
+                     ci.pin_number as "pinNumber",
                      ci.time_zone as "timeZone",
                      ci.status as "status",
 

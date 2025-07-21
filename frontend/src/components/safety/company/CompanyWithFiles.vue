@@ -27,35 +27,63 @@ const columns = [
     key: 'company_name',
     name: 'company_name',
     label: t('company_name'),
-    styles: '',
+    styles: 'min-width: 250px;',
     classes: '',
   },
   {
     key: 'insurance_cert',
     name: 'insurance_cert',
     label: t('insurance_cert'),
-    styles: 'width: 200px;',
+    styles: 'min-width: 200px;',
     classes: '',
   },
   {
     key: 'ifta_license',
     name: 'ifta_license',
     label: t('ifta_license'),
-    styles: 'width: 200px;',
+    styles: 'min-width: 200px;',
     classes: '',
   },
   {
     key: 'ucr',
     name: 'ucr',
     label: t('ucr'),
-    styles: 'width: 200px;',
+    styles: 'min-width: 200px;',
     classes: '',
   },
   {
     key: 'mcs_150',
     name: 'mcs_150',
     label: t('mcs_150'),
-    styles: 'width: 200px;',
+    styles: 'min-width: 200px;',
+    classes: '',
+  },
+  {
+    key: 'articles_of_incorporation',
+    name: 'articles_of_incorporation',
+    label: t('articles_of_incorporation'),
+    styles: 'min-width: 200px;',
+    classes: '',
+  },
+  {
+    key: 'mc_certificate',
+    name: 'mc_certificate',
+    label: t('mc_certificate'),
+    styles: 'min-width: 200px;',
+    classes: '',
+  },
+  {
+    key: 'owner_operator_agreement',
+    name: 'owner_operator_agreement',
+    label: t('owner_operator_agreement'),
+    styles: 'min-width: 200px;',
+    classes: '',
+  },
+  {
+    key: 'driver_agreement',
+    name: 'driver_agreement',
+    label: t('driver_agreement'),
+    styles: 'min-width: 200px;',
     classes: '',
   },
   {
@@ -289,6 +317,38 @@ watch(
           <FileMiniCard name="MCS_150" type="MCS_150"
                         :file="row?.files.find(it => it.type==='MCS_150')"
                         @click="(e) => { selectedRow = row; selectFileSection('MCS_150'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
+      <template #row_articles_of_incorporation="{row}">
+        <td>
+          <FileMiniCard name="ARTICLES_INCORP" type="ARTICLES_OF_INCORPORATION"
+                        :file="row?.files.find(it => it.type==='ARTICLES_OF_INCORPORATION')"
+                        @click="(e) => { selectedRow = row; selectFileSection('ARTICLES_OF_INCORPORATION'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
+      <template #row_mc_certificate="{row}">
+        <td>
+          <FileMiniCard name="MC_CERTIFICATE" type="MC_CERTIFICATE"
+                        :file="row?.files.find(it => it.type==='MC_CERTIFICATE')"
+                        @click="(e) => { selectedRow = row; selectFileSection('MC_CERTIFICATE'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
+      <template #row_owner_operator_agreement="{row}">
+        <td>
+          <FileMiniCard name="OWNER_AGREEMENT" type="OWNER_OPERATOR_AGREEMENT"
+                        :file="row?.files.find(it => it.type==='OWNER_OPERATOR_AGREEMENT')"
+                        @click="(e) => { selectedRow = row; selectFileSection('OWNER_OPERATOR_AGREEMENT'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
+      <template #row_driver_agreement="{row}">
+        <td>
+          <FileMiniCard name="DRIVER_AGREEMENT" type="DRIVER_AGREEMENT"
+                        :file="row?.files.find(it => it.type==='DRIVER_AGREEMENT')"
+                        @click="(e) => { selectedRow = row; selectFileSection('DRIVER_AGREEMENT'); e.stopPropagation()}"/>
         </td>
       </template>
 

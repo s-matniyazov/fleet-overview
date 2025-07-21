@@ -53,6 +53,14 @@ const props = defineProps({
                     class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
                   <p class="tw-m-0">{{ data.name }}</p>
                 </div>
+              </div><div class="tw-grid tw-grid-cols-[240px_auto] tw-gap-[33px] tw-gap-y-0 tw-items-start">
+                <div class="tw-text-right tw-text-gray-dark dark:!tw-text-gray-400 tw-text-sm tw-m-0 tw-pt-0.5">
+                  <p class="tw-m-0">Owner full name</p>
+                </div>
+                <div
+                    class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
+                  <p class="tw-m-0">{{ data.ownerName }}</p>
+                </div>
               </div>
               <div class="tw-grid tw-grid-cols-[240px_auto] tw-gap-[33px] tw-gap-y-0 tw-items-start">
                 <div class="tw-text-right tw-text-gray-dark dark:!tw-text-gray-400 tw-text-sm tw-m-0 tw-pt-0.5">
@@ -78,7 +86,7 @@ const props = defineProps({
                 </div>
                 <div
                     class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
-                  <p class="tw-m-0">{{ `${data.address1} ${data.address2} ` }}</p>
+                  <p class="tw-m-0">{{ data.address1 }}</p>
                 </div>
               </div>
               <div class="tw-grid tw-grid-cols-[240px_auto] tw-gap-[33px] tw-gap-y-0 tw-items-start">
@@ -106,6 +114,24 @@ const props = defineProps({
                 <div
                     class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
                   <p class="tw-m-0">{{ data.phone }}</p>
+                </div>
+              </div>
+              <div class="tw-grid tw-grid-cols-[240px_auto] tw-gap-[33px] tw-gap-y-0 tw-items-start">
+                <div class="tw-text-right tw-text-gray-dark dark:!tw-text-gray-400 tw-text-sm tw-m-0 tw-pt-0.5">
+                  <p class="tw-m-0">Pin number</p>
+                </div>
+                <div
+                    class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
+                  <p class="tw-m-0">{{ data.pinNumber }}</p>
+                </div>
+              </div>
+              <div class="tw-grid tw-grid-cols-[240px_auto] tw-gap-[33px] tw-gap-y-0 tw-items-start">
+                <div class="tw-text-right tw-text-gray-dark dark:!tw-text-gray-400 tw-text-sm tw-m-0 tw-pt-0.5">
+                  <p class="tw-m-0">Mailing address</p>
+                </div>
+                <div
+                    class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
+                  <p class="tw-m-0">{{ data.address2 }}</p>
                 </div>
               </div>
             </div>
