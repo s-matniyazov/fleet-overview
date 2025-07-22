@@ -134,6 +134,24 @@ const props = defineProps({
                   <p class="tw-m-0">{{ data.address2 }}</p>
                 </div>
               </div>
+              <div class="tw-grid tw-grid-cols-[240px_auto] tw-gap-[33px] tw-gap-y-0 tw-items-start">
+                <div class="tw-text-right tw-text-gray-dark dark:!tw-text-gray-400 tw-text-sm tw-m-0 tw-pt-0.5">
+                  <p class="tw-m-0">Status</p>
+                </div>
+                <div
+                    class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
+                  <p class="tw-m-0">{{ data.status }}</p>
+                </div>
+              </div>
+              <div class="tw-grid tw-grid-cols-[240px_auto] tw-gap-[33px] tw-gap-y-0 tw-items-start">
+                <div class="tw-text-right tw-text-gray-dark dark:!tw-text-gray-400 tw-text-sm tw-m-0 tw-pt-0.5">
+                  <p class="tw-m-0">New Entrant Status</p>
+                </div>
+                <div
+                    class="tw-text-black dark:!tw-text-gray-light tw-text-lg tw-font-semibold tw-leading-snug tw-break-words tw-m-0">
+                  <p class="tw-m-0">{{ data.entrantStatus }}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -73,7 +73,6 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
 
     @Override
     public ApiResponse post(CompanyRequest data) {
-
         repository.save(
                 new CompanyEntity(
                         data.name(),
@@ -91,7 +90,8 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
                         data.email(),
                         data.phone(),
                         data.timeZone(),
-                        data.status()
+                        data.status(),
+                        data.entrantStatus()
                 )
         );
 
@@ -118,6 +118,7 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
         company.setPhone(data.phone());
         company.setTimeZone(data.timeZone());
         company.setStatus(data.status());
+        company.setEntrantStatus(data.entrantStatus());
 
         repository.save(company);
 

@@ -3,8 +3,9 @@ package fleetoverview.domain.entity.company;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fleetoverview.domain.entity.StateEntity;
 import fleetoverview.domain.entity.base.BaseEntity;
-import fleetoverview.domain.enums.company.CompanyStatusEnum;
 import fleetoverview.domain.enums.TimeZoneEnum;
+import fleetoverview.domain.enums.company.CompanyEntrantStatusEnum;
+import fleetoverview.domain.enums.company.CompanyStatusEnum;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -54,6 +55,9 @@ public class CompanyEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private CompanyStatusEnum status;
 
+    @Enumerated(EnumType.STRING)
+    private CompanyEntrantStatusEnum entrantStatus;
+
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"createdBy", "created"})
     private Set<CompanyFileEntity> files = new HashSet<>();
@@ -63,7 +67,8 @@ public class CompanyEntity extends BaseEntity {
 
     public CompanyEntity(String name, String ownerName, String dot, String pinNumber, String mc, String dba, String fein,
                          StateEntity state, String address1, String address2, String city,
-                         Integer zipcode, String email, String phone, TimeZoneEnum timeZone, CompanyStatusEnum status) {
+                         Integer zipcode, String email, String phone, TimeZoneEnum timeZone, CompanyStatusEnum status
+            , CompanyEntrantStatusEnum entrantStatus) {
         this.name = name;
         this.ownerName = ownerName;
         this.dot = dot;
@@ -80,6 +85,7 @@ public class CompanyEntity extends BaseEntity {
         this.phone = phone;
         this.timeZone = timeZone;
         this.status = status;
+        this.entrantStatus = entrantStatus;
     }
 
     public String getName() {
@@ -212,5 +218,13 @@ public class CompanyEntity extends BaseEntity {
 
     public void setPinNumber(String pinNumber) {
         this.pinNumber = pinNumber;
+    }
+
+    public CompanyEntrantStatusEnum getEntrantStatus() {
+        return entrantStatus;
+    }
+
+    public void setEntrantStatus(CompanyEntrantStatusEnum entrantStatus) {
+        this.entrantStatus = entrantStatus;
     }
 }

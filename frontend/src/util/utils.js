@@ -118,6 +118,7 @@ export const DOCUMENT_TYPES = {
     "IFTA_LICENSE": "IFTA License",
     "UCR": "UCR (Unified Carrier Registration)",
     "MCS_150": "MCS-150 (Biennial)",
+    "CT_PERMIT": "CT Permit",
 
     "ARTICLES_OF_INCORPORATION": "Articles of Incorporation",
     "MC_CERTIFICATE": "MC Certificate",
@@ -207,6 +208,10 @@ export const COMPANY_TYPE_NAMES = [
     {
         key: "MCS_150",
         value: "MCS-150 (Biennial)"
+    },
+    {
+        key: "CT_PERMIT",
+        value: "CT Permit"
     },
 ];
 

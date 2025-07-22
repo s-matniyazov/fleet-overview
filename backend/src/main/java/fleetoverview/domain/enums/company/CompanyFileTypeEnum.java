@@ -10,6 +10,7 @@ public enum CompanyFileTypeEnum {
     IFTA_LICENSE("IFTA License"),
     UCR("UCR (Unified Carrier Registration)"),
     MCS_150("MCS-150 (Biennial)"),
+    CT_PERMIT("CT Permit"),
 
     // other documents
     ARTICLES_OF_INCORPORATION("Articles of Incorporation"),

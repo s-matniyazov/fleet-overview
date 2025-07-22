@@ -1,6 +1,7 @@
 package fleetoverview.domain.projection.company;
 
 import fleetoverview.domain.enums.TimeZoneEnum;
+import fleetoverview.domain.enums.company.CompanyEntrantStatusEnum;
 import fleetoverview.domain.enums.company.CompanyStatusEnum;
 import fleetoverview.domain.projection.company.CompanyFileProjection;
 
@@ -33,6 +34,7 @@ public class CompanyProjection {
     private String pinNumber;
     private TimeZoneEnum timeZone;
     private CompanyStatusEnum status;
+    private CompanyEntrantStatusEnum entrantStatus;
 
     private Integer createdById;
     private String createdByName;
@@ -233,5 +235,13 @@ public class CompanyProjection {
 
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
+    }
+
+    public CompanyEntrantStatusEnum getEntrantStatus() {
+        return entrantStatus;
+    }
+
+    public void setEntrantStatus(CompanyEntrantStatusEnum entrantStatus) {
+        this.entrantStatus = entrantStatus;
     }
 }

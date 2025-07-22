@@ -78,6 +78,34 @@ const columns = [
     classes: '',
   },
   {
+    key: 'ccf',
+    name: 'ccf',
+    label: t('ccf'),
+    styles: 'min-width: 200px;',
+    classes: '',
+  },
+  {
+    key: 'drug_test_result',
+    name: 'drug_test_result',
+    label: t('drug_test_result'),
+    styles: 'min-width: 200px;',
+    classes: '',
+  },
+  {
+    key: 'driver_application',
+    name: 'driver_application',
+    label: t('driver_application'),
+    styles: 'min-width: 200px;',
+    classes: '',
+  },
+  {
+    key: 'pev',
+    name: 'pev',
+    label: t('pev'),
+    styles: 'min-width: 200px;',
+    classes: '',
+  },
+  {
     key: 'inspections',
     name: 'inspections',
     label: t('inspections'),
@@ -356,6 +384,38 @@ watch(
           <FileMiniCard name="SSN" type="SSN"
                         :file="row?.files.find(it => it.type==='SSN')"
                         @click="(e) => {selectedRow = row; selectFileSection('SSN'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
+      <template #row_ccf="{row}">
+        <td>
+          <FileMiniCard name="CCF" type="CCF"
+                        :file="row?.files.find(it => it.type==='CCF')"
+                        @click="(e) => {selectedRow = row; selectFileSection('CCF'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
+      <template #row_drug_test_result="{row}">
+        <td>
+          <FileMiniCard name="DRUG_TEST_RESULT" type="DRUG_TEST_RESULT"
+                        :file="row?.files.find(it => it.type==='DRUG_TEST_RESULT')"
+                        @click="(e) => {selectedRow = row; selectFileSection('DRUG_TEST_RESULT'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
+      <template #row_driver_application="{row}">
+        <td>
+          <FileMiniCard name="DRIVER_APPL" type="DRIVER_APPLICATION"
+                        :file="row?.files.find(it => it.type==='DRIVER_APPLICATION')"
+                        @click="(e) => {selectedRow = row; selectFileSection('DRIVER_APPLICATION'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
+      <template #row_pev="{row}">
+        <td>
+          <FileMiniCard name="PEV" type="PEV"
+                        :file="row?.files.find(it => it.type==='PEV')"
+                        @click="(e) => {selectedRow = row; selectFileSection('PEV'); e.stopPropagation()}"/>
         </td>
       </template>
 

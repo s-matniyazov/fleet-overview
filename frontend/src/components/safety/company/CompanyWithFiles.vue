@@ -59,6 +59,13 @@ const columns = [
     classes: '',
   },
   {
+    key: 'ct_permit',
+    name: 'ct_permit',
+    label: t('ct_permit'),
+    styles: 'min-width: 200px;',
+    classes: '',
+  },
+  {
     key: 'articles_of_incorporation',
     name: 'articles_of_incorporation',
     label: t('articles_of_incorporation'),
@@ -320,6 +327,14 @@ watch(
         </td>
       </template>
 
+      <template #row_ct_permit="{row}">
+        <td>
+          <FileMiniCard name="CT_PERMIT" type="CT_PERMIT"
+                        :file="row?.files.find(it => it.type==='CT_PERMIT')"
+                        @click="(e) => { selectedRow = row; selectFileSection('CT_PERMIT'); e.stopPropagation()}"/>
+        </td>
+      </template>
+
       <template #row_articles_of_incorporation="{row}">
         <td>
           <FileMiniCard name="ARTICLES_INCORP" type="ARTICLES_OF_INCORPORATION"
@@ -445,16 +460,16 @@ watch(
                         :placeholder="t('enter_address1')" classes=""/>
               </div>
               <div class="col-3">
-                <UInput v-model="data.address2" :label="t('address2')" :hint="t('address2')" :name="t('address2')"
-                        :placeholder="t('enter_address2')" classes=""/>
-              </div>
-              <div class="col-3">
                 <USelect v-model="data.timeZone" :label="t('timeZone')"
                          :items="TIME_ZONES" name="timeZone"
                          option_name="key"
                          option_value="value"
                          :rules="(val) => (!val && $t('required'))"
                 ></USelect>
+              </div>
+              <div class="col-4">
+                <UInput v-model="data.address2" :label="t('mailingAddress')" :hint="t('mailingAddress')" :name="t('mailingAddress')"
+                        :placeholder="t('enter_mailingAddress')" type="email"/>
               </div>
               <div class="col-4">
                 <UInput v-model="data.email" type="email" :label="t('email')" :hint="t('email')" :name="t('email')"
@@ -467,6 +482,14 @@ watch(
               <div class="col-3">
                 <USelect v-model="data.status" :label="t('status')"
                          :items="[{name:'ACTIVE'},{name:'INACTIVE'}]" name="status"
+                         option_name="name"
+                         option_value="name"
+                         :rules="(val) => (!val && $t('required'))"
+                ></USelect>
+              </div>
+              <div class="col-3">
+                <USelect v-model="data.entrantStatus" :label="t('entrantStatus')"
+                         :items="[{name:'PASSED'},{name:'NOT_PASSED'}]" name="entrantStatus"
                          option_name="name"
                          option_value="name"
                          :rules="(val) => (!val && $t('required'))"

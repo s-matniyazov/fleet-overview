@@ -25,6 +25,7 @@
         <result property="pinNumber" column="pinNumber"/>
         <result property="timeZone" column="timeZone"/>
         <result property="status" column="status"/>
+        <result property="entrantStatus" column="entrantStatus"/>
 
         <result property="createdById" column="createdById"/>
         <result property="createdByName" column="createdByName"/>
@@ -87,6 +88,7 @@
                      ci.pin_number as "pinNumber",
                      ci.time_zone as "timeZone",
                      ci.status as "status",
+                     ci.entrant_status as "entrantStatus",
 
                      s.id as "stateId",
                      s.name as "stateName",
