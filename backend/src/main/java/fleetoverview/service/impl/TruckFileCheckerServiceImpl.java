@@ -16,18 +16,18 @@ import java.util.List;
  **/
 @Service
 public class TruckFileCheckerServiceImpl implements FileCheckerService {
-    private final TruckFileRepository truckFileRepository;
+    private final TruckFileRepository repository;
 
     @Autowired
-    public TruckFileCheckerServiceImpl(TruckFileRepository truckFileRepository) {
-        this.truckFileRepository = truckFileRepository;
+    public TruckFileCheckerServiceImpl(TruckFileRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public void checkAndDisableFile() {
-        List<TruckFileEntity> files = truckFileRepository.findExpiredFiles().stream()
+        List<TruckFileEntity> files = repository.findExpiredFiles().stream()
                 .peek(it -> it.setStatus(TruckFileStatusEnum.PASSIVE)).toList();
 
-        truckFileRepository.saveAll(files);
+        repository.saveAll(files);
     }
 }

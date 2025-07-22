@@ -2,6 +2,8 @@ package fleetoverview.config;
 
 import fleetoverview.service.FileCheckerService;
 import fleetoverview.service.NotificationService;
+import fleetoverview.service.impl.CompanyFileCheckerServiceImpl;
+import fleetoverview.service.impl.DriverFileCheckerServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +27,24 @@ public class FileExpirationCheckerScheduler {
     private final NotificationService notificationService;
     private final FileCheckerService truckFileCheckerServiceImpl;
     private final FileCheckerService permitFileCheckerServiceImpl;
+    private final DriverFileCheckerServiceImpl driverFileCheckerService;
+    private final CompanyFileCheckerServiceImpl companyFileCheckerService;
 
     @Autowired
-    public FileExpirationCheckerScheduler(NotificationService notificationService, FileCheckerService truckFileCheckerServiceImpl, FileCheckerService permitFileCheckerServiceImpl) {
+    public FileExpirationCheckerScheduler(NotificationService notificationService, FileCheckerService truckFileCheckerServiceImpl, FileCheckerService permitFileCheckerServiceImpl, DriverFileCheckerServiceImpl driverFileCheckerService, CompanyFileCheckerServiceImpl companyFileCheckerService) {
         this.notificationService = notificationService;
         this.truckFileCheckerServiceImpl = truckFileCheckerServiceImpl;
         this.permitFileCheckerServiceImpl = permitFileCheckerServiceImpl;
+        this.driverFileCheckerService = driverFileCheckerService;
+        this.companyFileCheckerService = companyFileCheckerService;
     }
 
     @Scheduled(cron = "0 0 1 * * ?")
     public void checkFileAndMakeExpired() {
         truckFileCheckerServiceImpl.checkAndDisableFile();
         permitFileCheckerServiceImpl.checkAndDisableFile();
+        driverFileCheckerService.checkAndDisableFile();
+        companyFileCheckerService.checkAndDisableFile();
     }
 
     //cron = "0 0 8 * * ?"

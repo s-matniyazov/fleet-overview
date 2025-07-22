@@ -15,7 +15,8 @@ import java.time.LocalDate;
  * @mailto :  sardorbekmatniyazov03@gmail.com
  * @created : 06 июль 2025
  **/
-@Entity(name = "company_files")
+@Entity
+@Table(name = "company_files")
 public class CompanyFileEntity extends BaseEntity {
     @OneToOne
     private ResourceEntity resource;
