@@ -1,6 +1,7 @@
 package fleetoverview.service;
 
 import fleetoverview.data.request.LoginRequest;
+import fleetoverview.data.request.RegisterUserRequest;
 import fleetoverview.data.response.ApiResponse;
 
 /**
@@ -11,4 +12,5 @@ import fleetoverview.data.response.ApiResponse;
 public interface AuthService {
     ApiResponse login(LoginRequest loginRequest);
     ApiResponse unlock(LoginRequest loginRequest);
+    ApiResponse registerUser(RegisterUserRequest registerUserRequest);
 }

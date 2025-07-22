@@ -1,5 +1,9 @@
 package fleetoverview.service.impl;
 
+import fleetoverview.data.request.RegisterUserRequest;
+import fleetoverview.repository.RoleRepository;
+import fleetoverview.service.base.BaseService;
+import fleetoverview.util.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,14 +26,16 @@ import java.util.Optional;
  * @created : 19 февр. 2025
  **/
 @Service
-public class AuthServiceImpl implements AuthService {
+public class AuthServiceImpl extends BaseService implements AuthService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
     @Autowired
-    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
     }
@@ -55,6 +61,21 @@ public class AuthServiceImpl implements AuthService {
         if (!passwordEncoder.matches(loginRequest.password(), principal.getPassword())) {
             throw new ForbiddenException("Unauthorized");
         }
+
+        return ApiResponse.success();
+    }
+
+    @Override
+    public ApiResponse registerUser(RegisterUserRequest registerUserRequest) {
+        userRepository.save(
+                new UserEntity(
+                        registerUserRequest.username(),
+                        passwordEncoder.encode(registerUserRequest.password()),
+                        registerUserRequest.name(),
+                        registerUserRequest.email(),
+                        roleRepository.findById(registerUserRequest.roleId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("role.not_found")))
+                )
+        );
 
         return ApiResponse.success();
     }

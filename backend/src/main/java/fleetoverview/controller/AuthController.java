@@ -1,5 +1,6 @@
 package fleetoverview.controller;
 
+import fleetoverview.data.request.RegisterUserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +37,10 @@ public class AuthController {
     @PostMapping("unlock")
     public HttpEntity<ApiResponse> unlock(@RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(service.unlock(loginRequest));
+    }
+
+    @PostMapping("register-user")
+    public HttpEntity<ApiResponse> registerUser(@RequestBody RegisterUserRequest registerUserRequest) {
+        return ResponseEntity.ok(service.registerUser(registerUserRequest));
     }
 }
