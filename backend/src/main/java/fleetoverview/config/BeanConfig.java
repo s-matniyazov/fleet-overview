@@ -44,8 +44,8 @@ public class BeanConfig {
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
+        mailSender.setHost("smtp.timeweb.ru");
+        mailSender.setPort(2525);
 
         mailSender.setUsername(mailParams.getUsername());
         mailSender.setPassword(mailParams.getPassword());

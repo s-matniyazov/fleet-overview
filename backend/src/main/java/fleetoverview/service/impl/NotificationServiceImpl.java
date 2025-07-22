@@ -75,7 +75,7 @@ public class NotificationServiceImpl implements NotificationService {
                     """, it.getName(), it.getName()));
 
             var trucks = truckRepository.getTrucksWithExpirationInfo(it.getId());
-            text.append("-------------------------------------------\n🚛 Truck Documents Expiring Soon\n");
+            text.append("----------------------------------------\n🚛 Truck Documents Expiring Soon\n");
             trucks.stream()
                     .filter(tr -> isNearlyExpires(tr.getRegCabCardExp()) || isNearlyExpires(tr.getAnnsInsExp())
                             || isNearlyExpires(tr.getPhysDamageExp()) || isNearlyExpires(tr.getLeaseAgrExp()))
@@ -115,7 +115,7 @@ public class NotificationServiceImpl implements NotificationService {
                     });
 
             var trailers = trailerRepository.getTrailersWithExpirationInfo(it.getId());
-            text.append("-------------------------------------------\n🚃 Trailer Documents Expiring Soon\n");
+            text.append("----------------------------------------\n🚃 Trailer Documents Expiring Soon\n");
             trailers.stream()
                     .filter(tr -> isNearlyExpires(tr.getRegCabCardExp()) || isNearlyExpires(tr.getAnnsInsExp())
                             || isNearlyExpires(tr.getPhysDamageExp()) || isNearlyExpires(tr.getLeaseAgrExp()))
@@ -216,7 +216,7 @@ public class NotificationServiceImpl implements NotificationService {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
-            helper.setFrom("sardorbekmatniyazov03@gmail.com");
+            helper.setFrom("bilol@efficientmanllc.com");
             helper.setSubject("⚠️ Fleet Alert");
             helper.setText(message);
 

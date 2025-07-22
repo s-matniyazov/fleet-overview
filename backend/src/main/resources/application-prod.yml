@@ -37,11 +37,18 @@ telegram:
   token: "6174384781:AAENYCRflrXFt6KERjQC1LhW6yd_zs-7Vbc"
   chatIds: "-1002554948125"
 mail:
-  senders: ""
-  host: smtp.gmail.com
-  username: sardorbekmatniyazov03@gmail.com
-  password: "rdlv svgm wzmn ymbx"
-
+  senders: "info@efficientmanllc.com,sardorbekmatniyazov03@gmail.com"
+  host: smtp.timeweb.ru
+  port: 2525
+  username: "bilol@efficientmanllc.com"
+  password: "if2u25pcf7"
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+          required: true
 resource:
   path: "d:\\resources\\"
 
