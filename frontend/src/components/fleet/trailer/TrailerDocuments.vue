@@ -45,7 +45,7 @@ const selectedFileSection = ref({
 function downloadAll(type) {
   if (type === 'trailerFiles') {
     FLEET_TYPE_NAMES.forEach(item => {
-      const resource = makeResourceEntity(trailerFileStore?.files.find(it => it.type === item.key))
+      const resource = trailerFileStore?.files.find(it => it.type === item.key)?.resource
       if (resource) {
         downloadResource(resource)
       }

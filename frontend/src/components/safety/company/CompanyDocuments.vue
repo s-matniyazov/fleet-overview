@@ -51,14 +51,14 @@ const selectedFileSection = ref({
 function downloadAll(type) {
   if (type === 'companyFiles') {
     COMPANY_TYPE_NAMES.forEach(item => {
-      const resource = makeResourceEntity(companyFileStore?.files.find(it => it.type === item.key))
+      const resource = companyFileStore?.files.find(it => it.type === item.key)?.resource
       if (resource) {
         downloadResource(resource)
       }
     })
   } else if (type === 'companyOtherFiles') {
     COMPANY_OTHER_TYPE_NAMES.forEach(item => {
-      const resource = makeResourceEntity(companyFileStore?.files.find(it => it.type === item.key))
+      const resource = companyFileStore?.files.find(it => it.type === item.key)?.resource
       if (resource) {
         downloadResource(resource)
       }

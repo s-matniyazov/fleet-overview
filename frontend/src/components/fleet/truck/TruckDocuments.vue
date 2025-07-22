@@ -46,14 +46,14 @@ const selectedFileSection = ref({
 function downloadAll(type) {
   if (type === 'truckFiles') {
     FLEET_TYPE_NAMES.forEach(item => {
-      const resource = makeResourceEntity(truckFileStore?.files.find(it => it.type === item.key))
+      const resource = truckFileStore?.files.find(it => it.type === item.key)?.resource
       if (resource) {
         downloadResource(resource)
       }
     })
   } else if (type === 'permits') {
     PERMIT_NAMES.forEach(item => {
-      const resource = makeResourceEntity(truckFileStore?.permits.find(it => it.type === item.key))
+      const resource = truckFileStore?.permits.find(it => it.type === item.key)?.resource
       if (resource) {
         downloadResource(resource)
       }

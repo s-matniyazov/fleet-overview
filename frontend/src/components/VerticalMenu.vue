@@ -210,7 +210,8 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
             <template #body>
               <div class="bg-primary rounded-2 px-2 font-size-15" style="min-width: 140px">
                 <router-link class="text-white" to="fleet-compliance" style="border-bottom: 1px solid white">Fleet Compliance</router-link><br>
-                <router-link class="text-white" to="fleet-overview">Fleet Overview</router-link>
+                <router-link class="text-white" to="fleet-overview" style="border-bottom: 1px solid white">Fleet Overview</router-link><br>
+                <router-link class="text-white" to="maintenance">Maintenance</router-link>
               </div>
             </template>
           </UDropDown>
