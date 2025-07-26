@@ -33,7 +33,7 @@ public class UserServiceImpl extends BaseService implements UserService {
     }
 
     @Override
-    public DataResponse<List<UserEntity>> get(Map<String, String> params) {
+    public DataResponse<List<UserEntity>> get(Map<String, Object> params) {
         return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 

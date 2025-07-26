@@ -62,7 +62,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
     }
 
     @Override
-    public DataResponse<List<DriverEntity>> get(Map<String, String> params) {
+    public DataResponse<List<DriverEntity>> get(Map<String, Object> params) {
         if (!params.containsKey("companyId")) {
             throw new NotFoundException(mSourceBundle.apply("filter.company.missed"));
         }

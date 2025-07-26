@@ -34,7 +34,7 @@ public class RoleServiceImpl extends BaseService implements RoleService {
     }
 
     @Override
-    public DataResponse<List<RoleEntity>> get(Map<String,String> params) {
+    public DataResponse<List<RoleEntity>> get(Map<String,Object> params) {
         return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 

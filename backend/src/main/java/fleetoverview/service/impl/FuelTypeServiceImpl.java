@@ -30,7 +30,7 @@ public class FuelTypeServiceImpl extends BaseService implements FuelTypeService 
     }
 
     @Override
-    public DataResponse<List<FuelTypeEntity>> get(Map<String, String> params) {
+    public DataResponse<List<FuelTypeEntity>> get(Map<String, Object> params) {
         return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 

@@ -30,7 +30,7 @@ public class TruckModelMakerServiceImpl extends BaseService implements TruckMode
     }
 
     @Override
-    public DataResponse<List<TruckModelMakerEntity>> get(Map<String, String> params) {
+    public DataResponse<List<TruckModelMakerEntity>> get(Map<String, Object> params) {
         return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 

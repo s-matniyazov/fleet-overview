@@ -147,6 +147,11 @@ const selectedFileSection = ref({
 });
 
 const apiUrl = URIS.TRUCK;
+const pagination = ref({
+  rowsPerPage: 5,
+  page: 1,
+  hasNext: true
+});
 const filter = ref({
   vinOrUnit: null
 });
@@ -157,6 +162,10 @@ const data = ref(newModel())
 const drivers = ref([]);
 
 // FUNCTIONS
+const paging = (a) => {
+  if (a === 'p' && pagination.value.page > 1) pagination.value.page --;
+  if (a === 'n' && pagination.value.hasNext) pagination.value.page ++;
+}
 const onAdd = () => {
   data.value = newModel();
 
@@ -262,10 +271,11 @@ const onActivate = (row) => {
 }
 
 function getData() {
-  axiosIns.get(`${apiUrl}${filterString({companyId: filterStore.companyId, ...filter.value})}`)
+  axiosIns.get(`${apiUrl}${filterString({companyId: filterStore.companyId, ...filter.value, ...pagination.value})}`)
       .then(res => {
         dataList.value = res.data.data;
         selectedRow.value = null;
+        pagination.value.hasNext = dataList.value.length >= pagination.value.rowsPerPage;
       }).catch(e => {
     showMessage(e)
   });
@@ -312,6 +322,19 @@ watch(
     }
 )
 
+watch(
+    () => pagination.value.page,
+    function (newValue) {
+      getData();
+    }
+)
+watch(
+    () => pagination.value.rowsPerPage,
+    function (newValue) {
+      getData();
+    }
+)
+
 </script>
 
 <template>
@@ -333,7 +356,20 @@ watch(
         <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-magnify"></span></button>
 
         <div class="align-items-center u-end">
-          <button @click="reload" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
+          <ul class="pagination pagination-sm ul-style">
+            <select v-model="pagination.rowsPerPage" class="form-select form-select-sm mb-0 my-n1">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select>
+
+            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('p')" :disabled="pagination.page <= 1">&laquo;</a></li>
+            <li class="page-item active cursor-not-allowed"><a class="page-link">{{ pagination.page }}</a></li>
+            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('n')" :disabled="!pagination.hasNext">&raquo;</a></li>
+<!--            <li class="page-item cursor-pointer">-->
+<!--              <button @click="reload" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>-->
+<!--            </li>-->
+          </ul>
         </div>
       </div>
     </div>
@@ -503,7 +539,8 @@ watch(
                 </div>
                 <!--            unit-->
                 <div class="col-6">
-                  <UInput v-model="data.carrier_responsible_for_safety" :label="t('carrier_responsible_for_safety')" :hint="t('carrier_responsible_for_safety')" :name="t('carrier_responsible_for_safety')"
+                  <UInput v-model="data.carrier_responsible_for_safety" :label="t('carrier_responsible_for_safety')"
+                          :hint="t('carrier_responsible_for_safety')" :name="t('carrier_responsible_for_safety')"
                           :placeholder="t('enter_carrier_responsible_for_safety')" classes="mb-2"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
@@ -670,7 +707,7 @@ watch(
     <UDialog :show="showModal && false" width="calc(100vw - 200px)" class="">
       <template #header>
         <div class="d-flex w-100 f-700">
-          TR: {{selectedRow.unit}}
+          TR: {{ selectedRow.unit }}
           <div class="text-end u-end">
             <button class="btn-close" @click="showModal = false"></button>
           </div>
@@ -690,9 +727,10 @@ watch(
                  width="calc(100vw - 500px)" class="">
     <template #header>
       <div class="d-flex w-100 f-700">
-        TR: {{selectedRow.unit}}
+        TR: {{ selectedRow.unit }}
         <div class="text-end u-end">
-          <button v-if="selectedRow.status === 'ACTIVE'" @click="deactivate(selectedRow)" class="btn btn-outline-danger btn-sm mx-3">
+          <button v-if="selectedRow.status === 'ACTIVE'" @click="deactivate(selectedRow)"
+                  class="btn btn-outline-danger btn-sm mx-3">
             {{ t("deactivate") }}
           </button>
           <button v-else @click="activate(selectedRow)" class="btn btn-outline-success btn-sm mx-3">
@@ -710,7 +748,7 @@ watch(
     </template>
   </URightOverlay>
 
-<!--  file overlay-->
+  <!--  file overlay-->
   <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
     <template #header>
       <h4 class="fw-bold text-white bg-primary p-2 rounded-2 d-flex">{{
@@ -722,7 +760,8 @@ watch(
       </h4>
     </template>
     <template #body>
-      <FileOverlay :url="`${URIS.TRUCK}/attach-file`" :data="selectedFileSection.data" :file="selectedFileSection.file"/>
+      <FileOverlay :url="`${URIS.TRUCK}/attach-file`" :data="selectedFileSection.data"
+                   :file="selectedFileSection.file"/>
     </template>
   </URightOverlay>
 </template>

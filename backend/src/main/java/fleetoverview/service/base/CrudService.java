@@ -12,7 +12,7 @@ import java.util.Map;
  * @created : 28 янв. 2025
  **/
 public interface CrudService<E, R> {
-    DataResponse<List<E>> get(Map<String,String> params);
+    DataResponse<List<E>> get(Map<String, Object> params);
     ApiResponse post(R data);
     ApiResponse put(R data);
     ApiResponse delete(R data);

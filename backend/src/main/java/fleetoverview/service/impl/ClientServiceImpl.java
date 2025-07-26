@@ -28,7 +28,7 @@ public class ClientServiceImpl extends BaseService implements ClientService {
     }
 
     @Override
-    public DataResponse<List<ClientEntity>> get(Map<String,String> params) {
+    public DataResponse<List<ClientEntity>> get(Map<String, Object> params) {
         return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 

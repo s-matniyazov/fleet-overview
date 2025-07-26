@@ -28,7 +28,7 @@ public abstract class CrudController<E, R> extends BaseController {
     }
 
     @GetMapping
-    protected HttpEntity<ApiResponse> get(@RequestParam Map<String,String> params) {
+    protected HttpEntity<ApiResponse> get(@RequestParam Map<String, Object> params) {
         return ResponseEntity.ok(service.get(params));
     }
 

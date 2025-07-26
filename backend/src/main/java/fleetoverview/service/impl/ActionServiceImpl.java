@@ -30,7 +30,7 @@ public class ActionServiceImpl extends BaseService implements ActionService {
     }
 
     @Override
-    public DataResponse<List<ActionEntity>> get(Map<String,String> params) {
+    public DataResponse<List<ActionEntity>> get(Map<String, Object> params) {
         return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 

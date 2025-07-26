@@ -30,7 +30,7 @@ public class CountryServiceImpl extends BaseService implements CountryService {
     }
 
     @Override
-    public DataResponse<List<CountryEntity>> get(Map<String, String> params) {
+    public DataResponse<List<CountryEntity>> get(Map<String, Object> params) {
         return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 

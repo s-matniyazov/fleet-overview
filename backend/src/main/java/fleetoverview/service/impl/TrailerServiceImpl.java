@@ -70,7 +70,7 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
     }
 
     @Override
-    public DataResponse<List<TrailerEntity>> get(Map<String, String> params) {
+    public DataResponse<List<TrailerEntity>> get(Map<String, Object> params) {
         if (!params.containsKey("companyId")) {
             throw new NotFoundException(mSourceBundle.apply("filter.company.missed"));
         }

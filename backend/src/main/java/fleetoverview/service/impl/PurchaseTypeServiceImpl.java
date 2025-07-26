@@ -30,7 +30,7 @@ public class PurchaseTypeServiceImpl extends BaseService implements PurchaseType
     }
 
     @Override
-    public DataResponse<List<PurchaseTypeEntity>> get(Map<String, String> params) {
+    public DataResponse<List<PurchaseTypeEntity>> get(Map<String, Object> params) {
         return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 

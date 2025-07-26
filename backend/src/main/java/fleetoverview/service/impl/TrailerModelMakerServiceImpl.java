@@ -30,7 +30,7 @@ public class TrailerModelMakerServiceImpl extends BaseService implements Trailer
     }
 
     @Override
-    public DataResponse<List<TrailerModelMakerEntity>> get(Map<String, String> params) {
+    public DataResponse<List<TrailerModelMakerEntity>> get(Map<String, Object> params) {
         return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 

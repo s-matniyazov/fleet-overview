@@ -141,6 +141,10 @@
                 <if test="companyId != null">
                     and di.company_id||'' = #{companyId}
                 </if>
+                <if test="rowsPerPage != null and page != null">
+                    limit ${rowsPerPage}
+                    offset ${page} * ${rowsPerPage}
+                </if>
         ) t
         left join driver_files df on df.driver_id = t.id and df.status = 'ACTIVE'
         left join states dfst on dfst.id = df.state_id

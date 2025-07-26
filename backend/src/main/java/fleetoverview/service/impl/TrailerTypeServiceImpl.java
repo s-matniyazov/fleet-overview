@@ -30,7 +30,7 @@ public class TrailerTypeServiceImpl extends BaseService implements TrailerTypeSe
     }
 
     @Override
-    public DataResponse<List<TrailerTypeEntity>> get(Map<String, String> params) {
+    public DataResponse<List<TrailerTypeEntity>> get(Map<String, Object> params) {
         return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 

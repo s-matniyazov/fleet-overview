@@ -49,7 +49,7 @@ public class StateServiceImpl extends BaseService implements StateService {
     }
 
     @Override
-    public DataResponse<List<StateEntity>> get(Map<String, String> params) {
+    public DataResponse<List<StateEntity>> get(Map<String, Object> params) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<StateEntity> cq = cb.createQuery(StateEntity.class);
         Root<StateEntity> states = cq.from(StateEntity.class);

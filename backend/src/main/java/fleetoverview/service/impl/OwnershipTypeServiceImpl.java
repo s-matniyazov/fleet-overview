@@ -30,7 +30,7 @@ public class OwnershipTypeServiceImpl extends BaseService implements OwnershipTy
     }
 
     @Override
-    public DataResponse<List<OwnershipTypeEntity>> get(Map<String, String> params) {
+    public DataResponse<List<OwnershipTypeEntity>> get(Map<String, Object> params) {
         return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 

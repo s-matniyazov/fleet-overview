@@ -75,7 +75,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
     }
 
     @Override
-    public DataResponse<List<TruckEntity>> get(Map<String, String> params) {
+    public DataResponse<List<TruckEntity>> get(Map<String, Object> params) {
         if (!params.containsKey("companyId")) {
             throw new NotFoundException(mSourceBundle.apply("filter.company.missed"));
         }

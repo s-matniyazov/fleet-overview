@@ -161,6 +161,10 @@
                 <if test="vinOrUnit != null">
                     and (ti.vin like '%'||#{vinOrUnit}||'%' or ti.unit like '%'||#{vinOrUnit}||'%')
                 </if>
+                <if test="rowsPerPage != null and page != null">
+                    limit ${rowsPerPage}
+                    offset ${page-1} * ${rowsPerPage}
+                </if>
         ) t
         left join truck_files tf on tf.truck_id = t.id and tf.status = 'ACTIVE'
         left join resources tfs on tfs.id = tf.resource_id
