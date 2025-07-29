@@ -110,6 +110,16 @@ const en = {
     enter_status_name:'Enter Status Name',
     model_maker:'Model Maker',
     ownership_type:'Ownership Type',
+    enter_company_ownerName: 'Enter Company Owner name',
+    enter_dot: 'Enter Dot',
+    enter_pinNumber: 'Enter pin Number',
+    enter_mc: 'Enter mc',
+    enter_dba: 'Enter dba',
+    enter_fein: 'Enter fein',
+    enter_zipcode: 'Enter zip Code',
+    enter_address1: 'Enter Address',
+    enter_address2: 'Enter Mailing Address',
+    enter_mailingAddress: 'Enter Mailing Address',
 }
 
 export default en;

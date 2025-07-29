@@ -539,13 +539,13 @@ watch(
                 ></USelect>
               </div>
             </div>
-
-            <div class="modal-footer">
-              <div class="d-flex text-end align-items-end mt-2">
-                <button type="submit" style="background-color:#0891B2;" class="btn text-white">Save</button>
-              </div>
-            </div>
           </UScrollArea>
+
+          <div class="modal-footer">
+            <div class="d-flex text-end align-items-end mt-2">
+              <button type="submit" style="background-color:#0891B2;" class="btn text-white">Save</button>
+            </div>
+          </div>
         </UForm>
       </template>
     </modal>

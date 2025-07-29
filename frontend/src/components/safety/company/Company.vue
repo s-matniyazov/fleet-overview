@@ -288,16 +288,16 @@ onMounted(() => {
                         :placeholder="t('enter_address1')" classes=""/>
               </div>
               <div class="col-3">
-                <UInput v-model="data.address2" :label="t('address2')" :hint="t('address2')" :name="t('address2')"
-                        :placeholder="t('enter_address2')" classes=""/>
-              </div>
-              <div class="col-3">
                 <USelect v-model="data.timeZone" :label="t('timeZone')"
                          :items="TIME_ZONES" name="timeZone"
                          option_name="key"
                          option_value="value"
                          :rules="(val) => (!val && $t('required'))"
                 ></USelect>
+              </div>
+              <div class="col-4">
+                <UInput v-model="data.address2" :label="t('mailingAddress')" :hint="t('mailingAddress')" :name="t('mailingAddress')"
+                        :placeholder="t('enter_mailingAddress')" type="email"/>
               </div>
               <div class="col-4">
                 <UInput v-model="data.email" type="email" :label="t('email')" :hint="t('email')" :name="t('email')"
@@ -315,14 +315,22 @@ onMounted(() => {
                          :rules="(val) => (!val && $t('required'))"
                 ></USelect>
               </div>
-            </div>
-
-            <div class="modal-footer bg-light">
-              <div class="d-flex text-end align-items-end mt-2">
-                <button type="submit" class="btn btn-primary">Save</button>
+              <div class="col-3">
+                <USelect v-model="data.entrantStatus" :label="t('entrantStatus')"
+                         :items="[{name:'PASSED'},{name:'NOT_PASSED'}]" name="entrantStatus"
+                         option_name="name"
+                         option_value="name"
+                         :rules="(val) => (!val && $t('required'))"
+                ></USelect>
               </div>
             </div>
           </UScrollArea>
+
+          <div class="modal-footer">
+            <div class="d-flex text-end align-items-end mt-2">
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </div>
         </UForm>
       </template>
     </modal>
