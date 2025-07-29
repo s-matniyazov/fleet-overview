@@ -104,9 +104,12 @@
                           left join countries c on c.id = s.country_id
                           left join users u on u.id = ci.created_by_id
                  where 1=1
+                <if test="companyName != null">
+                    and (ci.name like '%${companyName}%')
+                </if>
                 <if test="rowsPerPage != null and page != null">
                     limit ${rowsPerPage}
-                    offset ${page} * ${rowsPerPage}
+                    offset ${page-1} * ${rowsPerPage}
                 </if>
              ) t
                  left join company_files cf on cf.company_id = t.id and cf.status = 'ACTIVE'

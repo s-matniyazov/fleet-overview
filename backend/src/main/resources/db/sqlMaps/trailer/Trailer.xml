@@ -115,10 +115,10 @@
                 left join users u on u.id = ti.created_by_id
             where 1=1
                 <if test="companyId != null">
-                    and ti.company_id||'' = #{companyId}
+                    and ti.company_id = ${companyId}
                 </if>
                 <if test="vinOrUnit != null">
-                    and (ti.vin like '%'||#{vinOrUnit}||'%' or ti.unit like '%'||#{vinOrUnit}||'%')
+                    and (ti.vin like '%${vinOrUnit}%' or ti.unit like '%${vinOrUnit}%')
                 </if>
                 <if test="rowsPerPage != null and page != null">
                     limit ${rowsPerPage}

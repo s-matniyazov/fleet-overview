@@ -7,7 +7,7 @@ import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
 import UInput from "@/components/base/UInput.vue";
 import {useI18n} from "vue-i18n";
-import {DOCUMENT_TYPES, DRIVER_TYPES, showMessage} from "@/util/utils.js";
+import {DOCUMENT_TYPES, DRIVER_TYPES, filterString, showMessage} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
 import USelect from "@/components/base/USelect.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
@@ -144,6 +144,14 @@ const newModel = () => {
 const addModal = ref(false);
 
 const apiUrl = URIS.DRIVER;
+const pagination = ref({
+  rowsPerPage: 5,
+  page: 1,
+  hasNext: true
+});
+const filter = ref({
+  driverName: null
+});
 const dataList = ref([]);
 const data = ref(newModel())
 const selectedRow = ref();
@@ -161,6 +169,10 @@ const selectedFileSection = ref({
 });
 
 // FUNCTIONS
+const paging = (a) => {
+  if (a === 'p' && pagination.value.page > 1) pagination.value.page --;
+  if (a === 'n' && pagination.value.hasNext) pagination.value.page ++;
+}
 const onAdd = () => {
   data.value = newModel();
 
@@ -234,10 +246,11 @@ const onTerminate = (terminationData) => {
 }
 
 function getData() {
-  axiosIns.get(`${apiUrl}?companyId=${filterStore.companyId}`)
+  axiosIns.get(`${apiUrl}${filterString({companyId: filterStore.companyId, ...filter.value, ...pagination.value})}`)
       .then(res => {
         dataList.value = res.data.data;
         selectedRow.value = null;
+        pagination.value.hasNext = dataList.value.length >= pagination.value.rowsPerPage;
       }).catch(e => {
     showMessage(e)
   });
@@ -276,6 +289,19 @@ watch(
       }
     }
 )
+
+watch(
+    () => pagination.value.page,
+    function (newValue) {
+      getData();
+    }
+)
+watch(
+    () => pagination.value.rowsPerPage,
+    function (newValue) {
+      getData();
+    }
+)
 </script>
 
 <template>
@@ -293,8 +319,25 @@ watch(
           <span class="mdi mdi-eye"></span>
         </button>
 
-        <div class="align-items-center" style="right: 2px; margin-left: auto">
-          <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
+        <UInput v-model="filter.driverName" style="min-width: 23vw"
+                :hint="t('vin')" :placeholder="t('search_by_driver_name')"/>
+        <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-magnify"></span></button>
+
+        <div class="align-items-center u-end">
+          <ul class="pagination pagination-sm ul-style">
+            <select v-model="pagination.rowsPerPage" class="form-select form-select-sm mb-0 my-n1">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select>
+
+            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('p')" :disabled="pagination.page <= 1">&laquo;</a></li>
+            <li class="page-item active cursor-not-allowed"><a class="page-link">{{ pagination.page }}</a></li>
+            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('n')" :disabled="!pagination.hasNext">&raquo;</a></li>
+            <!--            <li class="page-item cursor-pointer">-->
+            <!--              <button @click="reload" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>-->
+            <!--            </li>-->
+          </ul>
         </div>
       </div>
     </div>

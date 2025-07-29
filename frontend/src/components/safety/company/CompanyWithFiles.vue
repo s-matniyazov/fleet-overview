@@ -7,7 +7,7 @@ import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
 import UInput from "@/components/base/UInput.vue";
 import {useI18n} from "vue-i18n";
-import {DOCUMENT_TYPES, showMessage, TIME_ZONES} from "@/util/utils.js";
+import {DOCUMENT_TYPES, filterString, showMessage, TIME_ZONES} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
 import USelect from "@/components/base/USelect.vue";
 import {useStateStore} from "@/store/StateStore.js";
@@ -137,6 +137,14 @@ const selectedFileSection = ref({
 });
 
 const apiUrl = URIS.COMPANIES;
+const pagination = ref({
+  rowsPerPage: 5,
+  page: 1,
+  hasNext: true
+});
+const filter = ref({
+  companyName: null
+});
 const dataList = ref([]);
 const status = ref([]);
 const data = ref(newModel())
@@ -145,6 +153,10 @@ const selectedRow = ref();
 const showModal = ref(false);
 
 // FUNCTIONS
+const paging = (a) => {
+  if (a === 'p' && pagination.value.page > 1) pagination.value.page --;
+  if (a === 'n' && pagination.value.hasNext) pagination.value.page ++;
+}
 const onAdd = () => {
   data.value = newModel();
 
@@ -207,10 +219,11 @@ const onDelete = (d) => {
 }
 
 function getData() {
-  axiosIns.get(URIS.COMPANIES_WITH_FILES)
+  axiosIns.get(`${apiUrl}/with-files${filterString({...filter.value, ...pagination.value})}`)
       .then(res => {
         dataList.value = res.data.data;
         selectedRow.value = null;
+        pagination.value.hasNext = dataList.value.length >= pagination.value.rowsPerPage;
       }).catch(e => {
     showMessage(e)
   });
@@ -249,6 +262,19 @@ watch(
     }
 )
 
+watch(
+    () => pagination.value.page,
+    function (newValue) {
+      getData();
+    }
+)
+watch(
+    () => pagination.value.rowsPerPage,
+    function (newValue) {
+      getData();
+    }
+)
+
 </script>
 
 <template>
@@ -266,8 +292,25 @@ watch(
           <span class="mdi mdi-eye"></span>
         </button>
 
-        <div class="align-items-center" style="right: 2px; margin-left: auto">
-          <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
+        <UInput v-model="filter.companyName" style="min-width: 23vw"
+                :hint="t('vin')" :placeholder="t('search_by_company_name')"/>
+        <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-magnify"></span></button>
+
+        <div class="align-items-center u-end">
+          <ul class="pagination pagination-sm ul-style">
+            <select v-model="pagination.rowsPerPage" class="form-select form-select-sm mb-0 my-n1">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select>
+
+            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('p')" :disabled="pagination.page <= 1">&laquo;</a></li>
+            <li class="page-item active cursor-not-allowed"><a class="page-link">{{ pagination.page }}</a></li>
+            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('n')" :disabled="!pagination.hasNext">&raquo;</a></li>
+            <!--            <li class="page-item cursor-pointer">-->
+            <!--              <button @click="reload" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>-->
+            <!--            </li>-->
+          </ul>
         </div>
       </div>
     </div>
@@ -298,7 +341,7 @@ watch(
       <template #row_insurance_cert="{row}">
         <td>
           <FileMiniCard name="INS_CERT" type="INS_CERT"
-                        :file="row?.files.find(it => it.type==='INS_CERT')"
+                        :file="row?.files?.find(it => it.type==='INS_CERT')"
                         @click="(e) => {selectedRow = row; selectFileSection('INS_CERT'); e.stopPropagation()}"/>
         </td>
       </template>
@@ -306,7 +349,7 @@ watch(
       <template #row_ifta_license="{row}">
         <td>
           <FileMiniCard name="IFTA_LICENSE" type="IFTA_LICENSE"
-                        :file="row?.files.find(it => it.type==='IFTA_LICENSE')"
+                        :file="row?.files?.find(it => it.type==='IFTA_LICENSE')"
                         @click="(e) => { selectedRow = row; selectFileSection('IFTA_LICENSE'); e.stopPropagation()}"/>
         </td>
       </template>
@@ -314,7 +357,7 @@ watch(
       <template #row_ucr="{row}">
         <td>
           <FileMiniCard name="UCR" type="UCR"
-                        :file="row?.files.find(it => it.type==='UCR')"
+                        :file="row?.files?.find(it => it.type==='UCR')"
                         @click="(e) => { selectedRow = row; selectFileSection('UCR'); e.stopPropagation()}"/>
         </td>
       </template>
@@ -322,7 +365,7 @@ watch(
       <template #row_mcs_150="{row}">
         <td>
           <FileMiniCard name="MCS_150" type="MCS_150"
-                        :file="row?.files.find(it => it.type==='MCS_150')"
+                        :file="row?.files?.find(it => it.type==='MCS_150')"
                         @click="(e) => { selectedRow = row; selectFileSection('MCS_150'); e.stopPropagation()}"/>
         </td>
       </template>
@@ -330,7 +373,7 @@ watch(
       <template #row_ct_permit="{row}">
         <td>
           <FileMiniCard name="CT_PERMIT" type="CT_PERMIT"
-                        :file="row?.files.find(it => it.type==='CT_PERMIT')"
+                        :file="row?.files?.find(it => it.type==='CT_PERMIT')"
                         @click="(e) => { selectedRow = row; selectFileSection('CT_PERMIT'); e.stopPropagation()}"/>
         </td>
       </template>
@@ -338,7 +381,7 @@ watch(
       <template #row_articles_of_incorporation="{row}">
         <td>
           <FileMiniCard name="ARTICLES_INCORP" type="ARTICLES_OF_INCORPORATION"
-                        :file="row?.files.find(it => it.type==='ARTICLES_OF_INCORPORATION')"
+                        :file="row?.files?.find(it => it.type==='ARTICLES_OF_INCORPORATION')"
                         @click="(e) => { selectedRow = row; selectFileSection('ARTICLES_OF_INCORPORATION'); e.stopPropagation()}"/>
         </td>
       </template>
@@ -346,7 +389,7 @@ watch(
       <template #row_mc_certificate="{row}">
         <td>
           <FileMiniCard name="MC_CERTIFICATE" type="MC_CERTIFICATE"
-                        :file="row?.files.find(it => it.type==='MC_CERTIFICATE')"
+                        :file="row?.files?.find(it => it.type==='MC_CERTIFICATE')"
                         @click="(e) => { selectedRow = row; selectFileSection('MC_CERTIFICATE'); e.stopPropagation()}"/>
         </td>
       </template>
@@ -354,7 +397,7 @@ watch(
       <template #row_owner_operator_agreement="{row}">
         <td>
           <FileMiniCard name="OWNER_AGREEMENT" type="OWNER_OPERATOR_AGREEMENT"
-                        :file="row?.files.find(it => it.type==='OWNER_OPERATOR_AGREEMENT')"
+                        :file="row?.files?.find(it => it.type==='OWNER_OPERATOR_AGREEMENT')"
                         @click="(e) => { selectedRow = row; selectFileSection('OWNER_OPERATOR_AGREEMENT'); e.stopPropagation()}"/>
         </td>
       </template>
@@ -362,7 +405,7 @@ watch(
       <template #row_driver_agreement="{row}">
         <td>
           <FileMiniCard name="DRIVER_AGREEMENT" type="DRIVER_AGREEMENT"
-                        :file="row?.files.find(it => it.type==='DRIVER_AGREEMENT')"
+                        :file="row?.files?.find(it => it.type==='DRIVER_AGREEMENT')"
                         @click="(e) => { selectedRow = row; selectFileSection('DRIVER_AGREEMENT'); e.stopPropagation()}"/>
         </td>
       </template>

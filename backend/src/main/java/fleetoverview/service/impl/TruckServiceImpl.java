@@ -16,6 +16,7 @@ import fleetoverview.repository.*;
 import fleetoverview.service.ResourceService;
 import fleetoverview.service.TruckService;
 import fleetoverview.service.base.BaseService;
+import fleetoverview.util.exceptions.ExistsException;
 import fleetoverview.util.exceptions.NotFoundException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -89,6 +90,9 @@ public class TruckServiceImpl extends BaseService implements TruckService {
 
     @Override
     public ApiResponse post(TruckRequest data) {
+        if (driverRepository.hasTruckById(data.driverId()) != 0)
+            throw new ExistsException(mSourceBundle.apply("driver.hasTruck"));
+
         repository.save(
                 new TruckEntity(
                         data.unit(),

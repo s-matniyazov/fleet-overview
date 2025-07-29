@@ -139,11 +139,15 @@
                 left join users u on u.id = di.created_by_id
             where 1=1
                 <if test="companyId != null">
-                    and di.company_id||'' = #{companyId}
+                    and di.company_id = ${companyId}
+                </if>
+                <if test="driverName != null">
+                    and (di.first_name like '%${driverName}%' or di.last_name like '%${driverName}%'
+                             or di.middle_name like '%${driverName}%')
                 </if>
                 <if test="rowsPerPage != null and page != null">
                     limit ${rowsPerPage}
-                    offset ${page} * ${rowsPerPage}
+                    offset ${page-1} * ${rowsPerPage}
                 </if>
         ) t
         left join driver_files df on df.driver_id = t.id and df.status = 'ACTIVE'
