@@ -2,6 +2,7 @@ package fleetoverview.service.impl;
 
 import fleetoverview.config.MailConfigurationParams;
 import fleetoverview.config.TelegramConfigurationParams;
+import fleetoverview.domain.enums.company.CompanyStatusEnum;
 import fleetoverview.domain.enums.truck.TruckFileTypeEnum;
 import fleetoverview.repository.CompanyRepository;
 import fleetoverview.repository.DriverRepository;
@@ -62,7 +63,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void sendNotifications() {
-        var companies = companyRepository.findAll();
+        var companies = companyRepository.findAllByStatus(CompanyStatusEnum.ACTIVE);
 
         companies.forEach(it -> {
             AtomicInteger counter = new AtomicInteger();

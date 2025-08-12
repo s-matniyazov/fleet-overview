@@ -1,7 +1,10 @@
 package fleetoverview.repository;
 
 import fleetoverview.domain.entity.company.CompanyEntity;
+import fleetoverview.domain.enums.company.CompanyStatusEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
 
 /**
  * @author :  Sardor Matniyazov
@@ -9,4 +12,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @created : 03 май 2025
  **/
 public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer> {
+    List<CompanyEntity> findAllByStatus(CompanyStatusEnum companyStatusEnum);
 }
