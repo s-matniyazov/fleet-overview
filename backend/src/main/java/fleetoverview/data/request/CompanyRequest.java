@@ -23,7 +23,7 @@ public record CompanyRequest(
         String address1,
         String address2,
         String city,
-        Integer zipcode,
+        String zipcode,
         String email,
         String phone,
         TimeZoneEnum timeZone,

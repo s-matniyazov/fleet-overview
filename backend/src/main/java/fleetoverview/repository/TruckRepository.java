@@ -1,7 +1,7 @@
 package fleetoverview.repository;
 
 import fleetoverview.domain.entity.truck.TruckEntity;
-import fleetoverview.domain.projection.ExpirationTruckFilesProjection;
+import fleetoverview.domain.projection.truck.ExpirationTruckFilesProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -14,6 +14,23 @@ const i18n = createI18n({
             ...en
         },
     },
+    dateTimeFormats: {
+        'en': {
+            short: {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+            },
+            long: {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long',
+                hour: 'numeric',
+                minute: 'numeric',
+            },
+        },
+    },
 })
 
 export default i18n;

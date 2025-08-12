@@ -1,15 +1,16 @@
-package fleetoverview.domain.projection;
+package fleetoverview.domain.projection.truck;
 
 import java.time.LocalDate;
 
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 03 июль 2025
+ * @created : 16 май 2025
  **/
-public interface ExpirationTrailerFilesProjection {
+public interface ExpirationTruckFilesProjection {
     String getUnit();
     String getMaker();
+    String getFuelType();
     Integer getYear();
 
     LocalDate getRegCabCardExp();

@@ -43,7 +43,7 @@ public class CompanyEntity extends BaseEntity {
     @Column(length = 200)
     private String city;
     @Column(length = 20)
-    private Integer zipcode;
+    private String zipcode;
     @Column(length = 100)
     private String email;
     @Column(length = 100)
@@ -67,7 +67,7 @@ public class CompanyEntity extends BaseEntity {
 
     public CompanyEntity(String name, String ownerName, String dot, String pinNumber, String mc, String dba, String fein,
                          StateEntity state, String address1, String address2, String city,
-                         Integer zipcode, String email, String phone, TimeZoneEnum timeZone, CompanyStatusEnum status
+                         String zipcode, String email, String phone, TimeZoneEnum timeZone, CompanyStatusEnum status
             , CompanyEntrantStatusEnum entrantStatus) {
         this.name = name;
         this.ownerName = ownerName;
@@ -160,11 +160,11 @@ public class CompanyEntity extends BaseEntity {
         this.city = city;
     }
 
-    public Integer getZipcode() {
+    public String getZipcode() {
         return zipcode;
     }
 
-    public void setZipcode(Integer zipcode) {
+    public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
 

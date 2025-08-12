@@ -4,6 +4,7 @@ import fleetoverview.config.MailConfigurationParams;
 import fleetoverview.config.TelegramConfigurationParams;
 import fleetoverview.domain.enums.truck.TruckFileTypeEnum;
 import fleetoverview.repository.CompanyRepository;
+import fleetoverview.repository.DriverRepository;
 import fleetoverview.repository.TrailerRepository;
 import fleetoverview.repository.TruckRepository;
 import fleetoverview.service.NotificationService;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static fleetoverview.domain.enums.driver.DriverFileTypeEnum.*;
 import static fleetoverview.domain.enums.truck.TruckFileTypeEnum.*;
 import static fleetoverview.util.helper.Utils.isNull;
 
@@ -39,6 +41,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final CompanyRepository companyRepository;
     private final TruckRepository truckRepository;
     private final TrailerRepository trailerRepository;
+    private final DriverRepository driverRepository;
     private final JavaMailSender mailSender;
     private final TelegramConfigurationParams telegramParams;
     private final MailConfigurationParams mailParams;
@@ -46,13 +49,15 @@ public class NotificationServiceImpl implements NotificationService {
     @Autowired
     public NotificationServiceImpl(TruckRepository truckRepository,
                                    CompanyRepository companyRepository, TrailerRepository trailerRepository,
-                                   JavaMailSender mailSender, TelegramConfigurationParams telegramParams, MailConfigurationParams mailParams) {
+                                   JavaMailSender mailSender, TelegramConfigurationParams telegramParams,
+                                   MailConfigurationParams mailParams, DriverRepository driverRepository) {
         this.truckRepository = truckRepository;
         this.companyRepository = companyRepository;
         this.trailerRepository = trailerRepository;
         this.mailSender = mailSender;
         this.telegramParams = telegramParams;
         this.mailParams = mailParams;
+        this.driverRepository = driverRepository;
     }
 
     @Override
@@ -66,7 +71,7 @@ public class NotificationServiceImpl implements NotificationService {
                     Subject: 🔔 Compliance Alert: Upcoming Expirations & Missing Documents for %s
                                         
                                         
-                    Dear Qobil,
+                    Dear Bilol,
                                         
                     This is an automated compliance notification from your Efficient management regarding %s.
                                         
@@ -148,6 +153,70 @@ public class NotificationServiceImpl implements NotificationService {
                         if (isNull(tr.getAnnsInsExp())) text.append(missingText(ANN_INS.getDescription()));
                         if (isNull(tr.getPhysDamageExp())) text.append(missingText(PHYS_DAMAGE.getDescription()));
                         if (isNull(tr.getLeaseAgrExp())) text.append(missingText(LEASE_AGR.getDescription()));
+
+                        text.append("\n");
+
+                        counter.getAndIncrement();
+                    });
+
+            var drivers = driverRepository.getDriversWithExpirationInfo(it.getId());
+            text.append("----------------------------------------\n🚃 Driver Documents Expiring Soon\n");
+            drivers.stream()
+                    .filter(tr -> isNearlyExpires(tr.getCdlExp()) || isNearlyExpires(tr.getMedicalCertExp())
+                            || isNearlyExpires(tr.getMvr()) || isNearlyExpires(tr.getClearingHouseExp())
+                            || isNearlyExpires(tr.getSsnExp()) || isNearlyExpires(tr.getCcfExp())
+                            || isNearlyExpires(tr.getDrugTestResultExp()) || isNearlyExpires(tr.getDriverApplicationExp())
+                            || isNearlyExpires(tr.getPevExp())
+                    )
+                    .forEach(tr -> {
+                        text.append(String.format("%s\n", tr.getDriverName()));
+
+                        if (isNearlyExpires(tr.getCdlExp()))
+                            text.append(expiresOnText(CDL.getDescription(), tr.getCdlExp()));
+                        if (isNearlyExpires(tr.getMedicalCertExp()))
+                            text.append(expiresOnText(MEDICAL_CERT.getDescription(), tr.getMedicalCertExp()));
+                        if (isNearlyExpires(tr.getMvr()))
+                            text.append(expiresOnText(MVR.getDescription(), tr.getMvr()));
+                        if (isNearlyExpires(tr.getClearingHouseExp()))
+                            text.append(expiresOnText(CLEARING_HOUSE.getDescription(), tr.getClearingHouseExp()));
+                        if (isNearlyExpires(tr.getSsnExp()))
+                            text.append(expiresOnText(SSN.getDescription(), tr.getSsnExp()));
+
+                        if (isNearlyExpires(tr.getCcfExp()))
+                            text.append(expiresOnText(CCF.getDescription(), tr.getCcfExp()));
+                        if (isNearlyExpires(tr.getDrugTestResultExp()))
+                            text.append(expiresOnText(DRUG_TEST_RESULT.getDescription(), tr.getDrugTestResultExp()));
+                        if (isNearlyExpires(tr.getDriverApplicationExp()))
+                            text.append(expiresOnText(DRIVER_APPLICATION.getDescription(), tr.getDriverApplicationExp()));
+                        if (isNearlyExpires(tr.getPevExp()))
+                            text.append(expiresOnText(PEV.getDescription(), tr.getPevExp()));
+
+                        text.append("\n");
+
+                        counter.getAndIncrement();
+                    });
+
+
+            text.append("\n❌ Missing Driver Documents\n");
+            drivers.stream()
+                    .filter(tr -> isNull(tr.getCdlExp()) || isNull(tr.getMedicalCertExp())
+                            || isNull(tr.getMvr()) || isNull(tr.getClearingHouseExp())
+                            || isNull(tr.getSsnExp()) || isNull(tr.getCcfExp())
+                            || isNull(tr.getDrugTestResultExp()) || isNull(tr.getDriverApplicationExp())
+                            || isNull(tr.getPevExp()))
+                    .forEach(tr -> {
+                        text.append(String.format("%s\n", tr.getDriverName()));
+
+                        if (isNull(tr.getCdlExp())) text.append(missingText(CDL.getDescription()));
+                        if (isNull(tr.getMedicalCertExp())) text.append(missingText(MEDICAL_CERT.getDescription()));
+                        if (isNull(tr.getMvr())) text.append(missingText(MVR.getDescription()));
+                        if (isNull(tr.getClearingHouseExp())) text.append(missingText(CLEARING_HOUSE.getDescription()));
+                        if (isNull(tr.getSsnExp())) text.append(missingText(SSN.getDescription()));
+                        if (isNull(tr.getCcfExp())) text.append(missingText(CCF.getDescription()));
+
+                        if (isNull(tr.getDrugTestResultExp())) text.append(missingText(DRUG_TEST_RESULT.getDescription()));
+                        if (isNull(tr.getDriverApplicationExp())) text.append(missingText(DRIVER_APPLICATION.getDescription()));
+                        if (isNull(tr.getPevExp())) text.append(missingText(PEV.getDescription()));
 
                         text.append("\n");
 

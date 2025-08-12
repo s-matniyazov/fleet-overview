@@ -115,7 +115,7 @@ const newModel = () => {
   return {
     id: null,
     unit: null,
-    carrier_responsible_for_safety: null,
+    carrierResponsibleForSafety: null,
     inServiceDate: null,
     licensePlate: null,
     stateId: null,
@@ -175,6 +175,7 @@ const onEdit = (d) => {
   data.value = {
     id: d.id,
     unit: d.unit,
+    carrierResponsibleForSafety: d.carrierResponsibleForSafety,
     inServiceDate: d.inServiceDate,
     licensePlate: d.licensePlate,
     countryId: d?.countryId,
@@ -539,7 +540,7 @@ watch(
                 </div>
                 <!--            unit-->
                 <div class="col-6">
-                  <UInput v-model="data.carrier_responsible_for_safety" :label="t('carrier_responsible_for_safety')"
+                  <UInput v-model="data.carrierResponsibleForSafety" :label="t('carrier_responsible_for_safety')"
                           :hint="t('carrier_responsible_for_safety')" :name="t('carrier_responsible_for_safety')"
                           :placeholder="t('enter_carrier_responsible_for_safety')" classes="mb-2"
                           :rules="(val) => (!val && $t('required'))"/>

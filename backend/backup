@@ -1,0 +1,34 @@
+.env
+
+DB_NAME=fleetdb
+DB_USER=fleet
+DB_PASSWORD=fleet
+DB_HOST=localhost
+DB_PORT=5432
+
+TELEGRAM_BOT_TOKEN=6174384781:AAENYCRflrXFt6KERjQC1LhW6yd_zs-7Vbc
+TELEGRAM_CHAT_ID=-1002554948125
+BACKUP_DIR=/home/user/pg_backup/backup
+
+
+pg_dump_and_send.sh
+#!/bin/bash
+
+# Fayldan sozlamalarni o‘qish
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/.env"
+
+# Sana va fayl nomi
+DATE=$(date +"%Y-%m-%d_%H-%M-%S")
+FILE_NAME="$DB_NAME-$DATE.sql.gz"
+DUMP_PATH="$BACKUP_DIR/$FILE_NAME"
+
+# Papkani yaratish
+mkdir -p "$BACKUP_DIR"
+
+# Dumplab siqish
+export PGPASSWORD="$DB_PASSWORD"
+pg_dump -U "$DB_USER" -h "$DB_HOST" -p "$DB_PORT" "$DB_NAME" | gzip > "$DUMP_PATH"
+
+# Telegramga yuborish
+curl -s -F document=@"$DUMP_PATH" "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendDocument?chat_id=$TELEGRAM_CHAT_ID&caption=PostgreSQL Backup: $FILE_NAME"

@@ -1,5 +1,6 @@
 package fleetoverview.domain.entity.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fleetoverview.domain.entity.UserEntity;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -25,6 +26,7 @@ public abstract class BaseEntity extends BaseIdEntity {
     private Date created;
     @CreatedBy
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"createdBy", "created"})
     private UserEntity createdBy;
     @UpdateTimestamp
     private Date updated;

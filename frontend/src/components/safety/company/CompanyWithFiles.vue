@@ -17,8 +17,10 @@ import FileOverlay from "@/components/FileOverlay.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
 import {useCompanyFileStore} from "@/store/CompanyFileStore.js";
 import CompanyCard from "@/components/safety/company/CompanyCard.vue";
+import {useFilterStore} from "@/store/FilterStore.js";
 
 const {t} = useI18n();
+const filterStore = useFilterStore();
 const stateStore = useStateStore();
 const companyFileStore = useCompanyFileStore();
 
@@ -143,7 +145,8 @@ const pagination = ref({
   hasNext: true
 });
 const filter = ref({
-  companyName: null
+  companyName: null,
+  companyId: filterStore.companyId
 });
 const dataList = ref([]);
 const status = ref([]);
@@ -494,7 +497,7 @@ watch(
                         :placeholder="t('enter_city')" classes=""/>
               </div>
               <div class="col-3">
-                <UInput v-model="data.zipcode" type="number" :label="t('zipcode')" :hint="t('zipcode')"
+                <UInput v-model="data.zipcode" :label="t('zipcode')" :hint="t('zipcode')"
                         :name="t('zipcode')"
                         :placeholder="t('enter_zipcode')" classes=""/>
               </div>

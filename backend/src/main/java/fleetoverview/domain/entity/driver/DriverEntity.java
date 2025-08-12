@@ -42,8 +42,8 @@ public class DriverEntity extends BaseEntity {
 
     @Column(length = 100)
     private String city;
-    @Column
-    private int zipCode;
+    @Column(length = 20)
+    private String zipCode;
     @Column(length = 100)
     private String email;
     @Column(length = 50)
@@ -58,7 +58,7 @@ public class DriverEntity extends BaseEntity {
     private Set<DriverFileEntity> files = new HashSet<>();
 
     public DriverEntity(CompanyEntity company,String firstName, String lastName, String middleName, LocalDate hireDate,
-                        LocalDateTime terminationDate, LocalDate dateOfBirth, StateEntity state, String address, String city, int zipCode,
+                        LocalDateTime terminationDate, LocalDate dateOfBirth, StateEntity state, String address, String city, String zipCode,
                         String email, String phone, DriverStatusEnum status, DriverTypeEnum type) {
         this.company = company;
         this.firstName = firstName;
@@ -159,11 +159,11 @@ public class DriverEntity extends BaseEntity {
         this.city = city;
     }
 
-    public int getZipCode() {
+    public String getZipCode() {
         return zipCode;
     }
 
-    public void setZipCode(int zipCode) {
+    public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
 

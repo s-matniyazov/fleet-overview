@@ -587,7 +587,7 @@ watch(
                 <!--           zipcode-->
                 <div class="col-4">
                   <UInput v-model="data.zipCode" :label="t('zip_code')" :hint="t('zip_code')" :name="t('zip_code')"
-                          :placeholder="t('enter_zip_code')" classes="mb-3" type="number"
+                          :placeholder="t('enter_zip_code')" classes="mb-3"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
 

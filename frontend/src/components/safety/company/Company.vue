@@ -279,7 +279,7 @@ onMounted(() => {
                         :placeholder="t('enter_city')" classes=""/>
               </div>
               <div class="col-3">
-                <UInput v-model="data.zipcode" type="number" :label="t('zipcode')" :hint="t('zipcode')"
+                <UInput v-model="data.zipcode" :label="t('zipcode')" :hint="t('zipcode')"
                         :name="t('zipcode')"
                         :placeholder="t('enter_zipcode')" classes=""/>
               </div>

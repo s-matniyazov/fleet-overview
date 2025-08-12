@@ -18,7 +18,7 @@ public record DriverRequest(
         int stateId,
         String address,
         String city,
-        int zipCode,
+        String zipCode,
         String email,
         String phone,
         DriverStatusEnum status,

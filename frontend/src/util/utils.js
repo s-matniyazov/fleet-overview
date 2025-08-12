@@ -46,8 +46,8 @@ export function longToDate(date, format) {
         res += toClockNumber(a.getMonth() + 1) + '-';
         res += toClockNumber(a.getDate());
     } else {
-        res += toClockNumber(a.getDate()) + ".";
         res += toClockNumber(a.getMonth() + 1) + '.';
+        res += toClockNumber(a.getDate()) + ".";
         res += a.getFullYear();
     }
 
@@ -59,8 +59,8 @@ export function longToDateTime(date) {
     if (!date) return '';
     let a = new Date(date)
     let res = '';
-    res += toClockNumber(a.getDate()) + '.';
     res += toClockNumber(a.getMonth() + 1) + '.';
+    res += toClockNumber(a.getDate()) + '.';
     res += a.getFullYear() + ' ';
     res += toClockNumber(a.getHours()) + ':'
     res += toClockNumber(a.getMinutes())/* + ':'

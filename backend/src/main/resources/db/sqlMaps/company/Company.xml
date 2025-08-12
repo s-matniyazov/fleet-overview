@@ -104,6 +104,9 @@
                           left join countries c on c.id = s.country_id
                           left join users u on u.id = ci.created_by_id
                  where 1=1
+                <if test="companyId != null">
+                    and ci.id = ${companyId}
+                </if>
                 <if test="companyName != null">
                     and (ci.name like '%${companyName}%')
                 </if>
