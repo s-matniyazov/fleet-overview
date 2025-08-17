@@ -96,7 +96,7 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
                         data.length(),
                         data.height(),
                         data.vin(),
-                        ownershipTypeRepository.findById(data.ownershipTypeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("ownershipType.not_found"))),
+                        ownershipTypeRepository.findById(data.ownershipTypeId()).orElse(null),
                         purchaseTypeRepository.findById(data.purchaseTypeId()).orElse(null),
                         driverRepository.findById(data.driverId()).orElse(null),
                         data.description(),
@@ -120,7 +120,7 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
         trailer.setLength(data.length());
         trailer.setHeight(data.height());
         trailer.setVin(data.vin());
-        trailer.setOwnershipType(ownershipTypeRepository.findById(data.ownershipTypeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("ownershipType.not_found"))));
+        trailer.setOwnershipType(ownershipTypeRepository.findById(data.ownershipTypeId()).orElse(null));
         trailer.setPurchaseType(purchaseTypeRepository.findById(data.purchaseTypeId()).orElse(null));
         trailer.setDriver(driverRepository.findById(data.driverId()).orElse(null));
         trailer.setDescription(data.description());

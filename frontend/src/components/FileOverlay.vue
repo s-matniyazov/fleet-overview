@@ -102,13 +102,13 @@ const uploadFile = (index) => {
 const saveFile = (index) => {
   const fileIn = uploads.value[index]
 
-  if (fileIn.data.endorsements) {
-    fileIn.data.endorsement = fileIn.data.endorsements.map(it => {
-      return {
-        id: it
-      }
-    })
-  }
+  fileIn.data.endorsements = fileIn.data.endorsements ? fileIn.data.endorsements : []
+
+  fileIn.data.endorsement = fileIn.data.endorsements.map(it => {
+    return {
+      id: it
+    }
+  })
 
   const formData = new FormData();
   formData.append("file", fileIn.file);

@@ -105,7 +105,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
                         data.grossWeight(),
                         data.axles(),
                         data.vin(),
-                        ownershipTypeRepository.findById(data.ownershipTypeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("ownershipType.not_found"))),
+                        ownershipTypeRepository.findById(data.ownershipTypeId()).orElse(null),
                         data.includeIFTA(),
                         purchaseTypeRepository.findById(data.purchaseTypeId()).orElse(null),
                         driverRepository.findById(data.driverId()).orElse(null),
@@ -131,7 +131,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         truck.setGrossWeight(data.grossWeight());
         truck.setAxles(data.axles());
         truck.setVin(data.vin());
-        truck.setOwnershipType(ownershipTypeRepository.findById(data.ownershipTypeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("ownershipType.not_found"))));
+        truck.setOwnershipType(ownershipTypeRepository.findById(data.ownershipTypeId()).orElse(null));
         truck.setIncludeIFTA(data.includeIFTA());
         truck.setPurchaseType(purchaseTypeRepository.findById(data.purchaseTypeId()).orElse(null));
         truck.setDriver(driverRepository.findById(data.driverId()).orElse(null));

@@ -642,7 +642,6 @@ watch(
                            :items="truckReferenceStore.ownershipTypes" name="ownershipType"
                            option_name="name"
                            classes="mb-2"
-                           :rules="(val) => (!val && $t('required'))"
                   ></USelect>
                 </div>
                 <!--            includeIFTA-->
@@ -658,7 +657,6 @@ watch(
                              :items="drivers" name="driver"
                              option_name="firstName"
                              classes="mb-2"
-                             :rules="(val) => (!val && $t('required'))"
                     ></USelect>
                   </div>
                 </template>
@@ -674,7 +672,6 @@ watch(
                              :items="truckReferenceStore.purchaseTypes" name="purchaseType"
                              option_name="name"
                              classes="mb-2"
-                             :rules="(val) => (!val && $t('required'))"
                     ></USelect>
                   </div>
                 </template>
