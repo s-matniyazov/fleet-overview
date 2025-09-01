@@ -26,7 +26,7 @@ public interface DriverRepository extends JpaRepository<DriverEntity, Integer> {
                                        min(case df.type when 'DRIVER_APPLICATION' then df.expiration_date end)  as driverApplicationExp,
                                        min(case df.type when 'PEV' then df.expiration_date end)                 as pevExp
                                 from public.driver_files df
-                                         left join trailers t on df.driver_id = t.id
+                                         left join drivers t on df.driver_id = t.id
                                 where t.company_id = :companyId
                                   and df.status = 'ACTIVE'
                                   and df.expiration_date >= CURRENT_DATE
