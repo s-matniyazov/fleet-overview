@@ -32,6 +32,7 @@ public interface DriverRepository extends JpaRepository<DriverEntity, Integer> {
                                   and df.expiration_date >= CURRENT_DATE
                                 group by df.driver_id) df on df.driver_id = t.id
             where t.company_id = :companyId
+                    and t.status='ACTIVE'
             order by t.id""", nativeQuery = true)
     List<ExpirationDriverFilesProjection> getDriversWithExpirationInfo(Integer companyId);
 }
