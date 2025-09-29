@@ -12,7 +12,7 @@ public interface ExpirationDriverFilesProjection {
 
     LocalDate getCdlExp();
     LocalDate getMedicalCertExp();
-    LocalDate getMvr();
+    LocalDate getMvrExp();
     LocalDate getClearingHouseExp();
     LocalDate getSsnExp();
 

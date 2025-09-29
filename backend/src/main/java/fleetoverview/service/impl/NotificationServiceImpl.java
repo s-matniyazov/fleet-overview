@@ -164,7 +164,7 @@ public class NotificationServiceImpl implements NotificationService {
             text.append("----------------------------------------\n🚃 Driver Documents Expiring Soon\n");
             drivers.stream()
                     .filter(tr -> isNearlyExpires(tr.getCdlExp()) || isNearlyExpires(tr.getMedicalCertExp())
-                            || isNearlyExpires(tr.getMvr()) || isNearlyExpires(tr.getClearingHouseExp())
+                            || isNearlyExpires(tr.getMvrExp()) || isNearlyExpires(tr.getClearingHouseExp())
                             || isNearlyExpires(tr.getSsnExp()) || isNearlyExpires(tr.getCcfExp())
                             || isNearlyExpires(tr.getDriverApplicationExp())
                             || isNearlyExpires(tr.getPevExp())
@@ -176,8 +176,8 @@ public class NotificationServiceImpl implements NotificationService {
                             text.append(expiresOnText(CDL.getDescription(), tr.getCdlExp()));
                         if (isNearlyExpires(tr.getMedicalCertExp()))
                             text.append(expiresOnText(MEDICAL_CERT.getDescription(), tr.getMedicalCertExp()));
-                        if (isNearlyExpires(tr.getMvr()))
-                            text.append(expiresOnText(MVR.getDescription(), tr.getMvr()));
+                        if (isNearlyExpires(tr.getMvrExp()))
+                            text.append(expiresOnText(MVR.getDescription(), tr.getMvrExp()));
                         if (isNearlyExpires(tr.getClearingHouseExp()))
                             text.append(expiresOnText(CLEARING_HOUSE.getDescription(), tr.getClearingHouseExp()));
                         if (isNearlyExpires(tr.getSsnExp()))
@@ -199,7 +199,7 @@ public class NotificationServiceImpl implements NotificationService {
             text.append("\n❌ Missing Driver Documents\n");
             drivers.stream()
                     .filter(tr -> isNull(tr.getCdlExp()) || isNull(tr.getMedicalCertExp())
-                            || isNull(tr.getMvr()) || isNull(tr.getClearingHouseExp())
+                            || isNull(tr.getMvrExp()) || isNull(tr.getClearingHouseExp())
                             || isNull(tr.getSsnExp()) || isNull(tr.getCcfExp())
                             || isNull(tr.getDriverApplicationExp())
                             || isNull(tr.getPevExp()))
@@ -208,7 +208,7 @@ public class NotificationServiceImpl implements NotificationService {
 
                         if (isNull(tr.getCdlExp())) text.append(missingText(CDL.getDescription()));
                         if (isNull(tr.getMedicalCertExp())) text.append(missingText(MEDICAL_CERT.getDescription()));
-                        if (isNull(tr.getMvr())) text.append(missingText(MVR.getDescription()));
+                        if (isNull(tr.getMvrExp())) text.append(missingText(MVR.getDescription()));
                         if (isNull(tr.getClearingHouseExp())) text.append(missingText(CLEARING_HOUSE.getDescription()));
                         if (isNull(tr.getSsnExp())) text.append(missingText(SSN.getDescription()));
                         if (isNull(tr.getCcfExp())) text.append(missingText(CCF.getDescription()));

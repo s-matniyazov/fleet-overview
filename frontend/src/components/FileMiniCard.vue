@@ -22,9 +22,6 @@ function getDataTitle(type) {
     case "W_9": return "Next Update Date"
     case "MCS_150": return "Next Filing Date"
     case "SSN": return "Social Security Number"
-    case "CLEARING_HOUSE":
-    case "MVR":
-      return "Last Collected On"
     case "MC_CERTIFICATE":
     case "OWNER_OPERATOR_AGREEMENT":
     case "DRIVER_AGREEMENT":
@@ -42,9 +39,6 @@ function getData(type) {
     case "W_9": return longToDate(props.file.nextUpdateDate || 1)
     case "MCS_150": return longToDate(props.file.nextUpdateDate || 1)
     case "SSN": return props.file.socialSecurityNumber
-    case "CLEARING_HOUSE":
-    case "MVR":
-      return longToDate(props.file.lastCollectedOn || 1)
     case "ARTICLES_OF_INCORPORATION":
     case "MC_CERTIFICATE":
     case "OWNER_OPERATOR_AGREEMENT":

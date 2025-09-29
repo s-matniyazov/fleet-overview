@@ -283,12 +283,6 @@ onMounted(() => {
               <!--              no data-->
             </template>
             <template v-else>
-              <div v-if="['MVR', 'CLEARING_HOUSE'].includes(data.type)" class="col-6">
-                <UDateInput v-model="upload.data.lastCollectedOn" placeholder="dd.mm.yyyy"
-                            label="Last Collected On *" :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"
-                            :rules="(val) => (!val && $t('required'))"/>
-              </div>
-
               <div class="col-6">
                 <UDateInput v-model="upload.data.expirationDate" placeholder="dd.mm.yyyy"
                             label="Expiration Date *" :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"
