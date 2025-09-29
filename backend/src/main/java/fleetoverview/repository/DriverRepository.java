@@ -27,6 +27,7 @@ public interface DriverRepository extends JpaRepository<DriverEntity, Integer> {
                                 from public.driver_files df
                                          left join drivers t on df.driver_id = t.id
                                 where t.company_id = :companyId
+                                  and t.status='ACTIVE'
                                   and df.status = 'ACTIVE'
                                   and df.expiration_date >= CURRENT_DATE
                                 group by df.driver_id) df on df.driver_id = t.id

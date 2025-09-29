@@ -93,6 +93,9 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         if (driverRepository.hasTruckById(data.driverId()) != 0)
             throw new ExistsException(mSourceBundle.apply("driver.hasTruck"));
 
+        if (repository.existsByUnit(data.unit()))
+            throw new ExistsException(mSourceBundle.apply("truck.unit.taken"));
+
         repository.save(
                 new TruckEntity(
                         data.unit(),
@@ -119,6 +122,9 @@ public class TruckServiceImpl extends BaseService implements TruckService {
 
     @Override
     public ApiResponse put(TruckRequest data) {
+        if (repository.existsByIdIsNotAndUnit(data.id(), data.unit()))
+            throw new ExistsException(mSourceBundle.apply("truck.unit.taken"));
+
         TruckEntity truck = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("truck.not_found")));
 
         truck.setUnit(data.unit());

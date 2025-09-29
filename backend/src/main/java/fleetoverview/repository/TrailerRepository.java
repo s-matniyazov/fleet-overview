@@ -35,6 +35,7 @@ public interface TrailerRepository extends JpaRepository<TrailerEntity, Integer>
                                  from trailer_files tf
                                           left join trailers t on tf.trailer_id = t.id
                                  where t.company_id = :companyId
+                                   and t.status='ACTIVE'
                                    and tf.status = 'ACTIVE'
                                    and tf.expiration_date >= CURRENT_DATE
                                  group by tf.trailer_id) tf on tf.trailer_id = t.id
@@ -42,4 +43,8 @@ public interface TrailerRepository extends JpaRepository<TrailerEntity, Integer>
                     and t.status='ACTIVE'
              order by t.unit""", nativeQuery = true)
     List<ExpirationTrailerFilesProjection> getTrailersWithExpirationInfo(Integer companyId);
+
+    boolean existsByUnit(String unit);
+
+    boolean existsByIdIsNotAndUnit(int id, String unit);
 }

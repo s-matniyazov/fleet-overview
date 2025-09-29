@@ -20,7 +20,6 @@ function getDataTitle(type) {
   switch (type) {
     case "HVUT_2290": return "Next Final Filing Date"
     case "W_9": return "Next Update Date"
-    case "MCS_150": return "Next Filing Date"
     case "SSN": return "Social Security Number"
     case "MC_CERTIFICATE":
     case "OWNER_OPERATOR_AGREEMENT":
@@ -37,7 +36,6 @@ function getData(type) {
   switch (type) {
     case "HVUT_2290": return props.file.filedPeriod
     case "W_9": return longToDate(props.file.nextUpdateDate || 1)
-    case "MCS_150": return longToDate(props.file.nextUpdateDate || 1)
     case "SSN": return props.file.socialSecurityNumber
     case "ARTICLES_OF_INCORPORATION":
     case "MC_CERTIFICATE":

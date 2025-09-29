@@ -12,6 +12,7 @@ import fleetoverview.repository.*;
 import fleetoverview.service.ResourceService;
 import fleetoverview.service.TrailerService;
 import fleetoverview.service.base.BaseService;
+import fleetoverview.util.exceptions.ExistsException;
 import fleetoverview.util.exceptions.NotFoundException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -84,6 +85,9 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
 
     @Override
     public ApiResponse post(TrailerRequest data) {
+        if (repository.existsByUnit(data.unit()))
+            throw new ExistsException(mSourceBundle.apply("truck.unit.taken"));
+
         repository.save(
                 new TrailerEntity(
                         data.unit(),
@@ -108,6 +112,9 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
 
     @Override
     public ApiResponse put(TrailerRequest data) {
+        if (repository.existsByIdIsNotAndUnit(data.id(), data.unit()))
+            throw new ExistsException(mSourceBundle.apply("truck.unit.taken"));
+
         TrailerEntity trailer = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("trailer.not_found")));
 
         trailer.setUnit(data.unit());

@@ -264,7 +264,7 @@ onMounted(() => {
                 ></Uselect>
               </div>
             </template>
-            <template v-else-if="['W_9', 'MCS_150'].includes(data.type)">
+            <template v-else-if="['W_9'].includes(data.type)">
               <div class="col-6">
                 <UDateInput v-model="upload.data.nextUpdateDate" placeholder="dd.mm.yyyy"
                             label="Next Update Date *" :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"

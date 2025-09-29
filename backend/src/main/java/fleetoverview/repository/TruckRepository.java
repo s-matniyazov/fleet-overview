@@ -40,6 +40,7 @@ public interface TruckRepository extends JpaRepository<TruckEntity, Integer> {
                                  from truck_files tf
                                           left join trucks t on tf.truck_id = t.id
                                  where t.company_id = :companyId
+                                   and t.status='ACTIVE'
                                    and tf.status = 'ACTIVE'
                                    and tf.expiration_date >= CURRENT_DATE
                                  group by tf.truck_id) tf on tf.truck_id = t.id
@@ -47,4 +48,8 @@ public interface TruckRepository extends JpaRepository<TruckEntity, Integer> {
                     and t.status='ACTIVE'
              order by t.unit""", nativeQuery = true)
     List<ExpirationTruckFilesProjection> getTrucksWithExpirationInfo(Integer companyId);
+
+    boolean existsByUnit(String unit);
+
+    boolean existsByIdIsNotAndUnit(int id, String unit);
 }
