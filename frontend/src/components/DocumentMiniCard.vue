@@ -30,6 +30,8 @@ function getDataTitle(type) {
     case "OWNER_OPERATOR_AGREEMENT":
     case "DRIVER_AGREEMENT":
       return ''
+    case "DRUG_TEST_RESULT":
+      return 'Test date:'
     default: return "Expiration Date: "
   }
 }

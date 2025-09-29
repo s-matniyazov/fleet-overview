@@ -271,6 +271,13 @@ onMounted(() => {
                             :rules="(val) => (!val && $t('required'))"/>
               </div>
             </template>
+            <template v-else-if="['DRUG_TEST_RESULT'].includes(data.type)">
+              <div class="col-6">
+                <UDateInput v-model="upload.data.expirationDate" placeholder="dd.mm.yyyy"
+                            label="Test date *" :readonly="[FILE_STATUS.UPLOADED].includes(upload.status)"
+                            :rules="(val) => (!val && $t('required'))"/>
+              </div>
+            </template>
             <template
                 v-else-if="['ARTICLES_OF_INCORPORATION', 'MC_CERTIFICATE', 'OWNER_OPERATOR_AGREEMENT', 'DRIVER_AGREEMENT'].includes(data.type)">
               <!--              no data-->

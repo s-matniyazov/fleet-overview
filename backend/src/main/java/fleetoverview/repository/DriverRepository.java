@@ -22,7 +22,6 @@ public interface DriverRepository extends JpaRepository<DriverEntity, Integer> {
                                        min(case df.type when 'CLEARING_HOUSE' then df.expiration_date end)      as clearingHouseExp,
                                        min(case df.type when 'SSN' then df.expiration_date end)                 as ssnExp,
                                        min(case df.type when 'CCF' then df.expiration_date end)                 as ccfExp,
-                                       min(case df.type when 'DRUG_TEST_RESULT' then df.expiration_date end)    as drugTestResultExp,
                                        min(case df.type when 'DRIVER_APPLICATION' then df.expiration_date end)  as driverApplicationExp,
                                        min(case df.type when 'PEV' then df.expiration_date end)                 as pevExp
                                 from public.driver_files df

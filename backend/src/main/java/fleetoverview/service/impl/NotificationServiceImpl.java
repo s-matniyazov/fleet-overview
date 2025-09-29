@@ -166,7 +166,7 @@ public class NotificationServiceImpl implements NotificationService {
                     .filter(tr -> isNearlyExpires(tr.getCdlExp()) || isNearlyExpires(tr.getMedicalCertExp())
                             || isNearlyExpires(tr.getMvr()) || isNearlyExpires(tr.getClearingHouseExp())
                             || isNearlyExpires(tr.getSsnExp()) || isNearlyExpires(tr.getCcfExp())
-                            || isNearlyExpires(tr.getDrugTestResultExp()) || isNearlyExpires(tr.getDriverApplicationExp())
+                            || isNearlyExpires(tr.getDriverApplicationExp())
                             || isNearlyExpires(tr.getPevExp())
                     )
                     .forEach(tr -> {
@@ -185,8 +185,6 @@ public class NotificationServiceImpl implements NotificationService {
 
                         if (isNearlyExpires(tr.getCcfExp()))
                             text.append(expiresOnText(CCF.getDescription(), tr.getCcfExp()));
-                        if (isNearlyExpires(tr.getDrugTestResultExp()))
-                            text.append(expiresOnText(DRUG_TEST_RESULT.getDescription(), tr.getDrugTestResultExp()));
                         if (isNearlyExpires(tr.getDriverApplicationExp()))
                             text.append(expiresOnText(DRIVER_APPLICATION.getDescription(), tr.getDriverApplicationExp()));
                         if (isNearlyExpires(tr.getPevExp()))
@@ -203,7 +201,7 @@ public class NotificationServiceImpl implements NotificationService {
                     .filter(tr -> isNull(tr.getCdlExp()) || isNull(tr.getMedicalCertExp())
                             || isNull(tr.getMvr()) || isNull(tr.getClearingHouseExp())
                             || isNull(tr.getSsnExp()) || isNull(tr.getCcfExp())
-                            || isNull(tr.getDrugTestResultExp()) || isNull(tr.getDriverApplicationExp())
+                            || isNull(tr.getDriverApplicationExp())
                             || isNull(tr.getPevExp()))
                     .forEach(tr -> {
                         text.append(String.format("%s\n", tr.getDriverName()));
@@ -215,7 +213,6 @@ public class NotificationServiceImpl implements NotificationService {
                         if (isNull(tr.getSsnExp())) text.append(missingText(SSN.getDescription()));
                         if (isNull(tr.getCcfExp())) text.append(missingText(CCF.getDescription()));
 
-                        if (isNull(tr.getDrugTestResultExp())) text.append(missingText(DRUG_TEST_RESULT.getDescription()));
                         if (isNull(tr.getDriverApplicationExp())) text.append(missingText(DRIVER_APPLICATION.getDescription()));
                         if (isNull(tr.getPevExp())) text.append(missingText(PEV.getDescription()));
 

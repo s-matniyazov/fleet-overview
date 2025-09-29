@@ -1,0 +1,7 @@
+??? Can't open PID file /run/postgresql/14-main.pid (yet?) after start: Operation not permitted
+
+-- journalctl -xeu postgresql@14-main.service
+
+-- sudo chmod 700 -R /var/lib/postgresql/14/main
+
+....
