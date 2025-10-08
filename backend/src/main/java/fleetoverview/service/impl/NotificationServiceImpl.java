@@ -2,8 +2,8 @@ package fleetoverview.service.impl;
 
 import fleetoverview.config.MailConfigurationParams;
 import fleetoverview.config.TelegramConfigurationParams;
+import fleetoverview.domain.enums.company.CompanyFileTypeEnum;
 import fleetoverview.domain.enums.company.CompanyStatusEnum;
-import fleetoverview.domain.enums.truck.TruckFileTypeEnum;
 import fleetoverview.repository.CompanyRepository;
 import fleetoverview.repository.DriverRepository;
 import fleetoverview.repository.TrailerRepository;
@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static fleetoverview.domain.enums.company.CompanyFileTypeEnum.*;
 import static fleetoverview.domain.enums.driver.DriverFileTypeEnum.*;
 import static fleetoverview.domain.enums.truck.TruckFileTypeEnum.*;
 import static fleetoverview.util.helper.Utils.isNull;
@@ -77,149 +78,13 @@ public class NotificationServiceImpl implements NotificationService {
                     This is an automated compliance notification from your Efficient management regarding %s.
                                         
                     Please review the following compliance alerts:
-                    
+                                        
                     """, it.getName(), it.getName()));
 
-            var trucks = truckRepository.getTrucksWithExpirationInfo(it.getId());
-            text.append("----------------------------------------\n🚛 Truck Documents Expiring Soon\n");
-            trucks.stream()
-                    .filter(tr -> isNearlyExpires(tr.getRegCabCardExp()) || isNearlyExpires(tr.getAnnsInsExp())
-                            || isNearlyExpires(tr.getPhysDamageExp()) || isNearlyExpires(tr.getLeaseAgrExp()))
-                    .forEach(tr -> {
-                        text.append(String.format("#%s (%s %s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getFuelType(), tr.getYear()));
-
-                        if (isNearlyExpires(tr.getRegCabCardExp()))
-                            text.append(expiresOnText(REG_CAB_CARD.getDescription(), tr.getRegCabCardExp()));
-                        if (isNearlyExpires(tr.getAnnsInsExp()))
-                            text.append(expiresOnText(ANN_INS.getDescription(), tr.getAnnsInsExp()));
-                        if (isNearlyExpires(tr.getPhysDamageExp()))
-                            text.append(expiresOnText(PHYS_DAMAGE.getDescription(), tr.getPhysDamageExp()));
-                        if (isNearlyExpires(tr.getLeaseAgrExp()))
-                            text.append(expiresOnText(LEASE_AGR.getDescription(), tr.getLeaseAgrExp()));
-
-                        text.append("\n");
-
-                        counter.getAndIncrement();
-                    });
-
-
-            text.append("\n❌ Missing Truck Documents\n");
-            trucks.stream()
-                    .filter(tr -> isNull(tr.getRegCabCardExp()) || isNull(tr.getAnnsInsExp())
-                            || isNull(tr.getPhysDamageExp()) || isNull(tr.getLeaseAgrExp()))
-                    .forEach(tr -> {
-                        text.append(String.format("#%s (%s %s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getFuelType(), tr.getYear()));
-
-                        if (isNull(tr.getRegCabCardExp())) text.append(missingText(REG_CAB_CARD.getDescription()));
-                        if (isNull(tr.getAnnsInsExp())) text.append(missingText(ANN_INS.getDescription()));
-                        if (isNull(tr.getPhysDamageExp())) text.append(missingText(PHYS_DAMAGE.getDescription()));
-                        if (isNull(tr.getLeaseAgrExp())) text.append(missingText(LEASE_AGR.getDescription()));
-
-                        text.append("\n");
-
-                        counter.getAndIncrement();
-                    });
-
-            var trailers = trailerRepository.getTrailersWithExpirationInfo(it.getId());
-            text.append("----------------------------------------\n🚃 Trailer Documents Expiring Soon\n");
-            trailers.stream()
-                    .filter(tr -> isNearlyExpires(tr.getRegCabCardExp()) || isNearlyExpires(tr.getAnnsInsExp())
-                            || isNearlyExpires(tr.getPhysDamageExp()) || isNearlyExpires(tr.getLeaseAgrExp()))
-                    .forEach(tr -> {
-                        text.append(String.format("#%s (%s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getYear()));
-
-                        if (isNearlyExpires(tr.getRegCabCardExp()))
-                            text.append(expiresOnText(REG_CAB_CARD.getDescription(), tr.getRegCabCardExp()));
-                        if (isNearlyExpires(tr.getAnnsInsExp()))
-                            text.append(expiresOnText(ANN_INS.getDescription(), tr.getAnnsInsExp()));
-                        if (isNearlyExpires(tr.getPhysDamageExp()))
-                            text.append(expiresOnText(PHYS_DAMAGE.getDescription(), tr.getPhysDamageExp()));
-                        if (isNearlyExpires(tr.getLeaseAgrExp()))
-                            text.append(expiresOnText(LEASE_AGR.getDescription(), tr.getLeaseAgrExp()));
-
-                        text.append("\n");
-
-                        counter.getAndIncrement();
-                    });
-
-
-            text.append("\n❌ Missing Trailer Documents\n");
-            trailers.stream()
-                    .filter(tr -> isNull(tr.getRegCabCardExp()) || isNull(tr.getAnnsInsExp())
-                            || isNull(tr.getPhysDamageExp()) || isNull(tr.getLeaseAgrExp()))
-                    .forEach(tr -> {
-                        text.append(String.format("#%s (%s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getYear()));
-
-                        if (isNull(tr.getRegCabCardExp())) text.append(missingText(REG_CAB_CARD.getDescription()));
-                        if (isNull(tr.getAnnsInsExp())) text.append(missingText(ANN_INS.getDescription()));
-                        if (isNull(tr.getPhysDamageExp())) text.append(missingText(PHYS_DAMAGE.getDescription()));
-                        if (isNull(tr.getLeaseAgrExp())) text.append(missingText(LEASE_AGR.getDescription()));
-
-                        text.append("\n");
-
-                        counter.getAndIncrement();
-                    });
-
-            var drivers = driverRepository.getDriversWithExpirationInfo(it.getId());
-            text.append("----------------------------------------\n🚃 Driver Documents Expiring Soon\n");
-            drivers.stream()
-                    .filter(tr -> isNearlyExpires(tr.getCdlExp()) || isNearlyExpires(tr.getMedicalCertExp())
-                            || isNearlyExpires(tr.getMvrExp()) || isNearlyExpires(tr.getClearingHouseExp())
-                            || isNearlyExpires(tr.getSsnExp()) || isNearlyExpires(tr.getCcfExp())
-                            || isNearlyExpires(tr.getDriverApplicationExp())
-                            || isNearlyExpires(tr.getPevExp())
-                    )
-                    .forEach(tr -> {
-                        text.append(String.format("%s\n", tr.getDriverName()));
-
-                        if (isNearlyExpires(tr.getCdlExp()))
-                            text.append(expiresOnText(CDL.getDescription(), tr.getCdlExp()));
-                        if (isNearlyExpires(tr.getMedicalCertExp()))
-                            text.append(expiresOnText(MEDICAL_CERT.getDescription(), tr.getMedicalCertExp()));
-                        if (isNearlyExpires(tr.getMvrExp()))
-                            text.append(expiresOnText(MVR.getDescription(), tr.getMvrExp()));
-                        if (isNearlyExpires(tr.getClearingHouseExp()))
-                            text.append(expiresOnText(CLEARING_HOUSE.getDescription(), tr.getClearingHouseExp()));
-                        if (isNearlyExpires(tr.getSsnExp()))
-                            text.append(expiresOnText(SSN.getDescription(), tr.getSsnExp()));
-
-                        if (isNearlyExpires(tr.getCcfExp()))
-                            text.append(expiresOnText(CCF.getDescription(), tr.getCcfExp()));
-                        if (isNearlyExpires(tr.getDriverApplicationExp()))
-                            text.append(expiresOnText(DRIVER_APPLICATION.getDescription(), tr.getDriverApplicationExp()));
-                        if (isNearlyExpires(tr.getPevExp()))
-                            text.append(expiresOnText(PEV.getDescription(), tr.getPevExp()));
-
-                        text.append("\n");
-
-                        counter.getAndIncrement();
-                    });
-
-
-            text.append("\n❌ Missing Driver Documents\n");
-            drivers.stream()
-                    .filter(tr -> isNull(tr.getCdlExp()) || isNull(tr.getMedicalCertExp())
-                            || isNull(tr.getMvrExp()) || isNull(tr.getClearingHouseExp())
-                            || isNull(tr.getSsnExp()) || isNull(tr.getCcfExp())
-                            || isNull(tr.getDriverApplicationExp())
-                            || isNull(tr.getPevExp()))
-                    .forEach(tr -> {
-                        text.append(String.format("%s\n", tr.getDriverName()));
-
-                        if (isNull(tr.getCdlExp())) text.append(missingText(CDL.getDescription()));
-                        if (isNull(tr.getMedicalCertExp())) text.append(missingText(MEDICAL_CERT.getDescription()));
-                        if (isNull(tr.getMvrExp())) text.append(missingText(MVR.getDescription()));
-                        if (isNull(tr.getClearingHouseExp())) text.append(missingText(CLEARING_HOUSE.getDescription()));
-                        if (isNull(tr.getSsnExp())) text.append(missingText(SSN.getDescription()));
-                        if (isNull(tr.getCcfExp())) text.append(missingText(CCF.getDescription()));
-
-                        if (isNull(tr.getDriverApplicationExp())) text.append(missingText(DRIVER_APPLICATION.getDescription()));
-                        if (isNull(tr.getPevExp())) text.append(missingText(PEV.getDescription()));
-
-                        text.append("\n");
-
-                        counter.getAndIncrement();
-                    });
+            text.append(companyNotificationBuilder(it.getId()));
+            text.append(truckNotificationBuilder(it.getId()));
+            text.append(trailerNotificationBuilder(it.getId()));
+            text.append(driverNotificationBuilder(it.getId()));
 
             if (counter.get() != 0) {
                 sendToGmail(text.toString());
@@ -268,7 +133,7 @@ public class NotificationServiceImpl implements NotificationService {
 
         if (telegramParams.getChatIds().isEmpty()) return;
 
-        for (String chatId: telegramParams.getChatIds().split(",")) {
+        for (String chatId : telegramParams.getChatIds().split(",")) {
             body.put("chat_id", chatId);
             restTemplate.postForEntity(
                     String.format("https://api.telegram.org/bot%s/sendmessage", telegramParams.getToken()),
@@ -289,7 +154,7 @@ public class NotificationServiceImpl implements NotificationService {
 
             if (mailParams.getSenders().isEmpty()) return;
 
-            for (String mail: mailParams.getSenders().split(",")) {
+            for (String mail : mailParams.getSenders().split(",")) {
                 helper.setTo(mail);
                 mailSender.send(mimeMessage);
             }
@@ -297,5 +162,195 @@ public class NotificationServiceImpl implements NotificationService {
         } catch (Exception e) {
             logger.error("MAIL_RESULT " + e.getMessage());
         }
+    }
+
+    private String companyNotificationBuilder(int companyId) {
+        StringBuilder text = new StringBuilder();
+
+        // Insurance, ifta, ucr, ct permit, mcs 150
+        var companies = companyRepository.getCompaniesWithExpirationInfo(companyId);
+        text.append("----------------------------------------\n🚛 Company Documents Expiring Soon\n");
+        companies.stream()
+                .filter(tr -> isNearlyExpires(tr.getInsuranceCertExp()) || isNearlyExpires(tr.getIftaExp())
+                        || isNearlyExpires(tr.getUcrExp()) || isNearlyExpires(tr.getPermitExp()) || isNearlyExpires(tr.getMcsExp()))
+                .forEach(tr -> {
+                    if (isNearlyExpires(tr.getInsuranceCertExp()))
+                        text.append(expiresOnText(INS_CERT.getDescription(), tr.getInsuranceCertExp()));
+                    if (isNearlyExpires(tr.getIftaExp()))
+                        text.append(expiresOnText(IFTA_LICENSE.getDescription(), tr.getIftaExp()));
+                    if (isNearlyExpires(tr.getUcrExp()))
+                        text.append(expiresOnText(UCR.getDescription(), tr.getUcrExp()));
+                    if (isNearlyExpires(tr.getPermitExp()))
+                        text.append(expiresOnText(CT_PERMIT.getDescription(), tr.getPermitExp()));
+                    if (isNearlyExpires(tr.getMcsExp()))
+                        text.append(expiresOnText(MCS_150.getDescription(), tr.getMcsExp()));
+
+                    text.append("\n");
+                });
+
+
+        text.append("\n❌ Missing Company Documents\n");
+        companies.stream()
+                .filter(tr -> isNull(tr.getInsuranceCertExp()) || isNull(tr.getIftaExp()) || isNull(tr.getUcrExp())
+                        || isNull(tr.getPermitExp()) || isNull(tr.getMcsExp()))
+                .forEach(tr -> {
+                    if (isNull(tr.getInsuranceCertExp())) text.append(missingText(INS_CERT.getDescription()));
+                    if (isNull(tr.getIftaExp())) text.append(missingText(IFTA_LICENSE.getDescription()));
+                    if (isNull(tr.getUcrExp())) text.append(missingText(UCR.getDescription()));
+                    if (isNull(tr.getPermitExp())) text.append(missingText(CT_PERMIT.getDescription()));
+                    if (isNull(tr.getMcsExp())) text.append(missingText(MCS_150.getDescription()));
+
+                    text.append("\n");
+                });
+
+        return text.toString();
+    }
+
+    private String truckNotificationBuilder(int companyId) {
+        StringBuilder text = new StringBuilder();
+
+        var trucks = truckRepository.getTrucksWithExpirationInfo(companyId);
+        text.append("----------------------------------------\n🚛 Truck Documents Expiring Soon\n");
+        trucks.stream()
+                .filter(tr -> isNearlyExpires(tr.getRegCabCardExp()) || isNearlyExpires(tr.getAnnsInsExp())
+                        || isNearlyExpires(tr.getPhysDamageExp()) || isNearlyExpires(tr.getLeaseAgrExp()))
+                .forEach(tr -> {
+                    text.append(String.format("#%s (%s %s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getFuelType(), tr.getYear()));
+
+                    if (isNearlyExpires(tr.getRegCabCardExp()))
+                        text.append(expiresOnText(REG_CAB_CARD.getDescription(), tr.getRegCabCardExp()));
+                    if (isNearlyExpires(tr.getAnnsInsExp()))
+                        text.append(expiresOnText(ANN_INS.getDescription(), tr.getAnnsInsExp()));
+                    if (isNearlyExpires(tr.getPhysDamageExp()))
+                        text.append(expiresOnText(PHYS_DAMAGE.getDescription(), tr.getPhysDamageExp()));
+                    if (isNearlyExpires(tr.getLeaseAgrExp()))
+                        text.append(expiresOnText(LEASE_AGR.getDescription(), tr.getLeaseAgrExp()));
+
+                    text.append("\n");
+                });
+
+
+        text.append("\n❌ Missing Truck Documents\n");
+        trucks.stream()
+                .filter(tr -> isNull(tr.getRegCabCardExp()) || isNull(tr.getAnnsInsExp())
+                        || isNull(tr.getPhysDamageExp()) || isNull(tr.getLeaseAgrExp()))
+                .forEach(tr -> {
+                    text.append(String.format("#%s (%s %s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getFuelType(), tr.getYear()));
+
+                    if (isNull(tr.getRegCabCardExp())) text.append(missingText(REG_CAB_CARD.getDescription()));
+                    if (isNull(tr.getAnnsInsExp())) text.append(missingText(ANN_INS.getDescription()));
+                    if (isNull(tr.getPhysDamageExp())) text.append(missingText(PHYS_DAMAGE.getDescription()));
+                    if (isNull(tr.getLeaseAgrExp())) text.append(missingText(LEASE_AGR.getDescription()));
+
+                    text.append("\n");
+                });
+
+        return text.toString();
+    }
+
+    private String trailerNotificationBuilder(int companyId) {
+        StringBuilder text = new StringBuilder();
+
+        var trailers = trailerRepository.getTrailersWithExpirationInfo(companyId);
+        text.append("----------------------------------------\n🚃 Trailer Documents Expiring Soon\n");
+        trailers.stream()
+                .filter(tr -> isNearlyExpires(tr.getRegCabCardExp()) || isNearlyExpires(tr.getAnnsInsExp())
+                        || isNearlyExpires(tr.getPhysDamageExp()) || isNearlyExpires(tr.getLeaseAgrExp()))
+                .forEach(tr -> {
+                    text.append(String.format("#%s (%s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getYear()));
+
+                    if (isNearlyExpires(tr.getRegCabCardExp()))
+                        text.append(expiresOnText(REG_CAB_CARD.getDescription(), tr.getRegCabCardExp()));
+                    if (isNearlyExpires(tr.getAnnsInsExp()))
+                        text.append(expiresOnText(ANN_INS.getDescription(), tr.getAnnsInsExp()));
+                    if (isNearlyExpires(tr.getPhysDamageExp()))
+                        text.append(expiresOnText(PHYS_DAMAGE.getDescription(), tr.getPhysDamageExp()));
+                    if (isNearlyExpires(tr.getLeaseAgrExp()))
+                        text.append(expiresOnText(LEASE_AGR.getDescription(), tr.getLeaseAgrExp()));
+
+                    text.append("\n");
+                });
+
+
+        text.append("\n❌ Missing Trailer Documents\n");
+        trailers.stream()
+                .filter(tr -> isNull(tr.getRegCabCardExp()) || isNull(tr.getAnnsInsExp())
+                        || isNull(tr.getPhysDamageExp()) || isNull(tr.getLeaseAgrExp()))
+                .forEach(tr -> {
+                    text.append(String.format("#%s (%s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getYear()));
+
+                    if (isNull(tr.getRegCabCardExp())) text.append(missingText(REG_CAB_CARD.getDescription()));
+                    if (isNull(tr.getAnnsInsExp())) text.append(missingText(ANN_INS.getDescription()));
+                    if (isNull(tr.getPhysDamageExp())) text.append(missingText(PHYS_DAMAGE.getDescription()));
+                    if (isNull(tr.getLeaseAgrExp())) text.append(missingText(LEASE_AGR.getDescription()));
+
+                    text.append("\n");
+                });
+
+        return text.toString();
+    }
+
+    private String driverNotificationBuilder(int companyId) {
+        StringBuilder text = new StringBuilder();
+
+        var drivers = driverRepository.getDriversWithExpirationInfo(companyId);
+        text.append("----------------------------------------\n🚃 Driver Documents Expiring Soon\n");
+        drivers.stream()
+                .filter(tr -> isNearlyExpires(tr.getCdlExp()) || isNearlyExpires(tr.getMedicalCertExp())
+                        || isNearlyExpires(tr.getMvrExp()) || isNearlyExpires(tr.getClearingHouseExp())
+                        || isNearlyExpires(tr.getSsnExp()) || isNearlyExpires(tr.getCcfExp())
+                        || isNearlyExpires(tr.getDriverApplicationExp())
+                        || isNearlyExpires(tr.getPevExp())
+                )
+                .forEach(tr -> {
+                    text.append(String.format("%s\n", tr.getDriverName()));
+
+                    if (isNearlyExpires(tr.getCdlExp()))
+                        text.append(expiresOnText(CDL.getDescription(), tr.getCdlExp()));
+                    if (isNearlyExpires(tr.getMedicalCertExp()))
+                        text.append(expiresOnText(MEDICAL_CERT.getDescription(), tr.getMedicalCertExp()));
+                    if (isNearlyExpires(tr.getMvrExp()))
+                        text.append(expiresOnText(MVR.getDescription(), tr.getMvrExp()));
+                    if (isNearlyExpires(tr.getClearingHouseExp()))
+                        text.append(expiresOnText(CLEARING_HOUSE.getDescription(), tr.getClearingHouseExp()));
+                    if (isNearlyExpires(tr.getSsnExp()))
+                        text.append(expiresOnText(SSN.getDescription(), tr.getSsnExp()));
+
+                    if (isNearlyExpires(tr.getCcfExp()))
+                        text.append(expiresOnText(CCF.getDescription(), tr.getCcfExp()));
+                    if (isNearlyExpires(tr.getDriverApplicationExp()))
+                        text.append(expiresOnText(DRIVER_APPLICATION.getDescription(), tr.getDriverApplicationExp()));
+                    if (isNearlyExpires(tr.getPevExp()))
+                        text.append(expiresOnText(PEV.getDescription(), tr.getPevExp()));
+
+                    text.append("\n");
+                });
+
+
+        text.append("\n❌ Missing Driver Documents\n");
+        drivers.stream()
+                .filter(tr -> isNull(tr.getCdlExp()) || isNull(tr.getMedicalCertExp())
+                        || isNull(tr.getMvrExp()) || isNull(tr.getClearingHouseExp())
+                        || isNull(tr.getSsnExp()) || isNull(tr.getCcfExp())
+                        || isNull(tr.getDriverApplicationExp())
+                        || isNull(tr.getPevExp()))
+                .forEach(tr -> {
+                    text.append(String.format("%s\n", tr.getDriverName()));
+
+                    if (isNull(tr.getCdlExp())) text.append(missingText(CDL.getDescription()));
+                    if (isNull(tr.getMedicalCertExp())) text.append(missingText(MEDICAL_CERT.getDescription()));
+                    if (isNull(tr.getMvrExp())) text.append(missingText(MVR.getDescription()));
+                    if (isNull(tr.getClearingHouseExp())) text.append(missingText(CLEARING_HOUSE.getDescription()));
+                    if (isNull(tr.getSsnExp())) text.append(missingText(SSN.getDescription()));
+                    if (isNull(tr.getCcfExp())) text.append(missingText(CCF.getDescription()));
+
+                    if (isNull(tr.getDriverApplicationExp()))
+                        text.append(missingText(DRIVER_APPLICATION.getDescription()));
+                    if (isNull(tr.getPevExp())) text.append(missingText(PEV.getDescription()));
+
+                    text.append("\n");
+                });
+
+        return text.toString();
     }
 }
