@@ -27,8 +27,8 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer>
                                        min(case cf.type when 'CT_PERMIT' then cf.expiration_date end)    as permitExp,
                                        min(case cf.type when 'MCS_150' then cf.expiration_date end)      as mcsExp
                                 from company_files cf
-                                         left join trailers t on cf.company_id = t.id
-                                where t.company_id = :companyId
+                                         left join companies t on cf.company_id = t.id
+                                where t.id = :companyId
                                   and t.status = 'ACTIVE'
                                   and cf.status = 'ACTIVE'
                                   and cf.expiration_date >= CURRENT_DATE

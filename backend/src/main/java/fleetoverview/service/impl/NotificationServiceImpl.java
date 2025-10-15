@@ -2,7 +2,6 @@ package fleetoverview.service.impl;
 
 import fleetoverview.config.MailConfigurationParams;
 import fleetoverview.config.TelegramConfigurationParams;
-import fleetoverview.domain.enums.company.CompanyFileTypeEnum;
 import fleetoverview.domain.enums.company.CompanyStatusEnum;
 import fleetoverview.repository.CompanyRepository;
 import fleetoverview.repository.DriverRepository;
@@ -67,8 +66,6 @@ public class NotificationServiceImpl implements NotificationService {
         var companies = companyRepository.findAllByStatus(CompanyStatusEnum.ACTIVE);
 
         companies.forEach(it -> {
-            AtomicInteger counter = new AtomicInteger();
-
             StringBuilder text = new StringBuilder(String.format("""
                     Subject: 🔔 Compliance Alert: Upcoming Expirations & Missing Documents for %s
                                         
@@ -78,7 +75,6 @@ public class NotificationServiceImpl implements NotificationService {
                     This is an automated compliance notification from your Efficient management regarding %s.
                                         
                     Please review the following compliance alerts:
-                                        
                     """, it.getName(), it.getName()));
 
             text.append(companyNotificationBuilder(it.getId()));
@@ -86,10 +82,8 @@ public class NotificationServiceImpl implements NotificationService {
             text.append(trailerNotificationBuilder(it.getId()));
             text.append(driverNotificationBuilder(it.getId()));
 
-            if (counter.get() != 0) {
-                sendToGmail(text.toString());
-                sendToTelegram(text.toString());
-            }
+            sendToGmail(text.toString());
+            sendToTelegram(text.toString());
         });
     }
 
@@ -166,10 +160,11 @@ public class NotificationServiceImpl implements NotificationService {
 
     private String companyNotificationBuilder(int companyId) {
         StringBuilder text = new StringBuilder();
+        AtomicInteger counter = new AtomicInteger();
 
         // Insurance, ifta, ucr, ct permit, mcs 150
         var companies = companyRepository.getCompaniesWithExpirationInfo(companyId);
-        text.append("----------------------------------------\n🚛 Company Documents Expiring Soon\n");
+        text.append("--\uD83C\uDFE6-------------------------------------\n 🕒Company Documents Expiring Soon\n");
         companies.stream()
                 .filter(tr -> isNearlyExpires(tr.getInsuranceCertExp()) || isNearlyExpires(tr.getIftaExp())
                         || isNearlyExpires(tr.getUcrExp()) || isNearlyExpires(tr.getPermitExp()) || isNearlyExpires(tr.getMcsExp()))
@@ -185,11 +180,16 @@ public class NotificationServiceImpl implements NotificationService {
                     if (isNearlyExpires(tr.getMcsExp()))
                         text.append(expiresOnText(MCS_150.getDescription(), tr.getMcsExp()));
 
+                    counter.getAndIncrement();
                     text.append("\n");
                 });
+        if (counter.get() == 0) {
+            text.append("\uD83D\uDFE2");
+            text.append("\n");
+        }
+        counter.set(0);
 
-
-        text.append("\n❌ Missing Company Documents\n");
+        text.append("\n\uD83D\uDEAB Missing Company Documents\n");
         companies.stream()
                 .filter(tr -> isNull(tr.getInsuranceCertExp()) || isNull(tr.getIftaExp()) || isNull(tr.getUcrExp())
                         || isNull(tr.getPermitExp()) || isNull(tr.getMcsExp()))
@@ -200,17 +200,23 @@ public class NotificationServiceImpl implements NotificationService {
                     if (isNull(tr.getPermitExp())) text.append(missingText(CT_PERMIT.getDescription()));
                     if (isNull(tr.getMcsExp())) text.append(missingText(MCS_150.getDescription()));
 
+                    counter.getAndIncrement();
                     text.append("\n");
                 });
+        if (counter.get() == 0) {
+            text.append("\uD83D\uDFE2");
+            text.append("\n");
+        }
 
         return text.toString();
     }
 
     private String truckNotificationBuilder(int companyId) {
         StringBuilder text = new StringBuilder();
+        AtomicInteger counter = new AtomicInteger();
 
         var trucks = truckRepository.getTrucksWithExpirationInfo(companyId);
-        text.append("----------------------------------------\n🚛 Truck Documents Expiring Soon\n");
+        text.append("--🚛-------------------------------------\n🕒 Truck Documents Expiring Soon\n");
         trucks.stream()
                 .filter(tr -> isNearlyExpires(tr.getRegCabCardExp()) || isNearlyExpires(tr.getAnnsInsExp())
                         || isNearlyExpires(tr.getPhysDamageExp()) || isNearlyExpires(tr.getLeaseAgrExp()))
@@ -226,11 +232,16 @@ public class NotificationServiceImpl implements NotificationService {
                     if (isNearlyExpires(tr.getLeaseAgrExp()))
                         text.append(expiresOnText(LEASE_AGR.getDescription(), tr.getLeaseAgrExp()));
 
+                    counter.getAndIncrement();
                     text.append("\n");
                 });
+        if (counter.get() == 0) {
+            text.append("\uD83D\uDFE2");
+            text.append("\n");
+        }
+        counter.set(0);
 
-
-        text.append("\n❌ Missing Truck Documents\n");
+        text.append("\n\uD83D\uDEAB Missing Truck Documents\n");
         trucks.stream()
                 .filter(tr -> isNull(tr.getRegCabCardExp()) || isNull(tr.getAnnsInsExp())
                         || isNull(tr.getPhysDamageExp()) || isNull(tr.getLeaseAgrExp()))
@@ -242,17 +253,23 @@ public class NotificationServiceImpl implements NotificationService {
                     if (isNull(tr.getPhysDamageExp())) text.append(missingText(PHYS_DAMAGE.getDescription()));
                     if (isNull(tr.getLeaseAgrExp())) text.append(missingText(LEASE_AGR.getDescription()));
 
+                    counter.getAndIncrement();
                     text.append("\n");
                 });
+        if (counter.get() == 0) {
+            text.append("\uD83D\uDFE2");
+            text.append("\n");
+        }
 
         return text.toString();
     }
 
     private String trailerNotificationBuilder(int companyId) {
         StringBuilder text = new StringBuilder();
+        AtomicInteger counter = new AtomicInteger();
 
         var trailers = trailerRepository.getTrailersWithExpirationInfo(companyId);
-        text.append("----------------------------------------\n🚃 Trailer Documents Expiring Soon\n");
+        text.append("--🚃-------------------------------------\n🕒 Trailer Documents Expiring Soon\n");
         trailers.stream()
                 .filter(tr -> isNearlyExpires(tr.getRegCabCardExp()) || isNearlyExpires(tr.getAnnsInsExp())
                         || isNearlyExpires(tr.getPhysDamageExp()) || isNearlyExpires(tr.getLeaseAgrExp()))
@@ -268,11 +285,16 @@ public class NotificationServiceImpl implements NotificationService {
                     if (isNearlyExpires(tr.getLeaseAgrExp()))
                         text.append(expiresOnText(LEASE_AGR.getDescription(), tr.getLeaseAgrExp()));
 
+                    counter.getAndIncrement();
                     text.append("\n");
                 });
+        if (counter.get() == 0) {
+            text.append("\uD83D\uDFE2");
+            text.append("\n");
+        }
+        counter.set(0);
 
-
-        text.append("\n❌ Missing Trailer Documents\n");
+        text.append("\n\uD83D\uDEAB Missing Trailer Documents\n");
         trailers.stream()
                 .filter(tr -> isNull(tr.getRegCabCardExp()) || isNull(tr.getAnnsInsExp())
                         || isNull(tr.getPhysDamageExp()) || isNull(tr.getLeaseAgrExp()))
@@ -284,17 +306,23 @@ public class NotificationServiceImpl implements NotificationService {
                     if (isNull(tr.getPhysDamageExp())) text.append(missingText(PHYS_DAMAGE.getDescription()));
                     if (isNull(tr.getLeaseAgrExp())) text.append(missingText(LEASE_AGR.getDescription()));
 
+                    counter.getAndIncrement();
                     text.append("\n");
                 });
+        if (counter.get() == 0) {
+            text.append("\uD83D\uDFE2");
+            text.append("\n");
+        }
 
         return text.toString();
     }
 
     private String driverNotificationBuilder(int companyId) {
         StringBuilder text = new StringBuilder();
+        AtomicInteger counter = new AtomicInteger();
 
         var drivers = driverRepository.getDriversWithExpirationInfo(companyId);
-        text.append("----------------------------------------\n🚃 Driver Documents Expiring Soon\n");
+        text.append("--\uD83E\uDD35\u200D♂\uFE0F-------------------------------------\n🕒 Driver Documents Expiring Soon\n");
         drivers.stream()
                 .filter(tr -> isNearlyExpires(tr.getCdlExp()) || isNearlyExpires(tr.getMedicalCertExp())
                         || isNearlyExpires(tr.getMvrExp()) || isNearlyExpires(tr.getClearingHouseExp())
@@ -323,11 +351,16 @@ public class NotificationServiceImpl implements NotificationService {
                     if (isNearlyExpires(tr.getPevExp()))
                         text.append(expiresOnText(PEV.getDescription(), tr.getPevExp()));
 
+                    counter.getAndIncrement();
                     text.append("\n");
                 });
+        if (counter.get() == 0) {
+            text.append("\uD83D\uDFE2");
+            text.append("\n");
+        }
+        counter.set(0);
 
-
-        text.append("\n❌ Missing Driver Documents\n");
+        text.append("\n\uD83D\uDEAB Missing Driver Documents\n");
         drivers.stream()
                 .filter(tr -> isNull(tr.getCdlExp()) || isNull(tr.getMedicalCertExp())
                         || isNull(tr.getMvrExp()) || isNull(tr.getClearingHouseExp())
@@ -348,8 +381,13 @@ public class NotificationServiceImpl implements NotificationService {
                         text.append(missingText(DRIVER_APPLICATION.getDescription()));
                     if (isNull(tr.getPevExp())) text.append(missingText(PEV.getDescription()));
 
+                    counter.getAndIncrement();
                     text.append("\n");
                 });
+        if (counter.get() == 0) {
+            text.append("\uD83D\uDFE2");
+            text.append("\n");
+        }
 
         return text.toString();
     }
