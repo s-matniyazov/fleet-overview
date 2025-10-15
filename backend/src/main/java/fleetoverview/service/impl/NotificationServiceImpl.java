@@ -164,7 +164,7 @@ public class NotificationServiceImpl implements NotificationService {
 
         // Insurance, ifta, ucr, ct permit, mcs 150
         var companies = companyRepository.getCompaniesWithExpirationInfo(companyId);
-        text.append("--\uD83C\uDFE6-------------------------------------\n 🕒Company Documents Expiring Soon\n");
+        text.append("--\uD83C\uDFE6-------------------------------------\n🕒 Company Documents Expiring Soon\n");
         companies.stream()
                 .filter(tr -> isNearlyExpires(tr.getInsuranceCertExp()) || isNearlyExpires(tr.getIftaExp())
                         || isNearlyExpires(tr.getUcrExp()) || isNearlyExpires(tr.getPermitExp()) || isNearlyExpires(tr.getMcsExp()))
@@ -322,7 +322,7 @@ public class NotificationServiceImpl implements NotificationService {
         AtomicInteger counter = new AtomicInteger();
 
         var drivers = driverRepository.getDriversWithExpirationInfo(companyId);
-        text.append("--\uD83E\uDD35\u200D♂\uFE0F-------------------------------------\n🕒 Driver Documents Expiring Soon\n");
+        text.append("\n--\uD83E\uDD35\u200D♂\uFE0F-------------------------------------\n🕒 Driver Documents Expiring Soon\n");
         drivers.stream()
                 .filter(tr -> isNearlyExpires(tr.getCdlExp()) || isNearlyExpires(tr.getMedicalCertExp())
                         || isNearlyExpires(tr.getMvrExp()) || isNearlyExpires(tr.getClearingHouseExp())
