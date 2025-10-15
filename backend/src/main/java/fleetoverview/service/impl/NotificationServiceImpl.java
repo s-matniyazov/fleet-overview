@@ -269,7 +269,7 @@ public class NotificationServiceImpl implements NotificationService {
         AtomicInteger counter = new AtomicInteger();
 
         var trailers = trailerRepository.getTrailersWithExpirationInfo(companyId);
-        text.append("--🚃-------------------------------------\n🕒 Trailer Documents Expiring Soon\n");
+        text.append("\n--🚃-------------------------------------\n🕒 Trailer Documents Expiring Soon\n");
         trailers.stream()
                 .filter(tr -> isNearlyExpires(tr.getRegCabCardExp()) || isNearlyExpires(tr.getAnnsInsExp())
                         || isNearlyExpires(tr.getPhysDamageExp()) || isNearlyExpires(tr.getLeaseAgrExp()))
