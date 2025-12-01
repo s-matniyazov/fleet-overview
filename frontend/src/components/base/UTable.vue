@@ -65,7 +65,7 @@ const onRowDoubleClick = (row) => {
           <thead>
           <tr>
             <slot v-for="col in columns" :col="col" :name="`col_${col.name}`" :key="col.key" class="bg-light">
-              <th scope="col" :style="col.styles" :class="col.classes" style="font-style: italic">
+              <th scope="col" :style="col.styles" :class="col.classes" style="text-transform: uppercase;">
                 {{ col.label }}
               </th>
             </slot>

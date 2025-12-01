@@ -34,7 +34,6 @@ const props = defineProps({
   option_name: { type: String, default: 'id' },
   option_value: { type: String, default: 'id' },
   classes: { type: String, default: '' },
-  btn_classes: { type: String, default: 'btn-info waves-effect waves-light' },
   wrapper_styles: { type: String, default: '' },
   styles: { type: String, default: '' },
   position: {

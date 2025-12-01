@@ -34,11 +34,7 @@ function onLogin() {
   <div class="d-flex justify-content-center align-items-center min-vh-100 main_with_gradient" >
     <div class="p-4 shadow-lg rounded-3 login" >
       <div class="text-center mb-4">
-        <h2 class="mt-3 text-white">EFFICIENT MANAGEMENT FLEET</h2>
-      </div>
-      <div class="text-center mb-4">
-        <h5 class="text-white">Welcome to EM Fleet!</h5>
-        <p class="text-white">Login to continue using EM Fleet..</p>
+        <h2 class="mt-3 text-white">EFFICIENT MANAGEMENT</h2>
       </div>
       <form>
         <div class="mb-3">
