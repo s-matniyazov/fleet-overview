@@ -1,5 +1,5 @@
 # Faqat JAR ishga tushirish uchun OpenJDK image
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk
 
 # Ishchi papkani belgilash
 WORKDIR /app

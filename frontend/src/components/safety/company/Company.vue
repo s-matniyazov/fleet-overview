@@ -176,6 +176,14 @@ onMounted(() => {
   stateStore.init();
 })
 
+function onExcel () {
+axiosIns.post(apiUrl+"/excel", data.value)
+      .then(res => {})
+      .catch(e => {
+    showMessage(e)
+  });
+}
+
 </script>
 
 <template>
@@ -186,6 +194,10 @@ onMounted(() => {
             t("add")
           }}
         </button>
+        <button @click="onExcel" class="btn btn-primary btn-sm"><span class="mdi mdi-plus"></span> {{
+                    t("add")
+                  }}
+                </button>
       </div>
     </div>
 

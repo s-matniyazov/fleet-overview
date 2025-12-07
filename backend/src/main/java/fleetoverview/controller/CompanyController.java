@@ -6,6 +6,7 @@ import fleetoverview.data.request.CompanyFileRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.domain.entity.company.CompanyEntity;
 import fleetoverview.service.CompanyService;
+import fleetoverview.service.impl.ExcelNotificationServiceImpl;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,14 +26,22 @@ import static fleetoverview.util.constants.UriConstants.COMPANIES;
 @RequestMapping(COMPANIES)
 public class CompanyController extends CrudController<CompanyEntity, CompanyRequest> {
     private final CompanyService service;
-    protected CompanyController(CompanyService service) {
+    private final ExcelNotificationServiceImpl excelNotificationService;
+    protected CompanyController(CompanyService service, ExcelNotificationServiceImpl excelNotificationService) {
         super(service);
         this.service = service;
+        this.excelNotificationService = excelNotificationService;
     }
 
     @PostMapping("attach-file")
     public HttpEntity<ApiResponse> attachFile(@RequestPart(name = "data") CompanyFileRequest data, @RequestPart(name = "file") MultipartFile file) {
         return ResponseEntity.ok(service.attachFile(data, file));
+    }
+
+    @PostMapping("excel")
+    public HttpEntity<ApiResponse> excel() {
+        excelNotificationService.sendNotifications();
+        return ResponseEntity.ok(ApiResponse.badRequest("sdfjkshdkfjs"));
     }
 
     @GetMapping("files")

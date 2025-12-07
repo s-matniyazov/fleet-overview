@@ -115,17 +115,17 @@ public class InitData implements CommandLineRunner {
 
     private void initUsers() {
         if (userRepository.findByUsername("username").isEmpty()) {
-//            userRepository.saveAll(
-//                    List.of(
-//                            new UserEntity(
-//                                    "username",
-//                                    passwordEncoder.encode("password"),
-//                                    "Testov User",
-//                                    "kuchukcha@gmail.com",
-//                                    roleRepository.getReferenceById(1)
-//                            )
-//                    )
-//            );
+            userRepository.saveAll(
+                    List.of(
+                            new UserEntity(
+                                    "username",
+                                    passwordEncoder.encode("password"),
+                                    "Testov User",
+                                    "kuchukcha@gmail.com",
+                                    roleRepository.getReferenceById(1)
+                            )
+                    )
+            );
         }
     }
 

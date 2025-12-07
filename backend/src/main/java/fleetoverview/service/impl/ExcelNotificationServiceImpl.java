@@ -2,12 +2,18 @@ package fleetoverview.service.impl;
 
 import fleetoverview.config.MailConfigurationParams;
 import fleetoverview.config.TelegramConfigurationParams;
+import fleetoverview.domain.enums.company.CompanyFileTypeEnum;
 import fleetoverview.domain.enums.company.CompanyStatusEnum;
 import fleetoverview.repository.CompanyRepository;
 import fleetoverview.repository.DriverRepository;
 import fleetoverview.repository.TrailerRepository;
 import fleetoverview.repository.TruckRepository;
 import fleetoverview.service.NotificationService;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.mail.internet.MimeMessage;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -37,8 +45,8 @@ import static fleetoverview.util.helper.Utils.isNull;
  * @created : 14 май 2025
  **/
 @Service
-public class NotificationServiceImpl implements NotificationService {
-    private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
+public class ExcelNotificationServiceImpl implements NotificationService {
+    private static final Logger logger = LoggerFactory.getLogger(ExcelNotificationServiceImpl.class);
     private final CompanyRepository companyRepository;
     private final TruckRepository truckRepository;
     private final TrailerRepository trailerRepository;
@@ -48,10 +56,10 @@ public class NotificationServiceImpl implements NotificationService {
     private final MailConfigurationParams mailParams;
 
     @Autowired
-    public NotificationServiceImpl(TruckRepository truckRepository,
-                                   CompanyRepository companyRepository, TrailerRepository trailerRepository,
-                                   JavaMailSender mailSender, TelegramConfigurationParams telegramParams,
-                                   MailConfigurationParams mailParams, DriverRepository driverRepository) {
+    public ExcelNotificationServiceImpl(TruckRepository truckRepository,
+                                        CompanyRepository companyRepository, TrailerRepository trailerRepository,
+                                        JavaMailSender mailSender, TelegramConfigurationParams telegramParams,
+                                        MailConfigurationParams mailParams, DriverRepository driverRepository) {
         this.truckRepository = truckRepository;
         this.companyRepository = companyRepository;
         this.trailerRepository = trailerRepository;
@@ -65,26 +73,72 @@ public class NotificationServiceImpl implements NotificationService {
     public void sendNotifications() {
         var companies = companyRepository.findAllByStatus(CompanyStatusEnum.ACTIVE);
 
+        Workbook workbook = new XSSFWorkbook();
+
+        Sheet sheet = workbook.createSheet("sheet");
+
+        AtomicInteger rowIndex = new AtomicInteger(0);
+
+        Row row = sheet.createRow(rowIndex.getAndIncrement());
+        addCell(row, 0, "Company name");
+        addCell(row, 1, "Type");
+        addCell(row, 2, "Name");
+        addCell(row, 3, "File");
+        addCell(row, 4, "Info");
+
         companies.forEach(it -> {
-            StringBuilder text = new StringBuilder(String.format("""
-                    Subject: 🔔 Compliance Alert: Upcoming Expirations & Missing Documents for %s
-                                        
-                                        
-                    Dear Bilol,
-                                        
-                    This is an automated compliance notification from your Efficient management regarding %s.
-                                        
-                    Please review the following compliance alerts:
-                    """, it.getName(), it.getName()));
+            Row companyNameRow = sheet.createRow(rowIndex.getAndIncrement());
+            addCell(companyNameRow, 0, it.getName());
 
-            text.append(companyNotificationBuilder(it.getId()));
-            text.append(truckNotificationBuilder(it.getId()));
-            text.append(trailerNotificationBuilder(it.getId()));
-            text.append(driverNotificationBuilder(it.getId()));
-
-            sendToGmail(text.toString());
-            sendToTelegram(text.toString());
+            companyNotificationBuilder(sheet, rowIndex, it.getId());
         });
+
+        try {
+            FileOutputStream fileOut = new FileOutputStream("students.xlsx");
+            workbook.write(fileOut);
+
+            fileOut.close();
+
+            workbook.close();
+        } catch (IOException e) {
+            logger.error("Error in closing sheet {}", e.getMessage());
+        }
+    }
+
+    private void companyNotificationBuilder(Sheet sheet, AtomicInteger rowIndex, int companyId) {
+        var companyFiles = companyRepository.getCompaniesWithExpirationInfo(companyId);
+
+        companyFiles.forEach(cFile -> {
+            Row row1 = sheet.createRow(rowIndex.getAndIncrement());
+            addCell(row1, 3, INS_CERT.toString());
+            addCell(row1, 4, dateToString(cFile.getInsuranceCertExp()));
+
+            Row row2 = sheet.createRow(rowIndex.getAndIncrement());
+            addCell(row2, 3, IFTA_LICENSE.toString());
+            addCell(row2, 4, dateToString(cFile.getIftaExp()));
+
+            Row row3 = sheet.createRow(rowIndex.getAndIncrement());
+            addCell(row3, 3, UCR.toString());
+            addCell(row3, 4, dateToString(cFile.getUcrExp()));
+
+            Row row4 = sheet.createRow(rowIndex.getAndIncrement());
+            addCell(row4, 3, CT_PERMIT.toString());
+            addCell(row4, 4, dateToString(cFile.getPermitExp()));
+
+            Row row5 = sheet.createRow(rowIndex.getAndIncrement());
+            addCell(row5, 3, MCS_150.toString());
+            addCell(row5, 4, dateToString(cFile.getMcsExp()));
+        });
+    }
+
+    private String dateToString(LocalDate date) {
+        if (date == null) return "none";
+        return date.toString();
+    }
+
+    private void addCell(Row row, int cellIndex, String cellValue) {
+        Cell cell = row.createCell(cellIndex);
+        cell.setCellValue(cellValue);
     }
 
     private boolean isNearlyExpires(LocalDate date) {
@@ -156,59 +210,6 @@ public class NotificationServiceImpl implements NotificationService {
         } catch (Exception e) {
             logger.error("MAIL_RESULT " + e.getMessage());
         }
-    }
-
-    private String companyNotificationBuilder(int companyId) {
-        StringBuilder text = new StringBuilder();
-        AtomicInteger counter = new AtomicInteger();
-
-        // Insurance, ifta, ucr, ct permit, mcs 150
-        var companies = companyRepository.getCompaniesWithExpirationInfo(companyId);
-        text.append("--\uD83C\uDFE6-------------------------------------\n🕒 Company Documents Expiring Soon\n");
-        companies.stream()
-                .filter(tr -> isNearlyExpires(tr.getInsuranceCertExp()) || isNearlyExpires(tr.getIftaExp())
-                        || isNearlyExpires(tr.getUcrExp()) || isNearlyExpires(tr.getPermitExp()) || isNearlyExpires(tr.getMcsExp()))
-                .forEach(tr -> {
-                    if (isNearlyExpires(tr.getInsuranceCertExp()))
-                        text.append(expiresOnText(INS_CERT.getDescription(), tr.getInsuranceCertExp()));
-                    if (isNearlyExpires(tr.getIftaExp()))
-                        text.append(expiresOnText(IFTA_LICENSE.getDescription(), tr.getIftaExp()));
-                    if (isNearlyExpires(tr.getUcrExp()))
-                        text.append(expiresOnText(UCR.getDescription(), tr.getUcrExp()));
-                    if (isNearlyExpires(tr.getPermitExp()))
-                        text.append(expiresOnText(CT_PERMIT.getDescription(), tr.getPermitExp()));
-                    if (isNearlyExpires(tr.getMcsExp()))
-                        text.append(expiresOnText(MCS_150.getDescription(), tr.getMcsExp()));
-
-                    counter.getAndIncrement();
-                    text.append("\n");
-                });
-        if (counter.get() == 0) {
-            text.append("\uD83D\uDFE2");
-            text.append("\n");
-        }
-        counter.set(0);
-
-        text.append("\n\uD83D\uDEAB Missing Company Documents\n");
-        companies.stream()
-                .filter(tr -> isNull(tr.getInsuranceCertExp()) || isNull(tr.getIftaExp()) || isNull(tr.getUcrExp())
-                        || isNull(tr.getPermitExp()) || isNull(tr.getMcsExp()))
-                .forEach(tr -> {
-                    if (isNull(tr.getInsuranceCertExp())) text.append(missingText(INS_CERT.getDescription()));
-                    if (isNull(tr.getIftaExp())) text.append(missingText(IFTA_LICENSE.getDescription()));
-                    if (isNull(tr.getUcrExp())) text.append(missingText(UCR.getDescription()));
-                    if (isNull(tr.getPermitExp())) text.append(missingText(CT_PERMIT.getDescription()));
-                    if (isNull(tr.getMcsExp())) text.append(missingText(MCS_150.getDescription()));
-
-                    counter.getAndIncrement();
-                    text.append("\n");
-                });
-        if (counter.get() == 0) {
-            text.append("\uD83D\uDFE2");
-            text.append("\n");
-        }
-
-        return text.toString();
     }
 
     private String truckNotificationBuilder(int companyId) {
