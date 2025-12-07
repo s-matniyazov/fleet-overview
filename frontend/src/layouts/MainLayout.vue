@@ -58,17 +58,15 @@ watch(
     <header id="page-topbar">
       <div class="navbar-header" style="background: #06273d;">
         <div class="d-flex items-center">
-          <div class="text-light" :style="collapsed ? 'padding: 0 0.5rem;' : 'padding: 0 1.5rem;'"  style="background: #06273d;">
+          <div class="text-light" :style="collapsed ? 'padding: 0 0.5rem;' : 'padding: 0 1.5rem;'" >
             <template v-if="!collapsed">
               <router-link to="/" class="logo logo-dark">
-<!--                <span class="logo-lg"> <img src="@/assets/icons/em_logo.png" alt="fleet logo" size="12" style="height: 50px">-->
-                  <span class="logo-txt font-size-13" >Efficient Management Fleet</span>
-<!--                </span>-->
+               <span class="logo-lg"> <img src="@/assets/icons/em_logo.png" alt="fleet logo" size="12" style="height: 50px">
+               </span>
               </router-link>
             </template>
             <template v-else>
-<!--                <span class="logo-sm"> <img src="@/assets/icons/em_logo.png" alt="fleet logo" size="8" style="height: 50px"/> </span>-->
-              <span class="logo-txt font-size-15">EM Fleet</span>
+               <span class="logo-sm"> <img src="@/assets/icons/em_logo.png" alt="fleet logo" size="8" style="height: 50px"/> </span>
             </template>
           </div>
         </div>
