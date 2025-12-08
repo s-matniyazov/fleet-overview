@@ -1,7 +1,5 @@
 package fleetoverview.service.impl;
 
-import fleetoverview.config.MailConfigurationParams;
-import fleetoverview.config.TelegramConfigurationParams;
 import fleetoverview.domain.enums.company.CompanyStatusEnum;
 import fleetoverview.repository.CompanyRepository;
 import fleetoverview.repository.DriverRepository;
@@ -16,24 +14,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static fleetoverview.domain.enums.company.CompanyFileTypeEnum.*;
@@ -145,25 +134,11 @@ public class ExcelNotificationServiceImpl implements NotificationService {
         var companyFiles = companyRepository.getCompaniesWithExpirationInfo(companyId);
 
         companyFiles.forEach(cFile -> {
-            Row row1 = sheet.createRow(rowIndex.getAndIncrement());
-            addCell(row1, 2, INS_CERT.toString());
-            addCell(row1, 3, dateToString(cFile.getInsuranceCertExp()));
-
-            Row row2 = sheet.createRow(rowIndex.getAndIncrement());
-            addCell(row2, 2, IFTA_LICENSE.toString());
-            addCell(row2, 3, dateToString(cFile.getIftaExp()));
-
-            Row row3 = sheet.createRow(rowIndex.getAndIncrement());
-            addCell(row3, 2, UCR.toString());
-            addCell(row3, 3, dateToString(cFile.getUcrExp()));
-
-            Row row4 = sheet.createRow(rowIndex.getAndIncrement());
-            addCell(row4, 2, CT_PERMIT.toString());
-            addCell(row4, 3, dateToString(cFile.getPermitExp()));
-
-            Row row5 = sheet.createRow(rowIndex.getAndIncrement());
-            addCell(row5, 2, MCS_150.toString());
-            addCell(row5, 3, dateToString(cFile.getMcsExp()));
+            createFileTypeRow(sheet, rowIndex, "", INS_CERT.toString(), cFile.getInsuranceCertExp());
+            createFileTypeRow(sheet, rowIndex, "", IFTA_LICENSE.toString(), cFile.getIftaExp());
+            createFileTypeRow(sheet, rowIndex, "", UCR.toString(), cFile.getUcrExp());
+            createFileTypeRow(sheet, rowIndex, "", CT_PERMIT.toString(), cFile.getPermitExp());
+            createFileTypeRow(sheet, rowIndex, "", MCS_150.toString(), cFile.getMcsExp());
         });
     }
 
@@ -176,13 +151,13 @@ public class ExcelNotificationServiceImpl implements NotificationService {
         addCell(driverFilesRow, 1, "Driver Files").setCellStyle(style);
 
         driverFiles.forEach(cFile -> {
-            createFileTypeRow(sheet, rowIndex.getAndIncrement(), cFile.getDriverName(), CDL.toString(), cFile.getCdlExp());
-            createFileTypeRow(sheet, rowIndex.getAndIncrement(), cFile.getDriverName(), MEDICAL_CERT.toString(), cFile.getMedicalCertExp());
-            createFileTypeRow(sheet, rowIndex.getAndIncrement(), cFile.getDriverName(), MVR.toString(), cFile.getMvrExp());
-            createFileTypeRow(sheet, rowIndex.getAndIncrement(), cFile.getDriverName(), CLEARING_HOUSE.toString(), cFile.getClearingHouseExp());
-            createFileTypeRow(sheet, rowIndex.getAndIncrement(), cFile.getDriverName(), SSN.toString(), cFile.getSsnExp());
-            createFileTypeRow(sheet, rowIndex.getAndIncrement(), cFile.getDriverName(), DRIVER_APPLICATION.toString(), cFile.getDriverApplicationExp());
-            createFileTypeRow(sheet, rowIndex.getAndIncrement(), cFile.getDriverName(), PEV.toString(), cFile.getPevExp());
+            createFileTypeRow(sheet, rowIndex, cFile.getDriverName(), CDL.toString(), cFile.getCdlExp());
+            createFileTypeRow(sheet, rowIndex, cFile.getDriverName(), MEDICAL_CERT.toString(), cFile.getMedicalCertExp());
+            createFileTypeRow(sheet, rowIndex, cFile.getDriverName(), MVR.toString(), cFile.getMvrExp());
+            createFileTypeRow(sheet, rowIndex, cFile.getDriverName(), CLEARING_HOUSE.toString(), cFile.getClearingHouseExp());
+            createFileTypeRow(sheet, rowIndex, cFile.getDriverName(), SSN.toString(), cFile.getSsnExp());
+            createFileTypeRow(sheet, rowIndex, cFile.getDriverName(), DRIVER_APPLICATION.toString(), cFile.getDriverApplicationExp());
+            createFileTypeRow(sheet, rowIndex, cFile.getDriverName(), PEV.toString(), cFile.getPevExp());
         });
     }
 
@@ -196,10 +171,10 @@ public class ExcelNotificationServiceImpl implements NotificationService {
 
         truckFiles.forEach(cFile -> {
             String name = String.format("#%s (%s %s - %s)\n", cFile.getUnit(), cFile.getMaker(), cFile.getFuelType(), cFile.getYear());
-            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, REG_CAB_CARD.toString(), cFile.getRegCabCardExp());
-            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, ANN_INS.toString(), cFile.getAnnsInsExp());
-            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, PHYS_DAMAGE.toString(), cFile.getPhysDamageExp());
-            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, LEASE_AGR.toString(), cFile.getLeaseAgrExp());
+            createFileTypeRow(sheet, rowIndex, name, REG_CAB_CARD.toString(), cFile.getRegCabCardExp());
+            createFileTypeRow(sheet, rowIndex, name, ANN_INS.toString(), cFile.getAnnsInsExp());
+            createFileTypeRow(sheet, rowIndex, name, PHYS_DAMAGE.toString(), cFile.getPhysDamageExp());
+            createFileTypeRow(sheet, rowIndex, name, LEASE_AGR.toString(), cFile.getLeaseAgrExp());
         });
     }
 
@@ -213,16 +188,16 @@ public class ExcelNotificationServiceImpl implements NotificationService {
 
         trailerFiles.forEach(cFile -> {
             String name = String.format("#%s (%s - %s)\n", cFile.getUnit(), cFile.getMaker(), cFile.getYear());
-            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, REG_CAB_CARD.toString(), cFile.getRegCabCardExp());
-            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, ANN_INS.toString(), cFile.getAnnsInsExp());
-            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, PHYS_DAMAGE.toString(), cFile.getPhysDamageExp());
-            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, LEASE_AGR.toString(), cFile.getLeaseAgrExp());
+            createFileTypeRow(sheet, rowIndex, name, REG_CAB_CARD.toString(), cFile.getRegCabCardExp());
+            createFileTypeRow(sheet, rowIndex, name, ANN_INS.toString(), cFile.getAnnsInsExp());
+            createFileTypeRow(sheet, rowIndex, name, PHYS_DAMAGE.toString(), cFile.getPhysDamageExp());
+            createFileTypeRow(sheet, rowIndex, name, LEASE_AGR.toString(), cFile.getLeaseAgrExp());
         });
     }
 
-    private void createFileTypeRow(Sheet sheet, int rowIndex, String driverName, String fileType, LocalDate expiration) {
+    private void createFileTypeRow(Sheet sheet, AtomicInteger rowIndex, String driverName, String fileType, LocalDate expiration) {
         if (isNearlyExpires(expiration) || isNull(expiration)) {
-            Row row1 = sheet.createRow(rowIndex);
+            Row row1 = sheet.createRow(rowIndex.getAndIncrement());
             addCell(row1, 1, driverName);
             addCell(row1, 2, fileType);
             addCell(row1, 3, dateToString(expiration));
