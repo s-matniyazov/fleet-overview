@@ -2,17 +2,16 @@ package fleetoverview.service.impl;
 
 import fleetoverview.config.MailConfigurationParams;
 import fleetoverview.config.TelegramConfigurationParams;
-import fleetoverview.domain.enums.company.CompanyFileTypeEnum;
 import fleetoverview.domain.enums.company.CompanyStatusEnum;
 import fleetoverview.repository.CompanyRepository;
 import fleetoverview.repository.DriverRepository;
 import fleetoverview.repository.TrailerRepository;
 import fleetoverview.repository.TruckRepository;
 import fleetoverview.service.NotificationService;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import fleetoverview.service.SocialService;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +24,10 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -51,22 +53,20 @@ public class ExcelNotificationServiceImpl implements NotificationService {
     private final TruckRepository truckRepository;
     private final TrailerRepository trailerRepository;
     private final DriverRepository driverRepository;
-    private final JavaMailSender mailSender;
-    private final TelegramConfigurationParams telegramParams;
-    private final MailConfigurationParams mailParams;
+
+    private final SocialService telegramService;
+    private final SocialService mailService;
 
     @Autowired
-    public ExcelNotificationServiceImpl(TruckRepository truckRepository,
-                                        CompanyRepository companyRepository, TrailerRepository trailerRepository,
-                                        JavaMailSender mailSender, TelegramConfigurationParams telegramParams,
-                                        MailConfigurationParams mailParams, DriverRepository driverRepository) {
+    public ExcelNotificationServiceImpl(TruckRepository truckRepository, CompanyRepository companyRepository,
+                                        TrailerRepository trailerRepository, DriverRepository driverRepository,
+                                        TelegramSocialServiceImpl telegramService, MailSocialServiceImpl mailService) {
         this.truckRepository = truckRepository;
         this.companyRepository = companyRepository;
         this.trailerRepository = trailerRepository;
-        this.mailSender = mailSender;
-        this.telegramParams = telegramParams;
-        this.mailParams = mailParams;
         this.driverRepository = driverRepository;
+        this.telegramService = telegramService;
+        this.mailService = mailService;
     }
 
     @Override
@@ -74,27 +74,51 @@ public class ExcelNotificationServiceImpl implements NotificationService {
         var companies = companyRepository.findAllByStatus(CompanyStatusEnum.ACTIVE);
 
         Workbook workbook = new XSSFWorkbook();
+        Font boldFont = workbook.createFont();
+        boldFont.setBold(true);
+        CellStyle boldStyle = workbook.createCellStyle();
+        boldStyle.setFont(boldFont);
+        CellStyle borderedStyle = borderedStyle(workbook);
+        CellStyle borderedGreyStyle = borderedStyle(workbook);
+        borderedGreyStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        borderedGreyStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        CellStyle fileSectionStyle = borderedStyle(workbook);
+        fileSectionStyle.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
+        fileSectionStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        fileSectionStyle.setAlignment(HorizontalAlignment.CENTER);
+        fileSectionStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        fileSectionStyle.setFont(boldFont);
 
         Sheet sheet = workbook.createSheet("sheet");
+
+        sheet.setColumnWidth(0, 8000);
+        sheet.setColumnWidth(1, 6000);
+        sheet.setColumnWidth(2, 4000);
+        sheet.setColumnWidth(3, 3000);
 
         AtomicInteger rowIndex = new AtomicInteger(0);
 
         Row row = sheet.createRow(rowIndex.getAndIncrement());
-        addCell(row, 0, "Company name");
-        addCell(row, 1, "Type");
-        addCell(row, 2, "Name");
-        addCell(row, 3, "File");
-        addCell(row, 4, "Info");
+        addCell(row, 0, "Company name").setCellStyle(borderedGreyStyle);
+        addCell(row, 1, "Name").setCellStyle(borderedGreyStyle);
+        addCell(row, 2, "File").setCellStyle(borderedGreyStyle);
+        addCell(row, 3, "Info").setCellStyle(borderedGreyStyle);
 
         companies.forEach(it -> {
             Row companyNameRow = sheet.createRow(rowIndex.getAndIncrement());
-            addCell(companyNameRow, 0, it.getName());
+            mergerRegion(sheet, companyNameRow.getRowNum(), 0, 3);
+
+            addCell(companyNameRow, 0, it.getName()).setCellStyle(borderedGreyStyle);
 
             companyNotificationBuilder(sheet, rowIndex, it.getId());
+            driverNotificationBuilder(sheet, fileSectionStyle, rowIndex, it.getId());
+            truckNotificationBuilder(sheet, fileSectionStyle, rowIndex, it.getId());
+            trailerNotificationBuilder(sheet, fileSectionStyle, rowIndex, it.getId());
         });
 
         try {
-            FileOutputStream fileOut = new FileOutputStream("students.xlsx");
+            FileOutputStream fileOut = new FileOutputStream("report.xlsx");
             workbook.write(fileOut);
 
             fileOut.close();
@@ -103,6 +127,18 @@ public class ExcelNotificationServiceImpl implements NotificationService {
         } catch (IOException e) {
             logger.error("Error in closing sheet {}", e.getMessage());
         }
+
+        try {
+            telegramService.sendDocument(new File("report.xlsx"));
+        } catch (FileNotFoundException | MessagingException e) {
+            logger.error("Error on sending telegram {}", e.getMessage());
+        }
+
+        try {
+            mailService.sendDocument(new File("report.xlsx"));
+        } catch (FileNotFoundException | MessagingException e) {
+            logger.error("Error on sending mail {}", e.getMessage());
+        }
     }
 
     private void companyNotificationBuilder(Sheet sheet, AtomicInteger rowIndex, int companyId) {
@@ -110,25 +146,113 @@ public class ExcelNotificationServiceImpl implements NotificationService {
 
         companyFiles.forEach(cFile -> {
             Row row1 = sheet.createRow(rowIndex.getAndIncrement());
-            addCell(row1, 3, INS_CERT.toString());
-            addCell(row1, 4, dateToString(cFile.getInsuranceCertExp()));
+            addCell(row1, 2, INS_CERT.toString());
+            addCell(row1, 3, dateToString(cFile.getInsuranceCertExp()));
 
             Row row2 = sheet.createRow(rowIndex.getAndIncrement());
-            addCell(row2, 3, IFTA_LICENSE.toString());
-            addCell(row2, 4, dateToString(cFile.getIftaExp()));
+            addCell(row2, 2, IFTA_LICENSE.toString());
+            addCell(row2, 3, dateToString(cFile.getIftaExp()));
 
             Row row3 = sheet.createRow(rowIndex.getAndIncrement());
-            addCell(row3, 3, UCR.toString());
-            addCell(row3, 4, dateToString(cFile.getUcrExp()));
+            addCell(row3, 2, UCR.toString());
+            addCell(row3, 3, dateToString(cFile.getUcrExp()));
 
             Row row4 = sheet.createRow(rowIndex.getAndIncrement());
-            addCell(row4, 3, CT_PERMIT.toString());
-            addCell(row4, 4, dateToString(cFile.getPermitExp()));
+            addCell(row4, 2, CT_PERMIT.toString());
+            addCell(row4, 3, dateToString(cFile.getPermitExp()));
 
             Row row5 = sheet.createRow(rowIndex.getAndIncrement());
-            addCell(row5, 3, MCS_150.toString());
-            addCell(row5, 4, dateToString(cFile.getMcsExp()));
+            addCell(row5, 2, MCS_150.toString());
+            addCell(row5, 3, dateToString(cFile.getMcsExp()));
         });
+    }
+
+    private void driverNotificationBuilder(Sheet sheet, CellStyle style, AtomicInteger rowIndex, int companyId) {
+        var driverFiles = driverRepository.getDriversWithExpirationInfo(companyId);
+        if (driverFiles.isEmpty()) return;
+
+        Row driverFilesRow = sheet.createRow(rowIndex.getAndIncrement());
+        mergerRegion(sheet, driverFilesRow.getRowNum(), 1, 3);
+        addCell(driverFilesRow, 1, "Driver Files").setCellStyle(style);
+
+        driverFiles.forEach(cFile -> {
+            createFileTypeRow(sheet, rowIndex.getAndIncrement(), cFile.getDriverName(), CDL.toString(), cFile.getCdlExp());
+            createFileTypeRow(sheet, rowIndex.getAndIncrement(), cFile.getDriverName(), MEDICAL_CERT.toString(), cFile.getMedicalCertExp());
+            createFileTypeRow(sheet, rowIndex.getAndIncrement(), cFile.getDriverName(), MVR.toString(), cFile.getMvrExp());
+            createFileTypeRow(sheet, rowIndex.getAndIncrement(), cFile.getDriverName(), CLEARING_HOUSE.toString(), cFile.getClearingHouseExp());
+            createFileTypeRow(sheet, rowIndex.getAndIncrement(), cFile.getDriverName(), SSN.toString(), cFile.getSsnExp());
+            createFileTypeRow(sheet, rowIndex.getAndIncrement(), cFile.getDriverName(), DRIVER_APPLICATION.toString(), cFile.getDriverApplicationExp());
+            createFileTypeRow(sheet, rowIndex.getAndIncrement(), cFile.getDriverName(), PEV.toString(), cFile.getPevExp());
+        });
+    }
+
+    private void truckNotificationBuilder(Sheet sheet, CellStyle style, AtomicInteger rowIndex, int companyId) {
+        var truckFiles = truckRepository.getTrucksWithExpirationInfo(companyId);
+        if (truckFiles.isEmpty()) return;
+
+        Row truckFilesRow = sheet.createRow(rowIndex.getAndIncrement());
+        mergerRegion(sheet, truckFilesRow.getRowNum(), 1, 3);
+        addCell(truckFilesRow, 1, "Truck Files").setCellStyle(style);
+
+        truckFiles.forEach(cFile -> {
+            String name = String.format("#%s (%s %s - %s)\n", cFile.getUnit(), cFile.getMaker(), cFile.getFuelType(), cFile.getYear());
+            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, REG_CAB_CARD.toString(), cFile.getRegCabCardExp());
+            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, ANN_INS.toString(), cFile.getAnnsInsExp());
+            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, PHYS_DAMAGE.toString(), cFile.getPhysDamageExp());
+            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, LEASE_AGR.toString(), cFile.getLeaseAgrExp());
+        });
+    }
+
+    private void trailerNotificationBuilder(Sheet sheet, CellStyle style, AtomicInteger rowIndex, int companyId) {
+        var trailerFiles = trailerRepository.getTrailersWithExpirationInfo(companyId);
+        if (trailerFiles.isEmpty()) return;
+
+        Row trailerFilesRow = sheet.createRow(rowIndex.getAndIncrement());
+        mergerRegion(sheet, trailerFilesRow.getRowNum(), 1, 3);
+        addCell(trailerFilesRow, 1, "Trailer Files").setCellStyle(style);
+
+        trailerFiles.forEach(cFile -> {
+            String name = String.format("#%s (%s - %s)\n", cFile.getUnit(), cFile.getMaker(), cFile.getYear());
+            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, REG_CAB_CARD.toString(), cFile.getRegCabCardExp());
+            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, ANN_INS.toString(), cFile.getAnnsInsExp());
+            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, PHYS_DAMAGE.toString(), cFile.getPhysDamageExp());
+            createFileTypeRow(sheet, rowIndex.getAndIncrement(), name, LEASE_AGR.toString(), cFile.getLeaseAgrExp());
+        });
+    }
+
+    private void createFileTypeRow(Sheet sheet, int rowIndex, String driverName, String fileType, LocalDate expiration) {
+        if (isNearlyExpires(expiration) || isNull(expiration)) {
+            Row row1 = sheet.createRow(rowIndex);
+            addCell(row1, 1, driverName);
+            addCell(row1, 2, fileType);
+            addCell(row1, 3, dateToString(expiration));
+        }
+    }
+
+    private CellStyle borderedStyle(Workbook workbook) {
+        CellStyle style = workbook.createCellStyle();
+
+        style.setBorderTop(BorderStyle.THIN);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+
+        style.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        style.setRightBorderColor(IndexedColors.BLACK.getIndex());
+
+        return style;
+    }
+
+    private void mergerRegion(Sheet sheet, int rowIndex, int fromCell, int toCell) {
+        CellRangeAddress region = new CellRangeAddress(rowIndex, rowIndex, fromCell, toCell);
+        sheet.addMergedRegion(region);
+
+        RegionUtil.setBorderTop(BorderStyle.THIN, region, sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, region, sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, region, sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, region, sheet);
     }
 
     private String dateToString(LocalDate date) {
@@ -136,9 +260,10 @@ public class ExcelNotificationServiceImpl implements NotificationService {
         return date.toString();
     }
 
-    private void addCell(Row row, int cellIndex, String cellValue) {
+    private Cell addCell(Row row, int cellIndex, String cellValue) {
         Cell cell = row.createCell(cellIndex);
         cell.setCellValue(cellValue);
+        return cell;
     }
 
     private boolean isNearlyExpires(LocalDate date) {
@@ -149,247 +274,5 @@ public class ExcelNotificationServiceImpl implements NotificationService {
         LocalDate sixDayAfterToday = LocalDate.ofYearDay(calendar.get(Calendar.YEAR), calendar.get(Calendar.DAY_OF_YEAR) + 6);
 
         return date.isAfter(yesterday) && date.isBefore(sixDayAfterToday);
-    }
-
-    private boolean isExpires(LocalDate date) {
-        if (isNull(date)) return false;
-
-        LocalDate today = LocalDate.now();
-
-        return date.isBefore(today);
-    }
-
-    private String expiresOnText(String type, LocalDate date) {
-        return String.format("%s - %s\n", type, date);
-    }
-
-    private String missingText(String type) {
-        return type + "\n";
-    }
-
-    private void sendToTelegram(String message) {
-        RestTemplate restTemplate = new RestTemplate();
-
-        // JSON body
-        Map<String, String> body = new HashMap<>();
-        body.put("text", message);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<Map<String, String>> request = new HttpEntity<>(body, headers);
-
-        if (telegramParams.getChatIds().isEmpty()) return;
-
-        for (String chatId : telegramParams.getChatIds().split(",")) {
-            body.put("chat_id", chatId);
-            restTemplate.postForEntity(
-                    String.format("https://api.telegram.org/bot%s/sendmessage", telegramParams.getToken()),
-                    request,
-                    String.class
-            );
-        }
-    }
-
-    private void sendToGmail(String message) {
-        try {
-            MimeMessage mimeMessage = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-
-            helper.setFrom("bilol@efficientmanllc.com");
-            helper.setSubject("⚠️ Fleet Alert");
-            helper.setText(message);
-
-            if (mailParams.getSenders().isEmpty()) return;
-
-            for (String mail : mailParams.getSenders().split(",")) {
-                helper.setTo(mail);
-                mailSender.send(mimeMessage);
-            }
-
-        } catch (Exception e) {
-            logger.error("MAIL_RESULT " + e.getMessage());
-        }
-    }
-
-    private String truckNotificationBuilder(int companyId) {
-        StringBuilder text = new StringBuilder();
-        AtomicInteger counter = new AtomicInteger();
-
-        var trucks = truckRepository.getTrucksWithExpirationInfo(companyId);
-        text.append("--🚛-------------------------------------\n🕒 Truck Documents Expiring Soon\n");
-        trucks.stream()
-                .filter(tr -> isNearlyExpires(tr.getRegCabCardExp()) || isNearlyExpires(tr.getAnnsInsExp())
-                        || isNearlyExpires(tr.getPhysDamageExp()) || isNearlyExpires(tr.getLeaseAgrExp()))
-                .forEach(tr -> {
-                    text.append(String.format("#%s (%s %s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getFuelType(), tr.getYear()));
-
-                    if (isNearlyExpires(tr.getRegCabCardExp()))
-                        text.append(expiresOnText(REG_CAB_CARD.getDescription(), tr.getRegCabCardExp()));
-                    if (isNearlyExpires(tr.getAnnsInsExp()))
-                        text.append(expiresOnText(ANN_INS.getDescription(), tr.getAnnsInsExp()));
-                    if (isNearlyExpires(tr.getPhysDamageExp()))
-                        text.append(expiresOnText(PHYS_DAMAGE.getDescription(), tr.getPhysDamageExp()));
-                    if (isNearlyExpires(tr.getLeaseAgrExp()))
-                        text.append(expiresOnText(LEASE_AGR.getDescription(), tr.getLeaseAgrExp()));
-
-                    counter.getAndIncrement();
-                    text.append("\n");
-                });
-        if (counter.get() == 0) {
-            text.append("\uD83D\uDFE2");
-            text.append("\n");
-        }
-        counter.set(0);
-
-        text.append("\n\uD83D\uDEAB Missing Truck Documents\n");
-        trucks.stream()
-                .filter(tr -> isNull(tr.getRegCabCardExp()) || isNull(tr.getAnnsInsExp())
-                        || isNull(tr.getPhysDamageExp()) || isNull(tr.getLeaseAgrExp()))
-                .forEach(tr -> {
-                    text.append(String.format("#%s (%s %s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getFuelType(), tr.getYear()));
-
-                    if (isNull(tr.getRegCabCardExp())) text.append(missingText(REG_CAB_CARD.getDescription()));
-                    if (isNull(tr.getAnnsInsExp())) text.append(missingText(ANN_INS.getDescription()));
-                    if (isNull(tr.getPhysDamageExp())) text.append(missingText(PHYS_DAMAGE.getDescription()));
-                    if (isNull(tr.getLeaseAgrExp())) text.append(missingText(LEASE_AGR.getDescription()));
-
-                    counter.getAndIncrement();
-                    text.append("\n");
-                });
-        if (counter.get() == 0) {
-            text.append("\uD83D\uDFE2");
-            text.append("\n");
-        }
-
-        return text.toString();
-    }
-
-    private String trailerNotificationBuilder(int companyId) {
-        StringBuilder text = new StringBuilder();
-        AtomicInteger counter = new AtomicInteger();
-
-        var trailers = trailerRepository.getTrailersWithExpirationInfo(companyId);
-        text.append("\n--🚃-------------------------------------\n🕒 Trailer Documents Expiring Soon\n");
-        trailers.stream()
-                .filter(tr -> isNearlyExpires(tr.getRegCabCardExp()) || isNearlyExpires(tr.getAnnsInsExp())
-                        || isNearlyExpires(tr.getPhysDamageExp()) || isNearlyExpires(tr.getLeaseAgrExp()))
-                .forEach(tr -> {
-                    text.append(String.format("#%s (%s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getYear()));
-
-                    if (isNearlyExpires(tr.getRegCabCardExp()))
-                        text.append(expiresOnText(REG_CAB_CARD.getDescription(), tr.getRegCabCardExp()));
-                    if (isNearlyExpires(tr.getAnnsInsExp()))
-                        text.append(expiresOnText(ANN_INS.getDescription(), tr.getAnnsInsExp()));
-                    if (isNearlyExpires(tr.getPhysDamageExp()))
-                        text.append(expiresOnText(PHYS_DAMAGE.getDescription(), tr.getPhysDamageExp()));
-                    if (isNearlyExpires(tr.getLeaseAgrExp()))
-                        text.append(expiresOnText(LEASE_AGR.getDescription(), tr.getLeaseAgrExp()));
-
-                    counter.getAndIncrement();
-                    text.append("\n");
-                });
-        if (counter.get() == 0) {
-            text.append("\uD83D\uDFE2");
-            text.append("\n");
-        }
-        counter.set(0);
-
-        text.append("\n\uD83D\uDEAB Missing Trailer Documents\n");
-        trailers.stream()
-                .filter(tr -> isNull(tr.getRegCabCardExp()) || isNull(tr.getAnnsInsExp())
-                        || isNull(tr.getPhysDamageExp()) || isNull(tr.getLeaseAgrExp()))
-                .forEach(tr -> {
-                    text.append(String.format("#%s (%s - %s)\n", tr.getUnit(), tr.getMaker(), tr.getYear()));
-
-                    if (isNull(tr.getRegCabCardExp())) text.append(missingText(REG_CAB_CARD.getDescription()));
-                    if (isNull(tr.getAnnsInsExp())) text.append(missingText(ANN_INS.getDescription()));
-                    if (isNull(tr.getPhysDamageExp())) text.append(missingText(PHYS_DAMAGE.getDescription()));
-                    if (isNull(tr.getLeaseAgrExp())) text.append(missingText(LEASE_AGR.getDescription()));
-
-                    counter.getAndIncrement();
-                    text.append("\n");
-                });
-        if (counter.get() == 0) {
-            text.append("\uD83D\uDFE2");
-            text.append("\n");
-        }
-
-        return text.toString();
-    }
-
-    private String driverNotificationBuilder(int companyId) {
-        StringBuilder text = new StringBuilder();
-        AtomicInteger counter = new AtomicInteger();
-
-        var drivers = driverRepository.getDriversWithExpirationInfo(companyId);
-        text.append("\n--\uD83E\uDD35\u200D♂\uFE0F-------------------------------------\n🕒 Driver Documents Expiring Soon\n");
-        drivers.stream()
-                .filter(tr -> isNearlyExpires(tr.getCdlExp()) || isNearlyExpires(tr.getMedicalCertExp())
-                        || isNearlyExpires(tr.getMvrExp()) || isNearlyExpires(tr.getClearingHouseExp())
-                        || isNearlyExpires(tr.getSsnExp()) || isNearlyExpires(tr.getCcfExp())
-                        || isNearlyExpires(tr.getDriverApplicationExp())
-                        || isNearlyExpires(tr.getPevExp())
-                )
-                .forEach(tr -> {
-                    text.append(String.format("%s\n", tr.getDriverName()));
-
-                    if (isNearlyExpires(tr.getCdlExp()))
-                        text.append(expiresOnText(CDL.getDescription(), tr.getCdlExp()));
-                    if (isNearlyExpires(tr.getMedicalCertExp()))
-                        text.append(expiresOnText(MEDICAL_CERT.getDescription(), tr.getMedicalCertExp()));
-                    if (isNearlyExpires(tr.getMvrExp()))
-                        text.append(expiresOnText(MVR.getDescription(), tr.getMvrExp()));
-                    if (isNearlyExpires(tr.getClearingHouseExp()))
-                        text.append(expiresOnText(CLEARING_HOUSE.getDescription(), tr.getClearingHouseExp()));
-                    if (isNearlyExpires(tr.getSsnExp()))
-                        text.append(expiresOnText(SSN.getDescription(), tr.getSsnExp()));
-
-                    if (isNearlyExpires(tr.getCcfExp()))
-                        text.append(expiresOnText(CCF.getDescription(), tr.getCcfExp()));
-                    if (isNearlyExpires(tr.getDriverApplicationExp()))
-                        text.append(expiresOnText(DRIVER_APPLICATION.getDescription(), tr.getDriverApplicationExp()));
-                    if (isNearlyExpires(tr.getPevExp()))
-                        text.append(expiresOnText(PEV.getDescription(), tr.getPevExp()));
-
-                    counter.getAndIncrement();
-                    text.append("\n");
-                });
-        if (counter.get() == 0) {
-            text.append("\uD83D\uDFE2");
-            text.append("\n");
-        }
-        counter.set(0);
-
-        text.append("\n\uD83D\uDEAB Missing Driver Documents\n");
-        drivers.stream()
-                .filter(tr -> isNull(tr.getCdlExp()) || isNull(tr.getMedicalCertExp())
-                        || isNull(tr.getMvrExp()) || isNull(tr.getClearingHouseExp())
-                        || isNull(tr.getSsnExp()) || isNull(tr.getCcfExp())
-                        || isNull(tr.getDriverApplicationExp())
-                        || isNull(tr.getPevExp()))
-                .forEach(tr -> {
-                    text.append(String.format("%s\n", tr.getDriverName()));
-
-                    if (isNull(tr.getCdlExp())) text.append(missingText(CDL.getDescription()));
-                    if (isNull(tr.getMedicalCertExp())) text.append(missingText(MEDICAL_CERT.getDescription()));
-                    if (isNull(tr.getMvrExp())) text.append(missingText(MVR.getDescription()));
-                    if (isNull(tr.getClearingHouseExp())) text.append(missingText(CLEARING_HOUSE.getDescription()));
-                    if (isNull(tr.getSsnExp())) text.append(missingText(SSN.getDescription()));
-                    if (isNull(tr.getCcfExp())) text.append(missingText(CCF.getDescription()));
-
-                    if (isNull(tr.getDriverApplicationExp()))
-                        text.append(missingText(DRIVER_APPLICATION.getDescription()));
-                    if (isNull(tr.getPevExp())) text.append(missingText(PEV.getDescription()));
-
-                    counter.getAndIncrement();
-                    text.append("\n");
-                });
-        if (counter.get() == 0) {
-            text.append("\uD83D\uDFE2");
-            text.append("\n");
-        }
-
-        return text.toString();
     }
 }

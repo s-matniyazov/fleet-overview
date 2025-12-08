@@ -68,14 +68,14 @@ public class TextNotificationServiceImpl implements NotificationService {
         companies.forEach(it -> {
             StringBuilder text = new StringBuilder(String.format("""
                     Subject: 🔔 Compliance Alert: Upcoming Expirations & Missing Documents for %s
-                                        
-                                        
+                                       \s
+                                       \s
                     Dear Bilol,
-                                        
+                                       \s
                     This is an automated compliance notification from your Efficient management regarding %s.
-                                        
+                                       \s
                     Please review the following compliance alerts:
-                    """, it.getName(), it.getName()));
+                   \s""", it.getName(), it.getName()));
 
             text.append(companyNotificationBuilder(it.getId()));
             text.append(truckNotificationBuilder(it.getId()));
@@ -95,14 +95,6 @@ public class TextNotificationServiceImpl implements NotificationService {
         LocalDate sixDayAfterToday = LocalDate.ofYearDay(calendar.get(Calendar.YEAR), calendar.get(Calendar.DAY_OF_YEAR) + 6);
 
         return date.isAfter(yesterday) && date.isBefore(sixDayAfterToday);
-    }
-
-    private boolean isExpires(LocalDate date) {
-        if (isNull(date)) return false;
-
-        LocalDate today = LocalDate.now();
-
-        return date.isBefore(today);
     }
 
     private String expiresOnText(String type, LocalDate date) {

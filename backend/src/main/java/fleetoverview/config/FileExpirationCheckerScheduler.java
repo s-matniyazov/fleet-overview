@@ -4,6 +4,7 @@ import fleetoverview.service.FileCheckerService;
 import fleetoverview.service.NotificationService;
 import fleetoverview.service.impl.CompanyFileCheckerServiceImpl;
 import fleetoverview.service.impl.DriverFileCheckerServiceImpl;
+import fleetoverview.service.impl.ExcelNotificationServiceImpl;
 import fleetoverview.service.impl.TextNotificationServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ import java.util.Date;
  * @mailto :  sardorbekmatniyazov03@gmail.com
  * @created : 13 май 2025
  **/
-//@Component
+@Component
 public class FileExpirationCheckerScheduler {
     private static final Logger log = LoggerFactory.getLogger(FileExpirationCheckerScheduler.class);
 
@@ -33,7 +34,9 @@ public class FileExpirationCheckerScheduler {
     private final CompanyFileCheckerServiceImpl companyFileCheckerService;
 
     @Autowired
-    public FileExpirationCheckerScheduler(TextNotificationServiceImpl notificationService, FileCheckerService truckFileCheckerServiceImpl, FileCheckerService permitFileCheckerServiceImpl, DriverFileCheckerServiceImpl driverFileCheckerService, CompanyFileCheckerServiceImpl companyFileCheckerService) {
+    public FileExpirationCheckerScheduler(ExcelNotificationServiceImpl notificationService, FileCheckerService truckFileCheckerServiceImpl,
+                                          FileCheckerService permitFileCheckerServiceImpl, DriverFileCheckerServiceImpl driverFileCheckerService,
+                                          CompanyFileCheckerServiceImpl companyFileCheckerService) {
         this.notificationService = notificationService;
         this.truckFileCheckerServiceImpl = truckFileCheckerServiceImpl;
         this.permitFileCheckerServiceImpl = permitFileCheckerServiceImpl;
