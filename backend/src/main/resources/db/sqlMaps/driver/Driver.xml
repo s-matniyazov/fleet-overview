@@ -145,6 +145,9 @@
                     and (di.first_name like '%${driverName}%' or di.last_name like '%${driverName}%'
                              or di.middle_name like '%${driverName}%')
                 </if>
+                <if test="status != null">
+                    and di.status = '${status}'
+                </if>
                 <if test="rowsPerPage != null and page != null">
                     limit ${rowsPerPage}
                     offset ${page-1} * ${rowsPerPage}

@@ -153,7 +153,8 @@ const pagination = ref({
   hasNext: true
 });
 const filter = ref({
-  vinOrUnit: null
+  vinOrUnit: null,
+  status: null
 });
 const dataList = ref([]);
 const selectedRow = ref();
@@ -373,9 +374,19 @@ watch(
           </ul>
         </div>
       </div>
+      <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
+        
+        <button @click="() => {filter.status = filter.status != 'ACTIVE' ? 'ACTIVE' : null; getData()}" class="btn btn-md" :class="filter.status == 'ACTIVE' ? 'btn-warning' :  'btn-primary'">
+          Active
+        </button>
+        <button @click="() => {filter.status = filter.status != 'PASSIVE' ? 'PASSIVE' : null; getData()}" class="btn btn-md" :class="filter.status == 'PASSIVE' ? 'btn-warning' :  'btn-primary'">
+          Passive
+        </button>
+
+      </div>
     </div>
 
-    <UTable :items="dataList" :columns="columns" v-model="selectedRow" height="calc(100vh - 252px)">
+    <UTable :items="dataList" :columns="columns" v-model="selectedRow" height="calc(100vh - 256px)">
       <template #row_unit_details="{row}">
         <td>
           <div class="row">

@@ -161,6 +161,9 @@
                 <if test="vinOrUnit != null">
                     and (ti.vin like '%${vinOrUnit}%' or ti.unit like '%${vinOrUnit}%')
                 </if>
+                <if test="status != null">
+                    and ti.status = '${status}'
+                </if>
                 <if test="rowsPerPage != null and page != null">
                     limit ${rowsPerPage}
                     offset ${page-1} * ${rowsPerPage}

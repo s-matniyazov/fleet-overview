@@ -279,7 +279,10 @@ onMounted(() => {
               </div>
             </template>
             <template
-                v-else-if="['ARTICLES_OF_INCORPORATION', 'MC_CERTIFICATE', 'OWNER_OPERATOR_AGREEMENT', 'DRIVER_AGREEMENT'].includes(data.type)">
+                v-else-if="['ARTICLES_OF_INCORPORATION', 'MC_CERTIFICATE',
+                 'OWNER_OPERATOR_AGREEMENT', 'DRIVER_AGREEMENT',
+                 'CCF', 'DRIVER_APPLICATION', 'DRUG_TEST_RESULT', 'PEV'
+                 ].includes(data.type)">
               <!--              no data-->
             </template>
             <template v-else>

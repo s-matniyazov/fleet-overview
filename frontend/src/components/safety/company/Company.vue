@@ -194,10 +194,6 @@ axiosIns.post(apiUrl+"/excel", data.value)
             t("add")
           }}
         </button>
-        <button @click="onExcel" class="btn btn-primary btn-sm"><span class="mdi mdi-plus"></span> {{
-                    t("add")
-                  }}
-                </button>
       </div>
     </div>
 
