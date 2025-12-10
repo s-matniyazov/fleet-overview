@@ -81,26 +81,13 @@ public class ExcelNotificationServiceImpl implements NotificationService {
 
     private void makeExcel(List<CompanyEntity> companies) {
         Workbook workbook = new XSSFWorkbook();
-        Font boldFont = workbook.createFont();
-        boldFont.setBold(true);
-        CellStyle boldStyle = workbook.createCellStyle();
-        boldStyle.setFont(boldFont);
 
-        CellStyle borderedStyle = borderedStyle(workbook);
-        borderedStyle.setAlignment(HorizontalAlignment.LEFT);
-        CellStyle borderedBoldStyle = borderedStyle(workbook);
-        borderedBoldStyle.setAlignment(HorizontalAlignment.CENTER);
-        borderedBoldStyle.setFont(boldFont);
+        ExcelData excelData = new ExcelData(workbook);
 
-        CellStyle laStyle = borderedStyle(workbook);
-        laStyle.setAlignment(HorizontalAlignment.LEFT);
-        CellStyle raStyle = borderedStyle(workbook);
-        raStyle.setAlignment(HorizontalAlignment.RIGHT);
-
-        createCompanySheet(workbook, borderedStyle, borderedBoldStyle, laStyle, companies);
-        createDriverSheet(workbook, borderedStyle, borderedBoldStyle, laStyle, companies);
-        createTruckSheet(workbook, borderedStyle, borderedBoldStyle, laStyle, companies);
-        createTrailerSheet(workbook, borderedStyle, borderedBoldStyle, laStyle, companies);
+        createCompanySheet(excelData, companies);
+        createDriverSheet(excelData, companies);
+        createTruckSheet(excelData, companies);
+        createTrailerSheet(excelData, companies);
 
         try {
             FileOutputStream fileOut = new FileOutputStream("report.xlsx");
@@ -114,174 +101,185 @@ public class ExcelNotificationServiceImpl implements NotificationService {
         }
     }
 
-    private void createCompanySheet(Workbook workbook, CellStyle borderedStyle, CellStyle borderedBoldStyle, CellStyle laStyle, List<CompanyEntity> companies) {
-        Sheet sheet = workbook.createSheet("Company Files");
+    private void createCompanySheet(ExcelData excelData, List<CompanyEntity> companies) {
+        excelData.setCurrentSheet("Company Files");
 
-        sheet.setColumnWidth(1, 6000);
-        sheet.setColumnWidth(2, 8000);
+        excelData.currentSheet.setColumnWidth(1, 8000);
 
         AtomicInteger rowIndex = new AtomicInteger(0);
         AtomicInteger companyCounter = new AtomicInteger(0);
 
         companies.forEach(it -> {
-            Row companyNameRow = sheet.createRow(rowIndex.getAndIncrement());
+            Row companyNameRow = excelData.currentSheet.createRow(rowIndex.getAndIncrement());
 
-            addCell(companyNameRow, 0, String.valueOf(companyCounter.getAndIncrement())).setCellStyle(borderedBoldStyle);
-            addCell(companyNameRow, 1, "").setCellStyle(borderedStyle);
-            addCell(companyNameRow, 2, it.getName()).setCellStyle(borderedBoldStyle);
-            mergerRegion(sheet, companyNameRow.getRowNum(), 2);
-            addCell(companyNameRow, 4, "").setCellStyle(borderedStyle);
+            addCell(companyNameRow, 0, String.valueOf(companyCounter.getAndIncrement())).setCellStyle(excelData.borderedBoldStyle);
+            addCell(companyNameRow, 1, it.getName()).setCellStyle(excelData.borderedBoldStyle);
+            mergerRegion(excelData.currentSheet, companyNameRow.getRowNum(), 1, 3);
 
-            companyFileRowsBuilder(sheet, borderedStyle, laStyle, rowIndex, it.getId());
+            companyFileRowsBuilder(excelData, rowIndex, it.getId());
 
             rowIndex.incrementAndGet();
             rowIndex.incrementAndGet();
         });
     }
 
-    private void createDriverSheet(Workbook workbook, CellStyle borderedStyle, CellStyle borderedBoldStyle, CellStyle laStyle, List<CompanyEntity> companies) {
-        Sheet sheet = workbook.createSheet("Driver Files");
+    private void createDriverSheet(ExcelData excelData, List<CompanyEntity> companies) {
+        excelData.setCurrentSheet("Driver Files");
 
-        sheet.setColumnWidth(1, 6000);
-        sheet.setColumnWidth(2, 8000);
+        excelData.currentSheet.setColumnWidth(1, 6000);
+        excelData.currentSheet.setColumnWidth(2, 8000);
 
         AtomicInteger rowIndex = new AtomicInteger(0);
         AtomicInteger companyCounter = new AtomicInteger(0);
 
         companies.forEach(it -> {
-            Row companyNameRow = sheet.createRow(rowIndex.getAndIncrement());
+            Row companyNameRow = excelData.currentSheet.createRow(rowIndex.getAndIncrement());
 
-            addCell(companyNameRow, 0, String.valueOf(companyCounter.getAndIncrement())).setCellStyle(borderedBoldStyle);
-            addCell(companyNameRow, 1, "").setCellStyle(borderedStyle);
-            addCell(companyNameRow, 2, it.getName()).setCellStyle(borderedBoldStyle);
-            mergerRegion(sheet, companyNameRow.getRowNum(), 2);
-            addCell(companyNameRow, 4, "").setCellStyle(borderedStyle);
+            addCell(companyNameRow, 0, String.valueOf(companyCounter.getAndIncrement())).setCellStyle(excelData.borderedBoldStyle);
+            addCell(companyNameRow, 1, it.getName()).setCellStyle(excelData.borderedBoldStyle);
+            mergerRegion(excelData.currentSheet, companyNameRow.getRowNum(), 1, 4);
 
-            driverFileRowsBuilder(sheet, borderedStyle, laStyle, rowIndex, it.getId());
+            driverFileRowsBuilder(excelData, rowIndex, it.getId());
 
             rowIndex.incrementAndGet();
             rowIndex.incrementAndGet();
         });
     }
 
-    private void createTruckSheet(Workbook workbook, CellStyle borderedStyle, CellStyle borderedBoldStyle, CellStyle laStyle, List<CompanyEntity> companies) {
-        Sheet sheet = workbook.createSheet("Truck Files");
+    private void createTruckSheet(ExcelData excelData, List<CompanyEntity> companies) {
+        excelData.setCurrentSheet("Truck Files");
 
-        sheet.setColumnWidth(1, 6000);
-        sheet.setColumnWidth(2, 8000);
+        excelData.currentSheet.setColumnWidth(1, 6000);
+        excelData.currentSheet.setColumnWidth(2, 8000);
 
         AtomicInteger rowIndex = new AtomicInteger(0);
         AtomicInteger companyCounter = new AtomicInteger(0);
 
         companies.forEach(it -> {
-            Row companyNameRow = sheet.createRow(rowIndex.getAndIncrement());
+            Row companyNameRow = excelData.currentSheet.createRow(rowIndex.getAndIncrement());
 
-            addCell(companyNameRow, 0, String.valueOf(companyCounter.getAndIncrement())).setCellStyle(borderedBoldStyle);
-            addCell(companyNameRow, 1, "").setCellStyle(borderedStyle);
-            addCell(companyNameRow, 2, it.getName()).setCellStyle(borderedBoldStyle);
-            mergerRegion(sheet, companyNameRow.getRowNum(), 2);
-            addCell(companyNameRow, 4, "").setCellStyle(borderedStyle);
+            addCell(companyNameRow, 0, String.valueOf(companyCounter.getAndIncrement())).setCellStyle(excelData.borderedBoldStyle);
+            addCell(companyNameRow, 1, it.getName()).setCellStyle(excelData.borderedBoldStyle);
+            mergerRegion(excelData.currentSheet, companyNameRow.getRowNum(), 1, 4);
 
-            truckFileRowsBuilder(sheet, borderedStyle, laStyle, rowIndex, it.getId());
+            truckFileRowsBuilder(excelData, rowIndex, it.getId());
 
             rowIndex.incrementAndGet();
             rowIndex.incrementAndGet();
         });
     }
 
-    private void createTrailerSheet(Workbook workbook, CellStyle borderedStyle, CellStyle borderedBoldStyle, CellStyle laStyle, List<CompanyEntity> companies) {
-        Sheet sheet = workbook.createSheet("Trailer Files");
+    private void createTrailerSheet(ExcelData excelData, List<CompanyEntity> companies) {
+        excelData.setCurrentSheet("Trailer Files");
 
-        sheet.setColumnWidth(1, 6000);
-        sheet.setColumnWidth(2, 8000);
+        excelData.currentSheet.setColumnWidth(1, 6000);
+        excelData.currentSheet.setColumnWidth(2, 8000);
 
         AtomicInteger rowIndex = new AtomicInteger(0);
         AtomicInteger companyCounter = new AtomicInteger(0);
 
         companies.forEach(it -> {
-            Row companyNameRow = sheet.createRow(rowIndex.getAndIncrement());
+            Row companyNameRow = excelData.currentSheet.createRow(rowIndex.getAndIncrement());
 
-            addCell(companyNameRow, 0, String.valueOf(companyCounter.getAndIncrement())).setCellStyle(borderedBoldStyle);
-            addCell(companyNameRow, 1, "").setCellStyle(borderedStyle);
-            addCell(companyNameRow, 2, it.getName()).setCellStyle(borderedBoldStyle);
-            mergerRegion(sheet, companyNameRow.getRowNum(), 2);
-            addCell(companyNameRow, 4, "").setCellStyle(borderedStyle);
+            addCell(companyNameRow, 0, String.valueOf(companyCounter.getAndIncrement())).setCellStyle(excelData.borderedBoldStyle);
+            addCell(companyNameRow, 1, it.getName()).setCellStyle(excelData.borderedBoldStyle);
+            mergerRegion(excelData.currentSheet, companyNameRow.getRowNum(), 1, 4);
 
-            trailerFileRowsBuilder(sheet, borderedStyle, laStyle, rowIndex, it.getId());
+            trailerFileRowsBuilder(excelData, rowIndex, it.getId());
 
             rowIndex.incrementAndGet();
             rowIndex.incrementAndGet();
         });
     }
 
-    private void companyFileRowsBuilder(Sheet sheet, CellStyle borderedStyle, CellStyle laStyle, AtomicInteger rowIndex, int companyId) {
+    private void companyFileRowsBuilder(ExcelData excelData, AtomicInteger rowIndex, int companyId) {
         var companyFiles = companyRepository.getCompaniesWithExpirationInfo(companyId);
 
+        if (companyFiles.isEmpty()) {
+            createNoDataRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), 3, "No Company Files", excelData.borderedACenterStyle);
+            return;
+        }
+
         createTableHeadRow(
-                sheet.createRow(rowIndex.getAndIncrement()),
-                laStyle,
-                "No", "", "Item:", "Info:", "Notes:");
+                excelData.currentSheet.createRow(rowIndex.getAndIncrement()),
+                excelData.laStyle,
+                "No",    "Item:", "Info:", "Notes:");
 
         companyFiles.forEach(cFile -> {
             int counter = 1;
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, "", INS_CERT.toString(), cFile.getInsuranceCertExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, "", IFTA_LICENSE.toString(), cFile.getIftaExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, "", UCR.toString(), cFile.getUcrExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, "", CT_PERMIT.toString(), cFile.getPermitExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter, "", MCS_150.toString(), cFile.getMcsExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, "", INS_CERT.toString(), cFile.getInsuranceCertExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, "", IFTA_LICENSE.toString(), cFile.getIftaExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, "", UCR.toString(), cFile.getUcrExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, "", CT_PERMIT.toString(), cFile.getPermitExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter, "", MCS_150.toString(), cFile.getMcsExp());
         });
     }
 
-    private void driverFileRowsBuilder(Sheet sheet, CellStyle borderedStyle, CellStyle laStyle, AtomicInteger rowIndex, int companyId) {
+    private void driverFileRowsBuilder(ExcelData excelData, AtomicInteger rowIndex, int companyId) {
         var driverFiles = driverRepository.getDriversWithExpirationInfo(companyId);
 
+        if (driverFiles.isEmpty()) {
+            createNoDataRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), 4, "No Driver Files", excelData.borderedACenterStyle);
+            return;
+        }
+
         createTableHeadRow(
-                sheet.createRow(rowIndex.getAndIncrement()),
-                laStyle, "No", "Driver Name:", "Item:", "Info:", "Notes:");
+                excelData.currentSheet.createRow(rowIndex.getAndIncrement()),
+                excelData.laStyle, "No", "Driver Name:", "Item:", "Info:", "Notes:");
 
         driverFiles.forEach(cFile -> {
             int counter = 1;
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, cFile.getDriverName(), CDL.toString(), cFile.getCdlExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, cFile.getDriverName(), MEDICAL_CERT.toString(), cFile.getMedicalCertExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, cFile.getDriverName(), MVR.toString(), cFile.getMvrExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, cFile.getDriverName(), CLEARING_HOUSE.toString(), cFile.getClearingHouseExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, cFile.getDriverName(), SSN.toString(), cFile.getSsnExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, cFile.getDriverName(), DRIVER_APPLICATION.toString(), cFile.getDriverApplicationExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter, cFile.getDriverName(), PEV.toString(), cFile.getPevExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, cFile.getDriverName(), CDL.toString(), cFile.getCdlExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, cFile.getDriverName(), MEDICAL_CERT.toString(), cFile.getMedicalCertExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, cFile.getDriverName(), MVR.toString(), cFile.getMvrExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, cFile.getDriverName(), CLEARING_HOUSE.toString(), cFile.getClearingHouseExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, cFile.getDriverName(), SSN.toString(), cFile.getSsnExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, cFile.getDriverName(), DRIVER_APPLICATION.toString(), cFile.getDriverApplicationExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter, cFile.getDriverName(), PEV.toString(), cFile.getPevExp());
         });
     }
 
-    private void truckFileRowsBuilder(Sheet sheet, CellStyle borderedStyle, CellStyle laStyle, AtomicInteger rowIndex, int companyId) {
+    private void truckFileRowsBuilder(ExcelData excelData, AtomicInteger rowIndex, int companyId) {
         var truckFiles = truckRepository.getTrucksWithExpirationInfo(companyId);
 
+        if (truckFiles.isEmpty()) {
+            createNoDataRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), 4, "No Truck Files", excelData.borderedACenterStyle);
+            return;
+        }
+
         createTableHeadRow(
-                sheet.createRow(rowIndex.getAndIncrement()),
-                laStyle, "No", "Truck Name:", "Item:", "Info:", "Notes:");
+                excelData.currentSheet.createRow(rowIndex.getAndIncrement()),
+                excelData.laStyle, "No", "Truck Name:", "Item:", "Info:", "Notes:");
 
         truckFiles.forEach(cFile -> {
             int counter = 1;
             String name = String.format("#%s (%s %s - %s)\n", cFile.getUnit(), cFile.getMaker(), cFile.getFuelType(), cFile.getYear());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, name, REG_CAB_CARD.toString(), cFile.getRegCabCardExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, name, ANN_INS.toString(), cFile.getAnnsInsExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, name, PHYS_DAMAGE.toString(), cFile.getPhysDamageExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter, name, LEASE_AGR.toString(), cFile.getLeaseAgrExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, name, REG_CAB_CARD.toString(), cFile.getRegCabCardExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, name, ANN_INS.toString(), cFile.getAnnsInsExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, name, PHYS_DAMAGE.toString(), cFile.getPhysDamageExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter, name, LEASE_AGR.toString(), cFile.getLeaseAgrExp());
         });
     }
 
-    private void trailerFileRowsBuilder(Sheet sheet, CellStyle borderedStyle, CellStyle laStyle, AtomicInteger rowIndex, int companyId) {
+    private void trailerFileRowsBuilder(ExcelData excelData, AtomicInteger rowIndex, int companyId) {
         var trailerFiles = trailerRepository.getTrailersWithExpirationInfo(companyId);
 
+        if (trailerFiles.isEmpty()) {
+            createNoDataRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), 4, "No Trailer Files", excelData.borderedACenterStyle);
+            return;
+        }
+
         createTableHeadRow(
-                sheet.createRow(rowIndex.getAndIncrement()),
-                laStyle, "No", "Trailer Name:", "Item:", "Info:", "Notes:");
+                excelData.currentSheet.createRow(rowIndex.getAndIncrement()),
+                excelData.laStyle, "No", "Trailer Name:", "Item:", "Info:", "Notes:");
 
         trailerFiles.forEach(cFile -> {
             int counter = 1;
             String name = String.format("#%s (%s - %s)\n", cFile.getUnit(), cFile.getMaker(), cFile.getYear());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, name, REG_CAB_CARD.toString(), cFile.getRegCabCardExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, name, ANN_INS.toString(), cFile.getAnnsInsExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter++, name, PHYS_DAMAGE.toString(), cFile.getPhysDamageExp());
-            createFileTypeRow(sheet.createRow(rowIndex.getAndIncrement()), borderedStyle, counter, name, LEASE_AGR.toString(), cFile.getLeaseAgrExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, name, REG_CAB_CARD.toString(), cFile.getRegCabCardExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, name, ANN_INS.toString(), cFile.getAnnsInsExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, name, PHYS_DAMAGE.toString(), cFile.getPhysDamageExp());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter, name, LEASE_AGR.toString(), cFile.getLeaseAgrExp());
         });
     }
 
@@ -291,33 +289,24 @@ public class ExcelNotificationServiceImpl implements NotificationService {
         }
     }
 
-    private void createFileTypeRow(Row row, CellStyle borderedStyle, int number, String name, String fileType, LocalDate expiration) {
+    private void createNoDataRow(Row row, int toCellNum, String info, CellStyle borderedACenterStyle) {
+        addCell(row, 0, info).setCellStyle(borderedACenterStyle);
+        mergerRegion(row.getSheet(), row.getRowNum(), 0, toCellNum);
+    }
+
+    private void createFileTypeRow(Row row, CellStyle borderedStyle, CellStyle raStyle, int number, String name, String fileType, LocalDate expiration) {
         if (isNearlyExpires(expiration) || isNull(expiration)) {
-            addCell(row, 0, number).setCellStyle(borderedStyle);
-            addCell(row, 1, name).setCellStyle(borderedStyle);
-            addCell(row, 2, fileType).setCellStyle(borderedStyle);
-            addCell(row, 3, dateToString(expiration)).setCellStyle(borderedStyle);
+            addCell(row, number).setCellStyle(raStyle);
+            int cellNum = 1;
+            if (!name.isEmpty()) addCell(row, cellNum++, name).setCellStyle(borderedStyle);
+            addCell(row, cellNum++, fileType).setCellStyle(borderedStyle);
+            addCell(row, cellNum++, dateToString(expiration)).setCellStyle(borderedStyle);
+            addCell(row, cellNum, "").setCellStyle(borderedStyle);
         }
     }
 
-    private CellStyle borderedStyle(Workbook workbook) {
-        CellStyle style = workbook.createCellStyle();
-
-        style.setBorderTop(BorderStyle.THIN);
-        style.setBorderBottom(BorderStyle.THIN);
-        style.setBorderLeft(BorderStyle.THIN);
-        style.setBorderRight(BorderStyle.THIN);
-
-        style.setTopBorderColor(IndexedColors.BLACK.getIndex());
-        style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
-        style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
-        style.setRightBorderColor(IndexedColors.BLACK.getIndex());
-
-        return style;
-    }
-
-    private void mergerRegion(Sheet sheet, int rowIndex, int fromCell) {
-        CellRangeAddress region = new CellRangeAddress(rowIndex, rowIndex, fromCell, 3);
+    private void mergerRegion(Sheet sheet, int rowIndex, int fromCell, int toCell) {
+        CellRangeAddress region = new CellRangeAddress(rowIndex, rowIndex, fromCell, toCell);
         sheet.addMergedRegion(region);
 
         RegionUtil.setBorderTop(BorderStyle.THIN, region, sheet);
@@ -337,8 +326,8 @@ public class ExcelNotificationServiceImpl implements NotificationService {
         return cell;
     }
 
-    private Cell addCell(Row row, int cellIndex, int cellValue) {
-        Cell cell = row.createCell(cellIndex);
+    private Cell addCell(Row row, int cellValue) {
+        Cell cell = row.createCell(0);
         cell.setCellValue(cellValue);
         return cell;
     }
@@ -351,5 +340,63 @@ public class ExcelNotificationServiceImpl implements NotificationService {
         LocalDate sixDayAfterToday = LocalDate.ofYearDay(calendar.get(Calendar.YEAR), calendar.get(Calendar.DAY_OF_YEAR) + 6);
 
         return date.isAfter(yesterday) && date.isBefore(sixDayAfterToday);
+    }
+
+    private static class ExcelData {
+        private final Workbook workbook;
+
+        private Sheet currentSheet;
+
+        private final CellStyle borderedStyle;
+        private final CellStyle borderedBoldStyle;
+        private final CellStyle borderedACenterStyle;
+
+        private final CellStyle laStyle;
+        private final CellStyle raStyle;
+
+        private ExcelData(Workbook workbook) {
+            this.workbook = workbook;
+
+            Font boldFont = workbook.createFont();
+            boldFont.setBold(true);
+            CellStyle boldStyle = workbook.createCellStyle();
+            boldStyle.setFont(boldFont);
+
+            borderedStyle = borderedStyle(workbook);
+            borderedStyle.setAlignment(HorizontalAlignment.LEFT);
+
+            borderedBoldStyle = borderedStyle(workbook);
+            borderedBoldStyle.setAlignment(HorizontalAlignment.CENTER);
+            borderedBoldStyle.setFont(boldFont);
+
+            borderedACenterStyle = borderedStyle(workbook);
+            borderedACenterStyle.setAlignment(HorizontalAlignment.CENTER);
+
+            laStyle = borderedStyle(workbook);
+            laStyle.setAlignment(HorizontalAlignment.LEFT);
+
+            raStyle = borderedStyle(workbook);
+            raStyle.setAlignment(HorizontalAlignment.RIGHT);
+        }
+
+        private void setCurrentSheet(String sheetName) {
+            this.currentSheet = workbook.createSheet(sheetName);
+        }
+
+        private CellStyle borderedStyle(Workbook workbook) {
+            CellStyle style = workbook.createCellStyle();
+
+            style.setBorderTop(BorderStyle.THIN);
+            style.setBorderBottom(BorderStyle.THIN);
+            style.setBorderLeft(BorderStyle.THIN);
+            style.setBorderRight(BorderStyle.THIN);
+
+            style.setTopBorderColor(IndexedColors.BLACK.getIndex());
+            style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+            style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+            style.setRightBorderColor(IndexedColors.BLACK.getIndex());
+
+            return style;
+        }
     }
 }
