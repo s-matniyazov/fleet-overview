@@ -28,7 +28,7 @@ public class CompanyProjection {
     private String address1;
     private String address2;
     private String city;
-    private Integer zipcode;
+    private String zipcode;
     private String email;
     private String phone;
     private String pinNumber;
@@ -149,11 +149,11 @@ public class CompanyProjection {
         this.city = city;
     }
 
-    public Integer getZipcode() {
+    public String getZipcode() {
         return zipcode;
     }
 
-    public void setZipcode(Integer zipcode) {
+    public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
 

@@ -52,7 +52,7 @@ public class MailSocialServiceImpl implements SocialService {
     }
 
     @Override
-    public void sendDocument(File document) throws FileNotFoundException, MessagingException {
+    public void sendDocument(File file) throws FileNotFoundException, MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
@@ -61,7 +61,6 @@ public class MailSocialServiceImpl implements SocialService {
         helper.setText("Report");
 
         // Excel file ni bog‘lash
-        File file = new File("students.xlsx");
         helper.addAttachment(file.getName(), file);
 
         if (mailParams.getSenders().isEmpty()) return;

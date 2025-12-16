@@ -139,7 +139,7 @@ body[data-bs-theme=dark] .layout-mode-light {
 
 .page-content {
     height: 100%;
-    padding: calc(60px + 1rem) calc(1.3rem * .75) 0 calc(1.3rem * .75)
+    padding: calc(60px + 1rem) calc(1.3rem * .75) 0 calc(1.3rem * .65)
 }
 
 .header-item {

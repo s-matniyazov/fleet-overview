@@ -58,15 +58,17 @@ watch(
     <header id="page-topbar">
       <div class="navbar-header" style="background: #06273d;">
         <div class="d-flex items-center">
-          <div class="text-light" :style="collapsed ? 'padding: 0 0.5rem;' : 'padding: 0 1.5rem;'" >
+          <div class="text-light" :style="collapsed ? 'padding: 0 0.5rem;' : 'padding: 0 1.5rem;'">
             <template v-if="!collapsed">
               <router-link to="/" class="logo logo-dark">
-               <span class="logo-lg"> <img src="@/assets/icons/em_logo.png" alt="fleet logo" size="12" style="height: 50px">
+               <span class="logo-lg"> <img src="@/assets/icons/em_logo.png" alt="fleet logo" size="12"
+                                           style="height: 50px">
                </span>
               </router-link>
             </template>
             <template v-else>
-               <span class="logo-sm"> <img src="@/assets/icons/em_logo.png" alt="fleet logo" size="8" style="height: 50px"/> </span>
+              <span class="logo-sm"> <img src="@/assets/icons/em_logo.png" alt="fleet logo" size="8"
+                                          style="height: 50px"/> </span>
             </template>
           </div>
         </div>
@@ -93,10 +95,7 @@ watch(
 
     <div class="main-content flex-fill h-100">
       <div class="page-content">
-        <div class="container-fluid"
-             style="border: 1px dashed #eae1e1; border-radius: 5px; height: calc(100vh - 90px); overflow: hidden; overflow-y: auto">
-          <router-view/>
-        </div>
+        <router-view/>
       </div>
     </div>
 

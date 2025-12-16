@@ -33,7 +33,7 @@ public class DriverProjection {
     private String address;
 
     private String city;
-    private int zipCode;
+    private String zipCode;
     private String email;
     private String phone;
     private DriverStatusEnum status;
@@ -178,11 +178,11 @@ public class DriverProjection {
         this.city = city;
     }
 
-    public int getZipCode() {
+    public String getZipCode() {
         return zipCode;
     }
 
-    public void setZipCode(int zipCode) {
+    public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
 

@@ -318,7 +318,7 @@ watch(
       </div>
     </div>
 
-    <UTable :items="dataList" :columns="columns" v-model="selectedRow" height="calc(100vh - 248px)">
+    <UTable :items="dataList" :columns="columns" v-model="selectedRow" height="calc(100vh - 240px)">
       <template #row_company_name="{row}">
         <td>
           <div class="row">

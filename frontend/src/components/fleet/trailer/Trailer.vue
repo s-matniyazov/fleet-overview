@@ -125,7 +125,8 @@ const pagination = ref({
   hasNext: true
 });
 const filter = ref({
-  vinOrUnit: null
+  vinOrUnit: null,
+  status: 'ACTIVE'
 });
 const dataList = ref([]);
 const selectedRow = ref();
@@ -308,15 +309,24 @@ watch(
             <li class="page-item cursor-pointer"><a class="page-link" @click="paging('p')" :disabled="pagination.page <= 1">&laquo;</a></li>
             <li class="page-item active cursor-not-allowed"><a class="page-link">{{ pagination.page }}</a></li>
             <li class="page-item cursor-pointer"><a class="page-link" @click="paging('n')" :disabled="!pagination.hasNext">&raquo;</a></li>
-            <!--            <li class="page-item cursor-pointer">-->
-            <!--              <button @click="reload" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>-->
-            <!--            </li>-->
           </ul>
         </div>
       </div>
+      <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
+
+        <button @click="() => {filter.status = filter.status !== 'ACTIVE' ? 'ACTIVE' : null; getData()}"
+                :class="['tab-button', { 'tab-active': filter.status === 'ACTIVE' }]">
+          Active
+        </button>
+        <button @click="() => {filter.status = filter.status !== 'PASSIVE' ? 'PASSIVE' : null; getData()}"
+                :class="['tab-button', { 'tab-active': filter.status === 'PASSIVE' }]">
+          Passive
+        </button>
+
+      </div>
     </div>
 
-    <UTable :items="dataList" :columns="columns" v-model="selectedRow" height="calc(100vh - 252px)">
+    <UTable :items="dataList" :columns="columns" v-model="selectedRow" height="calc(100vh - 290px)">
       <template #row_unit_details="{row}">
         <td>
           <div class="row">
@@ -675,5 +685,84 @@ watch(
 
 .justify-content-start {
   justify-content: flex-start !important;
+}
+
+.tab-button {
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--bs-body-color, #ffbf53);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  outline: none;
+  border: none;
+  border-radius: 0.375rem;
+  margin-bottom: 0.5rem;
+  background-color: rgba(56, 90, 138, 0.06);
+}
+
+.tab-button:hover {
+  color: var(--bs-warning, #385a8a);
+  background-color: rgba(56, 90, 138, 0.06);
+}
+
+.tab-button.tab-active {
+  color: var(--bs-warning, #385a8a);
+  font-weight: 600;
+  background-color: rgba(56, 90, 138, 0.1);
+  border-bottom: 3px solid var(--bs-warning, #385a8a);
+  margin-bottom: 0;
+  padding-bottom: calc(0.75rem - 2px);
+  border-left: 1px solid var(--bs-warning, #385a8a);
+}
+
+.tab-panels-container {
+  background-color: var(--bs-card-bg);
+  border: 2px solid var(--bs-border-color, #e0e0e0);
+  /* border-top: 2px solid var(--bs-border-color, #e0e0e0); */
+  border-radius: 0 0 0.5rem 0.5rem;
+  /* padding: 1rem; */
+  margin-top: -2px;
+  color: var(--bs-body-color);
+  min-height: 400px;
+  width: 100%;
+  display: block;
+  background-color: var(--bs-card-bg);
+}
+
+@media (max-width: 576px) {
+  .tab-button {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .tab-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+  }
+}
+
+:deep(.tab-pane) {
+  width: 100%;
+  display: block;
+}
+
+:deep(.tab-pane.active) {
+  animation: slideDownFade 0.6s ease-out;
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 </style>
