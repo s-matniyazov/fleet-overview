@@ -2,7 +2,6 @@
 import {ref} from "vue";
 import {useAuthStore} from "@/store/UseAuthStore.js";
 import router from "@/router/index.js";
-import UTooltip from "@/components/base/UTooltip.vue";
 import {useRouterStore} from "@/store/RouterStore.js";
 import UDropDown from "@/components/base/UDropDown.vue";
 

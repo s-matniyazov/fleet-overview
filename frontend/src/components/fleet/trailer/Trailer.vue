@@ -84,6 +84,13 @@ const columns = [
     styles: '',
     classes: '',
   },
+  {
+    key: 'actions',
+    name: 'actions',
+    label: t('actions'),
+    styles: '',
+    classes: '',
+  },
 ]
 
 const newModel = () => {
@@ -420,7 +427,16 @@ watch(
       </template>
 
       <template #row_status="{row}">
-        <td>
+        <td class="last-col-sticky">
+          <div class="d-flex gap-2">
+            <a class="badge bg-primary-subtle text-primary"
+               :class="`bg-${row?.status === 'PASSIVE' ? 'danger' : 'primary'}-subtle`"> {{ row?.status }}</a>
+          </div>
+        </td>
+      </template>
+
+      <template #row_actions="{row}">
+        <td class="last-col-sticky">
           <div class="d-flex gap-2">
             <a class="badge bg-primary-subtle text-primary"
                :class="`bg-${row?.status === 'PASSIVE' ? 'danger' : 'primary'}-subtle`"> {{ row?.status }}</a>

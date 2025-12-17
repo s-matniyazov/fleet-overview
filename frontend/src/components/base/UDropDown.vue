@@ -3,7 +3,7 @@
     <button
         type="button"
         class="btn"
-        :class="`${btn_classes} ${open && 'show'}`"
+        :class="`${open ? 'show' : ''}`"
         :aria-expanded="open"
     >
       <slot name="header">
@@ -14,28 +14,19 @@
     <div
         class="dropdown-menu-side rounded-4"
         :class="`${open ? 'show' : ''}`"
+        :style="positionStyle"
         role="menu"
     >
-      <slot name="body">
-        <a class="dropdown-item" role="menuitem">Safety Compliance</a>
-        <a class="dropdown-item" role="menuitem">DOT Inspections</a>
-        <a class="dropdown-item" role="menuitem">Collisions & Claims</a>
-      </slot>
+      <slot name="body"></slot>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 
 const props = defineProps({
   label: { type: String, default: 'Select' },
-  hint: { type: String, default: 'Please select item' },
-  option_name: { type: String, default: 'id' },
-  option_value: { type: String, default: 'id' },
-  classes: { type: String, default: '' },
-  wrapper_styles: { type: String, default: '' },
-  styles: { type: String, default: '' },
   position: {
     type: String,
     default: 'right',
@@ -46,15 +37,14 @@ const props = defineProps({
 const open = ref(false);
 const dropdownRef = ref(null);
 
-// Ekranda tashqariga bosilganda yopiladi
+const toggleDropdown = () => {
+  open.value = !open.value;
+};
+
 const handleClickOutside = (event) => {
   if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
     open.value = false;
   }
-};
-
-const toggleDropdown = () => {
-  open.value = !open.value;
 };
 
 onMounted(() => {
@@ -63,6 +53,13 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener('mousedown', handleClickOutside);
+});
+
+// Computed style for left or right dropdown
+const positionStyle = computed(() => {
+  return props.position === 'left'
+      ? { right: '90%', left: 'auto', top: '0' }
+      : { left: '90%', right: 'auto', top: '0' };
 });
 </script>
 
@@ -74,11 +71,10 @@ onUnmounted(() => {
 
 .dropdown-menu-side {
   position: absolute;
-  top: 5%;
-  left: 90%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   display: none;
   z-index: 1000;
+  width: auto;
 }
 
 .dropdown-menu-side.show {
@@ -89,9 +85,11 @@ onUnmounted(() => {
   padding: 10px 20px;
   text-decoration: none;
   display: block;
+  cursor: pointer;
 }
 
 .dropdown-item:hover {
   background-color: #0d3b5e;
+  color: white;
 }
 </style>

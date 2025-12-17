@@ -24,6 +24,7 @@ import {useTruckFileStore} from "@/store/TruckFileStore.js";
 import PermitMiniCard from "@/components/PermitMiniCard.vue";
 import {useTruckReferenceStore} from "@/store/TruckReferencesStore.js";
 import {useStateStore} from "@/store/StateStore.js";
+import UDropDown from "@/components/base/UDropDown.vue";
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
@@ -108,7 +109,14 @@ const columns = [
     label: t('status'),
     styles: 'min-width: 160px;',
     classes: '',
-  }
+  },
+  {
+    key: 'actions',
+    name: 'actions',
+    label: t('actions'),
+    styles: '',
+    classes: 'last-col-sticky',
+  },
 ]
 
 const newModel = () => {
@@ -164,8 +172,8 @@ const drivers = ref([]);
 
 // FUNCTIONS
 const paging = (a) => {
-  if (a === 'p' && pagination.value.page > 1) pagination.value.page --;
-  if (a === 'n' && pagination.value.hasNext) pagination.value.page ++;
+  if (a === 'p' && pagination.value.page > 1) pagination.value.page--;
+  if (a === 'n' && pagination.value.hasNext) pagination.value.page++;
 }
 const onAdd = () => {
   data.value = newModel();
@@ -220,14 +228,10 @@ const getOwnership = (row) => {
   } else return "N/A";
 }
 const deactivate = (row) => {
-  if (confirm("Are you sure to deactivate this truck?")) {
-    onDeactivate(row)
-  }
+  onDeactivate(row);
 }
 const activate = (row) => {
-  if (confirm("Are you sure to activate this truck?")) {
-    onActivate(row)
-  }
+  onActivate(row);
 }
 
 const reload = () => {
@@ -258,7 +262,7 @@ const onSave = () => {
 const onDeactivate = (row) => {
   axiosIns.post(`${apiUrl}/${row.id}/deactivate`)
       .then(() => {
-        row.status = 'PASSIVE'
+        getData();
       }).catch(e => {
     showMessage(e)
   });
@@ -266,7 +270,7 @@ const onDeactivate = (row) => {
 const onActivate = (row) => {
   axiosIns.post(`${apiUrl}/${row.id}/activate`)
       .then(() => {
-        row.status = 'ACTIVE'
+        getData();
       }).catch(e => {
     showMessage(e)
   });
@@ -365,12 +369,14 @@ watch(
               <option value="20">20</option>
             </select>
 
-            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('p')" :disabled="pagination.page <= 1">&laquo;</a></li>
+            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('p')"
+                                                    :disabled="pagination.page <= 1">&laquo;</a></li>
             <li class="page-item active cursor-not-allowed"><a class="page-link">{{ pagination.page }}</a></li>
-            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('n')" :disabled="!pagination.hasNext">&raquo;</a></li>
-<!--            <li class="page-item cursor-pointer">-->
-<!--              <button @click="reload" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>-->
-<!--            </li>-->
+            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('n')"
+                                                    :disabled="!pagination.hasNext">&raquo;</a></li>
+            <!--            <li class="page-item cursor-pointer">-->
+            <!--              <button @click="reload" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>-->
+            <!--            </li>-->
           </ul>
         </div>
       </div>
@@ -516,6 +522,35 @@ watch(
             <div class="col-12 d-flex align-items-center mt-1">
               {{ longToDateTime(row.statusDate) }}
             </div>
+          </div>
+        </td>
+      </template>
+
+      <template #row_actions="{row}">
+        <td class="last-col-sticky">
+          <div class="items-center">
+            <UDropDown position="left" class="btn w-auto text-start p-0">
+              <template #header>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="feather feather-more-vertical">
+                  <circle cx="12" cy="12" r="1"></circle>
+                  <circle cx="12" cy="5" r="1"></circle>
+                  <circle cx="12" cy="19" r="1"></circle>
+                </svg>
+              </template>
+              <template #body>
+                <div class="bg-body rounded-1 font-size-15 p-2">
+                  <button v-if="row.status === 'ACTIVE'" @click="deactivate(row)"
+                          class="btn btn-outline-danger btn-sm">
+                    {{ t("deactivate") }}
+                  </button>
+                  <button v-else @click="activate(row)" class="btn btn-outline-success btn-sm">
+                    {{ t("activate") }}
+                  </button>
+                </div>
+              </template>
+            </UDropDown>
           </div>
         </td>
       </template>
@@ -739,13 +774,6 @@ watch(
       <div class="d-flex w-100 f-700">
         TR: {{ selectedRow.unit }}
         <div class="text-end u-end">
-          <button v-if="selectedRow.status === 'ACTIVE'" @click="deactivate(selectedRow)"
-                  class="btn btn-outline-danger btn-sm mx-3">
-            {{ t("deactivate") }}
-          </button>
-          <button v-else @click="activate(selectedRow)" class="btn btn-outline-success btn-sm mx-3">
-            {{ t("activate") }}
-          </button>
           <button class="btn-close" @click="showModal = false"></button>
         </div>
       </div>
@@ -885,5 +913,11 @@ watch(
     opacity: 1;
     transform: translateY(0) scale(1);
   }
+}
+
+.last-col-sticky {
+  position: sticky;
+  right: 0;
+  z-index: 5;
 }
 </style>

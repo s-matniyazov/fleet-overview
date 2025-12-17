@@ -9,6 +9,7 @@ import fleetoverview.domain.entity.ResourceEntity;
 import fleetoverview.domain.entity.driver.DriverEntity;
 import fleetoverview.domain.entity.driver.DriverFileEntity;
 import fleetoverview.domain.entity.driver.EndorsementEntity;
+import fleetoverview.domain.enums.DriverStatusEnum;
 import fleetoverview.domain.enums.driver.DriverFileStatusEnum;
 import fleetoverview.domain.enums.driver.DriverFileTypeEnum;
 import fleetoverview.repository.*;
@@ -133,8 +134,15 @@ public class DriverServiceImpl extends BaseService implements DriverService {
         // not implemented yet
         DriverEntity driver = repository.findById(data.driverId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("driver.not_found")));
 
-        driver.setTerminationDate(LocalDateTime.now());
-        driver.setTerminationReason(data.reason());
+        if (driver.getStatus().equals(DriverStatusEnum.ACTIVE)) {
+            driver.setTerminationDate(LocalDateTime.now());
+            driver.setTerminationReason(data.reason());
+            driver.setStatus(DriverStatusEnum.PASSIVE);
+        } else {
+            driver.setTerminationDate(null);
+            driver.setTerminationReason("");
+            driver.setStatus(DriverStatusEnum.ACTIVE);
+        }
 
         return ApiResponse.success();
     }

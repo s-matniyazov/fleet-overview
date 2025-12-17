@@ -37,7 +37,13 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false
-  }
+  },
+  classes: {
+    type: String,
+    required: false,
+    default: ""
+  },
+
 })
 
 const emits = defineEmits(['row-dblclick']);
@@ -64,7 +70,7 @@ const onRowDoubleClick = (row) => {
         <table class="table align-middle datatable dt-responsive table-check nowrap table-hover rounded-4">
           <thead>
           <tr>
-            <slot v-for="col in columns" :col="col" :name="`col_${col.name}`" :key="col.key" class="bg-light">
+            <slot v-for="col in columns" :col="col" :name="`col_${col.name}`" :key="col.key">
               <th scope="col" :style="col.styles" :class="col.classes" style="text-transform: uppercase;">
                 {{ col.label }}
               </th>
@@ -101,4 +107,13 @@ const onRowDoubleClick = (row) => {
 .table-responsive thead {
   overflow: visible;
 }
+
+.last-col-sticky {
+  position: sticky;
+  right: 0;
+  background: #f8f9fa;
+  z-index: 10;
+}
+
+
 </style>
