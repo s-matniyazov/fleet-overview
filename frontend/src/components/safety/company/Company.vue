@@ -223,7 +223,7 @@ axiosIns.post(apiUrl+"/excel", data.value)
             {{ data.id ? t('edit') : t('add') }} Company
           </div>
           <div class="text-end u-end">
-            <button class="btn-close" @click="onClose"></button>
+              <button class="btn-close btn-close-white" @click="onClose"></button>
           </div>
         </div>
       </template>
