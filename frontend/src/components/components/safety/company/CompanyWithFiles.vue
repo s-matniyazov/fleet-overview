@@ -433,7 +433,7 @@ watch(
             {{ data.id ? t('edit') : t('add') }} Company
           </div>
           <div class="text-end u-end">
-            <button class="btn-close" @click="onClose"></button>
+              <button class="btn-close btn-close-white" @click="onClose"></button>
           </div>
         </div>
       </template>
@@ -466,7 +466,7 @@ watch(
                         :placeholder="t('enter_mc')" classes=""/>
               </div>
               <div class="col-3">
-                <UInput v-model="data.dba" :label="t('dba')" :hint="t('dba')" :name="t('dba')"
+                <UInput v-model="data.dba" :label="t('DBA')" :hint="t('dba')" :name="t('dba')"
                         :placeholder="t('enter_dba')" classes=""/>
               </div>
               <div class="col-3">

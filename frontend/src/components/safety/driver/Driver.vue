@@ -542,10 +542,10 @@ watch(
       <template #header>
         <div class="d-flex" style="width: 100%">
           <div class="text-white">
-            {{ data.id ? t('edit') : t('add') }} {{ t('driver') }} : ({{ data.id }})
+            {{ data.id ? t('edit') : t('add') }} {{ t('driver') }} : {{ data.id }}
           </div>
           <div class="text-end u-end">
-            <button class="btn-close" @click="onClose"></button>
+              <button class="btn-close btn-close-white" @click="onClose"></button>
           </div>
         </div>
       </template>
