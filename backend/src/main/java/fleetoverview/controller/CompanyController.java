@@ -53,4 +53,14 @@ public class CompanyController extends CrudController<CompanyEntity, CompanyRequ
     protected HttpEntity<ApiResponse> getWithFiles(@RequestParam Map<String,String> params) {
         return ResponseEntity.ok(service.getWithFiles(params));
     }
+
+    @PostMapping("{id}/deactivate")
+    public HttpEntity<ApiResponse> deactivate(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.deactivate(id));
+    }
+
+    @PostMapping("{id}/activate")
+    public HttpEntity<ApiResponse> activate(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.activate(id));
+    }
 }

@@ -18,6 +18,7 @@ import URightOverlay from "@/components/base/URightOverlay.vue";
 import {useCompanyFileStore} from "@/store/CompanyFileStore.js";
 import CompanyCard from "@/components/safety/company/CompanyCard.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
+import UDropDown from "@/components/base/UDropDown.vue";
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
@@ -102,6 +103,13 @@ const columns = [
     styles: '',
     classes: '',
   },
+  {
+    key: 'actions',
+    name: 'actions',
+    label: t('actions'),
+    styles: '',
+    classes: 'last-col-sticky',
+  },
 ]
 
 const newModel = () => {
@@ -175,6 +183,12 @@ const onEdit = (d) => {
 const onClose = () => {
   addModal.value = false;
 }
+const deactivate = (row) => {
+  onDeactivate(row);
+}
+const activate = (row) => {
+  onActivate(row);
+}
 
 const selectFileSection = (type) => {
   const file = selectedRow.value?.files.find(it => it.type === type) || {}
@@ -219,6 +233,22 @@ const onDelete = (d) => {
       showMessage(e)
     });
   }
+}
+const onDeactivate = (row) => {
+  axiosIns.post(`${apiUrl}/${row.id}/deactivate`)
+      .then(() => {
+        getData();
+      }).catch(e => {
+    showMessage(e)
+  });
+}
+const onActivate = (row) => {
+  axiosIns.post(`${apiUrl}/${row.id}/activate`)
+      .then(() => {
+        getData();
+      }).catch(e => {
+    showMessage(e)
+  });
 }
 
 function getData() {
@@ -418,6 +448,35 @@ watch(
           <div class="d-flex gap-2">
             <a class="badge bg-primary-subtle text-primary"
                :class="`bg-${row?.status === 'PASSIVE' ? 'danger' : 'primary'}-subtle`"> {{ row?.status }}</a>
+          </div>
+        </td>
+      </template>
+
+      <template #row_actions="{row}">
+        <td class="last-col-sticky">
+          <div class="items-center">
+            <UDropDown position="left" class="btn w-auto text-start p-0">
+              <template #header>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="feather feather-more-vertical">
+                  <circle cx="12" cy="12" r="1"></circle>
+                  <circle cx="12" cy="5" r="1"></circle>
+                  <circle cx="12" cy="19" r="1"></circle>
+                </svg>
+              </template>
+              <template #body>
+                <div class="bg-body rounded-1 font-size-15 p-2">
+                  <button v-if="row.status === 'ACTIVE'" @click="deactivate(row)"
+                          class="btn btn-outline-danger btn-sm">
+                    {{ t("deactivate") }}
+                  </button>
+                  <button v-else @click="activate(row)" class="btn btn-outline-success btn-sm">
+                    {{ t("activate") }}
+                  </button>
+                </div>
+              </template>
+            </UDropDown>
           </div>
         </td>
       </template>
@@ -626,5 +685,11 @@ watch(
 
 .justify-content-start {
   justify-content: flex-start !important;
+}
+
+.last-col-sticky {
+  position: sticky;
+  right: 0;
+  z-index: 5;
 }
 </style>

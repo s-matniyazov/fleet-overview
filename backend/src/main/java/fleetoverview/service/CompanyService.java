@@ -20,8 +20,8 @@ import java.util.Map;
  **/
 public interface CompanyService extends CrudService<CompanyEntity, CompanyRequest> {
     ApiResponse attachFile(CompanyFileRequest data, MultipartFile file);
-
     DataResponse<List<CompanyFileEntity>> getFiles(Map<String, String> params);
-
     DataResponse<List<CompanyProjection>> getWithFiles(Map<String, String> params);
+    ApiResponse deactivate(Integer id);
+    ApiResponse activate(Integer id);
 }

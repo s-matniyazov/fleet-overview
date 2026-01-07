@@ -8,6 +8,7 @@ import fleetoverview.domain.entity.ResourceEntity;
 import fleetoverview.domain.entity.company.CompanyEntity;
 import fleetoverview.domain.entity.company.CompanyFileEntity;
 import fleetoverview.domain.enums.company.CompanyFileStatusEnum;
+import fleetoverview.domain.enums.company.CompanyStatusEnum;
 import fleetoverview.domain.projection.company.CompanyProjection;
 import fleetoverview.repository.CompanyFileRepository;
 import fleetoverview.repository.CompanyRepository;
@@ -69,6 +70,22 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
                     sqlSession.selectList("selectCompanies", params)
             );
         }
+    }
+
+    @Override
+    public ApiResponse deactivate(Integer id) {
+        CompanyEntity company = repository.findById(id).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not.found")));
+        company.setStatus(CompanyStatusEnum.INACTIVE);
+        repository.save(company);
+        return ApiResponse.success();
+    }
+
+    @Override
+    public ApiResponse activate(Integer id) {
+        CompanyEntity company = repository.findById(id).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not.found")));
+        company.setStatus(CompanyStatusEnum.ACTIVE);
+        repository.save(company);
+        return ApiResponse.success();
     }
 
     @Override
