@@ -3,7 +3,7 @@ package fleetoverview.service;
 import fleetoverview.domain.entity.ResourceEntity;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * @author :  Sardor Matniyazov

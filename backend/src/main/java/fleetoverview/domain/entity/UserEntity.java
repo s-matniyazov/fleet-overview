@@ -1,14 +1,7 @@
 package fleetoverview.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import jakarta.persistence.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.enums.LangEnum;

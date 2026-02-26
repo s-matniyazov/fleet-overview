@@ -8,7 +8,7 @@ import fleetoverview.domain.enums.driver.DriverFileClassEnum;
 import fleetoverview.domain.enums.driver.DriverFileStatusEnum;
 import fleetoverview.domain.enums.driver.DriverFileTypeEnum;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 

@@ -18,15 +18,14 @@ import fleetoverview.service.TruckService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.ExistsException;
 import fleetoverview.util.exceptions.NotFoundException;
+import jakarta.persistence.criteria.*;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

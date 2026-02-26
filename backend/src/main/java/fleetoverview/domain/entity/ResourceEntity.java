@@ -2,8 +2,7 @@ package fleetoverview.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fleetoverview.domain.entity.base.BaseIdEntity;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.*;
 
 /**
  * @author :  Sardor Matniyazov

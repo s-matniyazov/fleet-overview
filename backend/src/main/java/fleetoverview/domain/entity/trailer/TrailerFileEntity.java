@@ -6,7 +6,7 @@ import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.enums.trailer.TrailerFileStatusEnum;
 import fleetoverview.domain.enums.trailer.TrailerFileTypeEnum;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.sql.Date;
 
 /**

@@ -7,15 +7,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record DriverRequest(
-        int id,
-        int companyId,
+        Integer id,
+        Integer companyId,
         String firstName,
         String lastName,
         String middleName,
         LocalDate hireDate,
         LocalDate dateOfBirth,
         LocalDateTime terminationDate,
-        int stateId,
+        Integer stateId,
         String address,
         String city,
         String zipCode,
@@ -23,6 +23,5 @@ public record DriverRequest(
         String phone,
         DriverStatusEnum status,
         DriverTypeEnum type,
-        int truckId
-) {
-}
+        Integer truckId
+) { }

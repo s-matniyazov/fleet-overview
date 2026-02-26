@@ -12,14 +12,14 @@ import java.util.List;
  * @created : 29 июнь 2025
  **/
 public record DriverFileRequest(
-        int id,
+        Integer id,
         LocalDate expirationDate,
         String description,
         DriverFileTypeEnum type,
-        int driverId,
+        Integer driverId,
 
         String driversLicense,
-        int stateId,
+        Integer stateId,
         DriverFileClassEnum classType,
         LocalDate issuedDate,
         List<EndorsementRequest> endorsement,

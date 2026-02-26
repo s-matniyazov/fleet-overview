@@ -14,6 +14,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+    open-in-view: false
   servlet:
     multipart:
       max-file-size: 100MB
@@ -43,7 +44,7 @@ mail:
   password: "rdlv svgm wzmn ymbx"
 
 resource:
-  path: "d:\\resources\\"
+  path: "/home/seco/resources/"
 
 logging:
   file:

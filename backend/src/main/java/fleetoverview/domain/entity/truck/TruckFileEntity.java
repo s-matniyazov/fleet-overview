@@ -5,15 +5,7 @@ import fleetoverview.domain.entity.ResourceEntity;
 import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.enums.truck.TruckFileStatusEnum;
 import fleetoverview.domain.enums.truck.TruckFileTypeEnum;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
+import jakarta.persistence.*;
 import java.sql.Date;
 
 /**

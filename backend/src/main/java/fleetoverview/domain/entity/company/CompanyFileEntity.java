@@ -6,8 +6,7 @@ import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.enums.company.CompanyFileStatusEnum;
 import fleetoverview.domain.enums.company.CompanyFileTypeEnum;
 
-import javax.persistence.*;
-import java.sql.Date;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 /**
