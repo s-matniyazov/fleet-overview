@@ -1,28 +1,25 @@
 package fleetoverview.security.filters;
 
-import fleetoverview.domain.entity.RoleEntity;
 import fleetoverview.repository.RoleRepository;
-import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import fleetoverview.domain.entity.UserEntity;
 import fleetoverview.repository.UserRepository;
 import fleetoverview.security.JwtService;
 import fleetoverview.util.helper.Utils;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Optional;
+import java.util.Collections;
 
 /**
  * @author :  sardor.matniyazov
@@ -30,7 +27,7 @@ import java.util.Optional;
  * @created : 19 февр. 2025
  **/
 @Component
-public class AuthorizationFilter implements Filter {
+public class AuthorizationFilter extends OncePerRequestFilter {
     private final Logger log = LoggerFactory.getLogger(AuthorizationFilter.class);
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -44,9 +41,7 @@ public class AuthorizationFilter implements Filter {
 
     @Transactional
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse response = (HttpServletResponse) res;
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 
         String path = request.getRequestURI();
         if (Utils.isPublicPath(path)) {
@@ -61,37 +56,16 @@ public class AuthorizationFilter implements Filter {
         }
 
         String jwt = token.substring(7);
-        Optional<UserEntity> byUsername = userRepository.findByUsername(jwtService.getUsername(jwt));
-        if (byUsername.isPresent()) {
-            UserEntity user = byUsername.get();
+        JwtService.ClaimType byUsername = jwtService.getUsername(jwt);
+        UserEntity user = new UserEntity(byUsername.userId(), byUsername.username());
 
-            RoleEntity roleWithActions = roleRepository.findRoleWithActions(user.getRole().getId());
-            if (roleWithActions != null) {
-                user.setRole(roleWithActions);
-            }
-
-            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
-                    user,
-                    null,
-                    user.getRole().getRoleActions()
-            ));
-        } else {
-            log.error("Invalid JWT token");
-            unSuccess(response);
-            return;
-        }
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
+                user,
+                null,
+                Collections.singleton(new SimpleGrantedAuthority(byUsername.role()))
+        ));
 
         chain.doFilter(request, response);
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) {
-        log.info("AuthorizationFilter init");
-    }
-
-    @Override
-    public void destroy() {
-        log.info("AuthorizationFilter destroyed");
     }
 
     private void unSuccess(HttpServletResponse response) throws IOException {
@@ -99,4 +73,15 @@ public class AuthorizationFilter implements Filter {
         response.setContentType("application/json");
         response.getWriter().write("{\"message\":\"Unauthorized\"}");
     }
+
+    @Override
+    protected boolean shouldNotFilterErrorDispatch() {
+        return true;
+    }
+
+    @Override
+    protected boolean shouldNotFilterAsyncDispatch() {
+        return true;
+    }
+
 }

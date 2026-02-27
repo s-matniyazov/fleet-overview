@@ -86,25 +86,25 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
     @Override
     public ApiResponse post(TrailerRequest data) {
         if (repository.existsByUnit(data.unit()))
-            throw new ExistsException(mSourceBundle.apply("truck.unit.taken"));
+            throw new ExistsException(mSourceBundle.apply("trailer.unit.taken"));
 
         repository.save(
                 new TrailerEntity(
                         data.unit(),
                         data.licensePlate(),
                         data.inServiceDate(),
-                        makerRepository.findById(data.modelMakerId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("maker.not_found"))),
-                        trailerTypeRepository.findById(data.typeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("trailer_type.not_found"))),
+                        makerRepository.getReferenceById(data.modelMakerId()),
+                        trailerTypeRepository.getReferenceById(data.typeId()),
                         data.year(),
                         data.axles(),
                         data.length(),
                         data.height(),
                         data.vin(),
-                        ownershipTypeRepository.findById(data.ownershipTypeId()).orElse(null),
-                        purchaseTypeRepository.findById(data.purchaseTypeId()).orElse(null),
-                        driverRepository.findById(data.driverId()).orElse(null),
+                        ownershipTypeRepository.getReferenceById(data.ownershipTypeId()),
+                        data.purchaseTypeId() != 0 ? purchaseTypeRepository.getReferenceById(data.purchaseTypeId()) : null,
+                        data.driverId() != 0 ? driverRepository.getReferenceById(data.driverId()) : null,
                         data.description(),
-                        companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found")))
+                        companyRepository.getReferenceById(data.companyId())
                 )
         );
         return ApiResponse.success();

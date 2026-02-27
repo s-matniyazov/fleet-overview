@@ -72,8 +72,7 @@ public class AuthServiceImpl extends BaseService implements AuthService {
                         registerUserRequest.username(),
                         passwordEncoder.encode(registerUserRequest.password()),
                         registerUserRequest.name(),
-                        registerUserRequest.email(),
-                        roleRepository.findById(registerUserRequest.roleId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("role.not_found")))
+                        registerUserRequest.email()
                 )
         );
 

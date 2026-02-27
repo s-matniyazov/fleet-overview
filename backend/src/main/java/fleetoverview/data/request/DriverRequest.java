@@ -1,5 +1,7 @@
 package fleetoverview.data.request;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import fleetoverview.domain.enums.DriverStatusEnum;
 import fleetoverview.domain.enums.driver.DriverTypeEnum;
 
@@ -7,15 +9,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record DriverRequest(
-        Integer id,
-        Integer companyId,
+        @JsonSetter(nulls = Nulls.AS_EMPTY) int id,
+        @JsonSetter(nulls = Nulls.AS_EMPTY) int companyId,
         String firstName,
         String lastName,
         String middleName,
         LocalDate hireDate,
         LocalDate dateOfBirth,
         LocalDateTime terminationDate,
-        Integer stateId,
+        @JsonSetter(nulls = Nulls.AS_EMPTY) int stateId,
         String address,
         String city,
         String zipCode,
@@ -23,5 +25,5 @@ public record DriverRequest(
         String phone,
         DriverStatusEnum status,
         DriverTypeEnum type,
-        Integer truckId
+        @JsonSetter(nulls = Nulls.AS_EMPTY) int truckId
 ) { }

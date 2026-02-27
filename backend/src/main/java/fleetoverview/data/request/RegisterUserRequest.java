@@ -1,5 +1,8 @@
 package fleetoverview.data.request;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
+
 /**
  * @author :  Sardor Matniyazov
  * @mailto :  sardorbekmatniyazov03@gmail.com
@@ -10,6 +13,6 @@ public record RegisterUserRequest(
         String password,
         String name,
         String email,
-        int roleId
+        @JsonSetter(nulls = Nulls.AS_EMPTY) int roleId
 ) {
 }

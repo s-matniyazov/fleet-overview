@@ -2,12 +2,15 @@ package fleetoverview.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.enums.LangEnum;
 import fleetoverview.domain.enums.UserStatusEnum;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -28,9 +31,9 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 50)
     private String email;
 
-    @ManyToOne(targetEntity = RoleEntity.class, fetch = FetchType.EAGER)
-    @JoinColumn(referencedColumnName = "id", name = "roles_id")
-    private RoleEntity role;
+//    @ManyToOne(targetEntity = RoleEntity.class, fetch = FetchType.EAGER)
+//    @JoinColumn(referencedColumnName = "id", name = "roles_id")
+//    private RoleEntity role;
 
     @Enumerated(EnumType.STRING)
     private UserStatusEnum status = UserStatusEnum.P;
@@ -43,12 +46,16 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     public UserEntity() {}
 
-    public UserEntity(String username, String password, String name, String email, RoleEntity roleEntity) {
+    public UserEntity(String username, String password, String name, String email) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
-        this.role = roleEntity;
+    }
+
+    public UserEntity(Integer userId, String username) {
+        this.setId(userId);
+        this.setUsername(username);
     }
 
     public String getUsername() {
@@ -85,8 +92,8 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     @JsonIgnore
     @Override
-    public Collection<ActionEntity> getAuthorities() {
-        return role.getRoleActions();
+    public Collection<GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority("USER"));
     }
 
     @JsonIgnore
@@ -112,15 +119,6 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public RoleEntity getRole() {
-        return role;
-    }
-
-    @JsonIgnore
-    public void setRole(RoleEntity role) {
-        this.role = role;
     }
 
     public UserStatusEnum getStatus() {
