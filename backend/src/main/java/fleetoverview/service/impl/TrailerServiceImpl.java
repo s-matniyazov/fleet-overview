@@ -27,6 +27,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -115,23 +116,23 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
         if (repository.existsByIdIsNotAndUnit(data.id(), data.unit()))
             throw new ExistsException(mSourceBundle.apply("truck.unit.taken"));
 
-        TrailerEntity trailer = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("trailer.not_found")));
+        TrailerEntity trailer = repository.getReferenceById(data.id());
 
         trailer.setUnit(data.unit());
         trailer.setLicensePlate(data.licensePlate());
         trailer.setInServiceDate(data.inServiceDate());
-        trailer.setModelMaker(makerRepository.findById(data.modelMakerId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("maker.not_found"))));
-        trailer.setType(trailerTypeRepository.findById(data.typeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("trailer.type.not_found"))));
+        trailer.setModelMaker(makerRepository.getReferenceById(data.modelMakerId()));
+        trailer.setType(trailerTypeRepository.getReferenceById(data.typeId()));
         trailer.setYear(data.year());
         trailer.setAxles(data.axles());
         trailer.setLength(data.length());
         trailer.setHeight(data.height());
         trailer.setVin(data.vin());
-        trailer.setOwnershipType(ownershipTypeRepository.findById(data.ownershipTypeId()).orElse(null));
-        trailer.setPurchaseType(purchaseTypeRepository.findById(data.purchaseTypeId()).orElse(null));
-        trailer.setDriver(driverRepository.findById(data.driverId()).orElse(null));
+        trailer.setOwnershipType(data.ownershipTypeId() != 0 ? ownershipTypeRepository.getReferenceById(data.ownershipTypeId()) : null);
+        trailer.setPurchaseType(data.purchaseTypeId() != 0 ? purchaseTypeRepository.getReferenceById(data.purchaseTypeId()) : null);
+        trailer.setDriver(data.driverId() != 0 ? driverRepository.getReferenceById(data.driverId()) : null);
         trailer.setDescription(data.description());
-        trailer.setCompany(companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))));
+        trailer.setCompany(companyRepository.getReferenceById(data.companyId()));
 
         return ApiResponse.success();
     }
@@ -144,7 +145,7 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
 
     @Override
     public ApiResponse attachFile(TrailerFileRequest data, MultipartFile file) {
-        TrailerEntity trailer = repository.findById(data.trailerId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("trailer.not_found")));
+        TrailerEntity trailer = repository.getReferenceById(data.trailerId());
 
         ResourceEntity resource = resourceService.createResource(file, "trailer");
 
