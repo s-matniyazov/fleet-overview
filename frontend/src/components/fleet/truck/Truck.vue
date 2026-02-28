@@ -156,7 +156,7 @@ const selectedFileSection = ref({
 
 const apiUrl = URIS.TRUCK;
 const pagination = ref({
-  rowsPerPage: 5,
+  rowsPerPage: 10,
   page: 1,
   hasNext: true
 });

@@ -25,7 +25,7 @@ import static fleetoverview.util.helper.Utils.getUrls;
  * @mailto :  sardorbekmatniyazov03@gmail.com
  * @created : 11 февр. 2025
  **/
-//@Component
+@Component
 public class InitData implements CommandLineRunner {
 
     private final ActionRepository actionRepository;

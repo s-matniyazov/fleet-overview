@@ -34,4 +34,6 @@ public interface UriConstants {
     String DRIVER = API + "/drivers";
     // notification
     String NOTIFICATION = API + "/notification";
+    //inspection
+    String INSPECTION = API + "/inspection";
 }

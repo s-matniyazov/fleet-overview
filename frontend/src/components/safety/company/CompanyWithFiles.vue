@@ -148,7 +148,7 @@ const selectedFileSection = ref({
 
 const apiUrl = URIS.COMPANIES;
 const pagination = ref({
-  rowsPerPage: 5,
+  rowsPerPage: 10,
   page: 1,
   hasNext: true
 });

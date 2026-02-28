@@ -19,139 +19,29 @@ import FileOverlay from "@/components/FileOverlay.vue";
 import {useStateStore} from "@/store/StateStore.js";
 import {useDriverReferenceStore} from "@/store/DriverReferenceStore.js";
 import UScrollArea from "@/components/base/UScrollArea.vue";
-import DriverCard from "@/components/safety/driver/DriverCard.vue";
-import {useDriverFileStore} from "@/store/DriverFileStore.js";
+import InspectionCard from "@/components/safety/inspection/InspectionCard.vue";
+import {useDotInspectionStore} from "@/store/DotInspectionFileStore.js";
 import UDropDown from "@/components/base/UDropDown.vue";
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
 const driverReferenceStore = useDriverReferenceStore();
-const driverFileStore = useDriverFileStore();
+const dotInspectionStore = useDotInspectionStore();
 const stateStore = useStateStore();
 
 const columns = [
-  {
-    key: 'name',
-    name: 'name',
-    label: 'name',
-    classes: 'min-width: 200px;',
-  },
-  {
-    key: 'contact',
-    name: 'contact',
-    label: t('contact'),
-    styles: 'min-width: 200px;',
-    classes: '',
-  },
-  {
-    key: 'cdl',
-    name: 'cdl',
-    label: t('cdl'),
-    styles: 'min-width: 200px;',
-    classes: '',
-  },
-  {
-    key: 'medical_cert',
-    name: 'medical_cert',
-    label: t('medical_cert'),
-    styles: 'min-width: 200px;',
-    classes: '',
-  },
-  {
-    key: 'mvr',
-    name: 'mvr',
-    label: t('mvr'),
-    styles: 'min-width: 200px;',
-    classes: '',
-  },
-  {
-    key: 'clearing_house',
-    name: 'clearing_house',
-    label: t('clearing_house'),
-    styles: 'min-width: 200px;',
-    classes: '',
-  },
-  {
-    key: 'ssn',
-    name: 'ssn',
-    label: t('ssn'),
-    styles: 'min-width: 200px;',
-    classes: '',
-  },
-  {
-    key: 'ccf',
-    name: 'ccf',
-    label: t('ccf'),
-    styles: 'min-width: 200px;',
-    classes: '',
-  },
-  {
-    key: 'drug_test_result',
-    name: 'drug_test_result',
-    label: t('drug_test_result'),
-    styles: 'min-width: 200px;',
-    classes: '',
-  },
-  {
-    key: 'driver_application',
-    name: 'driver_application',
-    label: t('driver_application'),
-    styles: 'min-width: 200px;',
-    classes: '',
-  },
-  {
-    key: 'pev',
-    name: 'pev',
-    label: t('pev'),
-    styles: 'min-width: 200px;',
-    classes: '',
-  },
-  {
-    key: 'inspections',
-    name: 'inspections',
-    label: t('inspections'),
-    styles: 'min-width: 200px;',
-    classes: '',
-  },
-  {
-    key: 'status',
-    name: 'status',
-    label: t('status'),
-    styles: '',
-    classes: '',
-  },
-  {
-    key: 'actions',
-    name: 'actions',
-    label: t('actions'),
-    styles: '',
-    classes: 'last-col-sticky',
-  },
+  
 ]
 
 const newModel = () => {
   return {
-    id: null,
-    address: null,
-    companyId: filterStore.companyId,
-    dateOfBirth: null,
-    hireDate: null,
-    firstName: null,
-    zipCode: null,
-    lastName: null,
-    middleName: null,
-    email: null,
-    phone: null,
-    stateId: null,
-    countryId: null,
-    city: null,
-    status: null,
+    
   }
 }
 
 const addModal = ref(false);
 
-const apiUrl = URIS.DRIVER;
+const apiUrl = URIS.DOT_INSPECTION;
 const pagination = ref({
   rowsPerPage: 10,
   page: 1,
@@ -703,7 +593,7 @@ watch(
 
     <template #body>
       <UScrollArea height="calc(100vh - 50px)">
-        <DriverCard :data="selectedRow"/>
+        <InspectionCard :data="selectedRow"/>
       </UScrollArea>
     </template>
   </URightOverlay>

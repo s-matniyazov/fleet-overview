@@ -49,7 +49,8 @@ public class AuthServiceImpl extends BaseService implements AuthService {
                 return DataResponse.success(jwtService.generateToken(user));
             }
         }
-        return ApiResponse.badRequest("there is no tomorrow");
+//        return ApiResponse.badRequest("there is no tomorrow");
+        return ApiResponse.badRequest("Incorrect username or password");
     }
 
     @Override
