@@ -7,7 +7,7 @@ import fleetoverview.domain.enums.TimeZoneEnum;
 import fleetoverview.domain.enums.company.CompanyEntrantStatusEnum;
 import fleetoverview.domain.enums.company.CompanyStatusEnum;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 

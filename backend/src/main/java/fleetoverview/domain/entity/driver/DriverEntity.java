@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fleetoverview.domain.entity.company.CompanyEntity;
 import fleetoverview.domain.entity.StateEntity;
 import fleetoverview.domain.entity.base.BaseEntity;
-import fleetoverview.domain.entity.truck.TruckEntity;
 import fleetoverview.domain.enums.DriverStatusEnum;
 import fleetoverview.domain.enums.driver.DriverTypeEnum;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -17,7 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "drivers")
 public class DriverEntity extends BaseEntity {
-    @ManyToOne(targetEntity = CompanyEntity.class)
+    @ManyToOne(targetEntity = CompanyEntity.class, fetch = FetchType.LAZY)
     private CompanyEntity company;
     @Column(length = 100)
     private String firstName;
@@ -33,7 +32,7 @@ public class DriverEntity extends BaseEntity {
     private String terminationReason;
     @Column
     private LocalDate dateOfBirth;
-    @ManyToOne(targetEntity = StateEntity.class)
+    @ManyToOne(targetEntity = StateEntity.class, fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"createdBy", "created"})
     private StateEntity state;
 

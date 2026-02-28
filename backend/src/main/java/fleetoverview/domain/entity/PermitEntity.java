@@ -2,12 +2,11 @@ package fleetoverview.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fleetoverview.domain.entity.base.BaseEntity;
-import fleetoverview.domain.entity.trailer.TrailerEntity;
 import fleetoverview.domain.entity.truck.TruckEntity;
 import fleetoverview.domain.enums.PermitStatusEnum;
 import fleetoverview.domain.enums.PermitTypeEnum;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.sql.Date;
 
 /**

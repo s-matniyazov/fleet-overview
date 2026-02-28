@@ -1,5 +1,7 @@
 package fleetoverview.data.request;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import fleetoverview.domain.entity.StateEntity;
 import fleetoverview.domain.enums.TimeZoneEnum;
 import fleetoverview.domain.enums.company.CompanyEntrantStatusEnum;
@@ -11,7 +13,7 @@ import fleetoverview.domain.enums.company.CompanyStatusEnum;
  * @created : 03 май 2025
  **/
 public record CompanyRequest(
-        int id,
+        @JsonSetter(nulls = Nulls.AS_EMPTY) int id,
         String name,
         String ownerName,
         String dot,
@@ -19,7 +21,7 @@ public record CompanyRequest(
         String mc,
         String dba,
         String fein,
-        int stateId,
+        @JsonSetter(nulls = Nulls.AS_EMPTY) int stateId,
         String address1,
         String address2,
         String city,

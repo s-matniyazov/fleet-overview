@@ -1,17 +1,12 @@
 package fleetoverview.domain.entity.base;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import fleetoverview.domain.entity.UserEntity;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import java.util.Date;
 
 /**
@@ -25,17 +20,14 @@ public abstract class BaseEntity extends BaseIdEntity {
     @CreationTimestamp
     private Date created;
     @CreatedBy
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"createdBy", "created"})
-    private UserEntity createdBy;
+    private Integer createdBy;
     @UpdateTimestamp
     private Date updated;
 
     @LastModifiedBy
-    @ManyToOne(fetch = FetchType.LAZY)
-    private UserEntity updatedBy;
+    private Integer updatedBy;
 
-    public BaseEntity(Date created, UserEntity createdBy, Date updated, UserEntity updatedBy) {
+    public BaseEntity(Date created, Integer createdBy, Date updated, Integer updatedBy) {
         this.created = created;
         this.createdBy = createdBy;
         this.updated = updated;
@@ -49,7 +41,7 @@ public abstract class BaseEntity extends BaseIdEntity {
         return created;
     }
 
-    public UserEntity getCreatedBy() {
+    public Integer getCreatedBy() {
         return createdBy;
     }
 }

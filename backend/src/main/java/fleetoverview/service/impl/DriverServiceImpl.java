@@ -22,12 +22,13 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
-import java.time.LocalDate;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,6 @@ public class DriverServiceImpl extends BaseService implements DriverService {
     private final DriverRepository repository;
     private final StateRepository stateRepository;
     private final CompanyRepository companyRepository;
-    private final TruckRepository truckRepository;
     private final ResourceService resourceService;
     private final EndorsementRepository endorsementRepository;
     private final DriverFileRepository driverFileRepository;
@@ -51,11 +51,12 @@ public class DriverServiceImpl extends BaseService implements DriverService {
     private final SqlSessionFactory db;
 
     @Autowired
-    public DriverServiceImpl(DriverRepository repository, StateRepository stateRepository, CompanyRepository companyRepository, TruckRepository truckRepository, ResourceService resourceService, EndorsementRepository endorsementRepository, DriverFileRepository driverFileRepository, SqlSessionFactory db) {
+    public DriverServiceImpl(DriverRepository repository, StateRepository stateRepository,
+                             CompanyRepository companyRepository, ResourceService resourceService,
+                             EndorsementRepository endorsementRepository, DriverFileRepository driverFileRepository, SqlSessionFactory db) {
         this.repository = repository;
         this.stateRepository = stateRepository;
         this.companyRepository = companyRepository;
-        this.truckRepository = truckRepository;
         this.resourceService = resourceService;
         this.endorsementRepository = endorsementRepository;
         this.driverFileRepository = driverFileRepository;
@@ -79,14 +80,14 @@ public class DriverServiceImpl extends BaseService implements DriverService {
     public ApiResponse post(DriverRequest data) {
         repository.save(
                 new DriverEntity(
-                        companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))),
+                        companyRepository.getReferenceById(data.companyId()),
                         data.firstName(),
                         data.lastName(),
                         data.middleName(),
                         data.hireDate(),
                         data.terminationDate(),
                         data.dateOfBirth(),
-                        stateRepository.findById(data.stateId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("state.not_found"))),
+                        stateRepository.getReferenceById(data.stateId()),
                         data.address(),
                         data.city(),
                         data.zipCode(),
@@ -101,9 +102,9 @@ public class DriverServiceImpl extends BaseService implements DriverService {
 
     @Override
     public ApiResponse put(DriverRequest data) {
-        DriverEntity driver = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("driver.not_found")));
+        DriverEntity driver = repository.getReferenceById(data.id());
 
-        driver.setCompany(companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))));
+        driver.setCompany(companyRepository.getReferenceById(data.companyId()));
         driver.setFirstName(data.firstName());
         driver.setMiddleName(data.middleName());
         driver.setLastName(data.lastName());
@@ -115,7 +116,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
         driver.setHireDate(data.hireDate());
         driver.setTerminationDate(data.terminationDate());
         driver.setDateOfBirth(data.dateOfBirth());
-        driver.setState(stateRepository.findById(data.stateId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("state.not_found"))));
+        driver.setState(stateRepository.getReferenceById(data.stateId()));
         driver.setStatus(data.status());
         driver.setType(data.type());
 
@@ -132,7 +133,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
     @Override
     public ApiResponse terminate(TerminationRequest data) {
         // not implemented yet
-        DriverEntity driver = repository.findById(data.driverId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("driver.not_found")));
+        DriverEntity driver = repository.getReferenceById(data.driverId());
 
         if (driver.getStatus().equals(DriverStatusEnum.ACTIVE)) {
             driver.setTerminationDate(LocalDateTime.now());
@@ -148,6 +149,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
     }
 
     @Override
+    @Transactional
     public ApiResponse attachFile(DriverFileRequest data, MultipartFile file) {
         DriverEntity driver = repository.findById(data.driverId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("driver.not_found")));
 
@@ -164,13 +166,12 @@ public class DriverServiceImpl extends BaseService implements DriverService {
 
         if (data.type().equals(DriverFileTypeEnum.CDL)) {
             driverFile.setDriversLicense(data.driversLicense());
-            driverFile.setState(stateRepository.findById(data.stateId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("state.not_found"))));
+            driverFile.setState(stateRepository.getReferenceById(data.stateId()));
             driverFile.setClassType(data.classType());
             driverFile.setIssuedDate(data.issuedDate());
             driverFile.setEndorsement(
                     data.endorsement().stream()
-                            .map(it -> endorsementRepository.findById(it.id())
-                                    .orElseThrow(() -> new NotFoundException(mSourceBundle.apply("endorsement.not_found"))))
+                            .map(it -> endorsementRepository.getReferenceById(it.id()))
                             .collect(Collectors.toList())
             );
         } else if (data.type().equals(DriverFileTypeEnum.MEDICAL_CERT) || data.type().equals(DriverFileTypeEnum.CLEARING_HOUSE)) {

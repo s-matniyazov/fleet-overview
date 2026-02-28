@@ -1,5 +1,7 @@
 package fleetoverview.security;
 
+import fleetoverview.util.exceptions.ForbiddenException;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
@@ -8,6 +10,7 @@ import fleetoverview.domain.entity.UserEntity;
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author :  sardor.matniyazov
@@ -27,7 +30,13 @@ public class JwtService {
         return Jwts.builder()
                 .subject(username)
                 .issuedAt(currentDate)
-                .claim("id", user.getId())
+                .claims(
+                        Map.of(
+                                "id", user.getId(),
+                                "username", user.getUsername(),
+                                "role", "USER"
+                        )
+                )
                 .expiration(expireDate)
                 .signWith(key())
                 .compact();
@@ -38,16 +47,20 @@ public class JwtService {
     }
 
     // extract username from JWT token
-    public String getUsername(String token) {
+    public ClaimType getUsername(String token) {
         try {
-            return Jwts.parser()
+            Claims payload = Jwts.parser()
                     .verifyWith((SecretKey) key())
                     .build()
                     .parseSignedClaims(token)
-                    .getPayload()
-                    .getSubject();
+                    .getPayload();
+            return new ClaimType(
+                    payload.get("id", Integer.class),
+                    payload.get("username", String.class),
+                    payload.get("role", String.class)
+            );
         } catch (Exception e) {
-            return "------------";
+            throw new ForbiddenException("forb");
         }
 
     }
@@ -60,5 +73,8 @@ public class JwtService {
                 .parse(token);
         return true;
 
+    }
+
+    public record ClaimType(Integer userId, String username, String role) {
     }
 }

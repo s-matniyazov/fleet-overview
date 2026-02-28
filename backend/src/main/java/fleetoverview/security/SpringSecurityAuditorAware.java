@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -14,19 +15,21 @@ import java.util.Optional;
  * @mailto :  sardorbekmatniyazov03@gmail.com
  * @created : 14 март 2025
  **/
-public class SpringSecurityAuditorAware implements AuditorAware<UserEntity> {
+public class SpringSecurityAuditorAware implements AuditorAware<Integer> {
     private final Logger log = LoggerFactory.getLogger(SpringSecurityAuditorAware.class);
 
     @Override
-    public Optional<UserEntity> getCurrentAuditor() {
+    public Optional<Integer> getCurrentAuditor() {
         Authentication authentication = Utils.getAuthentication(false);
 
         if (authentication == null || !authentication.isAuthenticated()) {
             return Optional.empty();
         }
 
-        log.debug("Current user: {}, {}", authentication.getName(), authentication.getPrincipal());
+        if (authentication.getPrincipal() instanceof UserEntity user) {
+            return Optional.of(user.getId());
+        }
 
-        return Optional.of((UserEntity) authentication.getPrincipal());
+        return Optional.empty();
     }
 }

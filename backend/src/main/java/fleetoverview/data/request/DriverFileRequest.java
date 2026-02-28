@@ -1,5 +1,7 @@
 package fleetoverview.data.request;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import fleetoverview.domain.enums.driver.DriverFileClassEnum;
 import fleetoverview.domain.enums.driver.DriverFileTypeEnum;
 
@@ -12,14 +14,14 @@ import java.util.List;
  * @created : 29 июнь 2025
  **/
 public record DriverFileRequest(
-        int id,
+        @JsonSetter(nulls = Nulls.AS_EMPTY) Integer id,
         LocalDate expirationDate,
         String description,
         DriverFileTypeEnum type,
-        int driverId,
+        @JsonSetter(nulls = Nulls.AS_EMPTY) Integer driverId,
 
         String driversLicense,
-        int stateId,
+        @JsonSetter(nulls = Nulls.AS_EMPTY) Integer stateId,
         DriverFileClassEnum classType,
         LocalDate issuedDate,
         List<EndorsementRequest> endorsement,

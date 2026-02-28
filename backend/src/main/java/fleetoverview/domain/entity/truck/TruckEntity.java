@@ -7,15 +7,7 @@ import fleetoverview.domain.entity.company.CompanyEntity;
 import fleetoverview.domain.entity.driver.DriverEntity;
 import fleetoverview.domain.enums.truck.TruckStatusEnum;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import jakarta.persistence.*;
 
 import java.sql.Date;
 import java.time.LocalDateTime;

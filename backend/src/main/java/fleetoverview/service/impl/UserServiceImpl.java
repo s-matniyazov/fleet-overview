@@ -44,8 +44,8 @@ public class UserServiceImpl extends BaseService implements UserService {
                         data.username(),
                         data.password(),
                         data.name(),
-                        data.email(),
-                        roleRepository.findById(data.rolesId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("role.not_found")))
+                        data.email()
+//                        roleRepository.findById(data.rolesId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("role.not_found")))
                 )
         );
 
@@ -60,7 +60,7 @@ public class UserServiceImpl extends BaseService implements UserService {
         user.setPassword(data.password());
         user.setName(data.name());
         user.setEmail(data.email());
-        user.setRole(roleRepository.findById(data.rolesId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("role.not_found"))));
+//        user.setRole(roleRepository.findById(data.rolesId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("role.not_found"))));
 
         repository.save(user);
 

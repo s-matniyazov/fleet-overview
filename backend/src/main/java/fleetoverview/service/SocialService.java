@@ -1,6 +1,6 @@
 package fleetoverview.service;
 
-import javax.mail.MessagingException;
+import jakarta.mail.MessagingException;
 import java.io.File;
 import java.io.FileNotFoundException;
 

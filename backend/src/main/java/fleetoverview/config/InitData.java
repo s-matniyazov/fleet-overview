@@ -121,8 +121,7 @@ public class InitData implements CommandLineRunner {
                                     "username",
                                     passwordEncoder.encode("password"),
                                     "Testov User",
-                                    "kuchukcha@gmail.com",
-                                    roleRepository.getReferenceById(1)
+                                    "kuchukcha@gmail.com"
                             )
                     )
             );

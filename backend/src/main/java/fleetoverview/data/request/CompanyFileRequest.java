@@ -1,5 +1,7 @@
 package fleetoverview.data.request;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import fleetoverview.domain.enums.company.CompanyFileTypeEnum;
 
 import java.time.LocalDate;
@@ -10,12 +12,12 @@ import java.time.LocalDate;
  * @created : 06 июль 2025
  **/
 public record CompanyFileRequest(
-        int id,
+        @JsonSetter(nulls = Nulls.AS_EMPTY) int id,
         LocalDate expirationDate,
         String filedPeriod,
         LocalDate nextUpdateDate,
         String description,
         CompanyFileTypeEnum type,
-        int companyId
+        @JsonSetter(nulls = Nulls.AS_EMPTY) int companyId
 ) {
 }

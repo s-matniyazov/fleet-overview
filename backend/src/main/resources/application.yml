@@ -4,6 +4,14 @@ spring:
   profiles:
     active: "prod"
 
+  threads:
+    virtual:
+      enabled: true
+server:
+  tomcat:
+    threads:
+      max: 10
+
 mybatis:
   mapper-locations:
     - "classpath*:/db/sqlMaps/**/*.xml"

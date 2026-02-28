@@ -18,15 +18,15 @@ import fleetoverview.service.TruckService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.ExistsException;
 import fleetoverview.util.exceptions.NotFoundException;
+import jakarta.persistence.criteria.*;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,19 +101,19 @@ public class TruckServiceImpl extends BaseService implements TruckService {
                         data.unit(),
                         data.inServiceDate(),
                         data.licensePlate(),
-                        stateRepository.findById(data.stateId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("state.not_found"))),
-                        makerRepository.findById(data.modelMakerId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("maker.not_found"))),
+                        stateRepository.getReferenceById(data.stateId()),
+                        makerRepository.getReferenceById(data.modelMakerId()),
                         data.year(),
-                        fuelTypeRepository.findById(data.fuelTypeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("fuelType.not_found"))),
+                        fuelTypeRepository.getReferenceById(data.fuelTypeId()),
                         data.grossWeight(),
                         data.axles(),
                         data.vin(),
-                        ownershipTypeRepository.findById(data.ownershipTypeId()).orElse(null),
+                        data.ownershipTypeId() != 0 ? ownershipTypeRepository.getReferenceById(data.ownershipTypeId()) : null,
                         data.includeIFTA(),
-                        purchaseTypeRepository.findById(data.purchaseTypeId()).orElse(null),
-                        driverRepository.findById(data.driverId()).orElse(null),
+                        data.purchaseTypeId() != 0 ? purchaseTypeRepository.getReferenceById(data.purchaseTypeId()) : null,
+                        data.driverId() != 0 ? driverRepository.getReferenceById(data.driverId()) : null,
                         data.description(),
-                        companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))),
+                        companyRepository.getReferenceById(data.companyId()),
                         data.carrierResponsibleForSafety()
                 )
         );
@@ -125,24 +125,24 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         if (repository.existsByIdIsNotAndUnit(data.id(), data.unit()))
             throw new ExistsException(mSourceBundle.apply("truck.unit.taken"));
 
-        TruckEntity truck = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("truck.not_found")));
+        TruckEntity truck = repository.getReferenceById(data.id());
 
         truck.setUnit(data.unit());
         truck.setInServiceDate(data.inServiceDate());
         truck.setLicensePlate(data.licensePlate());
-        truck.setState(stateRepository.findById(data.stateId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("state.not_found"))));
-        truck.setModelMaker(makerRepository.findById(data.modelMakerId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("maker.not_found"))));
+        truck.setState(stateRepository.getReferenceById(data.stateId()));
+        truck.setModelMaker(makerRepository.getReferenceById(data.modelMakerId()));
         truck.setYear(data.year());
-        truck.setFuelType(fuelTypeRepository.findById(data.fuelTypeId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("fuelType.not_found"))));
+        truck.setFuelType(fuelTypeRepository.getReferenceById(data.fuelTypeId()));
         truck.setGrossWeight(data.grossWeight());
         truck.setAxles(data.axles());
         truck.setVin(data.vin());
-        truck.setOwnershipType(ownershipTypeRepository.findById(data.ownershipTypeId()).orElse(null));
+        truck.setOwnershipType(data.ownershipTypeId() != 0 ? ownershipTypeRepository.getReferenceById(data.ownershipTypeId()) : null);
         truck.setIncludeIFTA(data.includeIFTA());
-        truck.setPurchaseType(purchaseTypeRepository.findById(data.purchaseTypeId()).orElse(null));
-        truck.setDriver(driverRepository.findById(data.driverId()).orElse(null));
+        truck.setPurchaseType(data.purchaseTypeId() != 0 ? purchaseTypeRepository.getReferenceById(data.purchaseTypeId()) : null);
+        truck.setDriver(data.driverId() != 0 ? driverRepository.getReferenceById(data.driverId()) : null);
         truck.setDescription(data.description());
-        truck.setCompany(companyRepository.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))));
+        truck.setCompany(companyRepository.getReferenceById(data.companyId()));
         truck.setCarrierResponsibleForSafety(data.carrierResponsibleForSafety());
 
         return ApiResponse.success();
@@ -150,7 +150,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
 
     @Override
     public ApiResponse deactivate(Integer id) {
-        TruckEntity truck = repository.findById(id).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("truck.not_found")));
+        TruckEntity truck = repository.getReferenceById(id);
 
         truck.setStatus(TruckStatusEnum.PASSIVE);
         truck.setStatusDate(LocalDateTime.now());
@@ -162,7 +162,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
 
     @Override
     public ApiResponse activate(Integer id) {
-        TruckEntity truck = repository.findById(id).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("truck.not_found")));
+        TruckEntity truck = repository.getReferenceById(id);
 
         truck.setStatus(TruckStatusEnum.ACTIVE);
         truck.setStatusDate(LocalDateTime.now());
@@ -180,7 +180,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
 
     @Override
     public ApiResponse attachFile(TruckFileRequest data, MultipartFile file) {
-        TruckEntity truck = repository.findById(data.truckId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("truck.not_found")));
+        TruckEntity truck = repository.getReferenceById(data.truckId());
 
         ResourceEntity resource = resourceService.createResource(file, "truck");
 
@@ -200,7 +200,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
 
     @Override
     public ApiResponse attachPermit(int truckId, PermitRequest data, MultipartFile file) {
-        TruckEntity truck = repository.findById(truckId).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("truck.not_found")));
+        TruckEntity truck = repository.getReferenceById(truckId);
 
         ResourceEntity resource = resourceService.createResource(file, "truck//permits");
 

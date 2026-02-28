@@ -1,5 +1,7 @@
 package fleetoverview.data.request;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import fleetoverview.domain.enums.truck.TruckFileTypeEnum;
 
 import java.sql.Date;
@@ -10,9 +12,9 @@ import java.sql.Date;
  * @created : 23 март 2025
  **/
 public record TruckFileRequest(
-        int id,
+        @JsonSetter(nulls = Nulls.AS_EMPTY) int id,
         Date expirationDate,
         String description,
         TruckFileTypeEnum type,
-        int truckId
+        @JsonSetter(nulls = Nulls.AS_EMPTY) int truckId
 ) {}
