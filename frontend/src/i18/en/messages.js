@@ -1,5 +1,5 @@
 const en = {
-    required: 'Fill the fields',
+    required: 'Value is required',
     add:'Add',
     edit:'Edit',
     delete:'Delete',
@@ -86,6 +86,8 @@ const en = {
     trailer_documents:'Trailer Documents',
     purchaseTypes:'Purchase Types',
     drivers:'Drivers',
+    co_driver:'Co-Driver',
+    select_co_driver:'Select Co-Driver',
     company_files:'Company Files',
     medical_cert:'Medical Certification',
     mvr:'MVR',
@@ -130,6 +132,25 @@ const en = {
     enter_address1: 'Enter Address',
     enter_address2: 'Enter Mailing Address',
     enter_mailingAddress: 'Enter Mailing Address',
+    inspection: 'Inspection',
+    correction: 'Correction',
+    certification: 'Certification',
+    inspectionNumber: 'Inspection Number',
+    inspectionDate:'Inspection Date',
+    enter_inspectionNumber:'Inspection #',
+    location:'Location',
+    violation_discovered: 'Violation(s) Discovered',
+    no_violation_discovered: 'No Violation(s)',
+    out_of_service: 'Out Of Service',
+    violation_type: 'Violation Type',
+    section_viol_code: 'Section/Viol code',
+    enter_viol_code: 'Enter Viol Code',
+    total_fine_amount:'$TOTAL FINE AMOUNT',
+    inspection_level:'Inspection Level',
+    level:'Level',
+    inspection_files:'Inspection Files',
+    inspection_documents:'Inspection Documents',
+    search_by_driver_name:'Search By Driver Name'
 }
 
 export default en;

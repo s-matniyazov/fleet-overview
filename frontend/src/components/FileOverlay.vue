@@ -73,7 +73,8 @@ const addFiles = (fileList) => {
         truckId: props.data.truckId,
         trailerId: props.data.trailerId,
         driverId: props.data.driverId,
-        companyId: props.data.companyId
+        companyId: props.data.companyId,
+        inspectionId: props.data.inspectionId
       }
     };
     simulateUpload(upload);
@@ -281,7 +282,7 @@ onMounted(() => {
             <template
                 v-else-if="['ARTICLES_OF_INCORPORATION', 'MC_CERTIFICATE',
                  'OWNER_OPERATOR_AGREEMENT', 'DRIVER_AGREEMENT',
-                 'CCF', 'DRIVER_APPLICATION', 'DRUG_TEST_RESULT', 'PEV'
+                 'CCF', 'DRIVER_APPLICATION', 'DRUG_TEST_RESULT', 'PEV','CORRECTION','CERTIFICATION'
                  ].includes(data.type)">
               <!--              no data-->
             </template>

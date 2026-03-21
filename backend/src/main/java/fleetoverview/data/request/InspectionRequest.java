@@ -1,17 +1,25 @@
 package fleetoverview.data.request;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record InspectionRequest(
-        int  id,
+        Integer id,
         String inspectionNumber,
-        LocalDate inspection_date,
-        int driverId,
-        int coDriverId,
-        int companyId,
+        LocalDate inspectionDate,
+        Integer driverId,
+        Integer coDriverId,
+        Integer truckId,
+        Integer companyId,
         String description,
-        int stateId,
+        Integer stateId,
         String city,
         String location,
-        boolean violation_discovered
-) {}
+        Boolean violationDiscovered,
+        Integer countryId,
+        Integer inspectionLevel,
+        Integer totalFineAmount,
+        Boolean outOfService,
+        List<ViolationTypeRequest> violationTypes
+) {
+}

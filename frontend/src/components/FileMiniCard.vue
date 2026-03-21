@@ -42,6 +42,8 @@ function getData(type) {
     case "OWNER_OPERATOR_AGREEMENT":
     case "DRIVER_AGREEMENT":
       return "YES"
+    case "CORRECTION" : return 
+    case "CERTIFICATION" : return
     default: return longToDate(props.file.expirationDate || 1);
   }
 }

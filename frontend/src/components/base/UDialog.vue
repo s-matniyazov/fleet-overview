@@ -9,7 +9,7 @@ defineProps({
 </script>
 <template>
   <Transition name="modal">
-    <div v-if="show" class="modal-mask text-white">
+    <div v-if="show" class="modal-mask text-white modal-overlay" >
       <div style="background: #06273d" class="modal-container rounded-4 shadow-dark" :style="`width: ${width}`">
         <div class="modal-header pb-3 border-bottom-0 text-primary" style="font-weight: 1000; font-size: 16px">
           <slot name="header">
@@ -27,50 +27,60 @@ defineProps({
     </div>
   </Transition>
 </template>
-<style>
+<style>/* Overlay */
 .modal-mask {
   position: fixed;
   z-index: 1002;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  inset: 0;
   display: flex;
-  transition: opacity 0.3s ease;
+  justify-content: center;
+  align-items: center;
+
+  background: var(--modal-overlay-bg);
+  backdrop-filter: blur(3px);
+
+  transition: opacity 0.25s ease;
 }
 
-[data-bs-theme=dark] .modal-mask {
-  position: fixed;
-  z-index: 1002;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.3);
-  display: flex;
-  transition: opacity 0.3s ease;
+/* Theme colors */
+[data-bs-theme="light"] {
+  --modal-overlay-bg: rgba(0, 0, 0, 0.5);
 }
 
+[data-bs-theme="dark"] {
+  --modal-overlay-bg: rgba(255, 255, 255, 0.25);
+}
+
+/* Modal window */
 .modal-container {
-  margin: auto;
-  padding: 20px 20px;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-  transition: all 0.2s ease;
+  padding: 20px;
+  border-radius: 6px;
+
+  background: var(--modal-bg);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+
+  transition: transform 0.2s ease, opacity 0.2s ease;
+
+  max-height: 80vh; /* max height for modal */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;  /* enable vertical scroll */
+  padding-right: 15px; /* optional: avoid scrollbar overlap */
 }
 
-[data-bs-theme=dark] .modal-container {
-  margin: auto;
-  padding: 20px 20px;
-  background-color: rgb(0, 0, 0);
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-  transition: all 0.2s ease;
+/* Theme modal background */
+[data-bs-theme="light"] {
+  --modal-bg: #ffffff;
 }
 
+[data-bs-theme="dark"] {
+  --modal-bg: #000000;
+}
+
+/* Vue transition */
 .modal-enter-from .modal-container,
 .modal-leave-to .modal-container {
-  transform: scale(0.7);
+  transform: scale(0.9);
+  opacity: 0;
 }
 </style>

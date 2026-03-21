@@ -14,10 +14,8 @@ const ru = {
     unit_details:'Unit Details',
     operated_by:'Operated By',
     ownership:'Владелец',
-
-
-
-
+    inspection_number: 'Inspection Number',
+    inspection_date:'Inspection Date'
 }
 
 export default ru;

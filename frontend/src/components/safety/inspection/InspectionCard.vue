@@ -16,13 +16,33 @@ const props = defineProps({
 })
 
 const TABS = [
-  
+  {
+    key: 'ins',
+    name: t('inspection'),
+    description: '',
+    component: InspectionInfo,
+    props: {data: props.data}
+  },
+  {
+    key: 'insf',
+    name: t('Files'),
+    description: '',
+    component: InspectionFiles,
+    props: {data: props.data}
+  },
+  {
+    key: 'insdoc',
+    name: t('Documents'),
+    description: '',
+    component: InspectionDocuments,
+    props: {data: props.data}
+  },
 ];
 </script>
 
 <template>
   <div class="row">
-    <UTabs class="col-12 d-flex justify-content-center align-items-center" :tabs="TABS" />
+    <UTabs class="col-12 d-flex justify-content-center" :tabs="TABS" />
   </div>
 </template>
 

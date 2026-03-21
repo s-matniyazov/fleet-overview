@@ -14,85 +14,83 @@ const props = defineProps({
 <template>
   <div class="tw-w-full tw-flex tw-flex-col ma-3">
 
-  <div class="tw-w-full tw-flex tw-justify-between tw-gap-x-4 mx-1 mt-3">
-    <div
-        class="tw-w-1/2 tw-rounded tw-bg-light-primary  tw-shadow-default tw-p-[7px]">
-      <div class="tw-flex tw-justify-between">
-        <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
-          <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Hired To</span><span
-              class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.companyName) }} </span></div>
-          <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Hired Date</span><span
-              class="tw-text-dark-primary  tw-text-[14px]"> {{ longToDate(dataOrTire(data?.hireDate)) }} </span></div>
+    <div class="tw-flex tw-gap-x-4 mx-1 mt-3">
+      <div class="tw-w-full tw-rounded tw-bg-light-primary tw-shadow-default tw-p-[7px]">
+        <div class="inspection-header">
+          <span class="fs-4 bg-cl mdi mdi-file-document-outline me-1"></span>
+          <span class="tw-mt-4 tw-text-lg tw-font-bold tw-text-dark-primary">Inspection Information</span>
+          <span :class="{'text-success fw-bold ms-2': data?.status === 'ACTIVE', 'text-danger ms-2': data?.status === 'PASSIVE'}">
+            {{ dataOrTire(data?.status) }}
+          </span>
         </div>
-        <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
-          <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Terminated Date</span><span
-              class="tw-text-dark-primary  tw-text-[14px]"><span
-              class="tw-text-dark-primary  tw-text-[14px] "> {{ dataOrTire(longToDateTime(data?.terminationDate)) }}
-              </span></span></div>
-          <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Terminated Reason</span><span
-              class="tw-text-dark-primary  tw-text-[14px]"><span
-              class="tw-text-dark-primary  tw-text-[14px] "> {{ dataOrTire(data?.terminationReason) }}
-              </span></span></div>
+
+        <div class="tw-flex tw-justify-between">
+          <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
+            <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Number</span><span
+                class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.inspectionNumber) }} </span></div>
+            <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Date</span><span
+                class="tw-text-dark-primary  tw-text-[14px]"> {{ longToDate(dataOrTire(data?.inspectionDate)) }} </span></div>
+          </div>
+          <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
+            <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Inspection Level</span><span
+                class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.inspectionLevel) }} </span></div>
+            <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Violation Discovered</span><span
+                class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.violationDiscovered) }} </span></div>
+          </div>
+          <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
+            <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">City</span><span
+                class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.city) }} </span></div>
+            <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Location</span><span
+                class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.location) }} </span></div>
+          </div>
+          <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
+            <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Out Of Service</span><span
+                class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.outOfService) }} </span></div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="tw-w-full tw-flex tw-items-start tw-gap-x-4 mx-1 mt-3">
+      <div class="tw-w-1/3 tw-rounded tw-bg-light-primary tw-shadow-default tw-p-[7px]">
+        <span class="fs-4 mdi mdi-account-outline"></span>
+        <span class="tw-mt-4 tw-text-lg tw-font-bold tw-text-dark-primary "> Driver Details</span>
+        <div class="tw-mt-4 tw-flex tw-flex-col">
+          <span class="tw-text-gray-dark tw-text-[12px]">Full Name</span>
+          <span class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data.driverFirstName) }} {{ dataOrTire(data.driverLastName) }}</span>
+        </div>
+      </div>
+      <div class="tw-w-1/3 tw-rounded tw-bg-light-primary tw-shadow-default tw-p-[7px]">
+        <div class="inspection-header">
+          <span class="fs-4 bg-cl mdi mdi-truck-check-outline me-1"></span>
+          <span class="tw-mt-4 tw-text-lg tw-font-bold tw-text-dark-primary">Truck Information</span>
+        </div>
+
+        <div class="tw-flex tw-justify-between">
+          <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
+            <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Unit Number</span><span
+                class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.unitNumber) }} </span></div>
+            <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Date</span><span
+                class="tw-text-dark-primary  tw-text-[14px]"> {{ longToDate(dataOrTire(data?.inspectionDate)) }} </span></div>
+          </div>
+        </div>
+      </div>
+      <div class="tw-w-1/3 tw-rounded tw-bg-light-primary tw-shadow-default tw-p-[7px]">
+        <div class="inspection-header">
+          <span class="fs-4 bg-cl mdi mdi-currency-usd"></span>
+          <span class="tw-mt-4 tw-text-lg tw-font-bold tw-text-dark-primary">Total Fine Amount</span>
+        </div>
+
+        <div class="tw-flex tw-justify-between">
+          <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
+            <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Amount</span><span
+                class="tw-text-dark-primary  fw-bold">${{ dataOrTire(data?.totalFineAmount) }} </span></div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="tw-w-full tw-flex tw-items-start tw-gap-x-4 mx-1 mt-3">
-    <div
-        class="tw-flex-1 tw-rounded tw-bg-light-primary  tw-shadow-default tw-p-[7px] tw-flex tw-flex-col">
-      <div class="tw-flex tw-justify-between"><span
-          class="tw-w-[21px] tw-h-[21px] tw-rounded-full tw-flex tw-items-center tw-justify-center tw-bg-secondary tw-text-light-primary ">
-          1 </span></div>
-      <span
-          class="tw-mt-4 tw-text-lg tw-font-bold tw-text-dark-primary "> Personal Details </span>
-      <div class="tw-mt-4 tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">First Name</span><span
-          class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data.firstName) }} </span></div>
-      <div class="tw-mt-2 tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Middle Name</span><span
-          class="tw-text-dark-primary  tw-text-[14px]"><span
-          class="tw-text-dark-primary  tw-text-[14px] "> {{ dataOrTire(data.middleName) }} </span></span>
-      </div>
-      <div class="tw-mt-2 tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Last Name</span><span
-          class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data.lastName) }} </span></div>
-      <div class="tw-mt-2 tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Phone</span><span
-          class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data.phone) }} </span>
-      </div>
-      <div class="tw-mt-2 tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Email</span><span
-          class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data.email) }} </span>
-      </div>
-      <div class="tw-mt-2 tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">DOB</span><span
-          class="tw-text-dark-primary  tw-text-[14px]"> {{ longToDate(dataOrTire(data?.dateOfBirth)) }} </span></div>
-      <div class="tw-mt-2 tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Address</span><span
-          class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.address) }} </span></div>
-    </div>
-    <div
-        class="tw-flex-1 tw-rounded tw-bg-light-primary  tw-shadow-default tw-p-[7px] tw-flex tw-flex-col ">
-      <div class="tw-flex tw-justify-between"><span
-          class="tw-w-[21px] tw-h-[21px] tw-rounded-full tw-flex tw-items-center tw-justify-center tw-bg-secondary tw-text-light-primary ">
-          2 </span></div>
-      <span
-          class="tw-mt-4 tw-text-lg tw-font-bold tw-text-dark-primary "> Contract </span>
-      <div class="tw-mt-4 tw-flex tw-flex-col "><span class="tw-text-gray-dark tw-text-[12px]">Driver
-          role</span><span class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.type) }} </span>
-      </div>
-
-    </div>
-    <div
-        class="tw-flex-1 tw-rounded tw-bg-light-primary  tw-shadow-default tw-p-[7px] tw-flex tw-flex-col">
-      <div class="tw-flex tw-justify-between"><span
-          class="tw-w-[21px] tw-h-[21px] tw-rounded-full tw-flex tw-items-center tw-justify-center tw-bg-secondary tw-text-light-primary ">
-          3 </span></div>
-      <span
-          class="tw-mt-4 tw-text-lg tw-font-bold tw-text-dark-primary "> Operation Equipment
-      </span>
-      <div class="tw-mt-4 tw-flex tw-flex-col "><span class="tw-text-gray-dark tw-text-[12px]">Truck</span><span
-          :class="`tw-w-fit ${data?.truckId && 'tw-text-light-primary tw-bg-secondary'} tw-px-2 tw-rounded tw-text-[14px] px-2`">
-          {{ dataOrTire(data?.truckName) }} </span></div>
-      <div class="tw-mt-2 tw-flex tw-flex-col "><span class="tw-text-gray-dark tw-text-[12px]">Trailer</span><span
-          :class="`tw-w-fit ${data?.trailerId && 'tw-text-light-primary tw-bg-secondary'} tw-px-2 tw-rounded tw-text-[14px] px-2`">
-          {{ dataOrTire(data?.trailerName) }} </span></div>
-    </div>
-  </div>
+    
   </div>
 </template>
 
@@ -121,6 +119,15 @@ const props = defineProps({
 .tw-w-1\/2 {
   width: 50%;
 }
+
+.tw-w-1\/3 {
+  width: 33%;
+}
+
+.tw-w-2\/3 {
+  width: 66%;
+}
+
 
 .tw-shadow-default {
   --tw-shadow: 0px 0px 2px 0px #00000040;

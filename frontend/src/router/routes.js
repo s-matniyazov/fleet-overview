@@ -18,7 +18,7 @@ const routes = [
 
             // safety
             {path: '/safety-compliance', name: "Safety Compliance", meta: {requiresAuth: true}, component: () => import('@/components/safety/SafetyCompliance.vue')},
-            {path: '/dot-inspections', name: "Dot inspections", meta: {requiresAuth: true}, component: () => import('@/components/safety/inspection/DotInspections.vue')},
+            {path: '/inspection', name: "Inspections", meta: {requiresAuth: true}, component: () => import('@/components/safety/inspection/Inspections.vue')},
 
 
             // references
@@ -28,6 +28,7 @@ const routes = [
             {path: '/model-maker', name: "Model Maker", meta: {requiresAuth: true}, component: () => import('@/components/references/ModelMaker.vue')},
             {path: '/ownership-type', name: "Ownership Type", meta: {requiresAuth: true}, component: () => import('@/components/references/OwnershipType.vue')},
             {path: '/purchase-type', name: "Purchase Type", meta: {requiresAuth: true}, component: () => import('@/components/references/PurchaseType.vue')},
+            {path: '/inspection-level', name: "Inspection Levels", meta: {requiresAuth: true}, component: () => import('@/components/references/InspectionLevel.vue')},
 
             {path: '/settings', name: "Settings", meta: {requiresAuth: true}, component: () => import('@/components/setting/SettingsPage.vue')},
             {path: '/user-profile', name: "User Profile", meta: {requiresAuth: true}, component: () => import('@/components/profile/UserProfile.vue')},

@@ -123,7 +123,11 @@ export const DOCUMENT_TYPES = {
     "ARTICLES_OF_INCORPORATION": "Articles of Incorporation",
     "MC_CERTIFICATE": "MC Certificate",
     "OWNER_OPERATOR_AGREEMENT": "Owner operator Agreement",
-    "DRIVER_AGREEMENT": "Driver Agreement"
+    "DRIVER_AGREEMENT": "Driver Agreement",
+
+//  inspection
+    "CORRECTION":"Correction",
+    "CERTIFICATION":"Certification"
 }
 
 export const FLEET_TYPE_NAMES = [
@@ -291,6 +295,17 @@ export const DRIVER_TYPES = [
     },
 ]
 
+export const INSPECTION_FILE_TYPES = [
+    {
+        key: "CORRECTION",
+        value: "CORRECTION"
+    },
+    {
+        key: "CERTIFICATION",
+        value: "CERTIFICATION"
+    }
+]
+
 export const TIME_ZONES = [
     {
         key: "est",
@@ -321,6 +336,7 @@ export function makeResourceEntity(file) {
 }
 export function downloadResource(resource) {
     if (!resource.id) return
+    console.log(resource);
     axiosIns.get(URIS.RESOURCES + '/view/' + resource.id, {
         responseType: 'blob',
     })

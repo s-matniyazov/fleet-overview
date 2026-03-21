@@ -3,14 +3,14 @@ import DocumentMiniCard from "@/components/DocumentMiniCard.vue";
 import URightOverlay from "@/components/base/URightOverlay.vue";
 import FileOverlay from "@/components/FileOverlay.vue";
 import {ref} from "vue";
-import {DOCUMENT_TYPES, downloadResource, SAFETY_TYPE_NAMES} from "@/util/utils.js";
+import {INSPECTION_FILE_TYPES,DOCUMENT_TYPES,downloadResource} from "@/util/utils.js";
 import {URIS} from "@/constants/UriConstants.js";
-import {useDriverFileStore} from "@/store/DriverFileStore.js";
+import {useInspectionStore} from "@/store/InspectionFileStore.js";
 
-const driverFileStore = useDriverFileStore();
+const inspectionStore = useInspectionStore();
 
 const selectFileSection = (type, url) => {
-  const file = driverFileStore.allDocuments().find(it => it.type===type) || {}
+  const file = inspectionStore.allDocuments().find(it => it.type===type) || {}
 
   selectedFileSection.value = {
     dialog: true,
@@ -19,7 +19,7 @@ const selectFileSection = (type, url) => {
       ...file,
       fileName: file.resource?.fileName,
       size: file.resource?.size,
-      driverId: props.data.id,
+      inspectionId: props.data.id,
       type: type
     }
   };
@@ -37,16 +37,17 @@ const selectedFileSection = ref({
   url: '',
   data: {
     description: '',
-    expirationDate: new Date(),
     type: '',
-    driverId: ''
+    inspectionId: ''
   }
 });
 
 function downloadAll(type) {
-  if (type === 'driverFiles') {
-    SAFETY_TYPE_NAMES.forEach(item => {
-      const resource = driverFileStore.files.find(it => it.type === item.key)?.resource
+
+  if (type === 'inspectionFiles') {
+    INSPECTION_FILE_TYPES.forEach(item => {
+      const resource = inspectionStore.files.find(it => it.type === item.key)?.resource
+
       if (resource) {
         downloadResource(resource)
       }
@@ -64,18 +65,18 @@ function downloadAll(type) {
           <div class="font-size-20 fw-bold text-secondary"> General Documents</div>
         </div>
         <div class="col-6 font-size-16 text-end">
-          <button class="btn btn-light" @click="downloadAll('driverFiles')">
+          <button class="btn btn-light" @click="downloadAll('inspectionFiles')">
             <span>Download All Files</span>
             <i class="mdi mdi-cloud-download-outline ms-2"></i>
           </button>
         </div>
       </div>
       <div class="row">
-        <div v-for="item in SAFETY_TYPE_NAMES"
+        <div v-for="item in INSPECTION_FILE_TYPES"
              class="col-6 mb-8 mt-2 cursor-pointer ng-star-inserted">
           <DocumentMiniCard
-              @click="(e) => {selectFileSection(item.key, `${URIS.DRIVER}/attach-file`); e.stopPropagation()}"
-              :file="driverFileStore.files.find(it => it.type===item.key)"
+              @click="(e) => {selectFileSection(item.key, `${URIS.INSPECTION}/attach-file`); e.stopPropagation()}"
+              :file="inspectionStore.files.find(it => it.type===item.key)"
               :type="item.key" :name="item.value"
           />
         </div>
@@ -89,7 +90,7 @@ function downloadAll(type) {
           DOCUMENT_TYPES[selectedFileSection.data.type]
         }}
         <span class="text-end u-end">
-          <button class="btn-close" @click="driverFileStore.init(data.id); selectedFileSection.dialog = false"></button>
+          <button class="btn-close" @click="inspectionStore.init(data.id); selectedFileSection.dialog = false"></button>
         </span>
       </h4>
     </template>

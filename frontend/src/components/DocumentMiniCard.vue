@@ -29,6 +29,8 @@ function getDataTitle(type) {
     case "MC_CERTIFICATE":
     case "OWNER_OPERATOR_AGREEMENT":
     case "DRIVER_AGREEMENT":
+    case "CORRECTION":
+    case "CERTIFICATION":
       return ''
     case "DRUG_TEST_RESULT":
       return 'Test date:'
@@ -50,6 +52,8 @@ function getData(type) {
     case "MC_CERTIFICATE":
     case "OWNER_OPERATOR_AGREEMENT":
     case "DRIVER_AGREEMENT":
+    case "CORRECTION":
+    case "CERTIFICATION":
       return ''
     default: return longToDate(props.file.expirationDate || 1);
   }
