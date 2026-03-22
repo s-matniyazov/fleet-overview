@@ -1,17 +1,13 @@
 package fleetoverview.repository;
 
 import fleetoverview.domain.entity.inspection.Inspection;
-import fleetoverview.domain.entity.inspection.ViolationTypes;
-import fleetoverview.domain.enums.StatusEnum;
+import fleetoverview.domain.enums.inspection.InspectionFileTypeEnum;
 import fleetoverview.domain.projection.inspection.InspectionDto;
-import fleetoverview.domain.projection.inspection.ViolationTypesDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface InspectionRepository extends JpaRepository<Inspection, Integer> {
@@ -60,7 +56,7 @@ public interface InspectionRepository extends JpaRepository<Inspection, Integer>
                                            and f.status = 'ACTIVE'
                                            and f.type = 'CORRECTION'
                                          order by f.created desc
-                                         limit 1) as fi_cor on true
+                                      limit 1) as fi_cor on true
                       LEFT JOIN LATERAL (SELECT f.*
                                          FROM inspection_files f
                                          WHERE f.inspection_id = i.id
@@ -83,4 +79,19 @@ public interface InspectionRepository extends JpaRepository<Inspection, Integer>
                     """,
             nativeQuery = true)
     Page<InspectionDto> findAllByCompanyIdAndDriverNameAndStatus(Integer companyId, String driver, String status, Pageable pageable);
+
+
+    @Query(value = """
+            select i.* from inspection i
+            where i.company_id = :companyId
+            and i.violation_discovered = true
+            and i.deadline_at <= current_date
+            and (
+                  not exists (select f1.id from inspection_files f1 where f1.inspection_id = i.id and f1.type = 'CORRECTION')
+                  or
+                  not exists (select f2.id from inspection_files f2 where f2.inspection_id = i.id and f2.type = 'CERTIFICATION')
+               )
+            """, nativeQuery = true)
+    List<Inspection> findInspectionsWithDeadlineAndMissingFiles(int companyId);
+
 }

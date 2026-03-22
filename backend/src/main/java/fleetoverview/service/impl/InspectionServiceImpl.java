@@ -17,7 +17,6 @@ import fleetoverview.service.InspectionService;
 import fleetoverview.service.ResourceService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.NotFoundException;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +31,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class InspectionServiceImp extends BaseService implements InspectionService {
+public class InspectionServiceImpl extends BaseService implements InspectionService {
 
     private final InspectionRepository inspectionRepo;
     private final InspectionFileRepository inspectionFileRepo;
@@ -68,6 +67,7 @@ public class InspectionServiceImp extends BaseService implements InspectionServi
         inspection.setInspectionLevel(data.inspectionLevel());
         inspection.setTotalFineAmount(data.totalFineAmount());
         inspection.setOutOfService(data.outOfService());
+        inspection.setDeadlineAt(data.inspectionDate().plusDays(15));
 
         inspectionRepo.save(inspection);
 

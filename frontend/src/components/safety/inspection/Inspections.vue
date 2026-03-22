@@ -305,7 +305,7 @@ watch(() => data.value.violationDiscovered, (val) => {
             class="mdi mdi-pen"></span> {{ t("edit") }}
         </button>
         <button @click="showModal = true" class="btn btn-primary btn-sm" :disabled="!selectedRow">
-          <span class="mdi mdi-eye"></span>
+          <span class="mdi mdi-eye"> View</span>
         </button>
 
         <UInput v-model="filter.driverName" style="min-width: 23vw"

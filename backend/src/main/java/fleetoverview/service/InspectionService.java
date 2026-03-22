@@ -21,6 +21,5 @@ public interface InspectionService {
     DataResponse<List<InspectionFileDto>> getFiles(Integer inspectionId);
     Page<InspectionDto> getInspections(Pageable page, Integer companyId, String driverName, StatusEnum status);
     DataResponse<List<ViolationTypesDto>> getViolationTypes(Integer inspectionId);
-
     ApiResponse updateStatus(Integer inspectionId);
 }

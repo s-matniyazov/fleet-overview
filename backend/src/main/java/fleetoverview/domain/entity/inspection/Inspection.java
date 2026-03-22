@@ -1,23 +1,17 @@
 package fleetoverview.domain.entity.inspection;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fleetoverview.domain.entity.StateEntity;
 import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.entity.company.CompanyEntity;
 import fleetoverview.domain.entity.driver.DriverEntity;
 import fleetoverview.domain.entity.truck.TruckEntity;
 import fleetoverview.domain.enums.StatusEnum;
-import fleetoverview.domain.projection.inspection.InspectionDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -64,8 +58,12 @@ public class Inspection extends BaseEntity {
 
     @Column
     Integer totalFineAmount;
+
     @Column
     Boolean outOfService;
+
+    @Column
+    LocalDate deadlineAt;
 
     @OneToMany(mappedBy = "inspection", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<InspectionFile> files = new HashSet<>();
@@ -97,10 +95,5 @@ public class Inspection extends BaseEntity {
         this.location = location;
         this.violationDiscovered = violationDiscovered;
     }
-
-//        TODO: inspection_level; violation type , Section/Viol Code, Violation description
-
-
-
 
 }

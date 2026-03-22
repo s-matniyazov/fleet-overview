@@ -34,8 +34,11 @@ const props = defineProps({
           <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
             <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Inspection Level</span><span
                 class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.inspectionLevel) }} </span></div>
-            <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Violation Discovered</span><span
-                class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.violationDiscovered) }} </span></div>
+            <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Violation Discovered</span>
+              <span :class="data?.violationDiscovered ? 'text-danger tw-text-[14px] fw-bold' : 'text-success tw-text-[14px] fw-bold'">
+                {{ data?.violationDiscovered ? 'YES' : 'NO' }}
+              </span>
+            </div>
           </div>
           <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
             <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">City</span><span
