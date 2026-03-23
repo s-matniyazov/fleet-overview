@@ -135,6 +135,11 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
               <i class="mdi mdi-account-circle-outline"/>
               <span>Dot Inspections</span>
             </router-link>
+            <router-link to="collisions" class="btn w-100 text-start p-0"
+                         :style="`color: ${getSelectedRouterColor('collisions')}`">
+              <i class="mdi mdi-account-circle-outline"/>
+              <span>Collision & Claims</span>
+            </router-link>
 
             <hr/>
           </li>
@@ -227,8 +232,9 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
             </template>
             <template #body>
               <div class="bg-primary rounded-2 px-2 font-size-15" style="min-width: 150px">
-                <router-link class="text-white" to="safety-compliance" style="border-bottom: 1px solid white">Safety Compliance</router-link><br>
-                <router-link class="text-white" to="dot-inspections">Dot Inspections</router-link>
+                <router-link class="text-white" to="safety-compliance" style="border-bottom: 1px solid white">Safety Compliance</router-link><br/>
+                <router-link class="text-white" to="dot-inspections" style="border-bottom: 1px solid white">Dot Inspections</router-link><br/>
+                <router-link class="text-white" to="collisions">Collision & Claims</router-link>
               </div>
             </template>
           </UDropDown>

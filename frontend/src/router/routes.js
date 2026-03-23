@@ -19,6 +19,7 @@ const routes = [
             // safety
             {path: '/safety-compliance', name: "Safety Compliance", meta: {requiresAuth: true}, component: () => import('@/components/safety/SafetyCompliance.vue')},
             {path: '/dot-inspections', name: "Dot inspections", meta: {requiresAuth: true}, component: () => import('@/components/safety/DotInspections.vue')},
+            {path: '/collisions', name: "Collisions", meta: {requiresAuth: true}, component: () => import('@/components/safety/Collision.vue')},
 
 
             // references

@@ -14,10 +14,12 @@ const ru = {
     unit_details:'Unit Details',
     operated_by:'Operated By',
     ownership:'Владелец',
-
-
-
-
+    collision: 'ДТП',
+    collisions: 'ДТП',
+    claim_number: 'Номер дела',
+    collision_date: 'Дата',
+    time: 'Время',
+    save: 'Сохранить',
 }
 
 export default ru;

@@ -1,6 +1,5 @@
 package fleetoverview.security.filters;
 
-import fleetoverview.repository.RoleRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +12,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import fleetoverview.domain.entity.UserEntity;
-import fleetoverview.repository.UserRepository;
 import fleetoverview.security.JwtService;
 import fleetoverview.util.helper.Utils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,13 +27,9 @@ import java.util.Collections;
 @Component
 public class AuthorizationFilter extends OncePerRequestFilter {
     private final Logger log = LoggerFactory.getLogger(AuthorizationFilter.class);
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final JwtService jwtService;
 
-    public AuthorizationFilter(UserRepository userRepository, RoleRepository roleRepository, JwtService jwtService) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+    public AuthorizationFilter(JwtService jwtService) {
         this.jwtService = jwtService;
     }
 

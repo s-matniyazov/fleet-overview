@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Collision">
+    <resultMap id="collisionResultMap" type="fleetoverview.domain.projection.claim.CollisionProjection">
+        <id property="id" column="id"/>
+        <result property="reportNumber" column="reportNumber"/>
+        <result property="collisionDate" column="collisionDate"/>
+        <result property="collisionTime" column="collisionTime"/>
+        <result property="timeZone" column="timeZone"/>
+        <result property="city" column="city"/>
+        <result property="stateId" column="stateId"/>
+        <result property="stateName" column="stateName"/>
+        <result property="zipCode" column="zipCode"/>
+        <result property="typeOfCargo" column="typeOfCargo"/>
+        <result property="companyId" column="companyId"/>
+        <result property="companyName" column="companyName"/>
+        <result property="truckId" column="truckId"/>
+        <result property="truckUnit" column="truckUnit"/>
+        <result property="driverId" column="driverId"/>
+        <result property="driverName" column="driverName"/>
+        <result property="createdById" column="createdById"/>
+        <result property="createdByName" column="createdByName"/>
+        <result property="created" column="created"/>
+
+        <collection property="files" columnPrefix="cf_"
+                    ofType="fleetoverview.domain.projection.claim.CollisionFileProjection">
+            <id property="id" column="id"/>
+            <result property="resourcesId" column="resourcesId"/>
+            <result property="fileName" column="fileName"/>
+            <result property="extension" column="extension"/>
+            <result property="size" column="size"/>
+            <result property="contentType" column="contentType"/>
+            <result property="description" column="description"/>
+            <result property="type" column="type"/>
+            <result property="status" column="status"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectCollisionCnt" resultType="int" parameterType="map">
+        select count(c.id)
+        from collisions c
+        where 1=1
+        <if test="companyId != null">
+            and c.company_id = ${companyId}
+        </if>
+        <if test="reportNumber != null">
+            and c.report_number like '%${reportNumber}%'
+        </if>
+    </select>
+
+    <select id="selectCollisions" resultMap="collisionResultMap" parameterType="map">
+        select c.*,
+               cf.id as "cf_id",
+               res.id as "cf_resourcesId",
+               res.file_name as "cf_fileName",
+               res.extension as "cf_extension",
+               res.size as "cf_size",
+               res.content_type as "cf_contentType",
+               cf.description as "cf_description",
+               cf.type as "cf_type",
+               cf.status as "cf_status"
+        from (
+            select
+                cl.id as "id",
+                cl.report_number as "reportNumber",
+                cl.collision_date as "collisionDate",
+                cl.collision_time as "collisionTime",
+                cl.time_zone as "timeZone",
+                cl.city as "city",
+                cl.zip_code as "zipCode",
+                cl.type_of_cargo as "typeOfCargo",
+                s.id as "stateId",
+                s.name as "stateName",
+                com.id as "companyId",
+                com.name as "companyName",
+                t.id as "truckId",
+                t.unit as "truckUnit",
+                d.id as "driverId",
+                d.first_name || ' ' || d.last_name as "driverName",
+                u.id as "createdById",
+                u.name as "createdByName",
+                cl.created as "created"
+            from collisions cl
+                left join states s on s.id = cl.state_id
+                left join companies com on com.id = cl.company_id
+                left join trucks t on t.id = cl.truck_id
+                left join drivers d on d.id = cl.driver_id
+                left join users u on u.id = cl.created_by_id
+            where 1=1
+            <if test="companyId != null">
+                and cl.company_id = ${companyId}
+            </if>
+            <if test="reportNumber != null">
+                and cl.report_number like '%${reportNumber}%'
+            </if>
+            <if test="rowsPerPage != null and page != null">
+                limit ${rowsPerPage}
+                offset ${page-1} * ${rowsPerPage}
+            </if>
+        ) c
+        left join collision_files cf on cf.collision_id = c.id and cf.status = 'ACTIVE'
+        left join resources res on res.id = cf.resource_id
+    </select>
+</mapper>

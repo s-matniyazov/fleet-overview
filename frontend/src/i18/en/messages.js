@@ -130,6 +130,12 @@ const en = {
     enter_address1: 'Enter Address',
     enter_address2: 'Enter Mailing Address',
     enter_mailingAddress: 'Enter Mailing Address',
+    collision: 'Collision',
+    collisions: 'Collisions',
+    claim_number: 'Claim number',
+    collision_date: 'Date',
+    time: 'Time',
+    save: 'Save',
 }
 
 export default en;

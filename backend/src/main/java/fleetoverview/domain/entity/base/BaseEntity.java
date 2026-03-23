@@ -20,18 +20,18 @@ public abstract class BaseEntity extends BaseIdEntity {
     @CreationTimestamp
     private Date created;
     @CreatedBy
-    private Integer createdBy;
+    private Integer createdById;
     @UpdateTimestamp
     private Date updated;
 
     @LastModifiedBy
-    private Integer updatedBy;
+    private Integer updatedById;
 
-    public BaseEntity(Date created, Integer createdBy, Date updated, Integer updatedBy) {
+    public BaseEntity(Date created, Integer createdById, Date updated, Integer updatedById) {
         this.created = created;
-        this.createdBy = createdBy;
+        this.createdById = createdById;
         this.updated = updated;
-        this.updatedBy = updatedBy;
+        this.updatedById = updatedById;
     }
 
     public BaseEntity() {
@@ -41,7 +41,7 @@ public abstract class BaseEntity extends BaseIdEntity {
         return created;
     }
 
-    public Integer getCreatedBy() {
-        return createdBy;
+    public Integer getCreatedById() {
+        return createdById;
     }
 }

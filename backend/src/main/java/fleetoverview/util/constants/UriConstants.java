@@ -32,6 +32,8 @@ public interface UriConstants {
     String TRAILER_MODEL_MAKER = API + "/trailer/model-makers";
     // driver
     String DRIVER = API + "/drivers";
+    // collision
+    String COLLISION = API + "/collisions";
     // notification
     String NOTIFICATION = API + "/notification";
 }
