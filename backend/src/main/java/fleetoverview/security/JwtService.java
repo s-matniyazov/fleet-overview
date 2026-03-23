@@ -11,6 +11,7 @@ import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author :  sardor.matniyazov
@@ -47,22 +48,21 @@ public class JwtService {
     }
 
     // extract username from JWT token
-    public ClaimType getUsername(String token) {
+    public Optional<ClaimType> getUsername(String token) {
         try {
             Claims payload = Jwts.parser()
                     .verifyWith((SecretKey) key())
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
-            return new ClaimType(
+            return Optional.of(new ClaimType(
                     payload.get("id", Integer.class),
                     payload.get("username", String.class),
                     payload.get("role", String.class)
-            );
+            ));
         } catch (Exception e) {
-            throw new ForbiddenException("forbidden");
+            return Optional.empty();
         }
-
     }
 
     // validate JWT token

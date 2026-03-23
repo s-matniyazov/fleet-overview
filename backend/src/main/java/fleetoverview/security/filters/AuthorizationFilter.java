@@ -18,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 
 /**
  * @author :  sardor.matniyazov
@@ -50,13 +51,19 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         }
 
         String jwt = token.substring(7);
-        JwtService.ClaimType byUsername = jwtService.getUsername(jwt);
-        UserEntity user = new UserEntity(byUsername.userId(), byUsername.username());
+        Optional<JwtService.ClaimType> byUsername = jwtService.getUsername(jwt);
+        if(byUsername.isEmpty()) {
+            unSuccess(response);
+            return;
+        }
+
+        JwtService.ClaimType claimType = byUsername.get();
+        UserEntity user = new UserEntity(claimType.userId(), claimType.username());
 
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
                 user,
                 null,
-                Collections.singleton(new SimpleGrantedAuthority(byUsername.role()))
+                Collections.singleton(new SimpleGrantedAuthority(claimType.role()))
         ));
 
         chain.doFilter(request, response);

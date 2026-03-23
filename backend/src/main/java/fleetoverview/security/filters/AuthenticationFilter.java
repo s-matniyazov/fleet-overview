@@ -42,7 +42,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void unSuccess(HttpServletResponse response) throws IOException {
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
         response.getWriter().write("Unauthenticated");
     }

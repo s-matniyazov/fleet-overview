@@ -1,7 +1,6 @@
 <script setup>
 import {onMounted, ref, watch} from "vue";
 
-import modal from '../../base/UDialog.vue'
 import axiosIns from "@/plugins/axios.js";
 import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
@@ -21,6 +20,8 @@ import {useInspectionStore} from "@/store/InspectionFileStore.js";
 import UDropDown from "@/components/base/UDropDown.vue";
 import USelect from "@/components/base/USelect.vue";
 import UTextarea from "@/components/base/UTextarea.vue";
+import UDialog from "@/components/base/UDialog.vue";
+import UScrollArea from "@/components/base/UScrollArea.vue";
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
@@ -438,7 +439,7 @@ watch(() => data.value.violationDiscovered, (val) => {
 
   <!--  inspection modal-->
   <Teleport to="body">
-    <modal :show="addModal" @close="addModal = false" width="calc(100vw - 700px)">
+    <UDialog :show="addModal" @close="addModal = false" width="calc(100vw - 700px)">
       <template #header>
         <div style="width: 100%">
           <div class="d-flex justify-content-between align-items-center">
@@ -666,7 +667,7 @@ watch(() => data.value.violationDiscovered, (val) => {
           </div>
         </UForm>
       </template>
-    </modal>
+    </UDialog>
   </Teleport>
 
   <!--  inspection card-->

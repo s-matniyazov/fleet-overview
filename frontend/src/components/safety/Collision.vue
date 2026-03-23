@@ -93,7 +93,6 @@ const timeZones = [
   {id: 'CST', name: 'CST'},
   {id: 'MST', name: 'MST'},
   {id: 'PST', name: 'PST'},
-  {id: 'AST', name: 'AST'},
   {id: 'HST', name: 'HST'},
 ];
 
@@ -243,44 +242,82 @@ watch(
       </template>
     </UTable>
 
-    <UDialog v-model="addModal" :title="t('collision')">
-      <template #body>
-        <UForm @submit="onSave" :submit-text="t('save')" @close="onClose">
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <UInput v-model="data.reportNumber" :label="t('claim_number')" required/>
+    <!--  collision modal-->
+    <Teleport to="body">
+      <UDialog :show="addModal" @close="addModal = false" width="calc(100vw - 700px)">
+        <template #header>
+          <div style="width: 100%">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="text-white">
+                {{ data.id ? data.inspection : t('add') }} {{ t('inspection') }}
+              </div>
+
+              <button class="btn-close btn-close-white" @click="onClose"></button>
             </div>
-            <div class="col-md-6 mb-3">
-              <UDateInput v-model="data.collisionDate" :label="t('collision_date')" required/>
-            </div>
-            <div class="col-md-6 mb-3">
-              <UInput v-model="data.collisionTime" :label="t('time')" type="time"/>
-            </div>
-            <div class="col-md-6 mb-3">
-              <USelect v-model="data.timeZone" :items="timeZones" :label="t('timeZone')" option_value="id" option_name="name"/>
-            </div>
-            <div class="col-md-6 mb-3">
-              <UInput v-model="data.city" :label="t('city')"/>
-            </div>
-            <div class="col-md-6 mb-3">
-              <USelect v-model="data.stateId" :items="stateStore.states" :label="t('state')" option_value="id" option_name="name"/>
-            </div>
-            <div class="col-md-6 mb-3">
-              <UInput v-model="data.zipCode" :label="t('zip_code')"/>
-            </div>
-            <div class="col-md-6 mb-3">
-              <UInput v-model="data.typeOfCargo" :label="t('type')"/>
-            </div>
-            <div class="col-md-6 mb-3">
-              <USelect v-model="data.truckId" :items="trucks" :label="t('truck')" option_value="id" option_name="unit"/>
-            </div>
-            <div class="col-md-6 mb-3">
-              <USelect v-model="data.driverId" :items="drivers" :label="t('driver')" option_value="id" :option_name="it => it.firstName + ' ' + it.lastName"/>
-            </div>
+            <hr class="my-3 border-primary opacity-75">
           </div>
-        </UForm>
-      </template>
-    </UDialog>
+        </template>
+
+        <template #body>
+          <UForm @submit="onSave" :submit-text="t('save')" @close="onClose">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <UInput v-model="data.reportNumber" :label="t('claim_number')" required/>
+              </div>
+              <div class="col-md-6 mb-3">
+                <UDateInput v-model="data.collisionDate" :label="t('collision_date')" required/>
+              </div>
+              <div class="col-md-6 mb-3">
+                <UInput v-model="data.collisionTime" :label="t('time')" type="time"/>
+              </div>
+              <div class="col-md-6 mb-3">
+                <USelect v-model="data.timeZone" :items="timeZones" :label="t('timeZone')" option_value="id"
+                         option_name="name"/>
+              </div>
+              <div class="col-md-6 mb-3">
+                <UInput v-model="data.city" :label="t('city')"/>
+              </div>
+              <div class="col-6">
+                <USelect v-model="data.countryId" :label="t('country')"
+                         :items="stateStore.countries" name="country"
+                         option_name="name"
+                         classes="mb-2"
+                         :rules="(val) => (!val && $t('required'))"
+                ></Uselect>
+              </div>
+              <div class="col-6">
+                <USelect v-model="data.stateId" :label="t('state')"
+                         :items="stateStore.getStates(data.countryId)" name="state"
+                         option_name="name"
+                         classes="mb-2"
+                         :rules="(val) => (!val && $t('required'))"
+                ></Uselect>
+              </div>
+              <div class="col-md-6 mb-3">
+                <UInput v-model="data.zipCode" :label="t('zip_code')"/>
+              </div>
+              <div class="col-md-6 mb-3">
+                <UInput v-model="data.typeOfCargo" :label="t('type')"/>
+              </div>
+              <div class="col-md-6 mb-3">
+                <USelect v-model="data.truckId" :items="trucks" :label="t('truck')" option_value="id"
+                         option_name="unit"/>
+              </div>
+              <div class="col-md-6 mb-3">
+                <USelect v-model="data.driverId" :items="drivers" :label="t('driver')" option_value="id"
+                         :option_name="it => it.firstName + ' ' + it.lastName"/>
+              </div>
+            </div>
+
+            <!-- footer -->
+            <div class="modal-footer d-flex justify-content-between align-items-center border-top border-primary pt-3 mt-3">
+              <button @click="onClose" class="btn text-white btn-secondary">Cancel</button>
+              <button type="submit" class="btn btn-info fw-bold">Save</button>
+            </div>
+          </UForm>
+        </template>
+      </UDialog>
+    </Teleport>
   </div>
 </template>
 

@@ -54,7 +54,7 @@ public class CExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = {ForbiddenException.class})
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<?> handleForbidden(NotFoundException e) {
         logger.warning(e.getMessage());
         return ResponseEntity.badRequest().body(ApiResponse.forbiddenRequest(e.getMessage()));

@@ -13,6 +13,7 @@ public record CollisionRequest(
         LocalTime collisionTime,
         TimeZoneEnum timeZone,
         String city,
+        @JsonSetter(nulls = Nulls.AS_EMPTY) int countryId,
         @JsonSetter(nulls = Nulls.AS_EMPTY) int stateId,
         String zipCode,
         String typeOfCargo,
