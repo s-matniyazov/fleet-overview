@@ -64,61 +64,60 @@ const activeComponentProps = computed(() => {
 
 .tabs-wrapper {
   display: flex;
-  gap: 0.25rem;
+  gap: 32px; 
   position: relative;
-  background-color: var(--bs-card-bg);
-  border: 2px solid var(--bs-border-color, #e0e0e0);
-  border-bottom: none;
-  padding: 0.5rem;
+  background-color: #ffffff; /* теперь фон виден */
+  border: none;
+  border-bottom: 1px solid var(--bs-border-color, #e5e7eb);
+  padding: 0 16px;
   margin: 0;
-  border-radius: 0.375rem 0.375rem 0 0;
+  border-radius: 12px 12px 0 0; /* скругляем верх */
 }
 
 .tab-button {
   position: relative;
-  padding: 0.75rem 1.25rem;
-  background-color: transparent;
+  padding: 14px 8px;
+  background: transparent; /* кнопка прозрачная, виден фон tabs-wrapper */
   border: none;
   cursor: pointer;
   font-weight: 500;
-  font-size: 0.95rem;
-  color: var(--bs-body-color, #545a6d);
+  font-size: 15px;
+  color: var(--bs-body-color, #6b7280);
   transition: all 0.3s ease;
   white-space: nowrap;
   outline: none;
-  border-radius: 0.375rem;
-  margin-bottom: 0.5rem;
-}
-
-.tab-button:hover {
-  color: var(--bs-primary, #385a8a);
-  background-color: rgba(56, 90, 138, 0.06);
 }
 
 .tab-button.tab-active {
-  color: var(--bs-primary, #385a8a);
+  color: var(--bs-primary, #1d4ed8);
   font-weight: 600;
-  background-color: rgba(56, 90, 138, 0.1);
-  border: none;
-  border-bottom: 3px solid var(--bs-primary, #385a8a);
-  margin-bottom: 0;
-  padding-bottom: calc(0.75rem - 2px);
 }
 
+/* Active tab indicator */
+.tab-button.tab-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 3px;
+  background-color: var(--bs-primary, #1d4ed8);
+  border-radius: 2px 2px 0 0;
+}
+
+/* 🔽 content panel */
 .tab-panels-container {
-  background-color: var(--bs-card-bg);
-  border: 2px solid var(--bs-border-color, #e0e0e0);
-  /* border-top: 2px solid var(--bs-border-color, #e0e0e0); */
-  border-radius: 0 0 0.5rem 0.5rem;
-  /* padding: 1rem; */
-  margin-top: -2px;
-  color: var(--bs-body-color);
+  background-color: #ffffff; /* фон панели */
+  border: 1px solid var(--bs-border-color, #e5e7eb);
+  border-top: none;
+  border-radius: 0 0 12px 12px; 
+  margin-top: 0;
+  padding: 16px;
   min-height: 400px;
   width: 100%;
-  display: block;
-  background-color: var(--bs-card-bg);
 }
 
+/* responsive */
 @media (max-width: 576px) {
   .tab-button {
     padding: 0.75rem 1rem;
@@ -133,13 +132,14 @@ const activeComponentProps = computed(() => {
   }
 }
 
+/* tab pane animation */
 :deep(.tab-pane) {
   width: 100%;
   display: block;
 }
 
 :deep(.tab-pane.active) {
-  animation: slideDownFade 0.6s ease-out;
+  animation: slideDownFade 0.5s ease-out;
 }
 
 @keyframes slideDownFade {

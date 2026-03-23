@@ -41,7 +41,7 @@ public class CompanyController extends CrudController<CompanyEntity, CompanyRequ
     @PostMapping("excel")
     public HttpEntity<ApiResponse> excel() {
         excelNotificationService.sendNotifications();
-        return ResponseEntity.ok(ApiResponse.badRequest("sdfjkshdkfjs"));
+        return ResponseEntity.ok(ApiResponse.badRequest("Post:excel \"Bad Request\""));
     }
 
     @GetMapping("files")

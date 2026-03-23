@@ -60,7 +60,7 @@ public class JwtService {
                     payload.get("role", String.class)
             );
         } catch (Exception e) {
-            throw new ForbiddenException("forb");
+            throw new ForbiddenException("forbidden");
         }
 
     }

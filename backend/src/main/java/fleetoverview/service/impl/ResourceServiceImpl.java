@@ -6,13 +6,13 @@ import fleetoverview.repository.ResourceRepository;
 import fleetoverview.service.ResourceService;
 import fleetoverview.util.exceptions.FileException;
 import fleetoverview.util.exceptions.NotFoundException;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -68,16 +68,23 @@ public class ResourceServiceImpl implements ResourceService {
         String[] split = Objects.requireNonNull(file.getOriginalFilename()).split("\\.");
         string += "." + split[split.length - 1];
 
+        Path fileDir = Paths.get(resourceParams.getPath(), type, string);
+
+        if (!Files.exists(fileDir.getParent())) {
+            try {
+                Files.createDirectories(fileDir.getParent());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         ResourceEntity save = repository.save(new ResourceEntity(
                 file.getOriginalFilename(),
                 split[split.length - 1],
                 file.getSize(),
-                resourceParams.getPath() + type + "//" + string,
+                fileDir.toString(),
                 file.getContentType()
         ));
-
         saveFileToSystem(save, file);
-
         return save;
     }
 

@@ -43,6 +43,13 @@
     scrollbar-color: #38527e transparent; /* Thumb & Track */
     /*z-index: 1000*/
 }
+header {
+    font-family: 'Arial', 'Helvetica', 'Verdana', sans-serif; /* readable sans-serif stack */
+    color: #e2e8f0; /* light text */
+    font-weight: 600; /* semi-bold for better emphasis */
+    font-size: 18px; /* slightly larger for header clarity */
+    line-height: 1.4; /* better spacing */
+}
 body {
     background-color: #0f172a; /* тёмно-синий фон */
     color: #e2e8f0; /* светлый текст */

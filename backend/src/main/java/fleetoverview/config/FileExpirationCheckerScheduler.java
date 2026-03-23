@@ -2,14 +2,11 @@ package fleetoverview.config;
 
 import fleetoverview.service.FileCheckerService;
 import fleetoverview.service.NotificationService;
-import fleetoverview.service.impl.CompanyFileCheckerServiceImpl;
-import fleetoverview.service.impl.DriverFileCheckerServiceImpl;
-import fleetoverview.service.impl.ExcelNotificationServiceImpl;
-import fleetoverview.service.impl.TextNotificationServiceImpl;
+import fleetoverview.service.impl.*;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -32,16 +29,18 @@ public class FileExpirationCheckerScheduler {
     private final FileCheckerService permitFileCheckerServiceImpl;
     private final DriverFileCheckerServiceImpl driverFileCheckerService;
     private final CompanyFileCheckerServiceImpl companyFileCheckerService;
+    private final InspectionServiceImpl inspectionServiceImpl;
 
     @Autowired
     public FileExpirationCheckerScheduler(ExcelNotificationServiceImpl notificationService, FileCheckerService truckFileCheckerServiceImpl,
                                           FileCheckerService permitFileCheckerServiceImpl, DriverFileCheckerServiceImpl driverFileCheckerService,
-                                          CompanyFileCheckerServiceImpl companyFileCheckerService) {
+                                          CompanyFileCheckerServiceImpl companyFileCheckerService, InspectionServiceImpl inspectionServiceImpl) {
         this.notificationService = notificationService;
         this.truckFileCheckerServiceImpl = truckFileCheckerServiceImpl;
         this.permitFileCheckerServiceImpl = permitFileCheckerServiceImpl;
         this.driverFileCheckerService = driverFileCheckerService;
         this.companyFileCheckerService = companyFileCheckerService;
+        this.inspectionServiceImpl = inspectionServiceImpl;
     }
 
     @Scheduled(cron = "0 0 1 * * ?")

@@ -20,6 +20,8 @@ const ru = {
     collision_date: 'Дата',
     time: 'Время',
     save: 'Сохранить',
+    inspection_number: 'Inspection Number',
+    inspection_date:'Inspection Date'
 }
 
 export default ru;

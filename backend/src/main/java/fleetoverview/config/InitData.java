@@ -2,6 +2,7 @@ package fleetoverview.config;
 
 import fleetoverview.domain.entity.*;
 import fleetoverview.domain.entity.driver.EndorsementEntity;
+import fleetoverview.domain.entity.inspection.Inspection;
 import fleetoverview.domain.entity.trailer.TrailerModelMakerEntity;
 import fleetoverview.domain.entity.trailer.TrailerTypeEntity;
 import fleetoverview.domain.entity.truck.FuelTypeEntity;
@@ -12,10 +13,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static fleetoverview.util.helper.Utils.getUrls;
@@ -25,7 +24,7 @@ import static fleetoverview.util.helper.Utils.getUrls;
  * @mailto :  sardorbekmatniyazov03@gmail.com
  * @created : 11 февр. 2025
  **/
-//@Component
+@Component
 public class InitData implements CommandLineRunner {
 
     private final ActionRepository actionRepository;
@@ -43,7 +42,7 @@ public class InitData implements CommandLineRunner {
     private final EndorsementRepository endorsementRepository;
     private Set<ActionEntity> actions = new HashSet<>();
 
-    public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository, StateRepository stateRepository, FuelTypeRepository fuelRepository, CountryRepository countryRepository, TruckModelMakerRepository truckModelMakerRepository, TrailerModelMakerRepository trailerModelMakerRepository, TrailerTypeRepository trailerTypeRepository, PurchaseTypeRepository purchaseTypeRepository, EndorsementRepository endorsementRepository) {
+    public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository, StateRepository stateRepository, FuelTypeRepository fuelRepository, CountryRepository countryRepository, TruckModelMakerRepository truckModelMakerRepository, TrailerModelMakerRepository trailerModelMakerRepository, TrailerTypeRepository trailerTypeRepository, PurchaseTypeRepository purchaseTypeRepository, EndorsementRepository endorsementRepository, InspectionRepository inspectionRepository, CompanyRepository companyRepository, DriverRepository driverRepository) {
         this.actionRepository = actionRepository;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;

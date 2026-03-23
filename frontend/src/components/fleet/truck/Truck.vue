@@ -156,7 +156,7 @@ const selectedFileSection = ref({
 
 const apiUrl = URIS.TRUCK;
 const pagination = ref({
-  rowsPerPage: 5,
+  rowsPerPage: 10,
   page: 1,
   hasNext: true
 });
@@ -837,34 +837,30 @@ watch(
 }
 
 .tab-button {
-  position: relative;
-  padding: 0.75rem 1.25rem;
+  padding: 0.6rem 1rem calc(0.6rem + 2px);
   cursor: pointer;
-  font-weight: 500;
-  font-size: 0.95rem;
-  color: var(--bs-body-color, #ffbf53);
-  transition: all 0.3s ease;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--bs-secondary-color);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 1;
   white-space: nowrap;
   outline: none;
-  border: none;
-  border-radius: 0.375rem;
-  margin-bottom: 0.5rem;
-  background-color: rgba(56, 90, 138, 0.06);
 }
 
 .tab-button:hover {
-  color: var(--bs-warning, #385a8a);
-  background-color: rgba(56, 90, 138, 0.06);
+  color: var(--bs-body-color);
+  background: rgba(56, 90, 138, 0.05);
 }
 
 .tab-button.tab-active {
-  color: var(--bs-warning, #385a8a);
-  font-weight: 600;
-  background-color: rgba(56, 90, 138, 0.1);
-  border-bottom: 3px solid var(--bs-warning, #385a8a);
-  margin-bottom: 0;
-  padding-bottom: calc(0.75rem - 2px);
-  border-left: 1px solid var(--bs-warning, #385a8a);
+  color: #385a8a;
+  font-weight: 500;
+  background: rgba(56, 90, 138, 0.06);
+  border-bottom: 2px solid #385a8a;
+  padding-bottom: 0.6rem;
 }
 
 .tab-panels-container {

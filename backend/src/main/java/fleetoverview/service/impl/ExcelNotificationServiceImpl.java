@@ -2,10 +2,7 @@ package fleetoverview.service.impl;
 
 import fleetoverview.domain.entity.company.CompanyEntity;
 import fleetoverview.domain.enums.company.CompanyStatusEnum;
-import fleetoverview.repository.CompanyRepository;
-import fleetoverview.repository.DriverRepository;
-import fleetoverview.repository.TrailerRepository;
-import fleetoverview.repository.TruckRepository;
+import fleetoverview.repository.*;
 import fleetoverview.service.NotificationService;
 import fleetoverview.service.SocialService;
 import org.apache.poi.ss.usermodel.*;
@@ -29,6 +26,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static fleetoverview.domain.enums.company.CompanyFileTypeEnum.*;
 import static fleetoverview.domain.enums.driver.DriverFileTypeEnum.*;
+import static fleetoverview.domain.enums.inspection.InspectionFileTypeEnum.CERTIFICATION;
+import static fleetoverview.domain.enums.inspection.InspectionFileTypeEnum.CORRECTION;
 import static fleetoverview.domain.enums.truck.TruckFileTypeEnum.*;
 import static fleetoverview.util.helper.Utils.isNull;
 
@@ -47,17 +46,19 @@ public class ExcelNotificationServiceImpl implements NotificationService {
 
     private final SocialService telegramService;
     private final SocialService mailService;
+    private final InspectionRepository inspectionRepository;
 
     @Autowired
     public ExcelNotificationServiceImpl(TruckRepository truckRepository, CompanyRepository companyRepository,
                                         TrailerRepository trailerRepository, DriverRepository driverRepository,
-                                        TelegramSocialServiceImpl telegramService, MailSocialServiceImpl mailService) {
+                                        TelegramSocialServiceImpl telegramService, MailSocialServiceImpl mailService, InspectionRepository inspectionRepository) {
         this.truckRepository = truckRepository;
         this.companyRepository = companyRepository;
         this.trailerRepository = trailerRepository;
         this.driverRepository = driverRepository;
         this.telegramService = telegramService;
         this.mailService = mailService;
+        this.inspectionRepository = inspectionRepository;
     }
 
     @Override
@@ -72,11 +73,11 @@ public class ExcelNotificationServiceImpl implements NotificationService {
             logger.error("Error on sending telegram {}", e.getMessage());
         }
 
-        try {
-            mailService.sendDocument(new File("report.xlsx"));
-        } catch (FileNotFoundException | MessagingException e) {
-            logger.error("Error on sending mail {}", e.getMessage());
-        }
+//        try {
+//            mailService.sendDocument(new File("report.xlsx"));
+//        } catch (FileNotFoundException | MessagingException e) {
+//            logger.error("Error on sending mail {}", e.getMessage());
+//        }
     }
 
     private void makeExcel(List<CompanyEntity> companies) {
@@ -88,6 +89,7 @@ public class ExcelNotificationServiceImpl implements NotificationService {
         createDriverSheet(excelData, companies);
         createTruckSheet(excelData, companies);
         createTrailerSheet(excelData, companies);
+        createInspectionSheet(excelData, companies);
 
         try {
             FileOutputStream fileOut = new FileOutputStream("report.xlsx");
@@ -192,6 +194,29 @@ public class ExcelNotificationServiceImpl implements NotificationService {
         });
     }
 
+    private void createInspectionSheet(ExcelData excelData, List<CompanyEntity> companies) {
+        excelData.setCurrentSheet("Inspection Files");
+
+        excelData.currentSheet.setColumnWidth(1, 6000);
+        excelData.currentSheet.setColumnWidth(2, 8000);
+
+        AtomicInteger rowIndex = new AtomicInteger(0);
+        AtomicInteger companyCounter = new AtomicInteger(0);
+
+        companies.forEach(it -> {
+            Row companyNameRow = excelData.currentSheet.createRow(rowIndex.getAndIncrement());
+
+            addCell(companyNameRow, 0, String.valueOf(companyCounter.getAndIncrement())).setCellStyle(excelData.borderedBoldStyle);
+            addCell(companyNameRow, 1, it.getName()).setCellStyle(excelData.borderedBoldStyle);
+            mergerRegion(excelData.currentSheet, companyNameRow.getRowNum(), 1, 4);
+
+            inspectionFileRowBuilder(excelData, rowIndex, it.getId());
+
+            rowIndex.incrementAndGet();
+            rowIndex.incrementAndGet();
+        });
+    }
+
     private void companyFileRowsBuilder(ExcelData excelData, AtomicInteger rowIndex, int companyId) {
         var companyFiles = companyRepository.getCompaniesWithExpirationInfo(companyId);
 
@@ -280,6 +305,25 @@ public class ExcelNotificationServiceImpl implements NotificationService {
             createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, name, ANN_INS.toString(), cFile.getAnnsInsExp());
             createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, name, PHYS_DAMAGE.toString(), cFile.getPhysDamageExp());
             createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter, name, LEASE_AGR.toString(), cFile.getLeaseAgrExp());
+        });
+    }
+
+    private void inspectionFileRowBuilder(ExcelData excelData, AtomicInteger rowIndex, int companyId) {
+        var inspections = inspectionRepository.findInspectionsWithDeadlineAndMissingFiles(companyId);
+
+        if (inspections.isEmpty()) {
+            createNoDataRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), 4, "No Inspection Files", excelData.borderedACenterStyle);
+            return;
+        }
+
+        createTableHeadRow(
+                excelData.currentSheet.createRow(rowIndex.getAndIncrement()),
+                excelData.laStyle, "No", "Inspection Number:", "Item:", "Info:", "Notes:");
+
+        inspections.forEach(cFile -> {
+            int counter = 1;
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter++, cFile.getInspectionNumber(), CORRECTION.toString(), cFile.getDeadlineAt());
+            createFileTypeRow(excelData.currentSheet.createRow(rowIndex.getAndIncrement()), excelData.borderedStyle, excelData.raStyle, counter, cFile.getInspectionNumber(), CERTIFICATION.toString(), cFile.getDeadlineAt());
         });
     }
 

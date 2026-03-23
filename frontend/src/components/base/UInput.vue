@@ -1,6 +1,7 @@
 <script setup>
 
 import {inject, ref} from "vue";
+const emit = defineEmits(['update:modelValue'])
 
 const props = defineProps({
   name: {
@@ -48,7 +49,21 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false
-  }
+  },
+  icon:{
+    type:String,
+    required:false,
+    default:''
+  },
+  id:{
+    type:String,
+    required:false,
+    default:''
+  },
+  modelValue: [String, Boolean, Number],
+  value: [String, Boolean, Number],
+
+
 })
 
 const model = defineModel({});
@@ -67,12 +82,63 @@ registerField(props.name, validate);
 
 <template>
   <div :class="[classes, errorMessage ? 'has-danger' : '', readonly ? 'readonly-mode' : '', 'p-1']" :style="styles">
-    <label v-if="label" class="form-label">{{ label }}</label>
-    <input class="form-control font-size-12" :placeholder="placeholder" :type="type" :name="name"
-           v-model="model">
-    <div class="invalid-feedback">{{ hint }}</div>
-    <p v-if="errorMessage" class="pristine-error text-help">{{ errorMessage }}</p>
-  </div>
+  <!-- Radio type -->
+  <template v-if="type === 'radio'">
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="radio"
+        v-model="model"
+        :name = "name"
+        :id="id"
+        :value="value"
+        :disabled="readonly"
+        @change="$emit('update:modelValue', value)"
+      />
+      <label class="form-check-label">
+        <i v-if="icon" :class="['mdi', icon, 'me-1']"></i>
+        {{ label }}
+      </label>
+    </div>
+  </template>
+
+  <!-- Checkbox type -->
+  <template v-else-if="type === 'checkbox'">
+    <div class="form-check">
+      <input
+        class="form-check-input rounded"
+        type="checkbox"
+        v-model="model"
+        :name = "name"
+        :id="id"
+        :disabled="readonly"
+      />
+      <label class="form-check-label">
+        <i v-if="icon" :class="['mdi', icon, 'me-1']"></i>
+        {{ label }}
+      </label>
+    </div>
+  </template>
+
+  <!-- Default input type -->
+  <template v-else>
+    <label v-if="label" class="form-label">
+      <i v-if="icon" :class="['mdi', icon, 'me-1']"></i>
+      {{ label }}
+    </label>
+    <input
+      class="form-control font-size-12"
+      :placeholder="placeholder"
+      :type="type"
+      :name="name"
+      v-model="model"
+      :disabled="readonly"
+    />
+  </template>
+
+  <div class="invalid-feedback">{{ hint }}</div>
+  <p v-if="errorMessage" class="pristine-error text-help">{{ errorMessage }}</p>
+</div>
 </template>
 
 <style scoped>

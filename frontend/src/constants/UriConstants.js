@@ -37,6 +37,12 @@ export const URIS = {
     TRAILER_FILES: "trailers/files",
     TRAILER_PERMITS: "trailers/permits",
     TRAILER_MODEL_MAKER: "trailer/model-makers",
+
+    //Inspection
+    INSPECTION: "inspections",
+    INSPECTION_FILES: 'inspections/files',
+    INSPECTION_LEVELS: 'inspection-levels',
+    VIOLATION_TYPES: 'violation-types',
     // collision
     COLLISIONS: "collisions",
 }

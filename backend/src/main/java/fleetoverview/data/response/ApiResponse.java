@@ -6,13 +6,14 @@ package fleetoverview.data.response;
  * @created : 28 янв. 2025
  **/
 public class ApiResponse {
-    private final int status;
-    private final String message;
+    private int status;
+    private String message;
 
     public ApiResponse(int status, String message) {
         this.status = status;
         this.message = message;
     }
+    public ApiResponse() {}
 
     public static ApiResponse success() {
         return new ApiResponse(200, "success");

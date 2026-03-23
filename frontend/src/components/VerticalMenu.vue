@@ -130,10 +130,10 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
               <i class="mdi mdi-account-circle-outline"/>
               <span>Safety Compliance</span>
             </router-link>
-            <router-link to="dot-inspections" class="btn w-100 text-start p-0"
-                         :style="`color: ${getSelectedRouterColor('dot-inspections')}`">
+            <router-link to="inspection" class="btn w-100 text-start p-0"
+                         :style="`color: ${getSelectedRouterColor('inspection')}`">
               <i class="mdi mdi-account-circle-outline"/>
-              <span>Dot Inspections</span>
+              <span>Inspections</span>
             </router-link>
             <router-link to="collisions" class="btn w-100 text-start p-0"
                          :style="`color: ${getSelectedRouterColor('collisions')}`">
@@ -198,6 +198,16 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
                     d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
               </svg>
               <span>Purchase type</span>
+            </router-link>
+            <router-link to="inspection-level" class="btn w-100 text-start p-0"
+                         :style="`color: ${getSelectedRouterColor('inspection-level')}`">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   class="feather feather-tool">
+                <path
+                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+              </svg>
+              <span>Inspection Level</span>
             </router-link>
             <hr/>
           </li>
@@ -266,14 +276,10 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
         </ul>
       </div>
 
-      <div class="w-100 position-absolute d-flex align-items-center p-1"
-           style="margin-top: auto; bottom: 0;">
-        <button class="btn btn-outline-light"
-                style="height: 50px; width: 50px;"
-                @click="e => { onLogout(); e.stopPropagation() }"
-                @mouseover="isHovered = true"
-                @mouseleave="isHovered = false">
-          <img :src="isHovered ? hoverIcon : defaultIcon" alt="logout" height="24" />
+      <div class="logout-container">
+        <button class="logout-btn" @click="e => { onLogout(); e.stopPropagation() }">
+          <span class="mdi mdi-logout"></span>
+          <span v-show="!collapsed" class="label">Log Out</span>
         </button>
       </div>
     </div>
@@ -328,5 +334,55 @@ hr {
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
+/* container pinned to bottom */
+.logout-container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+  border-top: 1px solid #e5e7eb; /* subtle separator */
+}
 
+/* button */
+.logout-btn {
+  width: 100%;
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+
+  background: transparent;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* icon */
+.logout-btn .mdi {
+  font-size: 20px;
+  transition: transform 0.2s ease;
+}
+
+/* hover */
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.166);
+  color: #ef4444;
+}
+
+/* icon motion */
+.logout-btn:hover .mdi {
+  transform: translateX(3px);
+}
+
+/* active */
+.logout-btn:active {
+  transform: scale(0.97);
+}
 </style>

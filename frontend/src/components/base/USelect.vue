@@ -45,6 +45,11 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false
+  },
+  icon:{
+    type:String,
+    required:false,
+    default:''
   }
 })
 
@@ -66,10 +71,12 @@ registerField(props.name, validate);
 
 <template>
   <div :class="[classes, errorMessage ? 'has-danger' : '', readonly ? 'readonly-mode' : '', 'p-1']" :style="styles">
-    <label v-if="label" class="form-label">{{ label }}</label>
+    <label v-if="label" class="form-label">
+      <i v-if="icon" :class="['mdi', icon, 'me-1']"></i>
+      {{ label }}</label>
     <select class="form-control form-select font-size-12" v-model="selected">
       <option v-for="option in items" :value="option[option_value]">
-        {{ option[option_name] }}
+        {{ typeof option_name === 'function' ? option_name(option) : option[option_name] }}
       </option>
     </select>
     <div class="invalid-feedback">{{ hint }}</div>

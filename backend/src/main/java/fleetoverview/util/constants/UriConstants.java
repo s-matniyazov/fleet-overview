@@ -36,4 +36,7 @@ public interface UriConstants {
     String COLLISION = API + "/collisions";
     // notification
     String NOTIFICATION = API + "/notification";
+    //inspection
+    String INSPECTION = API + "/inspections";
+    String INSPECTION_LEVEL = API + "/inspection-levels";
 }
