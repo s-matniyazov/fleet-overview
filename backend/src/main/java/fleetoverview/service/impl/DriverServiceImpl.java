@@ -120,6 +120,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
         driver.setStatus(data.status());
         driver.setType(data.type());
 
+        repository.save(driver);
         return ApiResponse.success();
     }
 
@@ -144,7 +145,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
             driver.setTerminationReason("");
             driver.setStatus(DriverStatusEnum.ACTIVE);
         }
-
+        repository.save(driver);
         return ApiResponse.success();
     }
 

@@ -243,7 +243,7 @@ const hoverIcon = new URL('../assets/icons/logout_hover.png', import.meta.url).h
             <template #body>
               <div class="bg-primary rounded-2 px-2 font-size-15" style="min-width: 150px">
                 <router-link class="text-white" to="safety-compliance" style="border-bottom: 1px solid white">Safety Compliance</router-link><br/>
-                <router-link class="text-white" to="inspection" style="border-bottom: 1px solid white">Dot Inspections</router-link><br/>
+                <router-link class="text-white" to="inspection" style="border-bottom: 1px solid white">Inspections</router-link><br/>
                 <router-link class="text-white" to="collisions">Collision & Claims</router-link>
               </div>
             </template>

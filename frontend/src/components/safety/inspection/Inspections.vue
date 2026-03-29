@@ -89,7 +89,7 @@ const newModel = () => {
     city: null,
     description: null,
     inspectionLevel:null,
-    totalFineAmount:null,
+    // totalFineAmount:null,
     violationTypes:[]
   }
 }
@@ -473,12 +473,10 @@ watch(() => data.value.violationDiscovered, (val) => {
                 <div class="col-6">
                   <UInput
                     v-model="data.inspectionDate"
-                    icon="mdi-calendar"
                     :label="t('inspectionDate')"
                     :hint="t('inspectionDate')"
                     :name="t('inspectionDate')"
                     type="date"
-                    :placeholder="t('inspectionDate')"
                     :rules="(val) => (!val && $t('required'))"
                   />
                 </div>
@@ -561,7 +559,7 @@ watch(() => data.value.violationDiscovered, (val) => {
                         :rules="(val) => (!val && $t('required'))"
                       />
                     </div>
-                    <div class="col-7 mb-2">
+                    <!-- <div class="col-7 mb-2">
                       <UInput
                         v-model="data.totalFineAmount"
                         :label="t('total_fine_amount')"
@@ -571,7 +569,7 @@ watch(() => data.value.violationDiscovered, (val) => {
                         :rules="(val) => (!val && $t('required'))"
                         type="number"
                       />
-                    </div>
+                    </div> -->
                   </div>
                   <div class="row">
                     <div class="col mb-2">

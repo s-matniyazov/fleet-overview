@@ -73,11 +73,11 @@ public class ExcelNotificationServiceImpl implements NotificationService {
             logger.error("Error on sending telegram {}", e.getMessage());
         }
 
-//        try {
-//            mailService.sendDocument(new File("report.xlsx"));
-//        } catch (FileNotFoundException | MessagingException e) {
-//            logger.error("Error on sending mail {}", e.getMessage());
-//        }
+        try {
+            mailService.sendDocument(new File("report.xlsx"));
+        } catch (FileNotFoundException | MessagingException e) {
+            logger.error("Error on sending mail {}", e.getMessage());
+        }
     }
 
     private void makeExcel(List<CompanyEntity> companies) {

@@ -98,14 +98,12 @@ const onRowDoubleClick = (row) => {
 
 <style scoped>
 .table-responsive thead th {
-  position: sticky;
   top: 0;
   z-index: 100;
   overflow: visible;
 }
 
 .table-responsive thead {
-  overflow: visible;
 }
 
 .last-col-sticky {
