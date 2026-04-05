@@ -1,6 +1,9 @@
 <script setup>
 
 import {inject, ref} from "vue";
+import {VueDatePicker} from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
 const emit = defineEmits(['update:modelValue'])
 
 const props = defineProps({
@@ -118,6 +121,22 @@ registerField(props.name, validate);
         {{ label }}
       </label>
     </div>
+  </template>
+
+  <!-- date input type -->
+  <template v-else-if="type === 'date'">
+    <label v-if="label" class="form-label">
+      <i v-if="icon" :class="['mdi', icon, 'me-1']"></i>
+      {{ label }}
+    </label>
+    <div>
+      <VueDatePicker v-model="model" 
+        auto-apply="true"
+        :locale="znCh"
+        :time-config="{ enableTimePicker: false }"
+      />
+    </div>
+    
   </template>
 
   <!-- Default input type -->

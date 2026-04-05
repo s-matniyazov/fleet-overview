@@ -336,7 +336,6 @@ export function makeResourceEntity(file) {
 }
 export function downloadResource(resource) {
     if (!resource.id) return
-    console.log(resource);
     axiosIns.get(URIS.RESOURCES + '/view/' + resource.id, {
         responseType: 'blob',
     })
@@ -391,4 +390,24 @@ export function filePeriods() {
     for (let i = start; i <= end; i++) periods.push({name: `${i - 1} - ${i}`});
 
     return periods;
+}
+
+export function stringToDateFormatter(dateStr, format = 'MM-DD-YYYY') {
+    if (!dateStr || !format) return "";
+
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return ""; // guard against invalid dates
+
+    const pad = n => String(n).padStart(2, "0");
+
+    const tokens = {
+        YYYY: date.getFullYear(),
+        MM:   pad(date.getMonth() + 1),
+        DD:   pad(date.getDate()),
+        HH:   pad(date.getHours()),
+        mm:   pad(date.getMinutes()),
+        ss:   pad(date.getSeconds()),
+    };
+
+    return format.replace(/YYYY|MM|DD|HH|mm|ss/g, token => tokens[token]);
 }

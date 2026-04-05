@@ -54,11 +54,18 @@ public class InspectionServiceImpl extends BaseService implements InspectionServ
         inspection.setInspectionNumber(data.inspectionNumber());
         inspection.setInspectionDate(data.inspectionDate());
         inspection.setCompany(companyRepo.findById(data.companyId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not_found"))));
-        inspection.setDriver(driverRepository.findById(data.driverId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("driver.not_found"))));
-        if (data.coDriverId() != null) {
-            inspection.setCoDriver(driverRepository.findById(data.coDriverId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("driver.not_found"))));
-        }
-        inspection.setTruck(truckRepository.findById(data.truckId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("truck.not_found"))));
+
+        inspection.setDriver(data.driverId() == null ? null :
+                driverRepository.findById(data.driverId())
+                        .orElseThrow(() -> new NotFoundException(mSourceBundle.apply("driver.not_found"))));
+
+        inspection.setCoDriver(data.coDriverId() == null ? null :
+                driverRepository.findById(data.coDriverId())
+                        .orElseThrow(() -> new NotFoundException(mSourceBundle.apply("driver.not_found"))));
+
+        inspection.setTruck(data.truckId() == null ? null :
+                truckRepository.findById(data.truckId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("truck.not_found"))));
+
         inspection.setDescription(data.description());
         inspection.setState(stateRepository.findById(data.stateId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("state.not_found"))));
         inspection.setCity(data.city());
@@ -103,22 +110,22 @@ public class InspectionServiceImpl extends BaseService implements InspectionServ
     public DataResponse<List<InspectionFileDto>> getFiles(Integer inspectionId) {
         var inspectionFiles = inspectionFileRepo.findAllByInspectionIdOrderByIdDesc(inspectionId);
         List<InspectionFileDto> inspectionFileDtos = inspectionFiles.stream().map(i ->
-                new InspectionFileDto(
-                        i.getId(),
-                        i.getResource(),
-                        i.getType().name(),
-                        i.getStatus().name(),
-                        i.getDescription(),
-                        i.getResource().getFileName(),
-                        i.getResource().getSize()
-                ))
+                        new InspectionFileDto(
+                                i.getId(),
+                                i.getResource(),
+                                i.getType().name(),
+                                i.getStatus().name(),
+                                i.getDescription(),
+                                i.getResource().getFileName(),
+                                i.getResource().getSize()
+                        ))
                 .collect(Collectors.toList());
         return DataResponse.success(inspectionFileDtos);
     }
 
     @Override
     public Page<InspectionDto> getInspections(Pageable page, Integer companyId, String driverName, StatusEnum staus) {
-        return inspectionRepo.findAllByCompanyIdAndDriverNameAndStatus(companyId, driverName, staus.name(),page );
+        return inspectionRepo.findAllByCompanyIdAndDriverNameAndStatus(companyId, driverName, staus.name(), page);
     }
 
     @Override

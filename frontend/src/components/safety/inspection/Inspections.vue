@@ -22,6 +22,8 @@ import USelect from "@/components/base/USelect.vue";
 import UTextarea from "@/components/base/UTextarea.vue";
 import UDialog from "@/components/base/UDialog.vue";
 import UScrollArea from "@/components/base/UScrollArea.vue";
+import {stringToDateFormatter} from "@/util/utils.js";
+
 
 const {t} = useI18n();
 const filterStore = useFilterStore();
@@ -147,7 +149,6 @@ const onEdit = (d) => {
           description: v.description
         }));
 
-        console.log(d);
       }).catch(e => {showMessage(e)});
   data.value = {
     ...d,
@@ -355,7 +356,7 @@ watch(() => data.value.violationDiscovered, (val) => {
             </div>
             <div>  
               <span class="text-secondary badge badge-pill" style="font-size: 15px">
-                {{ `Date: ${row?.inspectionDate}` }}
+                {{ `Date: ${stringToDateFormatter(row?.inspectionDate)}` }}
               </span>
             </div>
               
@@ -369,12 +370,15 @@ watch(() => data.value.violationDiscovered, (val) => {
           <div class="row">
             <div class="col-12 d-flex align-items-center">
               <span class="text-primary badge badge-pill" style="font-size: 15px">
-                {{ `${row?.driverFirstName} ${row?.driverLastName}` }}
+                {{ `${row?.driverFirstName || ''} ${row?.driverLastName || ''}` }}
               </span>
             </div>
             <div class="col-12 d-flex align-items-center mt-1">
               <img src="@/assets/icons/em/truck.svg" alt="Truck icon">
-              <span class="text-gray-light f-700 ms-1">{{ `Unit: ${row?.unitNumber}` }}</span>
+              <span class="text-gray-light f-700 ms-1">
+                {{ `${row?.driverFirstName || ''} ${row?.driverLastName || ''}` }}
+                {{ `Unit: ${row?.unitNumber || ''}` }}
+              </span>
             </div>
           </div>
         </td>
@@ -493,7 +497,6 @@ watch(() => data.value.violationDiscovered, (val) => {
                     :items="drivers"
                     name="driver"
                     :option_name="(d) => d.firstName + ' ' + d.lastName"
-                    :rules="(val) => (!val && $t('required'))"
                   />
                 </div>
                 <div class="col-6">
@@ -507,71 +510,20 @@ watch(() => data.value.violationDiscovered, (val) => {
               </div>
               <hr class="my-4 border-primary opacity-75"> <!-- adds clear separation -->
             </div>
-
-            <!-- --- location state city --- -->
-            <div class="col-12">
-              <div class="row g-4">
-                <div class="col-6">
-                  <UInput
-                    v-model="data.location"
-                    icon="mdi-calendar"
-                    :label="t('location')"
-                    :hint="t('location')"
-                    :name="t('location')"
-                    :placeholder="t('location')"
-                    :rules="(val) => (!val && $t('required'))"
-                  />
-                </div>
-                <div class="col-3">
-                  <UInput
-                    v-model="data.city"
-                    icon="mdi-map-marker-radius"
-                    :label="t('city')"
-                    :hint="t('city')"
-                    :name="t('city')"
-                    :placeholder="t('city')"
-                    :rules="(val) => (!val && $t('required'))"
-                  />
-                </div>
-                <div class="col-3">
-                  <USelect
-                    v-model="data.stateId" :label="t('states')" icon="mdi-flag-variant"
-                    :items="stateStore.getStates(1)" name="state"
-                    option_name="name"
-                    :rules="(val) => (!val && $t('required'))"
-                    ></USelect>
-                </div>
-              </div>
-              <hr class="my-4 border-primary opacity-75"> <!-- adds clear separation -->
-            </div>
             
             <!-- --- violation discovered --- -->
             <div class="col-12">
               <div class="row g-4">
                 <div class="col-6">
                   <div class="row">
-                    <div class="col-5 mb-2">
+                    <div class="col-6 mb-2">
                       <USelect
                         v-model="data.truckId" :label="t('truck')" icon="mdi-truck-check"
                         :items="trucks"
                         name="truck"
                         option_name="unit"
-                        :rules="(val) => (!val && $t('required'))"
                       />
                     </div>
-                    <!-- <div class="col-7 mb-2">
-                      <UInput
-                        v-model="data.totalFineAmount"
-                        :label="t('total_fine_amount')"
-                        :hint="t('total_fine_amount')"
-                        :name="t('total_fine_amount')"
-                        :placeholder="t('total_fine_amount')"
-                        :rules="(val) => (!val && $t('required'))"
-                        type="number"
-                      />
-                    </div> -->
-                  </div>
-                  <div class="row">
                     <div class="col mb-2">
                       <USelect
                         v-model="data.inspectionLevel" :label="t('inspection_level')"
@@ -580,6 +532,28 @@ watch(() => data.value.violationDiscovered, (val) => {
                         option_name="level"
                         :rules="(val) => (!val && $t('required'))"
                       />
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-6">
+                      <UInput
+                        v-model="data.city"
+                        icon="mdi-map-marker-radius"
+                        :label="t('city')"
+                        :hint="t('city')"
+                        :name="t('city')"
+                        :placeholder="t('city')"
+                        :rules="(val) => (!val && $t('required'))"
+                      />
+                    </div>
+                    <div class="col-6">
+                      <USelect
+                        v-model="data.stateId" :label="t('states')" icon="mdi-flag-variant"
+                        :items="stateStore.getStates(1)" name="state"
+                        option_name="name"
+                        :rules="(val) => (!val && $t('required'))"
+                        ></USelect>
                     </div>
                   </div>
 
@@ -611,34 +585,32 @@ watch(() => data.value.violationDiscovered, (val) => {
                 <div class="col-6" v-if="showViolation">
                   <div v-for="(item, index) in violations" :key="index" class="pb-3">
                     <div class="row border border-primary pb-2" >
-                      <div class="col">
-                          <USelect
-                            v-model="item.type" :label="t('violation_type')"
-                            :items="[{'name':'violation'},{'name':'citation'}]"
-                            name="type"
-                            option_name="name"
-                            option_value="name"
-                            :rules="(val) => (!val && $t('required'))"
-                          />
-                        </div>
-                      <div class="col">
-                          <UInput
-                            v-model="item.sectionViolCode"
-                            :label="t('section_viol_code')"
-                            :hint="t('section_viol_code')"
-                            name="sectionViolCode"
-                            :placeholder="t('enter_viol_code')"
-                            :rules="(val) => (!val && $t('required'))"
-                          />
-                      </div>
-                      <div class="row">
                         <div class="col">
+                            <USelect
+                              v-model="item.type" :label="t('violation_type')"
+                              :items="[{'name':'violation'},{'name':'citation'}]"
+                              name="type"
+                              option_name="name"
+                              option_value="name"
+                              :rules="(val) => (!val && $t('required'))"
+                            />
+                          </div>
+                        <div class="col">
+                            <UInput
+                              v-model="item.sectionViolCode"
+                              :label="t('section_viol_code')"
+                              :hint="t('section_viol_code')"
+                              name="sectionViolCode"
+                              :placeholder="t('enter_viol_code')"
+                              :rules="(val) => (!val && $t('required'))"
+                            />
+                        </div>
+                        <div class="col-12">
                           <UTextarea v-model="item.description" :label="t('description')" 
                             :placeholder="t('enter_description')"
                             rows="1" 
                           />
                         </div>
-                      </div>
                     </div>
                   </div>
                   <div class="row form-check form-switch">

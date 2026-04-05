@@ -40,9 +40,14 @@ export const useStateStore = defineStore("state", () => {
         return states.value.filter(it => it?.country.id === countryId);
     }
 
+    function getStateById(stateId) {
+        return states.value.find(it => it?.id === stateId);
+    }
+
     return {
         countries,
         getStates,
+        getStateById,
         init, clear
     };
 });

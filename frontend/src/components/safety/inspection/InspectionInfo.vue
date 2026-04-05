@@ -1,8 +1,12 @@
 <script setup>
+import {ref,watch} from "vue";
 import {useI18n} from "vue-i18n";
 import {dataOrTire, longToDate, longToDateTime} from "@/util/utils.js";
+import {useStateStore} from "@/store/StateStore.js";
 
 const {t} = useI18n();
+const stateStore = useStateStore();
+const state = ref(null);
 
 const props = defineProps({
   data: {
@@ -10,6 +14,15 @@ const props = defineProps({
     required: true
   }
 });
+
+watch(
+  () => props.data?.stateId,
+  async (newVal) => {
+    if (!newVal) return;
+    state.value = stateStore.getStateById(newVal);
+  },
+  { immediate: true }
+);
 </script>
 <template>
   <div class="tw-w-full tw-flex tw-flex-col ma-3">
@@ -43,8 +56,8 @@ const props = defineProps({
           <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
             <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">City</span><span
                 class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.city) }} </span></div>
-            <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Location</span><span
-                class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.location) }} </span></div>
+            <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">State</span><span
+                class="tw-text-dark-primary  tw-text-[14px]"> {{ state ? `${state.name}, ${state.country.name}` : '' }} </span></div>
           </div>
           <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
             <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Out Of Service</span><span
@@ -79,19 +92,7 @@ const props = defineProps({
           </div>
         </div>
       </div>
-      <div class="tw-w-1/3 tw-rounded tw-bg-light-primary tw-shadow-default tw-p-[7px]">
-        <div class="inspection-header">
-          <span class="fs-4 bg-cl mdi mdi-currency-usd"></span>
-          <span class="tw-mt-4 tw-text-lg tw-font-bold tw-text-dark-primary">Total Fine Amount</span>
-        </div>
-
-        <div class="tw-flex tw-justify-between">
-          <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
-            <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Amount</span><span
-                class="tw-text-dark-primary  fw-bold">${{ dataOrTire(data?.totalFineAmount) }} </span></div>
-          </div>
-        </div>
-      </div>
+      
     </div>
     
   </div>

@@ -75,6 +75,7 @@ registerField(props.name, validate);
       <i v-if="icon" :class="['mdi', icon, 'me-1']"></i>
       {{ label }}</label>
     <select class="form-control form-select font-size-12" v-model="selected">
+      <option></option>
       <option v-for="option in items" :value="option[option_value]">
         {{ typeof option_name === 'function' ? option_name(option) : option[option_name] }}
       </option>
