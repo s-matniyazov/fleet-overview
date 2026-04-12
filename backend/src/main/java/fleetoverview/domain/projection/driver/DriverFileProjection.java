@@ -37,7 +37,7 @@ public class DriverFileProjection {
     private String countryName;
     private DriverFileClassEnum classType;
     private LocalDate issuedDate;
-    private List<EndorsementEntity> endorsement;
+//    private List<EndorsementEntity> endorsement;
 
     // for MEDICAL_CERT
 
@@ -187,13 +187,13 @@ public class DriverFileProjection {
         this.issuedDate = issuedDate;
     }
 
-    public List<EndorsementEntity> getEndorsement() {
-        return endorsement;
-    }
-
-    public void setEndorsement(List<EndorsementEntity> endorsement) {
-        this.endorsement = endorsement;
-    }
+//    public List<EndorsementEntity> getEndorsement() {
+//        return endorsement;
+//    }
+//
+//    public void setEndorsement(List<EndorsementEntity> endorsement) {
+//        this.endorsement = endorsement;
+//    }
 
     public LocalDate getLastCollectedOn() {
         return lastCollectedOn;
