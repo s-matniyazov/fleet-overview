@@ -6,69 +6,78 @@ import { showMessage } from "@/util/utils.js";
 import useUserStore from "@/store/UserStore";
 import router from "@/router/index.js";
 import { useAuthStore } from "@/store/UseAuthStore.js";
-import UInput from "@/components/base/UInput.vue";
 
 const userStore = useUserStore();
 const username = ref("username");
 const password = ref("password");
 
 function onLogin() {
-  axiosIns.post(URIS.LOGIN, { login: username.value, password: password.value })
-      .then(res => {
-        if (res.data.status === 200) {
-          userStore.token = res.data.data;
-          const authStore = useAuthStore();
-          authStore.login(res.data.data);
-          router.push("/company-layout");
-        } else {
-          showMessage("Please check your login or password");
-        }
-      })
-      .catch(e => {
-        showMessage(e);
-      });
+  axiosIns
+    .post(URIS.LOGIN, { login: username.value, password: password.value })
+    .then((res) => {
+      if (res.data.status === 200) {
+        userStore.token = res.data.data;
+        const authStore = useAuthStore();
+        authStore.login(res.data.data);
+        router.push("/company-layout");
+      } else {
+        showMessage("Please check your login or password");
+      }
+    })
+    .catch((e) => {
+      showMessage(e);
+    });
 }
 </script>
 
 <template>
-  <div class="d-flex justify-content-center align-items-center min-vh-100 main_with_gradient" >
-    <div class="p-4 shadow-lg rounded-3 login" >
-      <div class="text-center mb-4">
-        <h2 class="mt-3 text-white">EFFICIENT MANAGEMENT</h2>
-      </div>
-      <form>
-        <div class="mb-3">
-          <UInput v-model="username" placeholder="Введите имя пользователя" label="Username" />
-        </div>
-        <div class="mb-3">
-          <UInput v-model="password" placeholder="Введите пароль" label="Password" type="password" />
-        </div>
-        <div class="mb-3">
-          <button style="background-color: #0891B2; "
-              class="btn w-100 text-white"
-              type="button"
-              @click="e => { onLogin(); e.stopPropagation(); }"
-          >
-            Login
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
+  <v-container fluid class="login-view fill-height pa-4">
+    <v-row align="center" justify="center" class="fill-height">
+      <v-col cols="12" sm="10" md="5" lg="4" xl="3">
+        <v-card variant="outlined" class="login-card pa-2">
+          <v-card-item class="pb-2">
+            <v-card-title class="text-h5 text-center font-weight-medium pt-4">
+              Efficient Management
+            </v-card-title>
+            <v-card-subtitle class="text-center text-medium-emphasis pb-2">
+              Sign in to continue
+            </v-card-subtitle>
+          </v-card-item>
+
+          <v-card-text>
+            <v-text-field
+              v-model="username"
+              label="Username"
+              autocomplete="username"
+              class="mb-3"
+            />
+            <v-text-field
+              v-model="password"
+              label="Password"
+              type="password"
+              autocomplete="current-password"
+              class="mb-2"
+              @keyup.enter="onLogin"
+            />
+            <v-btn block color="primary" size="large" class="mt-2" @click="onLogin">
+              Log in
+            </v-btn>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <style scoped>
-body {
-  margin: 0;
-  background-color: #4e749d;
+.login-view {
+  background: linear-gradient(145deg, #0f172a 0%, #1a2744 45%, #0b1220 100%);
+  min-height: 100vh;
 }
-.main_with_gradient{
-  background: linear-gradient(135deg, #24334b, rgb(2, 6, 23), #0f172a, #24334b);
-}
-.login{
-  width: 100%;max-width: 420px; background: rgba(30, 41, 59, 0.58);
-  backdrop-filter: blur(6px);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+
+.login-card {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: rgba(17, 28, 44, 0.92) !important;
+  backdrop-filter: blur(10px);
 }
 </style>

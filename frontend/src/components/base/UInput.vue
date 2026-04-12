@@ -1,164 +1,167 @@
 <script setup>
-
-import {inject, ref} from "vue";
-import {VueDatePicker} from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
-
-const emit = defineEmits(['update:modelValue'])
+import { computed, inject, ref } from "vue";
+import { VueDatePicker } from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 
 const props = defineProps({
   name: {
     type: String,
     required: false,
-    default: ''
+    default: "",
   },
   label: {
     type: String,
     required: false,
-    default: ''
+    default: "",
   },
   placeholder: {
     type: String,
     required: false,
-    default: ''
+    default: "",
   },
   hint: {
     type: String,
     required: false,
-    default: ''
+    default: "",
   },
   rows: {
     type: Number,
     required: false,
-    default: 3
+    default: 3,
   },
   classes: {
     type: String,
     required: false,
-    default: ''
+    default: "",
   },
   styles: {
     type: String,
     required: false,
-    default: ''
+    default: "",
   },
   type: {
     type: String,
     required: false,
-    default: 'text'
+    default: "text",
   },
   rules: Function,
   readonly: {
     type: Boolean,
     required: false,
-    default: false
+    default: false,
   },
-  icon:{
-    type:String,
-    required:false,
-    default:''
+  icon: {
+    type: String,
+    required: false,
+    default: "",
   },
-  id:{
-    type:String,
-    required:false,
-    default:''
+  id: {
+    type: String,
+    required: false,
+    default: "",
   },
-  modelValue: [String, Boolean, Number],
-  value: [String, Boolean, Number],
-
-
-})
+});
 
 const model = defineModel({});
-const errorMessage = ref('');
+const errorMessage = ref("");
 
-const formState = inject('formState', null);
-const registerField = inject('registerField', () => {});
+const registerField = inject("registerField", () => {});
 
 const validate = () => {
-  errorMessage.value = props.rules ? props.rules(model.value) : '';
+  errorMessage.value = props.rules ? props.rules(model.value) : "";
   return errorMessage.value;
 };
 
 registerField(props.name, validate);
+
+const errorMessages = computed(() =>
+  errorMessage.value ? [errorMessage.value] : [],
+);
+
+const prependInnerIcon = computed(() =>
+  props.icon && String(props.icon).startsWith("mdi") ? props.icon : undefined,
+);
 </script>
 
 <template>
-  <div :class="[classes, errorMessage ? 'has-danger' : '', readonly ? 'readonly-mode' : '', 'p-1']" :style="styles">
-  <!-- Radio type -->
-  <template v-if="type === 'radio'">
-    <div class="form-check">
-      <input
-        class="form-check-input"
-        type="radio"
+  <div :class="classes" :style="styles">
+    <!-- Checkbox type -->
+    <template v-if="type === 'checkbox'">
+      <v-checkbox
         v-model="model"
-        :name = "name"
-        :id="id"
-        :value="value"
         :disabled="readonly"
-        @change="$emit('update:modelValue', value)"
-      />
-      <label class="form-check-label">
-        <i v-if="icon" :class="['mdi', icon, 'me-1']"></i>
-        {{ label }}
-      </label>
-    </div>
-  </template>
+        :error-messages="errorMessages"
+        hide-details="auto"
+        density="compact"
+        color="primary"
+      >
+        <template #label>
+          <span class="d-inline-flex align-center">
+            <v-icon v-if="icon" :icon="icon" size="small" class="me-1" />
+            {{ label }}
+          </span>
+        </template>
+      </v-checkbox>
+    </template>
 
-  <!-- Checkbox type -->
-  <template v-else-if="type === 'checkbox'">
-    <div class="form-check">
-      <input
-        class="form-check-input rounded"
-        type="checkbox"
+    <!-- Date input: VueDatePicker (model often Date / ISO) -->
+    <template v-else-if="type === 'date'">
+      <div class="u-input-date">
+        <div v-if="label" class="text-caption text-medium-emphasis mb-1">
+          <v-icon v-if="icon" :icon="icon" size="x-small" class="me-1" />
+          {{ label }}
+        </div>
+        <VueDatePicker
+          v-model="model"
+          auto-apply
+          :enable-time-picker="false"
+          :dark="true"
+          class="u-input-date__picker"
+        />
+        <p v-if="errorMessage" class="text-error text-caption mt-1 mb-0">
+          {{ errorMessage }}
+        </p>
+        <p v-else-if="hint" class="text-caption text-medium-emphasis mt-1 mb-0">
+          {{ hint }}
+        </p>
+      </div>
+    </template>
+
+    <!-- Default: text, number, email, etc. -->
+    <template v-else>
+      <v-text-field
         v-model="model"
-        :name = "name"
-        :id="id"
-        :disabled="readonly"
+        :type="type"
+        :label="label"
+        :placeholder="placeholder"
+        :readonly="readonly"
+        :prepend-inner-icon="prependInnerIcon"
+        :error-messages="errorMessages"
+        :hint="hint || undefined"
+        persistent-hint
+        variant="outlined"
+        density="compact"
+        hide-details="auto"
       />
-      <label class="form-check-label">
-        <i v-if="icon" :class="['mdi', icon, 'me-1']"></i>
-        {{ label }}
-      </label>
-    </div>
-  </template>
-
-  <!-- date input type -->
-  <template v-else-if="type === 'date'">
-    <label v-if="label" class="form-label">
-      <i v-if="icon" :class="['mdi', icon, 'me-1']"></i>
-      {{ label }}
-    </label>
-    <div>
-      <VueDatePicker v-model="model" 
-        auto-apply="true"
-        :locale="znCh"
-        :time-config="{ enableTimePicker: false }"
-      />
-    </div>
-    
-  </template>
-
-  <!-- Default input type -->
-  <template v-else>
-    <label v-if="label" class="form-label">
-      <i v-if="icon" :class="['mdi', icon, 'me-1']"></i>
-      {{ label }}
-    </label>
-    <input
-      class="form-control font-size-12"
-      :placeholder="placeholder"
-      :type="type"
-      :name="name"
-      v-model="model"
-      :disabled="readonly"
-    />
-  </template>
-
-  <div class="invalid-feedback">{{ hint }}</div>
-  <p v-if="errorMessage" class="pristine-error text-help">{{ errorMessage }}</p>
-</div>
+    </template>
+  </div>
 </template>
 
 <style scoped>
+.u-input-date__picker {
+  width: 100%;
+}
+
+.u-input-date :deep(.dp__input) {
+  border-radius: 4px;
+  border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+  background: rgb(var(--v-theme-surface));
+  color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
+  min-height: 40px;
+  font-size: 0.875rem;
+}
+
+.u-input-date :deep(.dp__input_wrap) {
+  width: 100%;
+}
 </style>

@@ -164,10 +164,6 @@ const selectedRow = ref();
 const showModal = ref(false);
 
 // FUNCTIONS
-const paging = (a) => {
-  if (a === 'p' && pagination.value.page > 1) pagination.value.page --;
-  if (a === 'n' && pagination.value.hasNext) pagination.value.page ++;
-}
 const onAdd = () => {
   data.value = newModel();
 
@@ -312,43 +308,31 @@ watch(
 
 <template>
   <div class="mb-0 p-2">
-    <div class="col-12">
-      <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
-        <button @click="onAdd" class="btn btn-primary btn-sm"><span class="mdi mdi-plus"></span> {{
-            t("add")
-          }}
-        </button>
-        <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-            class="mdi mdi-pen"></span> {{ t("edit") }}
-        </button>
-        <button @click="showModal = true" class="btn btn-primary btn-sm" :disabled="!selectedRow">
-          <span class="mdi mdi-eye"></span>
-        </button>
+    <UTable
+      :items="dataList"
+      :columns="columns"
+      v-model="selectedRow"
+      v-model:pagination="pagination"
+    >
+      <template #top>
+        <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
+          <v-btn color="primary" size="small" prepend-icon="mdi-plus" @click="onAdd">
+            {{ t("add") }}
+          </v-btn>
+          <v-btn color="primary" size="small" prepend-icon="mdi-pencil" :disabled="!selectedRow" @click="onEdit(selectedRow)">
+            {{ t("edit") }}
+          </v-btn>
+          <v-btn color="primary" size="small" icon variant="text" :disabled="!selectedRow" @click="showModal = true">
+            <v-icon>mdi-eye</v-icon>
+          </v-btn>
 
-        <UInput v-model="filter.companyName" style="min-width: 23vw"
-                :hint="t('vin')" :placeholder="t('search_by_company_name')"/>
-        <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-magnify"></span></button>
-
-        <div class="align-items-center u-end">
-          <ul class="pagination pagination-sm ul-style">
-            <select v-model="pagination.rowsPerPage" class="form-select form-select-sm mb-0 my-n1">
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-            </select>
-
-            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('p')" :disabled="pagination.page <= 1">&laquo;</a></li>
-            <li class="page-item active cursor-not-allowed"><a class="page-link">{{ pagination.page }}</a></li>
-            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('n')" :disabled="!pagination.hasNext">&raquo;</a></li>
-            <!--            <li class="page-item cursor-pointer">-->
-            <!--              <button @click="reload" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>-->
-            <!--            </li>-->
-          </ul>
+          <UInput v-model="filter.companyName" style="min-width: 23vw"
+                  :placeholder="t('search_by_company_name')"/>
+          <v-btn color="primary" size="small" icon variant="text" @click="getData">
+            <v-icon>mdi-magnify</v-icon>
+          </v-btn>
         </div>
-      </div>
-    </div>
-
-    <UTable :items="dataList" :columns="columns" v-model="selectedRow" height="calc(100vh - 240px)">
+      </template>
       <template #row_company_name="{row}">
         <td>
           <div class="row">
@@ -467,13 +451,12 @@ watch(
               </template>
               <template #body>
                 <div class="bg-body rounded-1 font-size-15 p-2">
-                  <button v-if="row.status === 'ACTIVE'" @click="deactivate(row)"
-                          class="btn btn-outline-danger btn-sm">
+                  <v-btn v-if="row.status === 'ACTIVE'" size="small" variant="outlined" color="error" @click="deactivate(row)">
                     {{ t("deactivate") }}
-                  </button>
-                  <button v-else @click="activate(row)" class="btn btn-outline-success btn-sm">
+                  </v-btn>
+                  <v-btn v-else size="small" variant="outlined" color="success" @click="activate(row)">
                     {{ t("activate") }}
-                  </button>
+                  </v-btn>
                 </div>
               </template>
             </UDropDown>
@@ -492,7 +475,9 @@ watch(
             {{ data.id ? t('edit') : t('add') }} Company
           </div>
           <div class="text-end u-end">
-              <button class="btn-close btn-close-white" @click="onClose"></button>
+              <v-btn icon variant="text" color="white" aria-label="Close" @click="onClose">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
           </div>
         </div>
       </template>
@@ -605,7 +590,7 @@ watch(
 
           <div class="modal-footer">
             <div class="d-flex text-end align-items-end mt-2">
-              <button type="submit" style="background-color:#0891B2;" class="btn text-white">Save</button>
+              <v-btn type="submit" color="info">Save</v-btn>
             </div>
           </div>
         </UForm>
@@ -626,14 +611,18 @@ watch(
           </div>
         </div>
         <div class="text-end u-end">
-          <button class="btn-close" @click="showModal = false"></button>
+          <v-btn icon variant="text" density="comfortable" aria-label="Close" @click="showModal = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </div>
       </div>
     </template>
 
     <template #body>
       <UScrollArea height="calc(100vh - 50px)">
-        <CompanyCard :data="selectedRow"/>
+        <div class="u-scroll-slot-fill">
+          <CompanyCard :data="selectedRow"/>
+        </div>
       </UScrollArea>
     </template>
   </URightOverlay>
@@ -645,7 +634,9 @@ watch(
           DOCUMENT_TYPES[selectedFileSection.data.type]
         }}
         <span class="text-end u-end">
-          <button class="btn-close" @click="selectedFileSection.dialog = false"></button>
+          <v-btn icon variant="text" density="comfortable" aria-label="Close" @click="selectedFileSection.dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </span>
       </h4>
     </template>

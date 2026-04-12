@@ -1,0 +1,251 @@
+/* Hide scrollbar buttons in Chrome, Edge, and Safari */
+::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+/* Remove scrollbar buttons in older versions of Chrome */
+::-webkit-scrollbar-button:vertical:start:increment,
+::-webkit-scrollbar-button:vertical:end:increment,
+::-webkit-scrollbar-button:horizontal:start:increment,
+::-webkit-scrollbar-button:horizontal:end:increment {
+    display: none !important;
+}
+
+/* Custom Scrollbar (Without Arrows) */
+::-webkit-scrollbar {
+    width: 8px; /* Adjust thickness */
+    height: 8px; /* Horizontal scrollbar */
+    padding-left: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent; /* No default background */
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #4b6cc5, #5577b4); /* Custom gradient */
+    border-radius: 10px; /* Rounded corners */
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #4353b2, #4e6ea6); /* Darker on hover */
+}
+
+/* Firefox Custom Scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #38527e transparent; /* Thumb & Track */
+    /*z-index: 1000*/
+}
+header {
+    font-family: 'Arial', 'Helvetica', 'Verdana', sans-serif; /* readable sans-serif stack */
+    color: #e2e8f0; /* light text */
+    font-weight: 600; /* semi-bold for better emphasis */
+    font-size: 18px; /* slightly larger for header clarity */
+    line-height: 1.4; /* better spacing */
+}
+html {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background-color: #0f172a; /* тёмно-синий фон */
+    color: #e2e8f0; /* светлый текст */
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+}
+
+#app {
+    height: 100%;
+    max-height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Vuetify: fill viewport without growing past it (scroll stays inside panes/tables). */
+#app .v-application {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* MainLayout: routed view fills space below app bar */
+.page-shell {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.page-shell > * {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+}
+
+/* Flex child: allow shrink so nested scroll regions get a bounded height */
+.min-h-0 {
+    min-height: 0;
+}
+
+/**
+ * Direct child of UScrollArea when the scroll area has a fixed height (e.g. calc(100vh - …)).
+ * Lets UTabs / UTable use flex + height:100% without duplicating viewport math on each table.
+ */
+.u-scroll-slot-fill {
+    box-sizing: border-box;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.u-scroll-slot-fill > * {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+/* UTable toolbar: status filter before search */
+.table-top-status-select {
+    flex: 0 0 auto;
+    min-width: 150px;
+    max-width: 200px;
+}
+
+/* —— Forms: spacing & alignment (UForm + modal dialogs) —— */
+.u-form {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.u-dialog-body .u-form,
+.u-dialog-v-body-inner .u-form {
+    box-sizing: border-box;
+}
+
+/* Bootstrap row: consistent gutters inside dialogs */
+.u-dialog-body .row,
+.u-dialog-v-body-inner .row {
+    --bs-gutter-x: 12px;
+    --bs-gutter-y: 12px;
+}
+
+@media (min-width: 768px) {
+    .u-dialog-body .row,
+    .u-dialog-v-body-inner .row {
+        --bs-gutter-x: 16px;
+        --bs-gutter-y: 14px;
+    }
+}
+
+/* Prevent Vuetify fields from overflowing narrow columns */
+.u-dialog-body .row > [class*="col-"],
+.u-dialog-v-body-inner .row > [class*="col-"] {
+    min-width: 0;
+}
+
+/* Scrollable form blocks: breathing room next to custom scrollbar */
+.u-dialog-body .scroll-area {
+    padding-right: 14px;
+}
+
+/* Dialog footers (Save / Cancel) — legacy: footer inside body; yoki UDialog #actions */
+.u-dialog-body .modal-footer,
+.u-dialog-v-body-inner .modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    padding: 1rem 2px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent !important;
+}
+
+.u-dialog-body .modal-footer.bg-light,
+.u-dialog-v-body-inner .modal-footer.bg-light {
+    margin-top: 1rem;
+    padding: 0.875rem 1rem;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.22) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.u-dialog-body .modal-footer.border-top.border-primary,
+.u-dialog-v-body-inner .modal-footer.border-top.border-primary {
+    border-top-color: rgba(38, 166, 154, 0.45) !important;
+    padding-top: 1rem;
+}
+
+/* —— Form controls (Vuetify outlined fields in modals & pages) —— */
+.u-form .u-form-field,
+.u-form-field.v-input {
+    width: 100%;
+}
+
+.u-dialog-v-body-inner .u-form-field .v-label,
+.page-shell .u-form-field .v-label {
+    font-weight: 500;
+    letter-spacing: 0.015em;
+}
+
+/*
+ * Outlined inputs (VTextField, VSelect, VTextarea, …): sahifa + dialog — bir xil chegara,
+ * hover va focus. fleetDark uchun yumshoq kontrast.
+ */
+.page-shell .v-field--variant-outlined .v-field__outline,
+.u-dialog-v-body-inner .v-field--variant-outlined .v-field__outline {
+    transition: color 0.16s ease, opacity 0.16s ease;
+}
+
+.page-shell .v-field--variant-outlined:not(.v-field--error):not(.v-field--disabled) .v-field__outline,
+.u-dialog-v-body-inner .v-field--variant-outlined:not(.v-field--error):not(.v-field--disabled) .v-field__outline {
+    opacity: 1;
+    color: rgba(var(--v-theme-on-surface), 0.2);
+}
+
+.page-shell .v-field--variant-outlined:hover:not(.v-field--error):not(.v-field--disabled) .v-field__outline,
+.u-dialog-v-body-inner .v-field--variant-outlined:hover:not(.v-field--error):not(.v-field--disabled) .v-field__outline {
+    color: rgba(var(--v-theme-on-surface), 0.34);
+}
+
+.page-shell .v-field--focused:not(.v-field--error) .v-field__outline,
+.u-dialog-v-body-inner .v-field--focused:not(.v-field--error) .v-field__outline {
+    color: rgb(var(--v-theme-primary));
+}
+
+/*
+ * v-select / v-menu / v-autocomplete: dropdownlar custom UDialog ostida qolmasin.
+ * .u-dialog-mask = 2006; drawer/app bar odatda pastroq.
+ */
+.v-overlay-container {
+    z-index: 6200 !important;
+}
+
+.v-overlay {
+    z-index: 6200 !important;
+}

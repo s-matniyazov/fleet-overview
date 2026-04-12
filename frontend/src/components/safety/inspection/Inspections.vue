@@ -3,6 +3,7 @@ import {onMounted, ref, watch} from "vue";
 
 import axiosIns from "@/plugins/axios.js";
 import {URIS} from "@/constants/UriConstants.js";
+import {TABLE_STATUS_FILTER_ITEMS} from "@/constants/tableFilters.js";
 import UTable from "@/components/base/UTable.vue";
 import UInput from "@/components/base/UInput.vue";
 import {useI18n} from "vue-i18n";
@@ -128,10 +129,6 @@ const selectedFileSection = ref({
 });
 
 // FUNCTIONS
-const paging = (a) => {
-  if (a === 'p' && pagination.value.page > 1) pagination.value.page--;
-  if (a === 'n' && pagination.value.hasNext) pagination.value.page++;
-}
 const onAdd = () => {
   data.value = newModel();
   addModal.value = true;
@@ -297,54 +294,46 @@ watch(() => data.value.violationDiscovered, (val) => {
 
 <template>
   <div class="mb-0 p-2">
-    <div class="col-12">
-      <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
-        <button @click="onAdd" class="btn btn-primary btn-sm"><span class="mdi mdi-plus"></span> {{
-            t("add")
-          }}
-        </button>
-        <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-            class="mdi mdi-pen"></span> {{ t("edit") }}
-        </button>
-        <button @click="showModal = true" class="btn btn-primary btn-sm" :disabled="!selectedRow">
-          <span class="mdi mdi-eye"> View</span>
-        </button>
+    <UTable
+      :items="dataList"
+      :columns="columns"
+      v-model="selectedRow"
+      v-model:pagination="pagination"
+      pagination-rows-key="size"
+    >
+      <template #top>
+        <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
+          <v-btn color="primary" size="small" prepend-icon="mdi-plus" @click="onAdd">
+            {{ t("add") }}
+          </v-btn>
+          <v-btn color="primary" size="small" prepend-icon="mdi-pencil" :disabled="!selectedRow" @click="onEdit(selectedRow)">
+            {{ t("edit") }}
+          </v-btn>
+          <v-btn color="primary" size="small" prepend-icon="mdi-eye" :disabled="!selectedRow" @click="showModal = true">
+            View
+          </v-btn>
 
-        <UInput v-model="filter.driverName" style="min-width: 23vw"
-                :hint="t('driver')" :placeholder="t('search_by_driver_name')"/>
-        <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-magnify"></span></button>
+          <v-select
+            v-model="filter.status"
+            :items="TABLE_STATUS_FILTER_ITEMS"
+            item-title="title"
+            item-value="value"
+            :label="t('status')"
+            density="compact"
+            variant="outlined"
+            hide-details
+            bg-color="surface"
+            class="table-top-status-select"
+            @update:model-value="getData"
+          />
 
-        <div class="align-items-center u-end">
-          <ul class="pagination pagination-sm ul-style">
-            <select v-model="pagination.size" class="form-select form-select-sm mb-0 my-n1">
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-            </select>
-
-            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('p')"
-                                                    :disabled="pagination.page <= 1">&laquo;</a></li>
-            <li class="page-item active cursor-not-allowed"><a class="page-link">{{ pagination.page }}</a></li>
-            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('n')"
-                                                    :disabled="!pagination.hasNext">&raquo;</a></li>
-          </ul>
+          <UInput v-model="filter.driverName" style="min-width: 23vw"
+                  :placeholder="t('search_by_driver_name')"/>
+          <v-btn color="primary" size="small" icon variant="text" @click="getData">
+            <v-icon>mdi-magnify</v-icon>
+          </v-btn>
         </div>
-      </div>
-      <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
-
-        <button @click="() => {filter.status = filter.status !== 'ACTIVE' ? 'ACTIVE' : null; getData()}"
-                :class="['tab-button', { 'tab-active': filter.status === 'ACTIVE' }]">
-          Active
-        </button>
-        <button @click="() => {filter.status = filter.status !== 'PASSIVE' ? 'PASSIVE' : null; getData()}"
-                :class="['tab-button', { 'tab-active': filter.status === 'PASSIVE' }]">
-          Passive
-        </button>
-
-      </div>
-    </div>
-
-    <UTable :items="dataList" :columns="columns" v-model="selectedRow" height="calc(100vh - 290px)">
+      </template>
       <template #row_inspection="{row}">
         <td>
           <div class="row">
@@ -424,13 +413,12 @@ watch(() => data.value.violationDiscovered, (val) => {
               </template>
               <template #body>
                 <div class="bg-body rounded-1 font-size-15 p-2">
-                  <button v-if="row.status === 'ACTIVE'" @click="updateStatus(row.id)"
-                          class="btn btn-outline-danger btn-sm">
+                  <v-btn v-if="row.status === 'ACTIVE'" size="small" variant="outlined" color="error" @click="updateStatus(row.id)">
                     {{ t("deactivate") }}
-                  </button>
-                  <button v-else @click="updateStatus(row.id)" class="btn btn-outline-success btn-sm">
+                  </v-btn>
+                  <v-btn v-else size="small" variant="outlined" color="success" @click="updateStatus(row.id)">
                     {{ t("activate") }}
-                  </button>
+                  </v-btn>
                 </div>
               </template>
             </UDropDown>
@@ -451,7 +439,9 @@ watch(() => data.value.violationDiscovered, (val) => {
               {{ data.id ? data.inspection : t('add') }} {{ t('inspection') }}
             </div>
 
-            <button class="btn-close btn-close-white" @click="onClose"></button>
+            <v-btn icon variant="text" color="white" aria-label="Close" @click="onClose">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
           </div>
           <hr class="my-3 border-primary opacity-75">
         </div>
@@ -558,27 +548,26 @@ watch(() => data.value.violationDiscovered, (val) => {
                   </div>
 
                   <div class="row">
-                    <div class="col">
-                      <UInput
+                    <div class="col-12">
+                      <v-radio-group
                         v-model="data.violationDiscovered"
-                        type="radio"
-                        :label="t('violation_discovered')"
-                        :value="true"
-                        id="violation_yes"
-                        name="violation_discovered"
-                      />
+                        class="d-flex flex-row flex-wrap ga-4"
+                        inline
+                        density="compact"
+                        hide-details
+                      >
+                        <v-radio
+                          :label="t('violation_discovered')"
+                          :value="true"
+                          color="primary"
+                        />
+                        <v-radio
+                          :label="t('no_violation_discovered')"
+                          :value="false"
+                          color="primary"
+                        />
+                      </v-radio-group>
                     </div>
-
-                    <div class="col">
-                      <UInput
-                        v-model="data.violationDiscovered"
-                        type="radio"
-                        :label="t('no_violation_discovered')"
-                        :value="false"
-                        id="violation_no"
-                        name="violation_discovered"
-                      />
-                    </div>  
                   </div>
                 </div>
 
@@ -613,15 +602,20 @@ watch(() => data.value.violationDiscovered, (val) => {
                         </div>
                     </div>
                   </div>
-                  <div class="row form-check form-switch">
+                  <div class="row">
                     <div class="col-12 mt-3">
-                      <input class="form-check-input" type="checkbox" v-model="data.outOfService" id="outOfService">
-                      <label class="form-check-label" for="outOfService">{{ t('out_of_service') }}</label>
-                    </div> 
+                      <v-switch
+                        v-model="data.outOfService"
+                        :label="t('out_of_service')"
+                        color="primary"
+                        density="compact"
+                        hide-details
+                      />
+                    </div>
                   </div>
                   <div class="row">
                     <div class="col-12 mt-3">
-                      <button @click="addNewViolation" class="btn btn-outline-info fw-bold mdi-add">New Type</button>
+                      <v-btn variant="outlined" color="info" prepend-icon="mdi-plus" @click="addNewViolation">New Type</v-btn>
                     </div>
                   </div>
                   
@@ -632,8 +626,8 @@ watch(() => data.value.violationDiscovered, (val) => {
 
           <!-- footer -->
           <div class="modal-footer d-flex justify-content-between align-items-center border-top border-primary pt-3 mt-3">
-              <button @click="onClose" class="btn text-white btn-secondary">Cancel</button>
-              <button type="submit" class="btn btn-info fw-bold">Save</button>
+              <v-btn variant="tonal" color="secondary" @click="onClose">Cancel</v-btn>
+              <v-btn type="submit" color="info">Save</v-btn>
           </div>
         </UForm>
       </template>
@@ -647,14 +641,18 @@ watch(() => data.value.violationDiscovered, (val) => {
         <div class="d-flex w-100 f-700">
           Inspection: {{ selectedRow.inspectionNumber }}
           <div class="text-end u-end">
-            <button class="btn-close" @click="showModal = false"></button>
+            <v-btn icon variant="text" density="comfortable" aria-label="Close" @click="showModal = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
           </div>
         </div>
       </template>
 
       <template #body>
         <UScrollArea height="calc(100vh - 200px)">
-          <InspectionCard :data="selectedRow"/>
+          <div class="u-scroll-slot-fill">
+            <InspectionCard :data="selectedRow"/>
+          </div>
         </UScrollArea>
       </template>
     </UDialog>
@@ -668,21 +666,24 @@ watch(() => data.value.violationDiscovered, (val) => {
       <div class="d-flex w-100 f-700 fs-4">
         Inspection: {{ selectedRow.inspectionNumber }}
         <div class="text-end u-end">
-          <button v-if="selectedRow.status === 'ACTIVE'" @click="updateStatus(selectedRow.id)"
-                  class="btn btn-outline-danger btn-sm mx-3">
+          <v-btn v-if="selectedRow.status === 'ACTIVE'" class="mx-3" size="small" variant="outlined" color="error" @click="updateStatus(selectedRow.id)">
             {{ t("deactivate") }}
-          </button>
-          <button v-else @click="updateStatus(selectedRow.id)" class="btn btn-outline-success btn-sm mx-3">
+          </v-btn>
+          <v-btn v-else class="mx-3" size="small" variant="outlined" color="success" @click="updateStatus(selectedRow.id)">
             {{ t("activate") }}
-          </button>
-          <button class="btn-close" @click="showModal = false"></button>
+          </v-btn>
+          <v-btn icon variant="text" density="comfortable" aria-label="Close" @click="showModal = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </div>
       </div>
     </template>
 
     <template #body>
       <UScrollArea height="calc(100vh - 50px)">
-        <InspectionCard :data="selectedRow"/>
+        <div class="u-scroll-slot-fill">
+          <InspectionCard :data="selectedRow"/>
+        </div>
       </UScrollArea>
     </template>
   </URightOverlay>
@@ -700,7 +701,9 @@ watch(() => data.value.violationDiscovered, (val) => {
           </div>
         </div>
         <span class="text-end u-end">
-          <button class="btn-close" @click="selectedFileSection.dialog = false"></button>
+          <v-btn icon variant="text" density="comfortable" aria-label="Close" @click="selectedFileSection.dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </span>
       </div>
     </template>
@@ -751,32 +754,6 @@ watch(() => data.value.violationDiscovered, (val) => {
 .min-height-64 {
   min-height: 64%;
 }
-.tab-button {
-  padding: 0.6rem 1rem calc(0.6rem + 2px);
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 400;
-  color: var(--bs-secondary-color);
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid transparent;
-  border-radius: 1;
-  white-space: nowrap;
-  outline: none;
-}
-
-.tab-button:hover {
-  color: var(--bs-body-color);
-  background: rgba(56, 90, 138, 0.05);
-}
-
-.tab-button.tab-active {
-  color: #385a8a;
-  font-weight: 500;
-  background: rgba(56, 90, 138, 0.06);
-  border-bottom: 2px solid #385a8a;
-  padding-bottom: 0.6rem;
-}
 
 .tab-panels-container {
   background-color: var(--bs-card-bg);
@@ -790,20 +767,6 @@ watch(() => data.value.violationDiscovered, (val) => {
   width: 100%;
   display: block;
   background-color: var(--bs-card-bg);
-}
-
-@media (max-width: 576px) {
-  .tab-button {
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
-  }
-
-  .tab-label {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100px;
-  }
 }
 
 :deep(.tab-pane) {

@@ -97,10 +97,6 @@ const timeZones = [
 ];
 
 // FUNCTIONS
-const paging = (a) => {
-  if (a === 'p' && pagination.value.page > 1) pagination.value.page--;
-  if (a === 'n' && pagination.value.hasNext) pagination.value.page++;
-}
 
 const onAdd = () => {
   data.value = newModel();
@@ -203,38 +199,28 @@ watch(
 
 <template>
   <div class="mb-0 p-2">
-    <div class="col-12">
-      <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
-        <button @click="onAdd" class="btn btn-primary btn-sm">
-          <span class="mdi mdi-plus"></span> {{ t("add") }}
-        </button>
-        <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow">
-          <span class="mdi mdi-pen"></span> {{ t("edit") }}
-        </button>
+    <UTable
+      :items="dataList"
+      :columns="columns"
+      v-model="selectedRow"
+      v-model:pagination="pagination"
+    >
+      <template #top>
+        <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
+          <v-btn color="primary" size="small" prepend-icon="mdi-plus" @click="onAdd">
+            {{ t("add") }}
+          </v-btn>
+          <v-btn color="primary" size="small" prepend-icon="mdi-pencil" :disabled="!selectedRow" @click="onEdit(selectedRow)">
+            {{ t("edit") }}
+          </v-btn>
 
-        <UInput v-model="filter.reportNumber" style="min-width: 23vw"
-                :placeholder="t('claim_number')"/>
-        <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-magnify"></span></button>
-
-        <div class="align-items-center u-end">
-          <ul class="pagination pagination-sm ul-style">
-            <select v-model="pagination.rowsPerPage" class="form-select form-select-sm mb-0 my-n1">
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-            </select>
-
-            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('p')"
-                                                    :disabled="pagination.page <= 1">&laquo;</a></li>
-            <li class="page-item active cursor-not-allowed"><a class="page-link">{{ pagination.page }}</a></li>
-            <li class="page-item cursor-pointer"><a class="page-link" @click="paging('n')"
-                                                    :disabled="!pagination.hasNext">&raquo;</a></li>
-          </ul>
+          <UInput v-model="filter.reportNumber" style="min-width: 23vw"
+                  :placeholder="t('claim_number')"/>
+          <v-btn color="primary" size="small" icon variant="text" @click="getData">
+            <v-icon>mdi-magnify</v-icon>
+          </v-btn>
         </div>
-      </div>
-    </div>
-
-    <UTable :items="dataList" :columns="columns" v-model="selectedRow" height="calc(100vh - 200px)">
+      </template>
       <template #row_city_state="{row}">
         <td>
           {{ row.city }}, {{ row.stateName }}
@@ -252,7 +238,9 @@ watch(
                 {{ data.id ? data.inspection : t('add') }} {{ t('inspection') }}
               </div>
 
-              <button class="btn-close btn-close-white" @click="onClose"></button>
+              <v-btn icon variant="text" color="white" aria-label="Close" @click="onClose">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
             </div>
             <hr class="my-3 border-primary opacity-75">
           </div>
@@ -311,8 +299,8 @@ watch(
 
             <!-- footer -->
             <div class="modal-footer d-flex justify-content-between align-items-center border-top border-primary pt-3 mt-3">
-              <button @click="onClose" class="btn text-white btn-secondary">Cancel</button>
-              <button type="submit" class="btn btn-info fw-bold">Save</button>
+              <v-btn variant="tonal" color="secondary" @click="onClose">Cancel</v-btn>
+              <v-btn type="submit" color="info">Save</v-btn>
             </div>
           </UForm>
         </template>

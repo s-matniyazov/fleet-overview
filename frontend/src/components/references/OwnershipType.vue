@@ -120,17 +120,19 @@ onMounted(() => {
   <div class="mb-0 p-2">
     <div class="col-12">
       <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
-        <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-            class="mdi mdi-pen"></span> {{ t("edit") }}
-        </button>
+        <v-btn color="primary" size="small" prepend-icon="mdi-pencil" :disabled="!selectedRow" @click="onEdit(selectedRow)">
+          {{ t("edit") }}
+        </v-btn>
 
         <div class="align-items-center" style="right: 2px; margin-left: auto">
-          <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
+          <v-btn color="primary" size="small" icon variant="text" @click="getData">
+            <v-icon>mdi-reload</v-icon>
+          </v-btn>
         </div>
       </div>
     </div>
 
-    <UTable :items="dataList" :columns="columns" v-model="selectedRow" styles="height: calc(100vh - 141px)">
+    <UTable :items="dataList" :columns="columns" v-model="selectedRow">
       <template #row_created="{row}">
         <td>{{ longToDateTime(row?.created) }}</td>
       </template>
@@ -145,7 +147,9 @@ onMounted(() => {
             {{ data.id ? t('edit') : t('add') }} {{ t('ownership_type') }}
           </div>
           <div class="text-end u-end">
-              <button class="btn-close btn-close-white" @click="onClose"></button>
+              <v-btn icon variant="text" color="white" aria-label="Close" @click="onClose">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
           </div>
         </div>
       </template>
@@ -163,7 +167,7 @@ onMounted(() => {
 
           <div class="modal-footer">
             <div class="d-flex text-end align-items-end mt-2">
-              <button type="submit" style="background-color:#0891B2;" class="btn text-white">Save</button>
+              <v-btn type="submit" color="info">Save</v-btn>
             </div>
           </div>
         </UForm>

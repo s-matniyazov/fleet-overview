@@ -1,5 +1,5 @@
 <script setup>
-import {inject, ref} from "vue";
+import { computed, inject, ref } from "vue";
 
 const props = defineProps({
   name: {
@@ -13,78 +13,95 @@ const props = defineProps({
   hint: {
     type: String,
     required: false,
-    default: 'Please select'
+    default: "Please select",
   },
   option_name: {
-    type: String,
+    type: [String, Function],
     required: false,
-    default: 'id'
+    default: "id",
   },
   option_value: {
     type: String,
     required: false,
-    default: 'id'
+    default: "id",
   },
   items: {
     type: Array,
     required: true,
-    default: []
+    default: () => [],
   },
   classes: {
     type: String,
     required: false,
-    default: ''
+    default: "",
   },
   styles: {
     type: String,
     required: false,
-    default: ''
+    default: "",
   },
   rules: Function,
   readonly: {
     type: Boolean,
     required: false,
-    default: false
+    default: false,
   },
-  icon:{
-    type:String,
-    required:false,
-    default:''
-  }
-})
-
-const selected = defineModel({});
-const errorMessage = ref('');
-
-const formState = inject('formState', null);
-const registerField = inject('registerField', () => {
+  icon: {
+    type: String,
+    required: false,
+    default: "",
+  },
 });
 
+const selected = defineModel({});
+const errorMessage = ref("");
+
+const registerField = inject("registerField", () => {});
+
 const validate = () => {
-  errorMessage.value = props.rules ? props.rules(selected.value) : '';
+  errorMessage.value = props.rules ? props.rules(selected.value) : "";
   return errorMessage.value;
 };
 
 registerField(props.name, validate);
 
+const errorMessages = computed(() =>
+  errorMessage.value ? [errorMessage.value] : [],
+);
+
+const prependInnerIcon = computed(() =>
+  props.icon && String(props.icon).startsWith("mdi") ? props.icon : undefined,
+);
+
+const mappedItems = computed(() =>
+  (props.items || []).map((option) => ({
+    title:
+      typeof props.option_name === "function"
+        ? props.option_name(option)
+        : option[props.option_name],
+    value: option[props.option_value],
+    raw: option,
+  })),
+);
 </script>
 
 <template>
-  <div :class="[classes, errorMessage ? 'has-danger' : '', readonly ? 'readonly-mode' : '', 'p-1']" :style="styles">
-    <label v-if="label" class="form-label">
-      <i v-if="icon" :class="['mdi', icon, 'me-1']"></i>
-      {{ label }}</label>
-    <select class="form-control form-select font-size-12" v-model="selected">
-      <option></option>
-      <option v-for="option in items" :value="option[option_value]">
-        {{ typeof option_name === 'function' ? option_name(option) : option[option_name] }}
-      </option>
-    </select>
-    <div class="invalid-feedback">{{ hint }}</div>
-    <p v-if="errorMessage" class="pristine-error text-help">{{ errorMessage }}</p>
+  <div :class="classes" :style="styles">
+    <v-select
+      v-model="selected"
+      :items="mappedItems"
+      item-title="title"
+      item-value="value"
+      :label="label"
+      :readonly="readonly"
+      :prepend-inner-icon="prependInnerIcon"
+      :error-messages="errorMessages"
+      :hint="hint || undefined"
+      persistent-hint
+      clearable
+      variant="outlined"
+      density="compact"
+      hide-details="auto"
+    />
   </div>
 </template>
-
-<style scoped>
-
-</style>

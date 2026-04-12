@@ -115,24 +115,25 @@ onMounted(() => {
   <div class="mb-0 p-2">
     <div class="col-12">
       <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
-        <button @click="onAdd" class="btn btn-primary btn-sm"><span class="mdi mdi-plus"></span> {{
-            t("add")
-          }}
-        </button>
-        <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-            class="mdi mdi-pen"></span> {{ t("edit") }}
-        </button>
-        <button @click="onDelete(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-            class="mdi mdi-delete"></span> {{ t("delete") }}
-        </button>
+        <v-btn color="primary" size="small" prepend-icon="mdi-plus" @click="onAdd">
+          {{ t("add") }}
+        </v-btn>
+        <v-btn color="primary" size="small" prepend-icon="mdi-pencil" :disabled="!selectedRow" @click="onEdit(selectedRow)">
+          {{ t("edit") }}
+        </v-btn>
+        <v-btn color="primary" size="small" prepend-icon="mdi-delete" :disabled="!selectedRow" @click="onDelete(selectedRow)">
+          {{ t("delete") }}
+        </v-btn>
 
         <div class="align-items-center" style="right: 2px; margin-left: auto">
-          <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
+          <v-btn color="primary" size="small" icon variant="text" @click="getData">
+            <v-icon>mdi-reload</v-icon>
+          </v-btn>
         </div>
       </div>
     </div>
 
-    <UTable :items="dataList" :columns="columns" v-model="selectedRow" styles="height: calc(100vh - 141px)">
+    <UTable :items="dataList" :columns="columns" v-model="selectedRow">
       <template #row_created="{row}">
         <td>{{ longToDateTime(row?.created) }}</td>
       </template>
@@ -147,7 +148,9 @@ onMounted(() => {
             {{ data.id ? t('edit') : t('add') }} {{ t('purchase_type') }}
           </div>
           <div class="text-end u-end">
-              <button class="btn-close btn-close-white" @click="onClose"></button>
+              <v-btn icon variant="text" color="white" aria-label="Close" @click="onClose">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
           </div>
         </div>
       </template>
@@ -169,8 +172,8 @@ onMounted(() => {
 
           <!-- footer -->
           <div class="modal-footer d-flex justify-content-between align-items-center border-top border-primary pt-3 mt-3">
-              <button @click="onClose" class="btn text-white btn-secondary">Cancel</button>
-              <button type="submit" class="btn btn-info fw-bold">Save</button>
+              <v-btn variant="tonal" color="secondary" @click="onClose">Cancel</v-btn>
+              <v-btn type="submit" color="info">Save</v-btn>
           </div>
         </UForm>
       </template>

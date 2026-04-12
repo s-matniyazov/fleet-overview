@@ -196,26 +196,28 @@ async function fetchData() {
 
 <template>
   <div class="mb-0 p-2">
-    <div class="col-12">
-      <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-2">
-        <div class="d-flex">
-          <button @click="onAdd" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-plus"></span> {{ t('add') }}
-          </button>
-          <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-              class="mdi mdi-pen"></span> {{ t('edit') }}
-          </button>
-          <button @click="getData" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-reload"></span></button>
-          <button @click="isOpen = true" class="btn btn-primary btn-sm"><span class="mdi mdi-file-eye"></span> Открыть
-            диалог
-          </button>
-          <button @click="fetchData" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-file-eye"></span>
-            Загрузить данные
-          </button>
-        </div>
-      </div>
-    </div>
-
     <UTable :items="dataList" :columns="columns" v-model="selectedRow">
+      <template #top>
+        <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
+          <div class="d-flex flex-wrap ga-2">
+            <v-btn color="primary" size="small" class="mx-1" prepend-icon="mdi-plus" @click="onAdd">
+              {{ t('add') }}
+            </v-btn>
+            <v-btn color="primary" size="small" prepend-icon="mdi-pencil" :disabled="!selectedRow" @click="onEdit(selectedRow)">
+              {{ t('edit') }}
+            </v-btn>
+            <v-btn color="primary" size="small" class="mx-1" icon variant="text" @click="getData">
+              <v-icon>mdi-reload</v-icon>
+            </v-btn>
+            <v-btn color="primary" size="small" prepend-icon="mdi-file-eye" @click="isOpen = true">
+              Открыть диалог
+            </v-btn>
+            <v-btn color="primary" size="small" class="mx-1" prepend-icon="mdi-file-eye" @click="fetchData">
+              Загрузить данные
+            </v-btn>
+          </div>
+        </div>
+      </template>
       <template #row_status="{row}">
         <td>
           <div class="d-flex gap-2">
@@ -250,8 +252,10 @@ async function fetchData() {
   </div>
 
   <URightOverlay :isOpen="isOpen" @close="isOpen = false">
-    <h2>Привет, Vue!</h2>
-    <p>Это правый оверлейный диалог.</p>
+    <template #body>
+      <h2>Привет, Vue!</h2>
+      <p>Это правый оверлейный диалог.</p>
+    </template>
   </URightOverlay>
 
   <Teleport to="body">
@@ -262,7 +266,9 @@ async function fetchData() {
             {{ data.id ? t('edit') : t('add') }} {{ t('employer') }}
           </div>
           <div class="text-end u-end">
-              <button class="btn-close btn-close-white" @click="onClose"></button>
+              <v-btn icon variant="text" aria-label="Close" @click="onClose">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
           </div>
         </div>
       </template>

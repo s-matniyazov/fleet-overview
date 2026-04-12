@@ -140,24 +140,26 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mb-0">
-    <div class="col-12">
-      <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-3">
-        <div class="d-flex">
-          <button @click="onAdd" class="btn btn-primary btn-sm mx-1"><span class="mdi mdi-plus"></span> {{ t('add') }}
-          </button>
-          <button @click="onEdit(selectedRow)" class="btn btn-primary btn-sm" :disabled="!selectedRow"><span
-              class="mdi mdi-pen"></span> {{ t('edit') }}
-          </button>
-          <button @click="onDelete(selectedRow)" class="btn btn-primary btn-sm mx-1" :disabled="!selectedRow"><span
-              class="mdi mdi-delete"></span> {{ t('delete') }}
-          </button>
-          <button @click="getData" class="btn btn-primary btn-sm"><span class="mdi mdi-reload"></span></button>
-        </div>
-      </div>
-    </div>
-
+  <div class="mb-0 p-2">
     <UTable :items="dataList" :columns="columns" v-model="selectedRow">
+      <template #top>
+        <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
+          <div class="d-flex flex-wrap ga-2">
+            <v-btn color="primary" size="small" class="mx-1" prepend-icon="mdi-plus" @click="onAdd">
+              {{ t('add') }}
+            </v-btn>
+            <v-btn color="primary" size="small" prepend-icon="mdi-pencil" :disabled="!selectedRow" @click="onEdit(selectedRow)">
+              {{ t('edit') }}
+            </v-btn>
+            <v-btn color="primary" size="small" class="mx-1" prepend-icon="mdi-delete" :disabled="!selectedRow" @click="onDelete(selectedRow)">
+              {{ t('delete') }}
+            </v-btn>
+            <v-btn color="primary" size="small" icon variant="text" @click="getData">
+              <v-icon>mdi-reload</v-icon>
+            </v-btn>
+          </div>
+        </div>
+      </template>
       <template #row_created="{row}">
         <td>{{ longToDateTime(row?.created) }}</td>
       </template>
@@ -172,7 +174,9 @@ onMounted(() => {
             {{ data.id ? t('edit') : t('add') }} {{ t('project_priority') }}
           </div>
           <div class="text-end u-end">
-              <button class="btn-close btn-close-white" @click="onClose"></button>
+              <v-btn icon variant="text" aria-label="Close" @click="onClose">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
           </div>
         </div>
       </template>

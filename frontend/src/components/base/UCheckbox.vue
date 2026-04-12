@@ -1,66 +1,67 @@
 <script setup>
-
-import {inject, ref} from "vue";
+import { computed, inject, ref } from "vue";
 
 const props = defineProps({
   name: {
     type: String,
     required: false,
-    default: 'input'
+    default: "input",
   },
   checked: {
     type: Boolean,
     required: false,
-    default: false
+    default: false,
   },
   label: {
     type: String,
     required: false,
-    default: 'input'
+    default: "input",
   },
   classes: {
     type: String,
     required: false,
-    default: ''
+    default: "",
   },
   styles: {
     type: String,
     required: false,
-    default: ''
+    default: "",
   },
   rules: Function,
   readonly: {
     type: Boolean,
     required: false,
-    default: false
-  }
-})
-
-const model = defineModel({});
-const errorMessage = ref('');
-
-const formState = inject('formState', null);
-const registerField = inject('registerField', () => {
+    default: false,
+  },
 });
 
+const model = defineModel({});
+const errorMessage = ref("");
+
+const registerField = inject("registerField", () => {});
+
 const validate = () => {
-  errorMessage.value = props.rules ? props.rules(model.value) : '';
+  errorMessage.value = props.rules ? props.rules(model.value) : "";
   return errorMessage.value;
 };
 
 registerField(props.name, validate);
+
+const errorMessages = computed(() =>
+  errorMessage.value ? [errorMessage.value] : [],
+);
 </script>
 
 <template>
-  <div :class="[classes, errorMessage ? 'has-danger' : '', readonly ? 'readonly-mode' : '', 'p-1']" :style="styles">
-    <input class="form-check-input" type="checkbox" v-model="model" :checked="checked" :readonly="readonly">
-    <label class="form-check-label px-2">
-      {{ label }}
-    </label>
-    <p v-if="errorMessage" class="pristine-error text-help">{{ errorMessage }}</p>
+  <div :class="classes" :style="styles">
+    <v-checkbox
+      v-model="model"
+      :label="label"
+      :disabled="readonly"
+      :error-messages="errorMessages"
+      hide-details="auto"
+      density="compact"
+      color="primary"
+    />
   </div>
 </template>
-
-<style scoped>
-
-</style>

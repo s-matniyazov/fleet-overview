@@ -8,6 +8,7 @@ import fleetoverview.domain.entity.ResourceEntity;
 import fleetoverview.domain.entity.trailer.TrailerEntity;
 import fleetoverview.domain.entity.trailer.TrailerFileEntity;
 import fleetoverview.domain.enums.trailer.TrailerFileStatusEnum;
+import fleetoverview.domain.enums.trailer.TrailerStatusEnum;
 import fleetoverview.repository.*;
 import fleetoverview.service.ResourceService;
 import fleetoverview.service.TrailerService;
@@ -141,6 +142,22 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
     public ApiResponse delete(TrailerRequest data) {
         // not implemented
         return null;
+    }
+
+    @Override
+    public ApiResponse deactivate(Integer id) {
+        TrailerEntity trailer = repository.getReferenceById(id);
+        trailer.setStatus(TrailerStatusEnum.PASSIVE);
+        repository.save(trailer);
+        return ApiResponse.success();
+    }
+
+    @Override
+    public ApiResponse activate(Integer id) {
+        TrailerEntity trailer = repository.getReferenceById(id);
+        trailer.setStatus(TrailerStatusEnum.ACTIVE);
+        repository.save(trailer);
+        return ApiResponse.success();
     }
 
     @Override
