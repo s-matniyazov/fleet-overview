@@ -301,9 +301,10 @@ onMounted(() => {
             </div>
 
             <div class="mt-3 text-end" v-if="![FILE_STATUS.UPLOADED].includes(upload.status)">
-              <button class="btn btn-secondary me-2" @click="(e) => {removeFile(index); e.stopPropagation()}">Cancel
-              </button>
-              <button class="btn btn-success" type="submit">Save</button>
+              <v-btn variant="tonal" color="secondary" class="me-2" @click="(e) => {removeFile(index); e.stopPropagation()}">
+                Cancel
+              </v-btn>
+              <v-btn type="submit" color="success">Save</v-btn>
             </div>
           </div>
         </UForm>

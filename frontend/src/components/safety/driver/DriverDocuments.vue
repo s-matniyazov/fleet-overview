@@ -64,10 +64,9 @@ function downloadAll(type) {
           <div class="font-size-20 fw-bold text-secondary"> General Documents</div>
         </div>
         <div class="col-6 font-size-16 text-end">
-          <button class="btn btn-light" @click="downloadAll('driverFiles')">
-            <span>Download All Files</span>
-            <i class="mdi mdi-cloud-download-outline ms-2"></i>
-          </button>
+          <v-btn variant="tonal" prepend-icon="mdi-cloud-download-outline" @click="downloadAll('driverFiles')">
+            Download All Files
+          </v-btn>
         </div>
       </div>
       <div class="row">
@@ -89,7 +88,9 @@ function downloadAll(type) {
           DOCUMENT_TYPES[selectedFileSection.data.type]
         }}
         <span class="text-end u-end">
-          <button class="btn-close" @click="driverFileStore.init(data.id); selectedFileSection.dialog = false"></button>
+          <v-btn icon variant="text" density="comfortable" aria-label="Close" @click="driverFileStore.init(data.id); selectedFileSection.dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </span>
       </h4>
     </template>

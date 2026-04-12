@@ -9,78 +9,93 @@ defineProps({
 </script>
 <template>
   <Transition name="modal">
-    <div v-if="show" class="modal-mask text-white modal-overlay" >
-      <div style="background: #06273d" class="modal-container rounded-4 shadow-dark" :style="`width: ${width}`">
-        <div class="modal-header pb-3 border-bottom-0 text-primary" style="font-weight: 1000; font-size: 16px">
+    <div v-if="show" class="u-dialog-mask">
+      <div
+        class="u-dialog-container rounded-xl"
+        :style="{ width }"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div class="u-dialog-header">
           <slot name="header">
-            <h5 class="modal-title">Создание</h5>
-
-            <button type="button" class="btn-close"></button>
+            <h5 class="u-dialog-title">Создание</h5>
+            <v-btn type="button" icon variant="text" density="comfortable" aria-label="Close">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
           </slot>
         </div>
 
-        <div class="modal-body">
+        <div class="u-dialog-body">
           <slot name="body"></slot>
         </div>
-
       </div>
     </div>
   </Transition>
 </template>
-<style>/* Overlay */
-.modal-mask {
+<style>
+.u-dialog-mask {
   position: fixed;
-  z-index: 1002;
+  z-index: 2006;
   inset: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  background: var(--modal-overlay-bg);
-  backdrop-filter: blur(3px);
-
+  padding: 16px;
+  padding-top: max(16px, env(safe-area-inset-top, 0px));
+  padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   transition: opacity 0.25s ease;
 }
 
-/* Theme colors */
-[data-bs-theme="light"] {
-  --modal-overlay-bg: rgba(0, 0, 0, 0.5);
-}
-
-[data-bs-theme="dark"] {
-  --modal-overlay-bg: rgba(255, 255, 255, 0.25);
-}
-
-/* Modal window */
-.modal-container {
-  padding: 20px;
-  border-radius: 6px;
-
-  background: var(--modal-bg);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
-
-  transition: transform 0.2s ease, opacity 0.2s ease;
-
-  max-height: 80vh; /* max height for modal */
+.u-dialog-container {
+  max-width: calc(100vw - 32px);
+  max-height: min(80vh, 100dvh - 32px);
   display: flex;
   flex-direction: column;
-  overflow-y: auto;  /* enable vertical scroll */
-  padding-right: 15px; /* optional: avoid scrollbar overlap */
+  overflow: hidden;
+  padding: 0;
+  /* Navy shell (matches nav drawer); forms keep existing text-white / light labels */
+  background: linear-gradient(180deg, #06273d 0%, #071a2e 100%);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.35),
+    0 8px 24px rgba(0, 0, 0, 0.25);
+  transition: transform 0.22s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.22s ease;
 }
 
-/* Theme modal background */
-[data-bs-theme="light"] {
-  --modal-bg: #ffffff;
+.u-dialog-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 16px 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.12);
 }
 
-[data-bs-theme="dark"] {
-  --modal-bg: #000000;
+.u-dialog-title {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
 }
 
-/* Vue transition */
-.modal-enter-from .modal-container,
-.modal-leave-to .modal-container {
-  transform: scale(0.9);
+.u-dialog-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 16px 20px 20px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal-enter-from .u-dialog-container,
+.modal-leave-to .u-dialog-container {
+  transform: scale(0.96) translateY(8px);
   opacity: 0;
 }
 </style>

@@ -187,18 +187,20 @@ axiosIns.post(apiUrl+"/excel", data.value)
 </script>
 
 <template>
-  <div class="mb-0 p-2 bg-light rounded-4 shadow-dark">
-    <div class="col-12">
-      <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-2">
-        <button @click="onAdd" class="btn btn-primary btn-sm"><span class="mdi mdi-plus"></span> {{
-            t("add")
-          }}
-        </button>
-      </div>
-    </div>
-
-    <UTable :items="dataList" :columns="columns" v-model="selectedRow" height="calc(100vh - 248px)"
-            @row-dblclick="handleDoubleClick">
+  <div class="mb-0 p-2">
+    <UTable
+      :items="dataList"
+      :columns="columns"
+      v-model="selectedRow"
+      @row-dblclick="handleDoubleClick"
+    >
+      <template #top>
+        <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
+          <v-btn color="primary" size="small" prepend-icon="mdi-plus" @click="onAdd">
+            {{ t("add") }}
+          </v-btn>
+        </div>
+      </template>
       <template #row_created="{row}">
         <td>{{ longToDateTime(row?.created) }}</td>
       </template>
@@ -223,7 +225,9 @@ axiosIns.post(apiUrl+"/excel", data.value)
             {{ data.id ? t('edit') : t('add') }} Company
           </div>
           <div class="text-end u-end">
-              <button class="btn-close btn-close-white" @click="onClose"></button>
+              <v-btn icon variant="text" aria-label="Close" @click="onClose">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
           </div>
         </div>
       </template>
@@ -336,7 +340,7 @@ axiosIns.post(apiUrl+"/excel", data.value)
 
           <div class="modal-footer">
             <div class="d-flex text-end align-items-end mt-2">
-              <button type="submit" class="btn btn-primary">Save</button>
+              <v-btn type="submit" color="primary">Save</v-btn>
             </div>
           </div>
         </UForm>

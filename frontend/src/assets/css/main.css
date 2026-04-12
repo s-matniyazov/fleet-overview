@@ -50,10 +50,85 @@ header {
     font-size: 18px; /* slightly larger for header clarity */
     line-height: 1.4; /* better spacing */
 }
+html {
+    height: 100%;
+    overflow: hidden;
+}
+
 body {
     background-color: #0f172a; /* тёмно-синий фон */
     color: #e2e8f0; /* светлый текст */
     font-family: 'Inter', 'Segoe UI', sans-serif;
     margin: 0;
     padding: 0;
+    height: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+}
+
+#app {
+    height: 100%;
+    max-height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Vuetify: fill viewport without growing past it (scroll stays inside panes/tables). */
+#app .v-application {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* MainLayout: routed view fills space below app bar */
+.page-shell {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.page-shell > * {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+}
+
+/* Flex child: allow shrink so nested scroll regions get a bounded height */
+.min-h-0 {
+    min-height: 0;
+}
+
+/**
+ * Direct child of UScrollArea when the scroll area has a fixed height (e.g. calc(100vh - …)).
+ * Lets UTabs / UTable use flex + height:100% without duplicating viewport math on each table.
+ */
+.u-scroll-slot-fill {
+    box-sizing: border-box;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.u-scroll-slot-fill > * {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+/* UTable toolbar: status filter before search */
+.table-top-status-select {
+    flex: 0 0 auto;
+    min-width: 150px;
+    max-width: 200px;
 }

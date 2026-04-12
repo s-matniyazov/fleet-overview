@@ -9,6 +9,7 @@ import fleetoverview.service.TrailerService;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +33,16 @@ public class TrailerController extends CrudController<TrailerEntity, TrailerRequ
     protected TrailerController(TrailerService service) {
         super(service);
         this.service = service;
+    }
+
+    @PostMapping("{id}/deactivate")
+    public HttpEntity<ApiResponse> deactivate(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.deactivate(id));
+    }
+
+    @PostMapping("{id}/activate")
+    public HttpEntity<ApiResponse> activate(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.activate(id));
     }
 
     @PostMapping("attach-file")

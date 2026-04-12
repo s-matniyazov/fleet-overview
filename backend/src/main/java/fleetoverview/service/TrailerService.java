@@ -20,4 +20,8 @@ import java.util.Map;
 public interface TrailerService extends CrudService<TrailerEntity, TrailerRequest> {
     ApiResponse attachFile(TrailerFileRequest data, MultipartFile file);
     DataResponse<List<TrailerFileEntity>> getFiles(Map<String, String> params);
+
+    ApiResponse deactivate(Integer id);
+
+    ApiResponse activate(Integer id);
 }
