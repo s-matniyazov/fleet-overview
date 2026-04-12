@@ -45,7 +45,8 @@ public class DriverFileEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private DriverFileClassEnum classType;
     private LocalDate issuedDate;
-    @ManyToMany(targetEntity = EndorsementEntity.class)
+    @JsonIgnore
+    @ManyToMany(targetEntity = EndorsementEntity.class,fetch = FetchType.LAZY)
     private List<EndorsementEntity> endorsement;
 
     // for MEDICAL_CERT

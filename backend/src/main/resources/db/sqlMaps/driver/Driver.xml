@@ -55,11 +55,11 @@
             <id property="lastCollectedOn" column="lastCollectedOn"/>
             <id property="socialSecurityNumber" column="socialSecurityNumber"/>
 
-            <collection property="endorsement" columnPrefix="en_"
-                        ofType="fleetoverview.domain.entity.driver.EndorsementEntity">
-                <id property="id" column="id"/>
-                <result property="name" column="name"/>
-            </collection>
+<!--            <collection property="endorsement" columnPrefix="en_"-->
+<!--                        ofType="fleetoverview.domain.entity.driver.EndorsementEntity">-->
+<!--                <id property="id" column="id"/>-->
+<!--                <result property="name" column="name"/>-->
+<!--            </collection>-->
         </collection>
     </resultMap>
 
@@ -90,10 +90,10 @@
             df.class_type as "df_classType",
             df.issued_date as "df_issuedDate",
             df.last_collected_on as "df_lastCollectedOn",
-            df.social_security_number as "df_socialSecurityNumber",
+            df.social_security_number as "df_socialSecurityNumber"
 
-            en.id as "df_en_id",
-            en.name as "df_en_name"
+--             en.id as "df_en_id",
+--             en.name as "df_en_name"
         from (
             select
                 di.id as "id",
@@ -156,8 +156,8 @@
         left join driver_files df on df.driver_id = t.id and df.status = 'ACTIVE'
         left join states dfst on dfst.id = df.state_id
         left join countries dfc on dfc.id = dfst.country_id
-        left join driver_files_endorsement dfe on dfe.driver_file_entity_id = df.id
-        left join endorsements en on en.id = dfe.endorsement_id
+--         left join driver_files_endorsement dfe on dfe.driver_file_entity_id = df.id
+--         left join endorsements en on en.id = dfe.endorsement_id
         left join resources dfs on dfs.id = df.resource_id
     </select>
 </mapper>
