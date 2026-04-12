@@ -192,6 +192,10 @@ public class DriverServiceImpl extends BaseService implements DriverService {
         CriteriaQuery<DriverFileEntity> cq = cb.createQuery(DriverFileEntity.class);
         Root<DriverFileEntity> driverFiles = cq.from(DriverFileEntity.class);
 
+        driverFiles.fetch("endorsement", JoinType.LEFT);
+        driverFiles.fetch("resource", JoinType.LEFT);
+        driverFiles.fetch("state", JoinType.LEFT);
+
         List<Predicate> filters = new ArrayList<>();
 
         if (params.containsKey("driverId")) {
@@ -206,7 +210,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
                 .orderBy(cb.desc(driverFiles.get("id")));
 
         TypedQuery<DriverFileEntity> query = entityManager.createQuery(cq);
-        List<DriverFileEntity> results = query.getResultList();
+        List<DriverFileEntity> results = query.getResultList().stream().distinct().toList();
 
         return DataResponse.success(results);
     }
