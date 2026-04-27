@@ -60,7 +60,14 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
 
     @Override
     public DataResponse<List<CompanyEntity>> get(Map<String, Object> params) {
-        return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
+        Integer userId = Integer.valueOf(params.get("userId").toString());
+
+        return DataResponse.success(
+                repository.findByCreatedById(
+                        userId,
+                        Sort.by(Sort.Direction.DESC, "id")
+                )
+        );
     }
 
     @Override

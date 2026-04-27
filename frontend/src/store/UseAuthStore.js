@@ -7,7 +7,9 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     login(token) {
       this.token = token
-      localStorage.setItem('token', token) // Save token
+      localStorage.setItem('token', token); // Save token
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      localStorage.userId = payload.id;
     },
     logout() {
       this.token = ''

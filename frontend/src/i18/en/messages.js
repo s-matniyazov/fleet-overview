@@ -156,7 +156,9 @@ const en = {
     level:'Level',
     inspection_files:'Inspection Files',
     inspection_documents:'Inspection Documents',
-    search_by_driver_name:'Search By Driver Name'
+    search_by_driver_name:'Search By Driver Name',
+    search_by_name:'Search by Name',
+    enter_username:'Enter username'
 }
 
 export default en;

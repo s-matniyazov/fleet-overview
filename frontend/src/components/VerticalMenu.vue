@@ -224,6 +224,54 @@ const flyoutProps = {
             <v-divider class="my-2 border-opacity-25" />
           </div>
         </v-expand-transition>
+
+        <!-- settings -->
+        <v-list-item
+          class="nav-section-header rounded-lg mb-1"
+          :class="{
+            'bg-white bg-opacity-5': currentOpenMenu.includes('settings'),
+          }"
+          @click.stop="toggleSubmenu('settings')"
+        >
+          <template #prepend>
+            <v-icon icon="mdi-cog-outline" size="22" class="text-white" />
+          </template>
+          <v-list-item-title class="text-body-2 font-weight-bold text-white">
+            Settings
+          </v-list-item-title>
+          <template #append>
+            <v-icon
+              :icon="
+                currentOpenMenu.includes('settings')
+                  ? 'mdi-chevron-up'
+                  : 'mdi-chevron-down'
+              "
+              size="small"
+              class="text-medium-emphasis"
+            />
+          </template>
+        </v-list-item>
+
+        <v-expand-transition>
+          <div v-show="currentOpenMenu.includes('settings')">
+            <v-list-item
+              to="/users"
+              title="Users"
+              prepend-icon="mdi-account-multiple-outline"
+              rounded="lg"
+              class="nav-sublink mb-1"
+              active-class="nav-sublink--active"
+            />
+            <v-list-item
+              to="/settings"
+              title="Settings"
+              prepend-icon="mdi-hammer-wrench"
+              rounded="lg"
+              class="nav-sublink mb-1"
+              active-class="nav-sublink--active"
+            />
+          </div>  
+        </v-expand-transition>
       </v-list>
     </div>
 

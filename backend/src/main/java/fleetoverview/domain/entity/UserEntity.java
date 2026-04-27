@@ -9,9 +9,7 @@ import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.enums.LangEnum;
 import fleetoverview.domain.enums.UserStatusEnum;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
 
 /**
  * @author :  sardor.matniyazov
@@ -31,12 +29,12 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 50)
     private String email;
 
-//    @ManyToOne(targetEntity = RoleEntity.class, fetch = FetchType.EAGER)
-//    @JoinColumn(referencedColumnName = "id", name = "roles_id")
-//    private RoleEntity role;
+    @ManyToOne(targetEntity = RoleEntity.class, fetch = FetchType.EAGER)
+    @JoinColumn(referencedColumnName = "id", name = "roles_id")
+    private RoleEntity role;
 
     @Enumerated(EnumType.STRING)
-    private UserStatusEnum status = UserStatusEnum.P;
+    private UserStatusEnum status = UserStatusEnum.A;
 
     private Date registrationDate;
 
@@ -151,5 +149,13 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     public void setEnableNotification(boolean enableNotification) {
         this.enableNotification = enableNotification;
+    }
+
+    public RoleEntity getRole() {
+        return this.role;
+    }
+
+    public void setRole(RoleEntity role) {
+        this.role = role;
     }
 }

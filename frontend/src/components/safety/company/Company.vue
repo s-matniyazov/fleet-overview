@@ -7,7 +7,7 @@ import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
 import UInput from "@/components/base/UInput.vue";
 import {useI18n} from "vue-i18n";
-import {longToDateTime, showMessage, TIME_ZONES} from "@/util/utils.js";
+import {longToDateTime, showMessage,filterString,  TIME_ZONES} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
 import router from "@/router/index.js";
@@ -158,15 +158,35 @@ const onDelete = (d) => {
     });
   }
 }
+const pagination = ref({
+  size: 10,
+  page: 1,
+  hasNext: true
+});
+
+// function getData() {
+//   axiosIns.get(`${apiUrl}${filterString({userId: localStorage?.userId, ...pagination.value})}`)
+//       .then(res => {
+//         dataList.value = res.data.data;
+//         selectedRow.value = null;
+//       }).catch(e => {
+//     showMessage(e)
+//   });
+// }
 
 function getData() {
-  axiosIns.get(apiUrl)
-      .then(res => {
-        dataList.value = res.data.data;
-        selectedRow.value = null;
-      }).catch(e => {
+  axiosIns.get(
+    `${apiUrl}${filterString({
+      userId: localStorage.getItem("userId")
+    })}`
+  )
+  .then(res => {
+    dataList.value = res.data.data
+    selectedRow.value = null
+  })
+  .catch(e => {
     showMessage(e)
-  });
+  })
 }
 
 // HOOKS

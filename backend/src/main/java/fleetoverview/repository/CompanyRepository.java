@@ -3,6 +3,7 @@ package fleetoverview.repository;
 import fleetoverview.domain.entity.company.CompanyEntity;
 import fleetoverview.domain.enums.company.CompanyStatusEnum;
 import fleetoverview.domain.projection.company.CompanyFilesProjection;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -38,4 +39,7 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer>
             order by t.id
             """, nativeQuery = true)
     List<CompanyFilesProjection> getCompaniesWithExpirationInfo(int companyId);
+
+    List<CompanyEntity> findByCreatedById(Integer createdById, Sort sort);
+
 }

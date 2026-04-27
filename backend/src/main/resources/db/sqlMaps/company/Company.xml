@@ -110,6 +110,9 @@
                 <if test="companyName != null">
                     and (ci.name like '%${companyName}%')
                 </if>
+                <if test="userId != null">
+                    and ci.created_by_id = #{userId}
+                </if>
                 <if test="rowsPerPage != null and page != null">
                     limit ${rowsPerPage}
                     offset ${page-1} * ${rowsPerPage}

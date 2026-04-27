@@ -3,7 +3,7 @@ import VerticalMenu from "@/components/VerticalMenu.vue";
 import { onMounted, ref, watch } from "vue";
 import { useRouterStore } from "@/store/RouterStore.js";
 import axiosIns from "@/plugins/axios.js";
-import { showMessage } from "@/util/utils.js";
+import { showMessage,filterString } from "@/util/utils.js";
 import { URIS } from "@/constants/UriConstants.js";
 import { useFilterStore } from "@/store/FilterStore.js";
 
@@ -25,7 +25,11 @@ const toggleSidebar = () => {
 
 function getCompanies() {
   axiosIns
-    .get(URIS.COMPANIES)
+    .get(
+    `${URIS.COMPANIES}${filterString({
+      userId: localStorage.getItem("userId")
+    })}`
+  )
     .then((res) => {
       companies.value = res.data.data;
     })
