@@ -150,7 +150,8 @@ public class TruckServiceImpl extends BaseService implements TruckService {
 
     @Override
     public ApiResponse deactivate(Integer id) {
-        TruckEntity truck = repository.getReferenceById(id);
+        TruckEntity truck = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Truck not found: " + id));
 
         truck.setStatus(TruckStatusEnum.PASSIVE);
         truck.setStatusDate(LocalDateTime.now());
@@ -162,7 +163,8 @@ public class TruckServiceImpl extends BaseService implements TruckService {
 
     @Override
     public ApiResponse activate(Integer id) {
-        TruckEntity truck = repository.getReferenceById(id);
+        TruckEntity truck = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Truck not found: " + id));
 
         truck.setStatus(TruckStatusEnum.ACTIVE);
         truck.setStatusDate(LocalDateTime.now());

@@ -1,286 +1,206 @@
 <script setup>
-import {useI18n} from "vue-i18n";
-import {dataOrTire, longToDate, longToDateTime} from "@/util/utils.js";
+import { useI18n } from "vue-i18n";
+import { dataOrTire, longToDate, longToDateTime } from "@/util/utils.js";
 
-const {t} = useI18n();
+const { t } = useI18n();
 
 const props = defineProps({
   data: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 });
 </script>
+
 <template>
-  <div class="tw-w-full tw-flex tw-flex-col ma-3">
+  <div class="driver-info">
 
-  <div class="tw-w-full tw-flex tw-justify-between tw-gap-x-4 mx-1 mt-3">
-    <div
-        class="tw-w-1/2 tw-rounded tw-bg-light-primary  tw-shadow-default tw-p-[7px]">
-      <div class="tw-flex tw-justify-between">
-        <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
-          <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Hired To</span><span
-              class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.companyName) }} </span></div>
-          <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Hired Date</span><span
-              class="tw-text-dark-primary  tw-text-[14px]"> {{ longToDate(dataOrTire(data?.hireDate)) }} </span></div>
+    <!-- Employment row -->
+    <div class="info-card mb-4">
+      <div class="info-grid-2">
+        <div class="info-field">
+          <span class="info-label">Hired To</span>
+          <span class="info-value">{{ dataOrTire(data?.companyName) }}</span>
         </div>
-        <div class="tw-w-1/2 tw-flex tw-flex-col tw-gap-y-4">
-          <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Terminated Date</span><span
-              class="tw-text-dark-primary  tw-text-[14px]"><span
-              class="tw-text-dark-primary  tw-text-[14px] "> {{ dataOrTire(longToDateTime(data?.terminationDate)) }}
-              </span></span></div>
-          <div class="tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Terminated Reason</span><span
-              class="tw-text-dark-primary  tw-text-[14px]"><span
-              class="tw-text-dark-primary  tw-text-[14px] "> {{ dataOrTire(data?.terminationReason) }}
-              </span></span></div>
+        <div class="info-field">
+          <span class="info-label">Hired Date</span>
+          <span class="info-value">{{ longToDate(dataOrTire(data?.hireDate)) }}</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Terminated Date</span>
+          <span class="info-value">{{ dataOrTire(longToDateTime(data?.terminationDate)) }}</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Terminated Reason</span>
+          <span class="info-value">{{ dataOrTire(data?.terminationReason) }}</span>
         </div>
       </div>
     </div>
-<!--    <div-->
-<!--        class="tw-w-1/2 tw-p-[7px] tw-rounded tw-bg-light-primary  tw-shadow-default tw-flex tw-flex-col">-->
-<!--      <div class="tw-flex tw-justify-between"><span-->
-<!--          class="tw-text-lg tw-font-bold tw-text-dark-primary "> Special Notes </span><span-->
-<!--          class="tw-cursor-pointer tw-text-base tw-text-gray-dark  "><i-->
-<!--          class="fa-solid fa-pen"></i></span></div>-->
-<!--      <div class="tw-mt-2 tw-w-full tw-h-[150px] tw-relative">-->
-<!--        <form novalidate="" class="tw-w-full tw-h-full ng-untouched ng-pristine ng-valid">-->
-<!--          <div-->
-<!--              class="tw-rounded tw-p-1 tw-bg-gray-extra-light tw-w-full tw-h-full tw-min-h-full tw-max-h-full tw-overflow-y-auto">-->
-<!--            N/A-->
-<!--          </div>-->
-<!--        </form>-->
-<!--      </div>-->
-<!--    </div>-->
-  </div>
 
-  <div class="tw-w-full tw-flex tw-items-start tw-gap-x-4 mx-1 mt-3">
-    <div
-        class="tw-flex-1 tw-rounded tw-bg-light-primary  tw-shadow-default tw-p-[7px] tw-flex tw-flex-col">
-      <div class="tw-flex tw-justify-between"><span
-          class="tw-w-[21px] tw-h-[21px] tw-rounded-full tw-flex tw-items-center tw-justify-center tw-bg-secondary tw-text-light-primary ">
-          1 </span></div>
-      <span
-          class="tw-mt-4 tw-text-lg tw-font-bold tw-text-dark-primary "> Personal Details </span>
-      <div class="tw-mt-4 tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">First Name</span><span
-          class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data.firstName) }} </span></div>
-      <div class="tw-mt-2 tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Middle Name</span><span
-          class="tw-text-dark-primary  tw-text-[14px]"><span
-          class="tw-text-dark-primary  tw-text-[14px] "> {{ dataOrTire(data.middleName) }} </span></span>
-      </div>
-      <div class="tw-mt-2 tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Last Name</span><span
-          class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data.lastName) }} </span></div>
-      <div class="tw-mt-2 tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Phone</span><span
-          class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data.phone) }} </span>
-      </div>
-      <div class="tw-mt-2 tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Email</span><span
-          class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data.email) }} </span>
-      </div>
-      <div class="tw-mt-2 tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">DOB</span><span
-          class="tw-text-dark-primary  tw-text-[14px]"> {{ longToDate(dataOrTire(data?.dateOfBirth)) }} </span></div>
-      <div class="tw-mt-2 tw-flex tw-flex-col"><span class="tw-text-gray-dark tw-text-[12px]">Address</span><span
-          class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.address) }} </span></div>
-    </div>
-    <div
-        class="tw-flex-1 tw-rounded tw-bg-light-primary  tw-shadow-default tw-p-[7px] tw-flex tw-flex-col ">
-      <div class="tw-flex tw-justify-between"><span
-          class="tw-w-[21px] tw-h-[21px] tw-rounded-full tw-flex tw-items-center tw-justify-center tw-bg-secondary tw-text-light-primary ">
-          2 </span></div>
-      <span
-          class="tw-mt-4 tw-text-lg tw-font-bold tw-text-dark-primary "> Contract </span>
-      <div class="tw-mt-4 tw-flex tw-flex-col "><span class="tw-text-gray-dark tw-text-[12px]">Driver
-          role</span><span class="tw-text-dark-primary  tw-text-[14px]"> {{ dataOrTire(data?.type) }} </span>
+    <!-- Detail cards row -->
+    <div class="info-grid-3">
+
+      <!-- 1 — Personal Details -->
+      <div class="info-card">
+        <div class="info-section-header">
+          <span class="info-badge">1</span>
+          <span class="info-section-title">Personal Details</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">First Name</span>
+          <span class="info-value">{{ dataOrTire(data?.firstName) }}</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Middle Name</span>
+          <span class="info-value">{{ dataOrTire(data?.middleName) }}</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Last Name</span>
+          <span class="info-value">{{ dataOrTire(data?.lastName) }}</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Phone</span>
+          <span class="info-value">{{ dataOrTire(data?.phone) }}</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Email</span>
+          <span class="info-value">{{ dataOrTire(data?.email) }}</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">DOB</span>
+          <span class="info-value">{{ longToDate(dataOrTire(data?.dateOfBirth)) }}</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Address</span>
+          <span class="info-value">{{ dataOrTire(data?.address) }}</span>
+        </div>
       </div>
 
+      <!-- 2 — Contract -->
+      <div class="info-card">
+        <div class="info-section-header">
+          <span class="info-badge">2</span>
+          <span class="info-section-title">Contract</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Driver Role</span>
+          <span class="info-value">{{ dataOrTire(data?.type) }}</span>
+        </div>
+      </div>
+
+      <!-- 3 — Operation Equipment -->
+      <div class="info-card">
+        <div class="info-section-header">
+          <span class="info-badge">3</span>
+          <span class="info-section-title">Operation Equipment</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Truck</span>
+          <span v-if="data?.truckId" class="info-tag">{{ dataOrTire(data?.truckName) }}</span>
+          <span v-else class="info-value">{{ dataOrTire(data?.truckName) }}</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Trailer</span>
+          <span v-if="data?.trailerId" class="info-tag">{{ dataOrTire(data?.trailerName) }}</span>
+          <span v-else class="info-value">{{ dataOrTire(data?.trailerName) }}</span>
+        </div>
+      </div>
+
     </div>
-    <div
-        class="tw-flex-1 tw-rounded tw-bg-light-primary  tw-shadow-default tw-p-[7px] tw-flex tw-flex-col">
-      <div class="tw-flex tw-justify-between"><span
-          class="tw-w-[21px] tw-h-[21px] tw-rounded-full tw-flex tw-items-center tw-justify-center tw-bg-secondary tw-text-light-primary ">
-          3 </span></div>
-      <span
-          class="tw-mt-4 tw-text-lg tw-font-bold tw-text-dark-primary "> Operation Equipment
-      </span>
-      <div class="tw-mt-4 tw-flex tw-flex-col "><span class="tw-text-gray-dark tw-text-[12px]">Truck</span><span
-          :class="`tw-w-fit ${data?.truckId && 'tw-text-light-primary tw-bg-secondary'} tw-px-2 tw-rounded tw-text-[14px] px-2`">
-          {{ dataOrTire(data?.truckName) }} </span></div>
-      <div class="tw-mt-2 tw-flex tw-flex-col "><span class="tw-text-gray-dark tw-text-[12px]">Trailer</span><span
-          :class="`tw-w-fit ${data?.trailerId && 'tw-text-light-primary tw-bg-secondary'} tw-px-2 tw-rounded tw-text-[14px] px-2`">
-          {{ dataOrTire(data?.trailerName) }} </span></div>
-    </div>
-  </div>
   </div>
 </template>
 
-
 <style scoped>
-.tw-gap-x-4 {
-  column-gap: 1rem;
-}
-
-.tw-justify-between {
-  justify-content: space-between;
-}
-
-.tw-flex {
-  display: flex;
-}
-
-.tw-gap-y-4 {
-  row-gap: 1rem;
-}
-
-.tw-flex-col {
-  flex-direction: column;
-}
-
-.tw-w-1\/2 {
-  width: 50%;
-}
-
-.tw-shadow-default {
-  --tw-shadow: 0px 0px 2px 0px #00000040;
-  --tw-shadow-colored: 0px 0px 2px 0px;
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), 0 0 #0000, var(--tw-shadow);
-}
-
-.tw-bg-light-primary {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
-}
-
-.tw-p-\[7px\] {
-  padding: 7px;
-}
-
-.tw-rounded {
-  border-radius: .25rem;
-}
-
-.tw-text-gray-dark {
-  --tw-text-opacity: 1;
-  color: rgb(113 113 113 / var(--tw-text-opacity, 1));
-}
-
-.tw-text-\[12px\] {
-  font-size: 12px;
-}
-
-.tw-text-dark-primary {
-  --tw-text-opacity: 1;
-  color: rgb(33 42 54 / var(--tw-text-opacity, 1));
-}
-
-.tw-font-bold {
-  font-weight: 700;
-}
-
-.tw-text-lg {
-  font-size: 1.125rem;
-  line-height: 1.75rem;
-}
-
-.tw-text-base {
-  font-size: 1rem;
-  line-height: 1.5rem;
-}
-
-.tw-cursor-pointer {
-  cursor: pointer;
-}
-
-.tw-w-full {
+.driver-info {
   width: 100%;
+  padding: 4px 4px;
 }
 
-.tw-h-\[150px\] {
-  height: 150px;
-}
-
-.tw-mt-2 {
-  margin-top: .5rem;
-}
-
-.tw-relative {
-  position: relative;
-}
-
-.tw-bg-gray-extra-light {
-  --tw-bg-opacity: 1;
-  background-color: rgb(242 242 242 / var(--tw-bg-opacity, 1));
-}
-
-.tw-p-1 {
-  padding: .25rem;
-}
-
-.tw-overflow-y-auto {
-  overflow-y: auto;
-}
-
-.tw-min-h-full {
-  min-height: 100%;
-}
-
-.tw-max-h-full {
-  max-height: 100%;
-}
-
-.tw-h-full {
-  height: 100%;
-}
-
-.tw-text-light-primary {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-}
-
-.tw-bg-secondary {
-  --tw-bg-opacity: 1;
-  background-color: rgb(0 64 91 / var(--tw-bg-opacity, 1));
-}
-
-.tw-justify-center {
-  justify-content: center;
-}
-
-.tw-items-center {
-  align-items: center;
-}
-
-.tw-w-\[21px\] {
-  width: 21px;
-}
-
-.tw-h-\[21px\] {
-  height: 21px;
-}
-
-.tw-bg-secondary {
-  --tw-bg-opacity: 1;
-  background-color: rgb(0 64 91 / var(--tw-bg-opacity, 1));
-}
-
-.tw-rounded-full {
-  border-radius: 9999px;
-}
-
-.tw-justify-center {
-  justify-content: center;
-}
-
-.tw-items-center {
-  align-items: center;
-}
-
-.tw-w-\[21px\] {
-  width: 21px;
-}
-
-.tw-h-\[21px\] {
-  height: 21px;
-}
-
-.tw-flex {
+.info-card {
+  background: rgb(var(--v-theme-surface-variant));
+  border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-radius: 10px;
+  padding: 14px 16px;
   display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.info-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 24px;
+}
+
+.info-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.info-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.info-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgb(var(--v-theme-primary));
+  color: rgb(var(--v-theme-on-primary));
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.info-section-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
+}
+
+.info-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.info-label {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+
+.info-value {
+  font-size: 13.5px;
+  color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
+}
+
+.info-tag {
+  display: inline-block;
+  background: rgba(var(--v-theme-primary), 0.12);
+  color: rgb(var(--v-theme-primary));
+  border-radius: 5px;
+  padding: 1px 8px;
+  font-size: 13px;
+  font-weight: 500;
+  width: fit-content;
+}
+
+@media (max-width: 768px) {
+  .info-grid-2 {
+    grid-template-columns: 1fr;
+  }
+  .info-grid-3 {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

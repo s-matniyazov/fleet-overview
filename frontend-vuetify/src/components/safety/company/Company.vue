@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 
 import modal from '../../base/UDialog.vue'
 import axiosIns from "@/plugins/axios.js";
@@ -7,7 +7,7 @@ import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
 import UInput from "@/components/base/UInput.vue";
 import {useI18n} from "vue-i18n";
-import {longToDateTime, showMessage, TIME_ZONES} from "@/util/utils.js";
+import {longToDateTime, showMessage, filterString, TIME_ZONES} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
 import router from "@/router/index.js";
@@ -101,6 +101,19 @@ const dataList = ref([]);
 const status = ref([]);
 const data = ref(newModel())
 const selectedRow = ref();
+
+const pagination = ref({ page: 1, rowsPerPage: 20, hasNext: false });
+
+const pagedData = computed(() => {
+  const { page, rowsPerPage } = pagination.value;
+  return dataList.value.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+});
+
+watch(
+  () => [pagination.value.page, pagination.value.rowsPerPage, dataList.value.length],
+  ([page, size, total]) => { pagination.value.hasNext = page * size < total; },
+  { immediate: true },
+);
 
 const companyCountryItems = computed(() =>
   mapSelectItems(stateStore.countries, "name", "id"),
@@ -202,7 +215,7 @@ const onDelete = (d) => {
 }
 
 function getData() {
-  axiosIns.get(apiUrl)
+  axiosIns.get(`${apiUrl}${filterString({ userId: localStorage.getItem('userId') })}`)
       .then(res => {
         dataList.value = res.data.data;
         selectedRow.value = null;
@@ -229,11 +242,12 @@ axiosIns.post(apiUrl+"/excel", data.value)
 </script>
 
 <template>
-  <div class="mb-0 p-2">
+  <div class="company-shell">
     <UTable
-      :items="dataList"
+      :items="pagedData"
       :columns="columns"
       v-model="selectedRow"
+      v-model:pagination="pagination"
       @row-dblclick="handleDoubleClick"
     >
       <template #top>
@@ -262,15 +276,13 @@ axiosIns.post(apiUrl+"/excel", data.value)
   <Teleport to="body">
     <modal :show="addModal" @close="addModal = false" width="calc(100vw - 400px)">
       <template #header>
-        <div class="d-flex" style="width: 100%">
-          <div class="text-primary">
+        <div class="d-flex align-center w-100">
+          <span class="text-subtitle-1 font-weight-bold flex-grow-1">
             {{ data.id ? t('edit') : t('add') }} Company
-          </div>
-          <div class="text-end u-end">
-              <v-btn icon variant="text" aria-label="Close" @click="onClose">
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
-          </div>
+          </span>
+          <v-btn icon variant="text" density="comfortable" aria-label="Close" @click="onClose">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </div>
       </template>
 
@@ -424,5 +436,11 @@ axiosIns.post(apiUrl+"/excel", data.value)
 </template>
 
 <style scoped>
-
+.company-shell {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+}
 </style>

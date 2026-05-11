@@ -1,7 +1,18 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { useTheme } from "vuetify";
 import { useAuthStore } from "@/store/UseAuthStore.js";
 import router from "@/router/index.js";
+
+const theme = useTheme();
+const isDark = computed(() => theme.current.value.dark);
+
+const railIconColor = computed(() => isDark.value ? "#e8eef5" : "#475569");
+const railFleetColor = computed(() => isDark.value ? "#7dd3fc" : "#0d9488");
+const railHoverBg = computed(() => isDark.value ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.08)");
+const railHoverIconColor = computed(() => isDark.value ? "#ffffff" : "#1e293b");
+const logoutBorderColor = computed(() => isDark.value ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.1)");
+const activeMenuBg = computed(() => isDark.value ? "rgba(255,255,255,0.05)" : "rgba(13,148,136,0.08)");
 
 const authStore = useAuthStore();
 
@@ -40,7 +51,7 @@ const flyoutProps = {
 
 <template>
   <div
-    class="vertical-menu-nav d-flex flex-column flex-grow-1 text-white"
+    :class="['vertical-menu-nav d-flex flex-column flex-grow-1', isDark ? 'text-white' : 'text-high-emphasis']"
     style="min-height: 0"
   >
     <!-- Expanded drawer -->
@@ -53,13 +64,13 @@ const flyoutProps = {
         <!-- Fleet -->
         <v-list-item
           class="nav-section-header rounded-lg mb-1"
-          :class="{ 'bg-white bg-opacity-5': currentOpenMenu.includes('fleet') }"
+          :class="{ 'nav-section-header--open': currentOpenMenu.includes('fleet') }"
           @click.stop="toggleSubmenu('fleet')"
         >
           <template #prepend>
-            <v-icon icon="mdi-folder-cog-outline" size="22" class="text-white" />
+            <v-icon icon="mdi-folder-cog-outline" size="22" />
           </template>
-          <v-list-item-title class="text-body-2 font-weight-bold text-white">
+          <v-list-item-title class="text-body-2 font-weight-bold">
             Fleet
           </v-list-item-title>
           <template #append>
@@ -108,13 +119,13 @@ const flyoutProps = {
         <!-- Safety -->
         <v-list-item
           class="nav-section-header rounded-lg mb-1"
-          :class="{ 'bg-white bg-opacity-5': currentOpenMenu.includes('safety') }"
+          :class="{ 'nav-section-header--open': currentOpenMenu.includes('safety') }"
           @click.stop="toggleSubmenu('safety')"
         >
           <template #prepend>
-            <v-icon icon="mdi-shield-car" size="22" class="text-white" />
+            <v-icon icon="mdi-shield-car" size="22" />
           </template>
-          <v-list-item-title class="text-body-2 font-weight-bold text-white">
+          <v-list-item-title class="text-body-2 font-weight-bold">
             Safety
           </v-list-item-title>
           <template #append>
@@ -163,15 +174,13 @@ const flyoutProps = {
         <!-- References -->
         <v-list-item
           class="nav-section-header rounded-lg mb-1"
-          :class="{
-            'bg-white bg-opacity-5': currentOpenMenu.includes('references'),
-          }"
+          :class="{ 'nav-section-header--open': currentOpenMenu.includes('references') }"
           @click.stop="toggleSubmenu('references')"
         >
           <template #prepend>
-            <v-icon icon="mdi-tune-variant" size="22" class="text-white" />
+            <v-icon icon="mdi-tune-variant" size="22" />
           </template>
-          <v-list-item-title class="text-body-2 font-weight-bold text-white">
+          <v-list-item-title class="text-body-2 font-weight-bold">
             References
           </v-list-item-title>
           <template #append>
@@ -217,6 +226,49 @@ const flyoutProps = {
               to="/inspection-level"
               title="Inspection Level"
               prepend-icon="mdi-format-list-checks"
+              rounded="lg"
+              class="nav-sublink mb-1"
+              active-class="nav-sublink--active"
+            />
+            <v-divider class="my-2 border-opacity-25" />
+          </div>
+        </v-expand-transition>
+
+        <!-- Settings -->
+        <v-list-item
+          class="nav-section-header rounded-lg mb-1"
+          :class="{ 'nav-section-header--open': currentOpenMenu.includes('settings') }"
+          @click.stop="toggleSubmenu('settings')"
+        >
+          <template #prepend>
+            <v-icon icon="mdi-cog-outline" size="22" />
+          </template>
+          <v-list-item-title class="text-body-2 font-weight-bold">
+            Settings
+          </v-list-item-title>
+          <template #append>
+            <v-icon
+              :icon="currentOpenMenu.includes('settings') ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+              size="small"
+              class="text-medium-emphasis"
+            />
+          </template>
+        </v-list-item>
+
+        <v-expand-transition>
+          <div v-show="currentOpenMenu.includes('settings')">
+            <v-list-item
+              to="/users"
+              title="Users"
+              prepend-icon="mdi-account-multiple-outline"
+              rounded="lg"
+              class="nav-sublink mb-1"
+              active-class="nav-sublink--active"
+            />
+            <v-list-item
+              to="/settings"
+              title="Settings"
+              prepend-icon="mdi-hammer-wrench"
               rounded="lg"
               class="nav-sublink mb-1"
               active-class="nav-sublink--active"
@@ -416,13 +468,16 @@ const flyoutProps = {
   color: rgb(var(--v-theme-primary)) !important;
 }
 
+.nav-section-header--open {
+  background: v-bind(activeMenuBg) !important;
+}
+
 .rail-fab {
   border-radius: 12px !important;
 }
 
-/* Rail: force readable icons on dark gradient drawer (avoid theme on-surface / "white" color bugs) */
 .rail-fab--activator {
-  color: #e8eef5 !important;
+  color: v-bind(railIconColor) !important;
 }
 
 .rail-fab--activator :deep(.v-btn__overlay) {
@@ -434,30 +489,29 @@ const flyoutProps = {
 }
 
 .rail-fab-icon {
-  color: #e8eef5 !important;
+  color: v-bind(railIconColor) !important;
   opacity: 1 !important;
 }
 
 .rail-fab:hover {
-  background: rgba(255, 255, 255, 0.12) !important;
+  background: v-bind(railHoverBg) !important;
 }
 
 .rail-fab:hover .rail-fab-icon {
-  color: #ffffff !important;
+  color: v-bind(railHoverIconColor) !important;
 }
 
 .rail-fab:hover .rail-fab-icon--fleet {
-  color: #ecfeff !important;
+  color: v-bind(railHoverIconColor) !important;
 }
 
-/* Fleet rail: outline icon was too faint; filled + teal tint stays visible on gradient */
 .rail-fab-icon--fleet {
-  color: #7dd3fc !important;
+  color: v-bind(railFleetColor) !important;
   opacity: 1 !important;
 }
 
 .rail-fab--fleet.rail-fab--activator {
-  color: #7dd3fc !important;
+  color: v-bind(railFleetColor) !important;
 }
 
 .rail-flyout {
@@ -468,7 +522,7 @@ const flyoutProps = {
   flex-shrink: 0;
   width: 100%;
   padding: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid v-bind(logoutBorderColor);
 }
 
 .logout-btn {

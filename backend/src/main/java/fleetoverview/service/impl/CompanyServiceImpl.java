@@ -5,6 +5,7 @@ import fleetoverview.data.request.CompanyRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
 import fleetoverview.domain.entity.ResourceEntity;
+import fleetoverview.domain.entity.UserEntity;
 import fleetoverview.domain.entity.company.CompanyEntity;
 import fleetoverview.domain.entity.company.CompanyFileEntity;
 import fleetoverview.domain.enums.company.CompanyFileStatusEnum;
@@ -13,6 +14,7 @@ import fleetoverview.domain.projection.company.CompanyProjection;
 import fleetoverview.repository.CompanyFileRepository;
 import fleetoverview.repository.CompanyRepository;
 import fleetoverview.repository.StateRepository;
+import fleetoverview.security.JwtService;
 import fleetoverview.service.CompanyService;
 import fleetoverview.service.ResourceService;
 import fleetoverview.service.base.BaseService;
@@ -31,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static fleetoverview.util.helper.Utils.getAuthentication;
 
 /**
  * @author :  Sardor Matniyazov
@@ -60,7 +64,7 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
 
     @Override
     public DataResponse<List<CompanyEntity>> get(Map<String, Object> params) {
-        Integer userId = Integer.valueOf(params.get("userId").toString());
+        Integer userId = ((UserEntity) Objects.requireNonNull(getAuthentication(true).getPrincipal())).getId();
 
         return DataResponse.success(
                 repository.findByCreatedById(

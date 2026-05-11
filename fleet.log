@@ -19,3 +19,8 @@ select t.first_name || ' ' || t.last_name as driverName,
             where t.company_id = 5
                     and t.status='ACTIVE'
             order by t.id
+
+
+            ;;
+
+             $2a$10$jJxnRh6QB20EOGkPo4JsT.HIqAH5TBPYM7Dj9wHBzw6VPErzX1zAa

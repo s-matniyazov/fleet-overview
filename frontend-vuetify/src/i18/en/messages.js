@@ -158,6 +158,8 @@ const en = {
     inspection_files:'Inspection Files',
     inspection_documents:'Inspection Documents',
     search_by_driver_name:'Search By Driver Name',
+    search_by_name:'Search by Name',
+    enter_username:'Enter username',
     driver_inspections_empty:'No inspections in the past 3 years',
 }
 

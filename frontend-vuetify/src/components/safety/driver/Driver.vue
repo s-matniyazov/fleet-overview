@@ -572,74 +572,65 @@ watch(
   <Teleport to="body">
     <modal :show="addModal" @close="addModal = false" width="calc(100vw - 400px)">
       <template #header>
-        <div class="d-flex" style="width: 100%">
-          <div class="text-white">
-            {{ data.id ? t('edit') : t('add') }} {{ t('driver') }} : {{ data.id }}
-          </div>
-          <div class="text-end u-end">
-              <v-btn icon variant="text" color="white" aria-label="Close" @click="onClose">
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
-          </div>
+        <div class="d-flex align-center w-100">
+          <span class="text-subtitle-1 font-weight-bold flex-grow-1">
+            {{ data.id ? t('edit') : t('add') }} {{ t('driver') }}
+            <span v-if="data.id" class="text-caption text-medium-emphasis ms-1">#{{ data.id }}</span>
+          </span>
+          <v-btn icon variant="text" density="comfortable" aria-label="Close" @click="onClose">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </div>
       </template>
 
       <template #body>
         <UForm id="safety-driver-form" @submit="onSave">
-          <div class="row p-4">
-            <!--            company-->
-            <div class="col-6 pe-5">
-              <div class="col-12 text-white mb-3" style="font-weight: 1000; font-size: 16px">
-                Personal Details
-              </div>
-              <!--            name-->
-              <div class="col-12 row">
+          <div class="row">
+            <!-- Personal Details -->
+            <div class="col-6">
+              <div class="text-subtitle-2 font-weight-bold text-primary mb-3">Personal Details</div>
+              <div class="row">
                 <div class="col-4">
-                  <UInput v-model="data.firstName" :label="t('first_name')" :hint="t('first_name')"
-                          :name="t('first_name')"
+                  <UInput v-model="data.firstName" :label="t('first_name')" :name="t('first_name')"
                           :placeholder="t('enter_first_name')" classes="mb-3"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
-                <!--           middle name-->
                 <div class="col-4">
-                  <UInput v-model="data.middleName" :label="t('middle_name')" :hint="t('middle_name')"
-                          :name="t('middle_name')"
+                  <UInput v-model="data.middleName" :label="t('middle_name')" :name="t('middle_name')"
                           :placeholder="t('enter_middle_name')" classes="mb-3"/>
                 </div>
-                <!--           last name-->
                 <div class="col-4">
-                  <UInput v-model="data.lastName" :label="t('last_name')" :hint="t('last_name')" :name="t('last_name')"
+                  <UInput v-model="data.lastName" :label="t('last_name')" :name="t('last_name')"
                           :placeholder="t('enter_last_name')" classes="mb-3"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
-                <!--           phone number-->
                 <div class="col-6">
-                  <UInput v-model="data.phone" :label="t('phone')" :hint="t('phone')" :name="t('phone')"
+                  <UInput v-model="data.phone" :label="t('phone')" :name="t('phone')"
                           :placeholder="t('enter_phone_number')" classes="mb-3"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
                 <div class="col-6">
-                  <UInput v-model="data.email" :label="t('email')" :hint="t('email')" :name="t('email')"
+                  <UInput v-model="data.email" :label="t('email')" :name="t('email')"
                           :placeholder="t('enter_email')" classes="mb-3"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
-                <div class="col-3">
-                  <UDateInput v-model="data.dateOfBirth" classes="mb-2" :label="t('date_of_birth')"
+                <div class="col-6">
+                  <UDateInput v-model="data.dateOfBirth" classes="mb-3" :label="t('date_of_birth')"
                               name="dataOfBirth"
                               :rules="(val) => (!val && t('required'))"/>
                 </div>
-                <div class="col-3">
-                  <UDateInput v-model="data.hireDate" classes="mb-2" :label="t('hired_date')"
+                <div class="col-6">
+                  <UDateInput v-model="data.hireDate" classes="mb-3" :label="t('hired_date')"
                               name="hiredDate"
                               :rules="(val) => (!val && t('required'))"/>
                 </div>
               </div>
             </div>
+
+            <!-- Address & Classification -->
             <div class="col-6">
-              <div class="col-12 text-white mb-3" style="font-weight: 1000; font-size: 16px">
-                Current Address
-              </div>
-              <div class="col-12 row">
+              <div class="text-subtitle-2 font-weight-bold text-primary mb-3">Current Address</div>
+              <div class="row">
                 <div class="col-6">
                   <v-select
                     v-model="data.countryId"
@@ -653,7 +644,7 @@ watch(
                     clearable
                     bg-color="surface"
                     :error-messages="driverCountryErr"
-                    class="mb-2"
+                    class="mb-3"
                   />
                 </div>
                 <div class="col-6">
@@ -669,32 +660,25 @@ watch(
                     clearable
                     bg-color="surface"
                     :error-messages="driverStateErr"
-                    class="mb-2"
+                    class="mb-3"
                   />
                 </div>
-              </div>
-
-              <!--            address-->
-              <div class="col-12 row">
                 <div class="col-4">
-                  <UInput v-model="data.address" :label="t('address')" :hint="t('address')" :name="t('address')"
+                  <UInput v-model="data.address" :label="t('address')" :name="t('address')"
                           :placeholder="t('enter_address')" classes="mb-3"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
-                <!--           city name-->
                 <div class="col-4">
-                  <UInput v-model="data.city" :label="t('city')" :hint="t('city')" :name="t('city')"
+                  <UInput v-model="data.city" :label="t('city')" :name="t('city')"
                           :placeholder="t('enter_city')" classes="mb-3"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
-                <!--           zipcode-->
                 <div class="col-4">
-                  <UInput v-model="data.zipCode" :label="t('zip_code')" :hint="t('zip_code')" :name="t('zip_code')"
+                  <UInput v-model="data.zipCode" :label="t('zip_code')" :name="t('zip_code')"
                           :placeholder="t('enter_zip_code')" classes="mb-3"
                           :rules="(val) => (!val && $t('required'))"/>
                 </div>
-
-                <div class="col-3">
+                <div class="col-6">
                   <v-select
                     v-model="data.type"
                     :items="driverTypeItems"
@@ -707,11 +691,10 @@ watch(
                     clearable
                     bg-color="surface"
                     :error-messages="driverTypeErr"
-                    class="mb-2"
+                    class="mb-3"
                   />
                 </div>
-
-                <div class="col-3">
+                <div class="col-6">
                   <v-select
                     v-model="data.status"
                     :items="driverStatusItems"
@@ -724,10 +707,9 @@ watch(
                     clearable
                     bg-color="surface"
                     :error-messages="driverStatusErr"
-                    class="mb-2"
+                    class="mb-3"
                   />
                 </div>
-
               </div>
             </div>
           </div>
@@ -776,20 +758,19 @@ watch(
   <!--  file overlay-->
   <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
     <template #header>
-      <div class="fw-bold text-white bg-primary p-2 rounded-2 d-flex p-2 mb-2">
-        <div class="row">
-          <div class="col-12 d-flex align-items-center font-size-14">
+      <div class="d-flex align-center justify-space-between pa-2 rounded-lg bg-primary mb-2">
+        <div class="d-flex flex-column">
+          <span class="text-subtitle-2 font-weight-bold text-on-primary">
             {{ DOCUMENT_TYPES[selectedFileSection.data.type] }}
-          </div>
-          <div class="col-12 d-flex align-items-center font-size-11">
+          </span>
+          <span class="text-caption text-on-primary opacity-80">
             {{ `${selectedRow?.firstName} ${selectedRow?.lastName}` }}
-          </div>
+          </span>
         </div>
-        <span class="text-end u-end">
-          <v-btn icon variant="text" density="comfortable" aria-label="Close" @click="selectedFileSection.dialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </span>
+        <v-btn icon variant="text" density="comfortable" color="on-primary" aria-label="Close"
+          @click="selectedFileSection.dialog = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
       </div>
     </template>
     <template #body>

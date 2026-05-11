@@ -1,5 +1,6 @@
 package fleetoverview.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fleetoverview.domain.entity.base.BaseEntity;
 import jakarta.persistence.*;
 
@@ -20,6 +21,7 @@ public class RoleEntity extends BaseEntity {
     @Column(nullable = false, length = 1000)
     private String description;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<ActionEntity> roleActions = new HashSet<>();
 

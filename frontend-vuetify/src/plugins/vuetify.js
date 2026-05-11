@@ -4,8 +4,22 @@ import { aliases, mdi } from "vuetify/iconsets/mdi";
 
 export default createVuetify({
   theme: {
-    defaultTheme: "fleetDark",
+    defaultTheme: "fleetLight",
     themes: {
+      fleetLight: {
+        dark: false,
+        colors: {
+          background: "#f0f4f8",
+          surface: "#ffffff",
+          "surface-variant": "#f1f5f9",
+          primary: "#0d9488",
+          secondary: "#475569",
+          error: "#ef4444",
+          info: "#0284c7",
+          success: "#16a34a",
+          warning: "#d97706",
+        },
+      },
       fleetDark: {
         dark: true,
         colors: {

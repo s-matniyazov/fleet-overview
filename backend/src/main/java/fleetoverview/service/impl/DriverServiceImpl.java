@@ -134,7 +134,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
     @Override
     public ApiResponse terminate(TerminationRequest data) {
         // not implemented yet
-        DriverEntity driver = repository.getReferenceById(data.driverId());
+        DriverEntity driver = repository.findById(data.driverId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("driver.not_found")));
 
         if (driver.getStatus().equals(DriverStatusEnum.ACTIVE)) {
             driver.setTerminationDate(LocalDateTime.now());

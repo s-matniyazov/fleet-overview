@@ -463,101 +463,171 @@ watch(() => data.value.violationDiscovered, (val) => {
   <Teleport to="body">
     <UDialog :show="addModal" @close="addModal = false" width="calc(100vw - 700px)">
       <template #header>
-        <div style="width: 100%">
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="text-white">
-              {{ data.id ? data.inspection : t('add') }} {{ t('inspection') }}
-            </div>
-
-            <v-btn icon variant="text" color="white" aria-label="Close" @click="onClose">
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-          </div>
-          <hr class="my-3 border-primary opacity-75">
+        <div class="d-flex align-center w-100">
+          <span class="text-subtitle-1 font-weight-bold flex-grow-1">
+            {{ data.id ? t('edit') : t('add') }} {{ t('inspection') }}
+            <span v-if="data.id" class="text-caption text-medium-emphasis ms-1">#{{ data.id }}</span>
+          </span>
+          <v-btn icon variant="text" density="comfortable" aria-label="Close" @click="onClose">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </div>
       </template>
 
       <template #body>
         <UForm id="safety-inspection-form" @submit="onSave">
-          <div class="row g-2"> <!-- g-3 adds uniform gutter spacing between all columns -->
-            <!-- --- Inspection Section --- -->
-            <div class="col-12">
-              <div class="row g-4">
-                <div class="col-6">
-                  <UInput
-                    v-model="data.inspectionNumber"
-                    icon="mdi-number"
-                    :label="t('inspectionNumber')"
-                    :hint="t('enter_inspectionNumber')"
-                    :name="t('inspectionNumber')"
-                    :placeholder="t('inspectionNumber')"
-                    :rules="(val) => (!val && $t('required'))"
-                  />
-                </div>
-                <div class="col-6">
-                  <UInput
-                    v-model="data.inspectionDate"
-                    :label="t('inspectionDate')"
-                    :hint="t('inspectionDate')"
-                    :name="t('inspectionDate')"
-                    type="date"
-                    :rules="(val) => (!val && $t('required'))"
-                  />
-                </div>
-              </div>
-              <hr class="my-4 border-primary opacity-75"> <!-- adds clear separation -->
+          <div class="row">
+            <!-- Inspection Details -->
+            <div class="col-12 text-subtitle-2 font-weight-bold text-primary mb-3">
+              {{ t('inspection') }}
+            </div>
+            <div class="col-6 mb-3">
+              <UInput
+                v-model="data.inspectionNumber"
+                icon="mdi-number"
+                :label="t('inspectionNumber')"
+                :name="t('inspectionNumber')"
+                :placeholder="t('inspectionNumber')"
+                :rules="(val) => (!val && $t('required'))"
+              />
+            </div>
+            <div class="col-6 mb-3">
+              <UInput
+                v-model="data.inspectionDate"
+                :label="t('inspectionDate')"
+                :name="t('inspectionDate')"
+                type="date"
+                :rules="(val) => (!val && $t('required'))"
+              />
             </div>
 
-            <!-- --- Driver Section --- -->
-            <div class="col-12">
-              <div class="row g-4">
-                <div class="col-6">
-                  <v-select
-                    v-model="data.driverId"
-                    :items="inspectionDriverItems"
-                    item-title="title"
-                    item-value="value"
-                    :label="t('driver')"
-                    prepend-inner-icon="mdi-account"
-                    variant="outlined"
-                    density="compact"
-                    hide-details="auto"
-                    clearable
-                    bg-color="surface"
-                  />
-                </div>
-                <div class="col-6">
-                  <v-select
-                    v-model="data.coDriverId"
-                    :items="inspectionDriverItems"
-                    item-title="title"
-                    item-value="value"
-                    :label="t('co_driver')"
-                    prepend-inner-icon="mdi-account-multiple"
-                    variant="outlined"
-                    density="compact"
-                    hide-details="auto"
-                    clearable
-                    bg-color="surface"
-                  />
-                </div>
-              </div>
-              <hr class="my-4 border-primary opacity-75"> <!-- adds clear separation -->
+            <!-- Assignment -->
+            <div class="col-12 text-subtitle-2 font-weight-bold text-primary mb-3">
+              {{ t('driver') }} / {{ t('truck') }}
             </div>
-            
-            <!-- --- violation discovered --- -->
-            <div class="col-12">
-              <div class="row g-4">
-                <div class="col-6">
+            <div class="col-6 mb-3">
+              <v-select
+                v-model="data.driverId"
+                :items="inspectionDriverItems"
+                item-title="title"
+                item-value="value"
+                :label="t('driver')"
+                prepend-inner-icon="mdi-account"
+                variant="outlined"
+                density="compact"
+                hide-details="auto"
+                clearable
+                bg-color="surface"
+              />
+            </div>
+            <div class="col-6 mb-3">
+              <v-select
+                v-model="data.coDriverId"
+                :items="inspectionDriverItems"
+                item-title="title"
+                item-value="value"
+                :label="t('co_driver')"
+                prepend-inner-icon="mdi-account-multiple"
+                variant="outlined"
+                density="compact"
+                hide-details="auto"
+                clearable
+                bg-color="surface"
+              />
+            </div>
+            <div class="col-6 mb-3">
+              <v-select
+                v-model="data.truckId"
+                :items="inspectionTruckItems"
+                item-title="title"
+                item-value="value"
+                :label="t('truck')"
+                prepend-inner-icon="mdi-truck-check"
+                variant="outlined"
+                density="compact"
+                hide-details="auto"
+                clearable
+                bg-color="surface"
+              />
+            </div>
+            <div class="col-6 mb-3">
+              <v-select
+                v-model="data.inspectionLevel"
+                :items="inspectionLevelItems"
+                item-title="title"
+                item-value="value"
+                :label="t('inspection_level')"
+                variant="outlined"
+                density="compact"
+                hide-details="auto"
+                clearable
+                bg-color="surface"
+                :error-messages="inspectionLevelErr"
+              />
+            </div>
+
+            <!-- Location -->
+            <div class="col-12 text-subtitle-2 font-weight-bold text-primary mb-3">
+              {{ t('city') }} / {{ t('state') }}
+            </div>
+            <div class="col-6 mb-3">
+              <UInput
+                v-model="data.city"
+                icon="mdi-map-marker-radius"
+                :label="t('city')"
+                :name="t('city')"
+                :placeholder="t('city')"
+                :rules="(val) => (!val && $t('required'))"
+              />
+            </div>
+            <div class="col-6 mb-3">
+              <v-select
+                v-model="data.stateId"
+                :items="inspectionStateItems"
+                item-title="title"
+                item-value="value"
+                :label="t('states')"
+                prepend-inner-icon="mdi-flag-variant"
+                variant="outlined"
+                density="compact"
+                hide-details="auto"
+                clearable
+                bg-color="surface"
+                :error-messages="inspectionStateErr"
+              />
+            </div>
+
+            <!-- Violations -->
+            <div class="col-12 mb-2">
+              <v-radio-group
+                v-model="data.violationDiscovered"
+                inline
+                density="compact"
+                hide-details
+              >
+                <v-radio :label="t('violation_discovered')" :value="true" color="primary" />
+                <v-radio :label="t('no_violation_discovered')" :value="false" color="primary" />
+              </v-radio-group>
+            </div>
+
+            <template v-if="showViolation">
+              <div class="col-12 text-subtitle-2 font-weight-bold text-primary mb-3">
+                {{ t('violation_type') }}
+              </div>
+              <div class="col-12">
+                <div
+                  v-for="(item, index) in violations"
+                  :key="index"
+                  class="violation-item mb-3"
+                >
                   <div class="row">
                     <div class="col-6 mb-2">
                       <v-select
-                        v-model="data.truckId"
-                        :items="inspectionTruckItems"
+                        v-model="item.type"
+                        :items="violationTypeSelectItems"
                         item-title="title"
                         item-value="value"
-                        :label="t('truck')"
-                        prepend-inner-icon="mdi-truck-check"
+                        :label="t('violation_type')"
                         variant="outlined"
                         density="compact"
                         hide-details="auto"
@@ -565,140 +635,46 @@ watch(() => data.value.violationDiscovered, (val) => {
                         bg-color="surface"
                       />
                     </div>
-                    <div class="col mb-2">
-                      <v-select
-                        v-model="data.inspectionLevel"
-                        :items="inspectionLevelItems"
-                        item-title="title"
-                        item-value="value"
-                        :label="t('inspection_level')"
-                        variant="outlined"
-                        density="compact"
-                        hide-details="auto"
-                        clearable
-                        bg-color="surface"
-                        :error-messages="inspectionLevelErr"
-                      />
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-6">
+                    <div class="col-6 mb-2">
                       <UInput
-                        v-model="data.city"
-                        icon="mdi-map-marker-radius"
-                        :label="t('city')"
-                        :hint="t('city')"
-                        :name="t('city')"
-                        :placeholder="t('city')"
+                        v-model="item.sectionViolCode"
+                        :label="t('section_viol_code')"
+                        name="sectionViolCode"
+                        :placeholder="t('enter_viol_code')"
                         :rules="(val) => (!val && $t('required'))"
                       />
                     </div>
-                    <div class="col-6">
-                      <v-select
-                        v-model="data.stateId"
-                        :items="inspectionStateItems"
-                        item-title="title"
-                        item-value="value"
-                        :label="t('states')"
-                        prepend-inner-icon="mdi-flag-variant"
-                        variant="outlined"
-                        density="compact"
-                        hide-details="auto"
-                        clearable
-                        bg-color="surface"
-                        :error-messages="inspectionStateErr"
-                      />
-                    </div>
-                  </div>
-
-                  <div class="row">
                     <div class="col-12">
-                      <v-radio-group
-                        v-model="data.violationDiscovered"
-                        class="d-flex flex-row flex-wrap ga-4"
-                        inline
-                        density="compact"
-                        hide-details
-                      >
-                        <v-radio
-                          :label="t('violation_discovered')"
-                          :value="true"
-                          color="primary"
-                        />
-                        <v-radio
-                          :label="t('no_violation_discovered')"
-                          :value="false"
-                          color="primary"
-                        />
-                      </v-radio-group>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-6" v-if="showViolation">
-                  <div v-for="(item, index) in violations" :key="index" class="pb-3">
-                    <div class="row border border-primary pb-2" >
-                        <div class="col">
-                            <v-select
-                              v-model="item.type"
-                              :items="violationTypeSelectItems"
-                              item-title="title"
-                              item-value="value"
-                              :label="t('violation_type')"
-                              variant="outlined"
-                              density="compact"
-                              hide-details="auto"
-                              clearable
-                              bg-color="surface"
-                            />
-                          </div>
-                        <div class="col">
-                            <UInput
-                              v-model="item.sectionViolCode"
-                              :label="t('section_viol_code')"
-                              :hint="t('section_viol_code')"
-                              name="sectionViolCode"
-                              :placeholder="t('enter_viol_code')"
-                              :rules="(val) => (!val && $t('required'))"
-                            />
-                        </div>
-                        <div class="col-12">
-                          <UTextarea v-model="item.description" :label="t('description')" 
-                            :placeholder="t('enter_description')"
-                            rows="1" 
-                          />
-                        </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-12 mt-3">
-                      <v-switch
-                        v-model="data.outOfService"
-                        :label="t('out_of_service')"
-                        color="primary"
-                        density="compact"
-                        hide-details
+                      <UTextarea
+                        v-model="item.description"
+                        :label="t('description')"
+                        :placeholder="t('enter_description')"
+                        rows="1"
                       />
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="col-12 mt-3">
-                      <v-btn variant="outlined" color="info" prepend-icon="mdi-plus" @click="addNewViolation">New Type</v-btn>
-                    </div>
-                  </div>
-                  
                 </div>
               </div>
-            </div>
+              <div class="col-12 mb-2">
+                <v-switch
+                  v-model="data.outOfService"
+                  :label="t('out_of_service')"
+                  color="primary"
+                  density="compact"
+                  hide-details
+                />
+              </div>
+              <div class="col-12 mb-3">
+                <v-btn variant="outlined" color="primary" size="small" prepend-icon="mdi-plus" @click="addNewViolation">
+                  New Type
+                </v-btn>
+              </div>
+            </template>
           </div>
         </UForm>
       </template>
       <template #actions>
-        <div class="d-flex w-100 justify-space-between align-center flex-wrap ga-2">
-          <v-btn variant="tonal" color="secondary" @click="onClose">Cancel</v-btn>
-          <v-btn type="submit" form="safety-inspection-form" color="info">Save</v-btn>
-        </div>
+        <v-btn type="submit" form="safety-inspection-form" color="primary">{{ t('save') }}</v-btn>
       </template>
     </UDialog>
   </Teleport>
@@ -760,20 +736,19 @@ watch(() => data.value.violationDiscovered, (val) => {
   <!--  file overlay-->
   <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
     <template #header>
-      <div class="fw-bold text-white bg-primary p-2 rounded-2 d-flex p-2 mb-2">
-        <div class="row">
-          <div class="col-12 d-flex align-items-center font-size-14">
+      <div class="d-flex align-center justify-space-between pa-2 rounded-lg bg-primary mb-2">
+        <div class="d-flex flex-column">
+          <span class="text-subtitle-2 font-weight-bold text-on-primary">
             {{ DOCUMENT_TYPES[selectedFileSection.data.type] }}
-          </div>
-          <div class="col-12 d-flex align-items-center font-size-11">
-            {{ `${selectedRow?.inspectionNumber} ${selectedRow?.driverFirstName} ${selectedRow?.driverLastName}` }}
-          </div>
+          </span>
+          <span class="text-caption text-on-primary opacity-80">
+            {{ [selectedRow?.inspectionNumber, selectedRow?.driverFirstName, selectedRow?.driverLastName].filter(Boolean).join(' ') }}
+          </span>
         </div>
-        <span class="text-end u-end">
-          <v-btn icon variant="text" density="comfortable" aria-label="Close" @click="selectedFileSection.dialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </span>
+        <v-btn icon variant="text" density="comfortable" color="on-primary" aria-label="Close"
+          @click="selectedFileSection.dialog = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
       </div>
     </template>
     <template #body>
@@ -827,5 +802,11 @@ watch(() => data.value.violationDiscovered, (val) => {
   position: sticky;
   right: 0;
   z-index: 5;
+}
+
+.violation-item {
+  border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-radius: 8px;
+  padding: 10px 12px 4px;
 }
 </style>

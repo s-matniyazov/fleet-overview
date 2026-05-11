@@ -261,132 +261,124 @@ watch(
         </td>
       </template>
     </UTable>
-
-    <!--  collision modal-->
-    <Teleport to="body">
-      <UDialog :show="addModal" @close="addModal = false" width="calc(100vw - 700px)">
-        <template #header>
-          <div style="width: 100%">
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="text-white">
-                {{ data.id ? data.inspection : t('add') }} {{ t('inspection') }}
-              </div>
-
-              <v-btn icon variant="text" color="white" aria-label="Close" @click="onClose">
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
-            </div>
-            <hr class="my-3 border-primary opacity-75">
-          </div>
-        </template>
-
-        <template #body>
-          <UForm id="safety-collision-form" @submit="onSave" :submit-text="t('save')" @close="onClose">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <UInput v-model="data.reportNumber" :label="t('claim_number')" required/>
-              </div>
-              <div class="col-md-6 mb-3">
-                <UDateInput v-model="data.collisionDate" :label="t('collision_date')" required/>
-              </div>
-              <div class="col-md-6 mb-3">
-                <UInput v-model="data.collisionTime" :label="t('time')" type="time"/>
-              </div>
-              <div class="col-md-6 mb-3">
-                <v-select
-                  v-model="data.timeZone"
-                  :items="collisionTimeZoneItems"
-                  item-title="title"
-                  item-value="value"
-                  :label="t('timeZone')"
-                  variant="outlined"
-                  density="compact"
-                  hide-details="auto"
-                  clearable
-                  bg-color="surface"
-                />
-              </div>
-              <div class="col-md-6 mb-3">
-                <UInput v-model="data.city" :label="t('city')"/>
-              </div>
-              <div class="col-6">
-                <v-select
-                  v-model="data.countryId"
-                  :items="collisionCountryItems"
-                  item-title="title"
-                  item-value="value"
-                  :label="t('country')"
-                  variant="outlined"
-                  density="compact"
-                  hide-details="auto"
-                  clearable
-                  bg-color="surface"
-                  :error-messages="collisionCountryErr"
-                  class="mb-2"
-                />
-              </div>
-              <div class="col-6">
-                <v-select
-                  v-model="data.stateId"
-                  :items="collisionStateItems"
-                  item-title="title"
-                  item-value="value"
-                  :label="t('state')"
-                  variant="outlined"
-                  density="compact"
-                  hide-details="auto"
-                  clearable
-                  bg-color="surface"
-                  :error-messages="collisionStateErr"
-                  class="mb-2"
-                />
-              </div>
-              <div class="col-md-6 mb-3">
-                <UInput v-model="data.zipCode" :label="t('zip_code')"/>
-              </div>
-              <div class="col-md-6 mb-3">
-                <UInput v-model="data.typeOfCargo" :label="t('type')"/>
-              </div>
-              <div class="col-md-6 mb-3">
-                <v-select
-                  v-model="data.truckId"
-                  :items="collisionTruckItems"
-                  item-title="title"
-                  item-value="value"
-                  :label="t('truck')"
-                  variant="outlined"
-                  density="compact"
-                  hide-details="auto"
-                  clearable
-                  bg-color="surface"
-                />
-              </div>
-              <div class="col-md-6 mb-3">
-                <v-select
-                  v-model="data.driverId"
-                  :items="collisionDriverItems"
-                  item-title="title"
-                  item-value="value"
-                  :label="t('driver')"
-                  variant="outlined"
-                  density="compact"
-                  hide-details="auto"
-                  clearable
-                  bg-color="surface"
-                />
-              </div>
-            </div>
-          </UForm>
-        </template>
-        <template #actions>
-          <div class="d-flex w-100 justify-space-between align-center flex-wrap ga-2">
-            <v-btn variant="tonal" color="secondary" @click="onClose">Cancel</v-btn>
-            <v-btn type="submit" form="safety-collision-form" color="info">Save</v-btn>
-          </div>
-        </template>
-      </UDialog>
-    </Teleport>
   </div>
+
+  <!--  collision modal-->
+  <Teleport to="body">
+    <UDialog :show="addModal" @close="addModal = false" width="calc(100vw - 700px)">
+      <template #header>
+        <div class="d-flex align-center w-100">
+          <span class="text-subtitle-1 font-weight-bold flex-grow-1">
+            {{ data.id ? t('edit') : t('add') }} {{ t('collision') }}
+            <span v-if="data.id" class="text-caption text-medium-emphasis ms-1">#{{ data.id }}</span>
+          </span>
+          <v-btn icon variant="text" density="comfortable" aria-label="Close" @click="onClose">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </div>
+      </template>
+
+      <template #body>
+        <UForm id="safety-collision-form" @submit="onSave">
+          <div class="row">
+            <div class="col-6 mb-3">
+              <UInput v-model="data.reportNumber" :label="t('claim_number')"/>
+            </div>
+            <div class="col-6 mb-3">
+              <UDateInput v-model="data.collisionDate" :label="t('collision_date')"/>
+            </div>
+            <div class="col-6 mb-3">
+              <UInput v-model="data.collisionTime" :label="t('time')" type="time"/>
+            </div>
+            <div class="col-6 mb-3">
+              <v-select
+                v-model="data.timeZone"
+                :items="collisionTimeZoneItems"
+                item-title="title"
+                item-value="value"
+                :label="t('timeZone')"
+                variant="outlined"
+                density="compact"
+                hide-details="auto"
+                clearable
+                bg-color="surface"
+              />
+            </div>
+            <div class="col-4 mb-3">
+              <UInput v-model="data.city" :label="t('city')"/>
+            </div>
+            <div class="col-4 mb-3">
+              <v-select
+                v-model="data.countryId"
+                :items="collisionCountryItems"
+                item-title="title"
+                item-value="value"
+                :label="t('country')"
+                variant="outlined"
+                density="compact"
+                hide-details="auto"
+                clearable
+                bg-color="surface"
+                :error-messages="collisionCountryErr"
+              />
+            </div>
+            <div class="col-4 mb-3">
+              <v-select
+                v-model="data.stateId"
+                :items="collisionStateItems"
+                item-title="title"
+                item-value="value"
+                :label="t('state')"
+                variant="outlined"
+                density="compact"
+                hide-details="auto"
+                clearable
+                bg-color="surface"
+                :error-messages="collisionStateErr"
+              />
+            </div>
+            <div class="col-6 mb-3">
+              <UInput v-model="data.zipCode" :label="t('zip_code')"/>
+            </div>
+            <div class="col-6 mb-3">
+              <UInput v-model="data.typeOfCargo" :label="t('type')"/>
+            </div>
+            <div class="col-6 mb-3">
+              <v-select
+                v-model="data.truckId"
+                :items="collisionTruckItems"
+                item-title="title"
+                item-value="value"
+                :label="t('truck')"
+                variant="outlined"
+                density="compact"
+                hide-details="auto"
+                clearable
+                bg-color="surface"
+              />
+            </div>
+            <div class="col-6 mb-3">
+              <v-select
+                v-model="data.driverId"
+                :items="collisionDriverItems"
+                item-title="title"
+                item-value="value"
+                :label="t('driver')"
+                variant="outlined"
+                density="compact"
+                hide-details="auto"
+                clearable
+                bg-color="surface"
+              />
+            </div>
+          </div>
+        </UForm>
+      </template>
+      <template #actions>
+        <v-btn type="submit" form="safety-collision-form" color="primary">{{ t('save') }}</v-btn>
+      </template>
+    </UDialog>
+  </Teleport>
 </template>
 
 <style scoped>

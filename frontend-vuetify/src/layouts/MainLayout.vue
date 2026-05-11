@@ -1,6 +1,7 @@
 <script setup>
 import VerticalMenu from "@/components/VerticalMenu.vue";
 import { computed, onMounted, ref, watch } from "vue";
+import { useTheme } from "vuetify";
 import { pinia } from "@/pinia.js";
 import { useRouterStore } from "@/store/RouterStore.js";
 import { useStateStore } from "@/store/StateStore.js";
@@ -9,6 +10,25 @@ import { useFilterStore } from "@/store/FilterStore.js";
 const routerStore = useRouterStore(pinia);
 const stateStore = useStateStore(pinia);
 const filterStore = useFilterStore(pinia);
+
+const THEME_KEY = "fleet-theme";
+const vuetifyTheme = useTheme();
+
+// Sync theme from localStorage before first render
+try {
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved === "fleetDark" || saved === "fleetLight") {
+    vuetifyTheme.global.name.value = saved;
+  }
+} catch { /* ignore */ }
+
+const isDark = computed(() => vuetifyTheme.current.value.dark);
+
+function toggleTheme() {
+  const next = isDark.value ? "fleetLight" : "fleetDark";
+  vuetifyTheme.global.name.value = next;
+  try { localStorage.setItem(THEME_KEY, next); } catch { /* ignore */ }
+}
 
 const companies = computed(() => stateStore.companies);
 
@@ -74,7 +94,7 @@ watch(companyId, (newVal) => {
     width="240"
     elevation="0"
     border="end"
-    class="nav-drawer text-white"
+    :class="['nav-drawer', isDark ? 'nav-drawer--dark' : 'nav-drawer--light']"
   >
     <VerticalMenu :collapsed="collapsed" />
   </v-navigation-drawer>
@@ -84,7 +104,7 @@ watch(companyId, (newVal) => {
     height="56"
     elevation="0"
     border
-    class="nav-app-bar"
+    :class="['nav-app-bar', isDark ? 'nav-app-bar--dark' : 'nav-app-bar--light']"
   >
     <v-btn
       icon
@@ -125,10 +145,25 @@ watch(companyId, (newVal) => {
       class="company-toolbar-select me-1 me-md-2"
       bg-color="surface"
     />
+
+    <v-btn
+      icon
+      variant="text"
+      density="comfortable"
+      class="me-1"
+      :title="isDark ? 'Switch to light theme' : 'Switch to dark theme'"
+      @click="toggleTheme"
+    >
+      <v-icon
+        :icon="isDark ? 'mdi-weather-sunny' : 'mdi-weather-night'"
+        color="primary"
+        size="22"
+      />
+    </v-btn>
   </v-app-bar>
 
   <v-main class="main-surface main-layout-main">
-    <v-container fluid class="pa-4 pa-md-6 main-layout-container">
+    <v-container fluid class="pa-3 pa-md-4 main-layout-container">
       <div class="page-shell">
         <router-view />
       </div>
@@ -137,14 +172,26 @@ watch(companyId, (newVal) => {
 </template>
 
 <style scoped>
-.nav-drawer {
+.nav-drawer--dark {
   background: linear-gradient(180deg, #06273d 0%, #071a2e 100%) !important;
   border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
+.nav-drawer--light {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
 .nav-app-bar {
   background: rgb(var(--v-theme-surface)) !important;
+}
+
+.nav-app-bar--dark {
   border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.nav-app-bar--light {
+  border-color: rgba(0, 0, 0, 0.1) !important;
 }
 
 .main-surface {
@@ -177,5 +224,12 @@ watch(companyId, (newVal) => {
 
 .nav-collapse-btn {
   flex-shrink: 0;
+}
+
+.page-shell {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 </style>

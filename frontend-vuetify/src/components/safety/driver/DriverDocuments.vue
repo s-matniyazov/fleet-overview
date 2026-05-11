@@ -95,15 +95,15 @@ function downloadAll(type) {
 
   <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
     <template #header>
-      <h4 class="fw-bold text-white bg-primary p-2 rounded-2 d-flex">{{
-          DOCUMENT_TYPES[selectedFileSection.data.type]
-        }}
-        <span class="text-end u-end">
-          <v-btn icon variant="text" density="comfortable" aria-label="Close" @click="driverFileStore.init(data.id); selectedFileSection.dialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
+      <div class="d-flex align-center justify-space-between pa-2 rounded-lg bg-primary">
+        <span class="text-subtitle-2 font-weight-bold text-on-primary">
+          {{ DOCUMENT_TYPES[selectedFileSection.data.type] }}
         </span>
-      </h4>
+        <v-btn icon variant="text" density="comfortable" color="on-primary" aria-label="Close"
+          @click="driverFileStore.init(data.id); selectedFileSection.dialog = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </div>
     </template>
     <template #body>
       <FileOverlay :url="selectedFileSection.url" :data="selectedFileSection.data"/>

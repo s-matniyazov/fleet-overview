@@ -3,14 +3,17 @@ import Company from "@/components/safety/company/Company.vue";
 </script>
 
 <template>
-  <v-container fluid class="company-layout-view pa-6 pa-md-10">
+  <div class="company-layout">
     <Company :layout="true" />
-  </v-container>
+  </div>
 </template>
 
 <style scoped>
-.company-layout-view {
-  min-height: 100%;
-  background: linear-gradient(145deg, #0f172a 0%, #152238 50%, #0b1220 100%);
+.company-layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
 }
 </style>

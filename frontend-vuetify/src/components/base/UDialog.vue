@@ -56,14 +56,14 @@ function onModelUpdate(open) {
 <style>
 .u-dialog-v-card {
   max-height: min(88vh, 100dvh - 32px);
-  background: linear-gradient(180deg, #06273d 0%, #071a2e 100%) !important;
-  color: #e2e8f0;
-  border-color: rgba(255, 255, 255, 0.08) !important;
+  background: rgb(var(--v-theme-surface)) !important;
+  color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity)) !important;
+  border-color: rgba(var(--v-border-color), var(--v-border-opacity)) !important;
 }
 
 .u-dialog-v-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  background: rgba(var(--v-theme-surface-variant), 0.6);
 }
 
 .u-dialog-v-body {
@@ -83,7 +83,7 @@ function onModelUpdate(open) {
 }
 
 .u-dialog-v-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-  background: rgba(0, 0, 0, 0.15);
+  border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)) !important;
+  background: rgba(var(--v-theme-surface-variant), 0.4);
 }
 </style>

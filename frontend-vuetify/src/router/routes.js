@@ -31,8 +31,8 @@ const routes = [
             {path: '/purchase-type', name: "Purchase Type", meta: {requiresAuth: true}, component: () => import('@/components/references/PurchaseType.vue')},
             {path: '/inspection-level', name: "Inspection Levels", meta: {requiresAuth: true}, component: () => import('@/components/references/InspectionLevel.vue')},
 
-            {path: '/settings', name: "Settings", meta: {requiresAuth: true}, component: () => import('@/components/setting/SettingsPage.vue')},
-            {path: '/user-profile', name: "User Profile", meta: {requiresAuth: true}, component: () => import('@/components/profile/UserProfile.vue')},
+            {path: '/settings', name: "Settings", meta: {requiresAuth: true, roles: ['admin']}, component: () => import('@/components/setting/SettingsPage.vue')},
+            {path: '/users', name: "Users", meta: {requiresAuth: true, roles: ['admin']}, component: () => import('@/components/setting/Users.vue')},
         ]
     }
 ]

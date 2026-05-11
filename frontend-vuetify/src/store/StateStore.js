@@ -60,7 +60,7 @@ export const useStateStore = defineStore("state", () => {
             const [cRes, sRes, coRes] = await Promise.all([
                 axiosIns.get(URIS.COUNTRY),
                 axiosIns.get(URIS.STATE),
-                axiosIns.get(URIS.COMPANIES),
+                axiosIns.get(`${URIS.COMPANIES}?userId=${localStorage.getItem('userId') ?? ''}`),
             ]);
             countries.value.splice(0, countries.value.length, ...cRes.data.data);
             states.value.splice(0, states.value.length, ...sRes.data.data);

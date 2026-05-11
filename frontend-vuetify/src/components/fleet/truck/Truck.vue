@@ -604,15 +604,13 @@ watch(
   <Teleport to="body">
     <UDialog :show="addModal" @close="addModal = false" width="calc(100vw - 400px)">
       <template #header>
-        <div class="d-flex w-100">
-          <div class="text-white" style="font-weight: 1000; font-size: 16px">
+        <div class="d-flex align-center w-100">
+          <span class="text-subtitle-1 font-weight-bold flex-grow-1">
             {{ data.id ? t('edit') : t('add') }} {{ t('truck') }}
-          </div>
-          <div class="text-end u-end">
-             <v-btn icon variant="text" color="white" aria-label="Close" @click="onClose">
-               <v-icon>mdi-close</v-icon>
-             </v-btn>
-          </div>
+          </span>
+          <v-btn icon variant="text" density="comfortable" aria-label="Close" @click="onClose">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </div>
       </template>
 
@@ -620,7 +618,7 @@ watch(
         <UForm id="fleet-truck-form" @submit="onSave">
             <div class="row">
               <div class="col-6 row">
-                <div class="col-12 text-white mb-3" style="font-weight: 1000; font-size: 16px">
+                <div class="col-12 text-subtitle-2 font-weight-bold text-primary mb-3">
                   Unit details
                 </div>
                 <!--            unit-->
@@ -755,7 +753,7 @@ watch(
               </div>
 
               <div class="col-6">
-                <div class="col-12 text-white mb-3" style="font-weight: 1000; font-size: 16px">
+                <div class="col-12 text-subtitle-2 font-weight-bold text-primary mb-3">
                   Ownership details
                 </div>
 
@@ -811,7 +809,7 @@ watch(
                 </template>
 
                 <template v-if="data.ownershipTypeId === 1">
-                  <div class="col-12 text-white my-3" style="font-weight: 1000; font-size: 16px">
+                  <div class="col-12 text-subtitle-2 font-weight-bold text-primary my-3">
                     Other Details
                   </div>
 
@@ -834,7 +832,7 @@ watch(
                 </template>
 
                 <!--            description — section title outside the field (same as Other Details) -->
-                <div class="col-12 text-white my-3" style="font-weight: 1000; font-size: 16px">
+                <div class="col-12 text-subtitle-2 font-weight-bold text-primary my-3">
                   {{ t('additional_notes') }}
                 </div>
                 <div class="col-12">
@@ -907,15 +905,15 @@ watch(
   <!--  file overlay-->
   <URightOverlay :isOpen="selectedFileSection.dialog" @close="selectedFileSection.dialog = false">
     <template #header>
-      <h4 class="fw-bold text-white bg-primary p-2 rounded-2 d-flex">{{
-          DOCUMENT_TYPES[selectedFileSection.data.type]
-        }}
-        <span class="text-end u-end">
-          <v-btn icon variant="text" density="comfortable" aria-label="Close" @click="selectedFileSection.dialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
+      <div class="d-flex align-center justify-space-between pa-2 rounded-lg bg-primary">
+        <span class="text-subtitle-2 font-weight-bold text-on-primary">
+          {{ DOCUMENT_TYPES[selectedFileSection.data.type] }}
         </span>
-      </h4>
+        <v-btn icon variant="text" density="comfortable" color="on-primary" aria-label="Close"
+          @click="selectedFileSection.dialog = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </div>
     </template>
     <template #body>
       <FileOverlay :url="`${URIS.TRUCK}/attach-file`" :data="selectedFileSection.data"

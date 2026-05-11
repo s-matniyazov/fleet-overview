@@ -1,5 +1,6 @@
 <script setup>
 import { computed, inject, ref } from "vue";
+import { useTheme } from "vuetify";
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 
@@ -78,6 +79,8 @@ const errorMessages = computed(() =>
   errorMessage.value ? [errorMessage.value] : [],
 );
 
+const isDark = computed(() => useTheme().global.current.value.dark);
+
 const prependInnerIcon = computed(() =>
   props.icon && String(props.icon).startsWith("mdi") ? props.icon : undefined,
 );
@@ -115,7 +118,7 @@ const prependInnerIcon = computed(() =>
           v-model="model"
           auto-apply
           :enable-time-picker="false"
-          :dark="true"
+          :dark="isDark"
           class="u-input-date__picker"
         />
         <p v-if="errorMessage" class="text-error text-caption mt-1 mb-0">
