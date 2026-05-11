@@ -87,11 +87,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    public static void main(String[] args) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        System.out.println(passwordEncoder.encode("Khsnvbb.123!"));
-    }
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
