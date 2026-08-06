@@ -5,11 +5,7 @@ import fleetoverview.domain.entity.base.BaseEntity;
 
 import jakarta.persistence.*;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 13 март 2025
- **/
+
 @Entity
 @Table(name = "states", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "country_id" }) })
 public class StateEntity extends BaseEntity {

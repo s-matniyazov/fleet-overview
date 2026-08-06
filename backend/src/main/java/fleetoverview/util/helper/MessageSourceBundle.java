@@ -8,11 +8,6 @@ import java.util.function.Function;
 
 import static fleetoverview.domain.enums.LangEnum.UZBEK;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 07 Mar 2023
- **/
 @Component
 public record MessageSourceBundle (
         MessageSource messageSource

@@ -8,6 +8,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import java.io.File;
+
 @SpringBootApplication
 @EnableScheduling
 @EnableConfigurationProperties(JwtProperties.class)
@@ -18,6 +20,7 @@ public class FleetOverviewApplication extends SpringBootServletInitializer  {
     }
 
     public static void main(String[] args) {
+        System.out.println(">>> CWD: " + new File(".").getAbsolutePath());
         SpringApplication.run(FleetOverviewApplication.class, args);
     }
 }

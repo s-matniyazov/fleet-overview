@@ -8,11 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-/**
- * @author :  sardor.matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 18 февр. 2025
- **/
+
 @Component
 public class CAccessDeniedHandler implements AccessDeniedHandler {
 

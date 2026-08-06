@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: "optional:file:./backend/.env[.properties]"
   application:
     name: "Fleet Overview"
   threads:
@@ -9,9 +11,9 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
   datasource:
-    url: jdbc:postgresql://localhost:5432/fleet_db
-    username: fleet_username
-    password: fleet_password
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 25
@@ -40,7 +42,7 @@ spring:
               enable: true
 
 server:
-  port: 8080
+  port: ${SERVER_PORT}
   max-http-request-header-size: 100MB
   tomcat:
     max-swallow-size: 100MB
@@ -51,10 +53,10 @@ server:
 
 app:
   jwt:
-    secret: ${JWT_SECRETE:YoMaYo-thereshouLdbeSomeSecreteKeyThatsHardToReadB}
-    issuer: fleet-app
-    access-token-ttl: 60m
-    refresh-token-ttl: 3d
+    secret: ${JWT_SECRET}
+    issuer: ${ISSUER}
+    access-token-ttl: ${ACCESS_TOKEN_TTL}
+    refresh-token-ttl: ${REFRESH_TOKEN_TTL}
 
 mybatis:
   mapper-locations: classpath*:db/sqlMaps/**/*.xml
@@ -84,4 +86,4 @@ springdoc:
     enabled: true
   api-docs:
     path: /v3/api-docs
-    enabled: false
+    enabled: true

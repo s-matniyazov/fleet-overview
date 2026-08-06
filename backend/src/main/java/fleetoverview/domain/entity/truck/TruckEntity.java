@@ -14,11 +14,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 13 март 2025
- **/
+
 @Entity
 @Table(name = "trucks")
 public class TruckEntity extends BaseEntity {

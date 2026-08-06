@@ -10,11 +10,7 @@ import fleetoverview.service.RoleService;
 
 import static fleetoverview.util.constants.UriConstants.ROLES;
 
-/**
- * @author :  sardor.matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 30 янв. 2025
- **/
+
 @RestController
 @RequestMapping(ROLES)
 public class RoleController extends CrudController<RoleEntity, RoleRequest> {

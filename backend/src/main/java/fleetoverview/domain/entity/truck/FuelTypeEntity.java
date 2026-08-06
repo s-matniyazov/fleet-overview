@@ -3,11 +3,7 @@ package fleetoverview.domain.entity.truck;
 import fleetoverview.domain.entity.base.BaseEntity;
 import jakarta.persistence.*;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 13 март 2025
- **/
+
 @Entity
 @Table(name = "fuel_types")
 public class FuelTypeEntity extends BaseEntity {

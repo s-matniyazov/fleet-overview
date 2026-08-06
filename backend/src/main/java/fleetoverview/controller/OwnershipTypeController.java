@@ -9,11 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static fleetoverview.util.constants.UriConstants.OWNERSHIP_TYPE;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 13 март 2025
- **/
+
 @RestController
 @RequestMapping(OWNERSHIP_TYPE)
 public class OwnershipTypeController extends CrudController<OwnershipTypeEntity, OnlyNameRequest> {

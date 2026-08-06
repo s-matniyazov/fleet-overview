@@ -14,11 +14,7 @@ import fleetoverview.service.base.CrudService;
 import java.util.Map;
 import java.util.logging.Logger;
 
-/**
- * @author :  sardor.matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 29 янв. 2025
- **/
+
 public abstract class CrudController<E, R> extends BaseController {
     private final java.util.logging.Logger logger = Logger.getLogger(CrudController.class.getName());
     protected final CrudService<E, R> service;

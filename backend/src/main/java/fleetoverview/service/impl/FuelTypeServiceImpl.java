@@ -15,11 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 13 март 2025
- **/
+
 @Service
 public class FuelTypeServiceImpl extends BaseService implements FuelTypeService {
     private final FuelTypeRepository repository;

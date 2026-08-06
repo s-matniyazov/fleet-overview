@@ -9,12 +9,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
-/**
- * @author :  sardor.matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 28 янв. 2025
- **/
-
 @Entity
 @Table(name = "actions")
 public class ActionEntity extends BaseEntity implements GrantedAuthority {

@@ -10,11 +10,7 @@ import fleetoverview.service.ActionService;
 
 import static fleetoverview.util.constants.UriConstants.ACTIONS;
 
-/**
- * @author :  sardor.matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 30 янв. 2025
- **/
+
 @RestController
 @RequestMapping(ACTIONS)
 public class ActionController extends CrudController<ActionEntity, ActionRequest> {

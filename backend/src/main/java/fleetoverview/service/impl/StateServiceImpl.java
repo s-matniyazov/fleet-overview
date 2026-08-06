@@ -28,11 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 13 март 2025
- **/
+
 @Service
 public class StateServiceImpl extends BaseService implements StateService {
     private final StateRepository repository;

@@ -3,11 +3,7 @@ package fleetoverview.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 17 май 2025
- **/
+
 @Component
 @ConfigurationProperties(prefix = "telegram")
 public class TelegramConfigurationParams {

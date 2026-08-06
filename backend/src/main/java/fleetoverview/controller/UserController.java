@@ -10,11 +10,7 @@ import fleetoverview.service.UserService;
 
 import static fleetoverview.util.constants.UriConstants.USERS;
 
-/**
- * @author :  sardor.matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 29 янв. 2025
- **/
+
 @RestController
 @RequestMapping(USERS)
 public class UserController extends CrudController<UserEntity, UserRequest> {

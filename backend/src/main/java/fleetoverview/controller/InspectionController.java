@@ -33,9 +33,14 @@ public class InspectionController {
     public HttpEntity<ApiResponse> getInspections(@RequestParam("companyId") Integer companyId,
                                                   @RequestParam(name = "page", required = false) Integer page,
                                                   @RequestParam(name = "size", required = false) Integer size,
-                                                  @RequestParam(name= "driverName", required = false) String driverName,
+                                                  @RequestParam(name = "driverName", required = false) String driverName,
                                                   @RequestParam(name = "status", required = false) StatusEnum status) {
-        return ResponseEntity.ok(new PagedResponseContainer<>(service.getInspections(PageRequest.of(page == null ? 0 : Math.max(page - 1, 0), size == null ? 0 : size), companyId, driverName, status)));
+        return ResponseEntity.ok(new PagedResponseContainer<>(service.getInspections(
+                PageRequest.of(page == null ? 0 : Math.max(page - 1, 0),
+                        size == null ? 0 : size),
+                companyId,
+                driverName,
+                status)));
 
     }
 

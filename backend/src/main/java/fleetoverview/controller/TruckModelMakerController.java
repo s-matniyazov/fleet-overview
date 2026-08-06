@@ -9,11 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static fleetoverview.util.constants.UriConstants.TRUCK_MODEL_MAKER;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 13 март 2025
- **/
+
 @RestController
 @RequestMapping(TRUCK_MODEL_MAKER)
 public class TruckModelMakerController extends CrudController<TruckModelMakerEntity, OnlyNameRequest> {

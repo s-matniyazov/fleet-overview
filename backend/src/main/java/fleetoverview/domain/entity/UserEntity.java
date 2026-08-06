@@ -1,6 +1,5 @@
 package fleetoverview.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import fleetoverview.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,10 +17,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
-@AllArgsConstructor
-@Builder
+@Getter @Setter @AllArgsConstructor @Builder
 public class UserEntity extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 50)
     private String username;
@@ -48,8 +44,6 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     private Date registrationDate;
 
-    @Enumerated(EnumType.STRING)
-    private LangEnum lang = LangEnum.KIRIL;
     private boolean enableNotification = true;
 
     public UserEntity() {}

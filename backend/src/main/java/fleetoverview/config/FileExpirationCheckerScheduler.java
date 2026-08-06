@@ -4,6 +4,7 @@ import fleetoverview.service.FileCheckerService;
 import fleetoverview.service.NotificationService;
 import fleetoverview.service.impl.*;
 import jakarta.annotation.PostConstruct;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ public class FileExpirationCheckerScheduler {
         this.driverFileCheckerService = driverFileCheckerService;
         this.companyFileCheckerService = companyFileCheckerService;
         this.inspectionServiceImpl = inspectionServiceImpl;
+
     }
 
     @Scheduled(cron = "0 0 1 * * ?")

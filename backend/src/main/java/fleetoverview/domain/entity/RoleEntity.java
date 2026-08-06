@@ -7,11 +7,6 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * @author :  sardor.matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 28 янв. 2025
- **/
 @Entity
 @Table(name = "roles")
 public class RoleEntity extends BaseEntity {

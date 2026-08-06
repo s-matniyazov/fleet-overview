@@ -5,11 +5,7 @@ import fleetoverview.domain.entity.RoleEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-/**
- * @author :  sardor.matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 29 янв. 2025
- **/
+
 public interface RoleRepository extends JpaRepository<RoleEntity, Integer> {
     boolean existsByName(String name);
 

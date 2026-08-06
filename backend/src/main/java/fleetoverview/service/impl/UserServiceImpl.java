@@ -16,11 +16,7 @@ import fleetoverview.util.exceptions.NotFoundException;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author :  sardor.matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 29 янв. 2025
- **/
+
 @Service
 public class UserServiceImpl extends BaseService implements UserService {
     private final UserRepository repository;

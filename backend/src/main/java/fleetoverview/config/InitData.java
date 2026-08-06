@@ -19,11 +19,7 @@ import java.util.stream.Collectors;
 
 import static fleetoverview.util.helper.Utils.getUrls;
 
-/**
- * @author :  sardor.matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 11 февр. 2025
- **/
+
 @Component
 public class InitData implements CommandLineRunner {
 
