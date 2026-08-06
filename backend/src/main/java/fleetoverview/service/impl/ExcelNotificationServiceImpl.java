@@ -63,6 +63,7 @@ public class ExcelNotificationServiceImpl implements NotificationService {
 
     @Override
     public void sendNotifications() {
+        logger.info("excel notification is running ");
         var companies = companyRepository.findAllByStatus(CompanyStatusEnum.ACTIVE);
 
         makeExcel(companies);

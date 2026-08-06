@@ -60,19 +60,19 @@ public class InitData implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        initActions();
-        initRoles();
-        initUsers();
-        initOwnershipTypes();
-        initFuelTypes();
-        initCountryAndStates();
-
-        initTruckModelMakers();
-        initTrailerModelMakers();
-        initTrailerTypes();
-        initPurchaseTypes();
-
-        initEndorsements();
+//        initActions();
+//        initRoles();
+//        initUsers();
+//        initOwnershipTypes();
+//        initFuelTypes();
+//        initCountryAndStates();
+//
+//        initTruckModelMakers();
+//        initTrailerModelMakers();
+//        initTrailerTypes();
+//        initPurchaseTypes();
+//
+//        initEndorsements();
     }
 
     private void initActions() {

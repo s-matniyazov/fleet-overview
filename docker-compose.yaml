@@ -1,0 +1,43 @@
+version: '1.0'
+
+volumes:
+  pg_fleet:
+
+services:
+  fleet_db:
+    container_name: fleet-app-db
+    image: postgres:17
+    restart: always
+    environment:
+      - POSTGRES_USER=fleet_username
+      - POSTGRES_PASSWORD=fleet_password
+      - POSTGRES_DB=fleet_db
+    volumes:
+      - pg_fleet:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"
+  backend:
+    #build is the for building image dir
+    build:
+      context: ./backend
+    container_name: fleet-app
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - fleet_db
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://fleet_db:5432/fleet_db'
+
+#  front:
+#    build:
+#      context: ./frontend-vuetify
+#    container_name: fleet-front
+#    restart: always
+#    depends_on:
+#      - backend
+#    ports:
+#      - "3000:3000"
+#    environment:
+#      NUXT_PUBLIC_API_URL: https://weltonacademy.uz
+#      NUXT_API_URL: http://backend:8080

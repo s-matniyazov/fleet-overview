@@ -1,26 +1,87 @@
 spring:
   application:
     name: "Fleet Overview"
-  profiles:
-    active: "prod"
-
   threads:
     virtual:
       enabled: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fleet_db
+    username: fleet_username
+    password: fleet_password
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 25
+      minimum-idle: 5
+      auto-commit: true
+
+  jpa:
+    show_sql: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+    open-in-view: false
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: bilol@efficientmanllc.com
+      password: "if2u25pcf7"
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+
 server:
+  port: 8080
+  max-http-request-header-size: 100MB
   tomcat:
+    max-swallow-size: 100MB
+    max-http-form-post-size: 100MB
+    connection-timeout: 20s
     threads:
       max: 10
 
-mybatis:
-  mapper-locations:
-    - "classpath*:/db/sqlMaps/**/*.xml"
-    - "classpath*:/db/sqlMaps/*.xml"
-  config-location: classpath:mybatis-config.xml
+app:
+  jwt:
+    secret: ${JWT_SECRETE:YoMaYo-thereshouLdbeSomeSecreteKeyThatsHardToReadB}
+    issuer: fleet-app
+    access-token-ttl: 60m
+    refresh-token-ttl: 3d
 
-# swagger-ui custom path
+mybatis:
+  mapper-locations: classpath*:db/sqlMaps/**/*.xml
+
+  configuration:
+    log-prefix: "_MYBATIS_"
+
+telegram:
+  token: "6174384781:AAENYCRflrXFt6KERjQC1LhW6yd_zs-7Vbc"
+  chatIds: "-1002554948125"
+mail:
+  senders: "info@efficientmanllc.com"
+  host: smtp.timeweb.ru
+  username: "bilol@efficientmanllc.com"
+  password: "if2u25pcf7"
+
+resource:
+  path: "//root//resources//"
+
+logging:
+  level:
+    root: INFO
+
 springdoc:
   swagger-ui:
-    path: "/swagger-ui"
-  show-actuator: true
-  override-with-generic-response: false
+    path: /swagger-ui.html
+    enabled: true
+  api-docs:
+    path: /v3/api-docs
+    enabled: false

@@ -2,6 +2,7 @@ package fleetoverview.security;
 
 import fleetoverview.security.filters.AuthenticationFilter;
 import fleetoverview.security.filters.AuthorizationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,70 +27,40 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  * @created : 18 февр. 2025
  **/
 @Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
-    private final AuthorizationFilter authorizationFilter;
-    private final AuthenticationFilter authenticationFilter;
 
-    @Autowired
-    public SecurityConfig(AuthorizationFilter authorizationFilter, AuthenticationFilter authenticationFilter) {
-        this.authorizationFilter = authorizationFilter;
-        this.authenticationFilter = authenticationFilter;
-    }
+    private final JwtAuthenticationFilter jwtFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
-        return http
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .sessionManagement(se -> se.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests((requests) -> {
-                            requests.requestMatchers("/api/auth/login").permitAll();
+                .cors(AbstractHttpConfigurer::disable)
 
-                            requests.anyRequest().authenticated();
-                        }
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-//                .httpBasic(Customizer.withDefaults())
-                .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
-    }
 
-    @Bean
-    public FilterRegistrationBean<AuthorizationFilter> disableAuthzFilterRegistration(AuthorizationFilter filter) {
-        FilterRegistrationBean<AuthorizationFilter> reg = new FilterRegistrationBean<>(filter);
-        reg.setEnabled(false);
-        return reg;
-    }
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/auth/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/actuator/health"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 
-    @Bean
-    public FilterRegistrationBean<AuthenticationFilter> disableAuthnFilterRegistration(AuthenticationFilter filter) {
-        FilterRegistrationBean<AuthenticationFilter> reg = new FilterRegistrationBean<>(filter);
-        reg.setEnabled(false);
-        return reg;
-    }
+                .httpBasic(Customizer.withDefaults());
 
-    @Bean
-    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.setAllowCredentials(true);
-        configuration.addAllowedOriginPattern("*");
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-        configuration.setMaxAge(0L);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+        return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
     }
 }

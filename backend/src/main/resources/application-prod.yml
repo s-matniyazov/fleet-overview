@@ -3,18 +3,17 @@ spring:
     name: "PROD"
   datasource:
     url: jdbc:postgresql://localhost:5432/fleetdb
-    username: postgres
-    password: postgres
+    username: fleet
+    password: fleet
     driver-class-name: org.postgresql.Driver
-  jpa:
-    show_sql: true
-    hibernate:
-      ddl-auto: update
-    properties:
+    jpa:
+      show_sql: false
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-    open-in-view: false
+        ddl-auto: update
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+          format_sql: false
   servlet:
     multipart:
       max-file-size: 100MB
@@ -24,7 +23,7 @@ spring:
       fail-on-empty-beans: false
 
 server:
-  port: 8088
+  port: 8080
   max-http-request-header-size: 100MB
   tomcat:
     max-swallow-size: 100MB

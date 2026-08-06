@@ -28,7 +28,7 @@
         <url/>
     </scm>
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
         <mybatis.springboot.starter>4.0.1</mybatis.springboot.starter>
     </properties>
     <dependencies>
@@ -113,6 +113,12 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>3.0.3</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
