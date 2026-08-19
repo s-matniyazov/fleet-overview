@@ -11,11 +11,7 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 05 апр. 2025
- **/
+
 @Entity
 @Table(name = "companies")
 public class CompanyEntity extends BaseEntity {

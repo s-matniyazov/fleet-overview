@@ -1,37 +1,26 @@
 package fleetoverview.service.impl;
 
-import fleetoverview.config.MailConfigurationParams;
-import fleetoverview.config.TelegramConfigurationParams;
+import fleetoverview.config.MailConfigurationProperties;
 import fleetoverview.service.SocialService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class MailSocialServiceImpl implements SocialService {
     private final JavaMailSender mailSender;
-    private final MailConfigurationParams mailParams;
+    private final MailConfigurationProperties mailProperties;
 
     @Autowired
-    public MailSocialServiceImpl(JavaMailSender mailSender, MailConfigurationParams mailParams) {
+    public MailSocialServiceImpl(JavaMailSender mailSender, MailConfigurationProperties mailProperties) {
         this.mailSender = mailSender;
-        this.mailParams = mailParams;
+        this.mailProperties = mailProperties;
     }
 
     @Override
@@ -39,13 +28,13 @@ public class MailSocialServiceImpl implements SocialService {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
-        helper.setFrom("bilol@efficientmanllc.com");
+        helper.setFrom(mailProperties.getUsername());
         helper.setSubject("⚠️ Fleet Alert");
         helper.setText(msg);
 
-        if (mailParams.getSenders().isEmpty()) return;
+        if (mailProperties.getReceiver().isEmpty()) return;
 
-        for (String mail : mailParams.getSenders().split(",")) {
+        for (String mail : mailProperties.getReceiver().split(",")) {
             helper.setTo(mail);
             mailSender.send(mimeMessage);
         }
@@ -56,16 +45,16 @@ public class MailSocialServiceImpl implements SocialService {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
-        helper.setFrom("bilol@efficientmanllc.com");
+        helper.setFrom(mailProperties.getUsername());
         helper.setSubject("⚠️ Fleet Alert");
         helper.setText("Report");
 
         // Excel file ni bog‘lash
         helper.addAttachment(file.getName(), file);
 
-        if (mailParams.getSenders().isEmpty()) return;
+        if (mailProperties.getReceiver().isEmpty()) return;
 
-        for (String mail : mailParams.getSenders().split(",")) {
+        for (String mail : mailProperties.getReceiver().split(",")) {
             helper.setTo(mail);
             mailSender.send(mimeMessage);
         }

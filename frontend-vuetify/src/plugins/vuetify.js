@@ -2,9 +2,11 @@ import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import { aliases, mdi } from "vuetify/iconsets/mdi";
 
+const savedTheme = localStorage.getItem("fleet-theme") || "fleetLight";
+
 export default createVuetify({
   theme: {
-    defaultTheme: "fleetLight",
+    defaultTheme: savedTheme,
     themes: {
       fleetLight: {
         dark: false,

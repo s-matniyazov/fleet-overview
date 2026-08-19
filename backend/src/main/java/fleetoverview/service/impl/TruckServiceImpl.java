@@ -33,11 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 16 март 2025
- **/
+
 @Service
 public class TruckServiceImpl extends BaseService implements TruckService {
     private final ResourceService resourceService;

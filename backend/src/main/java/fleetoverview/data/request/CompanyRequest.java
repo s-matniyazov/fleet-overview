@@ -7,11 +7,7 @@ import fleetoverview.domain.enums.TimeZoneEnum;
 import fleetoverview.domain.enums.company.CompanyEntrantStatusEnum;
 import fleetoverview.domain.enums.company.CompanyStatusEnum;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 03 май 2025
- **/
+
 public record CompanyRequest(
         @JsonSetter(nulls = Nulls.AS_EMPTY) int id,
         String name,

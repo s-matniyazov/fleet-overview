@@ -1,27 +1,21 @@
 package fleetoverview.controller;
 
+import fleetoverview.data.LoginRequest;
 import fleetoverview.data.RefreshRequest;
 import fleetoverview.data.RegisterRequest;
-import fleetoverview.data.TokenResponse;
-import fleetoverview.data.request.RegisterUserRequest;
-import fleetoverview.data.response.DataResponse;
+import fleetoverview.data.response.ApiResponse;
 import fleetoverview.service.impl.AuthServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import fleetoverview.data.LoginRequest;
-import fleetoverview.data.response.ApiResponse;
-
-import static fleetoverview.util.constants.UriConstants.AUTH;
 
 
 @RestController
-@RequestMapping(AUTH)
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 

@@ -20,6 +20,8 @@ services:
     #build is the for building image dir
     build:
       context: ./backend
+    env_file:
+      - ./backend/.env
     container_name: fleet-app
     restart: always
     ports:
@@ -27,17 +29,14 @@ services:
     depends_on:
       - fleet_db
     environment:
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://fleet_db:5432/fleet_db'
+      DB_URL: 'jdbc:postgresql://fleet_db:5432/fleet_db'
 
-#  front:
-#    build:
-#      context: ./frontend-vuetify
-#    container_name: fleet-front
-#    restart: always
-#    depends_on:
-#      - backend
-#    ports:
-#      - "3000:3000"
-#    environment:
-#      NUXT_PUBLIC_API_URL: https://weltonacademy.uz
-#      NUXT_API_URL: http://backend:8080
+  front:
+    build:
+      context: ./frontend-vuetify
+    container_name: fleet-front
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"

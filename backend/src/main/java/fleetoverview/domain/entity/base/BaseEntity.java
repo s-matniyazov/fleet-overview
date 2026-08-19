@@ -9,11 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.persistence.*;
 import java.util.Date;
 
-/**
- * @author :  sardor.matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 27 янв. 2025
- **/
+
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity extends BaseIdEntity {

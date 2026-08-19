@@ -1,50 +1,58 @@
 package fleetoverview.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
+import fleetoverview.data.RegisterRequest;
 import fleetoverview.data.request.UserRequest;
 import fleetoverview.data.response.ApiResponse;
 import fleetoverview.data.response.DataResponse;
+import fleetoverview.data.response.UserResponse;
 import fleetoverview.domain.entity.UserEntity;
 import fleetoverview.repository.RoleRepository;
 import fleetoverview.repository.UserRepository;
 import fleetoverview.service.UserService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.NotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl extends BaseService implements UserService {
     private final UserRepository repository;
     private final RoleRepository roleRepository;
-
-    @Autowired
-    public UserServiceImpl(UserRepository repository, RoleRepository roleRepository) {
-        this.repository = repository;
-        this.roleRepository = roleRepository;
-    }
+    private final AuthServiceImpl authService;
 
     @Override
     public DataResponse<List<UserEntity>> get(Map<String, Object> params) {
-        return DataResponse.success(repository.findAll(Sort.by(Sort.Direction.DESC, "id")));
+        return null;
+    }
+
+    @Override
+    public DataResponse<List<UserResponse>> findAll() {
+        List<UserResponse> id = repository.findAll().stream()
+                .map(e -> new UserResponse(
+                        e.getId(),
+                        e.getName(),
+                        e.getEmail(),
+                        e.getRoles(),
+                        e.getStatus()
+                ))
+                .collect(Collectors.toList());
+
+        return DataResponse.success(id);
     }
 
     @Override
     public ApiResponse post(UserRequest data) {
-        repository.save(
-                new UserEntity(
-                        data.username(),
-                        data.password(),
-                        data.name(),
-                        data.email()
-//                        roleRepository.findById(data.rolesId()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("role.not_found")))
-                )
-        );
-
+        authService.register(new RegisterRequest(
+                data.email(),
+                data.password(),
+                data.name()
+        ));
         return ApiResponse.success();
     }
 

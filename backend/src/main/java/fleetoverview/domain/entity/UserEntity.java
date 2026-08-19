@@ -1,6 +1,8 @@
 package fleetoverview.domain.entity;
 
+import fleetoverview.domain.entity.base.BaseEntity;
 import fleetoverview.domain.enums.Role;
+import fleetoverview.domain.enums.UserStatusEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +11,11 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import fleetoverview.domain.entity.base.BaseEntity;
-import fleetoverview.domain.enums.LangEnum;
-import fleetoverview.domain.enums.UserStatusEnum;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -32,10 +34,9 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private String email;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
+    @Column(name = "role", nullable = false, length = 32)
     @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
@@ -49,7 +50,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
     public UserEntity() {}
 
     public UserEntity(String username, String password, String name, String email) {
-        this.username = username;
+        this.username = email;
         this.password = password;
         this.name = name;
         this.email = email;
@@ -63,7 +64,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                .map(r -> new SimpleGrantedAuthority("ROLE_" + r.name()))
                 .toList();
     }
 }

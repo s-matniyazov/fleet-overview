@@ -1,9 +1,11 @@
 <script setup>
+import UnderDevelopment from "@/components/setting/UnderDevelopment.vue";
 </script>
 
 <template>
-  Fleet Overview
+  <UnderDevelopment/>
 </template>
+
 
 <style scoped>
 </style>

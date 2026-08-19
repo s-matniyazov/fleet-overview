@@ -359,10 +359,10 @@ watch(
     >
       <template #top>
         <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
-          <v-btn color="primary" size="small" prepend-icon="mdi-plus" @click="onAdd">
+          <v-btn color="primary" prepend-icon="mdi-plus" @click="onAdd">
             {{ t("add") }}
           </v-btn>
-          <v-btn color="primary" size="small" prepend-icon="mdi-pencil" :disabled="!selectedRow" @click="onEdit(selectedRow)">
+          <v-btn color="primary" prepend-icon="mdi-pencil" :disabled="!selectedRow" @click="onEdit(selectedRow)">
             {{ t("edit") }}
           </v-btn>
           <v-btn color="primary" size="small" icon variant="text" :disabled="!selectedRow" @click="showModal = true">

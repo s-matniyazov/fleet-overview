@@ -5,11 +5,9 @@ import com.fasterxml.jackson.annotation.Nulls;
 
 public record UserRequest (
         @JsonSetter(nulls = Nulls.AS_EMPTY) int id,
-        String username,
+        @JsonSetter(nulls = Nulls.AS_EMPTY) String username,
         String password,
         String name,
-        @JsonSetter(nulls = Nulls.AS_EMPTY) int departmentsId,
-        @JsonSetter(nulls = Nulls.AS_EMPTY) int positionsId,
         String email,
         @JsonSetter(nulls = Nulls.AS_EMPTY) int rolesId
 ) {}

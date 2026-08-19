@@ -49,7 +49,13 @@ const props = defineProps({
   },
   pageSizeOptions: {
     type: Array,
-    default: () => [5, 10, 20, 50],
+    default: () => [
+      { title: "5", value: 5 },
+      { title: "10", value: 10 },
+      { title: "20", value: 20 },
+      { title: "50", value: 50 },
+      { title: "All", value: null },
+    ],
   },
   classes: {
     type: String,
@@ -103,15 +109,21 @@ const headers = computed(() =>
   })),
 );
 
+
 const rowsPerPageValue = computed({
   get: () => pagination.value?.[props.paginationRowsKey],
+
   set: (v) => {
-    if (!pagination.value) return;
-    const n = typeof v === "string" ? Number(v) : v;
-    pagination.value[props.paginationRowsKey] = n;
-    pagination.value.page = 1;
+    if (!pagination.value) return
+
+    const n = typeof v === "string" ? Number(v) : v
+
+    pagination.value[props.paginationRowsKey] =
+        n === -1 ? props.items.length : n
+
+    pagination.value.page = 1
   },
-});
+})
 
 const pagePrev = () => {
   if (!pagination.value || pagination.value.page <= 1) return;
@@ -214,6 +226,8 @@ const isRowSelected = (row) =>
             <v-select
               v-model="rowsPerPageValue"
               :items="pageSizeOptions"
+              item-title="title"
+              item-value="value"
               density="compact"
               variant="outlined"
               hide-details

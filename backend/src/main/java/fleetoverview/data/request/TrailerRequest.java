@@ -6,11 +6,7 @@ import fleetoverview.domain.enums.truck.TruckStatusEnum;
 
 import java.sql.Date;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 24 май 2025
- **/
+
 public record TrailerRequest(
         @JsonSetter(nulls = Nulls.AS_EMPTY) int id,
         String unit,

@@ -1,6 +1,6 @@
 package fleetoverview.service.impl;
 
-import fleetoverview.config.MailConfigurationParams;
+import fleetoverview.config.MailConfigurationProperties;
 import fleetoverview.config.TelegramConfigurationParams;
 import fleetoverview.domain.enums.company.CompanyStatusEnum;
 import fleetoverview.repository.CompanyRepository;
@@ -8,6 +8,7 @@ import fleetoverview.repository.DriverRepository;
 import fleetoverview.repository.TrailerRepository;
 import fleetoverview.repository.TruckRepository;
 import fleetoverview.service.NotificationService;
+import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import jakarta.mail.internet.MimeMessage;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -31,11 +31,7 @@ import static fleetoverview.domain.enums.driver.DriverFileTypeEnum.*;
 import static fleetoverview.domain.enums.truck.TruckFileTypeEnum.*;
 import static fleetoverview.util.helper.Utils.isNull;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 14 май 2025
- **/
+
 @Service
 public class TextNotificationServiceImpl implements NotificationService {
     private static final Logger logger = LoggerFactory.getLogger(TextNotificationServiceImpl.class);
@@ -45,19 +41,19 @@ public class TextNotificationServiceImpl implements NotificationService {
     private final DriverRepository driverRepository;
     private final JavaMailSender mailSender;
     private final TelegramConfigurationParams telegramParams;
-    private final MailConfigurationParams mailParams;
+    private final MailConfigurationProperties mailProperties;
 
     @Autowired
     public TextNotificationServiceImpl(TruckRepository truckRepository,
                                        CompanyRepository companyRepository, TrailerRepository trailerRepository,
                                        JavaMailSender mailSender, TelegramConfigurationParams telegramParams,
-                                       MailConfigurationParams mailParams, DriverRepository driverRepository) {
+                                       MailConfigurationProperties mailProperties, DriverRepository driverRepository) {
         this.truckRepository = truckRepository;
         this.companyRepository = companyRepository;
         this.trailerRepository = trailerRepository;
         this.mailSender = mailSender;
         this.telegramParams = telegramParams;
-        this.mailParams = mailParams;
+        this.mailProperties = mailProperties;
         this.driverRepository = driverRepository;
     }
 
@@ -67,15 +63,15 @@ public class TextNotificationServiceImpl implements NotificationService {
 
         companies.forEach(it -> {
             StringBuilder text = new StringBuilder(String.format("""
-                    Subject: 🔔 Compliance Alert: Upcoming Expirations & Missing Documents for %s
-                                       \s
-                                       \s
-                    Dear Bilol,
-                                       \s
-                    This is an automated compliance notification from your Efficient management regarding %s.
-                                       \s
-                    Please review the following compliance alerts:
-                   \s""", it.getName(), it.getName()));
+                     Subject: 🔔 Compliance Alert: Upcoming Expirations & Missing Documents for %s
+                                        \s
+                                        \s
+                     Dear Bilol,
+                                        \s
+                     This is an automated compliance notification from your Efficient management regarding %s.
+                                        \s
+                     Please review the following compliance alerts:
+                    \s""", it.getName(), it.getName()));
 
             text.append(companyNotificationBuilder(it.getId()));
             text.append(truckNotificationBuilder(it.getId()));
@@ -134,13 +130,13 @@ public class TextNotificationServiceImpl implements NotificationService {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
-            helper.setFrom("bilol@efficientmanllc.com");
+            helper.setFrom(mailProperties.getUsername());
             helper.setSubject("⚠️ Fleet Alert");
             helper.setText(message);
 
-            if (mailParams.getSenders().isEmpty()) return;
+            if (mailProperties.getReceiver().isEmpty()) return;
 
-            for (String mail : mailParams.getSenders().split(",")) {
+            for (String mail : mailProperties.getReceiver().split(",")) {
                 helper.setTo(mail);
                 mailSender.send(mimeMessage);
             }

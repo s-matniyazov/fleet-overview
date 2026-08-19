@@ -160,6 +160,7 @@ const en = {
     search_by_driver_name:'Search By Driver Name',
     search_by_name:'Search by Name',
     enter_username:'Enter username',
+    enter_full_name:'Enter Full Name',
     driver_inspections_empty:'No inspections in the past 3 years',
 }
 

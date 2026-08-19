@@ -2,7 +2,6 @@ package fleetoverview.config;
 
 import fleetoverview.domain.entity.*;
 import fleetoverview.domain.entity.driver.EndorsementEntity;
-import fleetoverview.domain.entity.inspection.Inspection;
 import fleetoverview.domain.entity.trailer.TrailerModelMakerEntity;
 import fleetoverview.domain.entity.trailer.TrailerTypeEntity;
 import fleetoverview.domain.entity.truck.FuelTypeEntity;
@@ -13,8 +12,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static fleetoverview.util.helper.Utils.getUrls;
@@ -58,7 +59,6 @@ public class InitData implements CommandLineRunner {
     public void run(String... args) {
 //        initActions();
 //        initRoles();
-//        initUsers();
 //        initOwnershipTypes();
 //        initFuelTypes();
 //        initCountryAndStates();
@@ -108,20 +108,20 @@ public class InitData implements CommandLineRunner {
         }
     }
 
-    private void initUsers() {
-        if (userRepository.findByUsername("username").isEmpty()) {
-            userRepository.saveAll(
-                    List.of(
-                            new UserEntity(
-                                    "username",
-                                    passwordEncoder.encode("password"),
-                                    "Testov User",
-                                    "kuchukcha@gmail.com"
-                            )
-                    )
-            );
-        }
-    }
+//    private void initUsers() {
+//        if (userRepository.findByUsername("username").isEmpty()) {
+//            userRepository.saveAll(
+//                    List.of(
+//                            new UserEntity(
+//                                    "username",
+//                                    passwordEncoder.encode("password"),
+//                                    "Testov User",
+//                                    "kuchukcha@gmail.com"
+//                            )
+//                    )
+//            );
+//        }
+//    }
 
     private void initOwnershipTypes() {
         if (!ownershipTypeRepository.existsByName("Company")) {

@@ -7,12 +7,12 @@ import {URIS} from "@/constants/UriConstants.js";
 import UTable from "@/components/base/UTable.vue";
 import UInput from "@/components/base/UInput.vue";
 import {useI18n} from "vue-i18n";
-import {longToDateTime, showMessage, filterString, TIME_ZONES} from "@/util/utils.js";
+import {filterString, longToDateTime, showMessage, TIME_ZONES} from "@/util/utils.js";
 import UForm from "@/components/base/UForm.vue";
 import {useFilterStore} from "@/store/FilterStore.js";
 import router from "@/router/index.js";
-import { mapSelectItems } from "@/util/selectItems.js";
-import { useFormSelectField } from "@/composables/useFormSelectField.js";
+import {mapSelectItems} from "@/util/selectItems.js";
+import {useFormSelectField} from "@/composables/useFormSelectField.js";
 import {useStateStore} from "@/store/StateStore.js";
 
 const {t} = useI18n();
@@ -26,6 +26,9 @@ const props = defineProps({
     default: false
   },
 })
+const filter = ref({
+  status: 'ACTIVE',
+});
 
 const columns = [
   {
@@ -102,59 +105,80 @@ const status = ref([]);
 const data = ref(newModel())
 const selectedRow = ref();
 
-const pagination = ref({ page: 1, rowsPerPage: 20, hasNext: false });
+const pagination = ref({ page: 1, rowsPerPage: null, hasNext: false });
+
+const isAll = computed(() => {
+  const size = Number(pagination.value.rowsPerPage);
+  return !Number.isFinite(size) || size <= 0;   // null, -1, "", "all" → All
+});
+
+const pageCount = computed(() => {
+  if (isAll.value) return 1;
+  return Math.max(1, Math.ceil(dataList.value.length / Number(pagination.value.rowsPerPage)));
+});
 
 const pagedData = computed(() => {
-  const { page, rowsPerPage } = pagination.value;
-  return dataList.value.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+  if (isAll.value) return dataList.value;
+
+  const page = Number(pagination.value.page) || 1;
+  const size = Number(pagination.value.rowsPerPage);
+  const start = (page - 1) * size;
+  return dataList.value.slice(start, start + size);
+});
+
+watch(() => pagination.value.rowsPerPage, () => {
+  pagination.value.page = 1;
 });
 
 watch(
-  () => [pagination.value.page, pagination.value.rowsPerPage, dataList.value.length],
-  ([page, size, total]) => { pagination.value.hasNext = page * size < total; },
-  { immediate: true },
+    () => [pagination.value.page, pagination.value.rowsPerPage, dataList.value.length],
+    () => {
+      pagination.value.hasNext = isAll.value
+          ? false
+          : Number(pagination.value.page) * Number(pagination.value.rowsPerPage) < dataList.value.length;
+    },
+    { immediate: true },
 );
-
 const companyCountryItems = computed(() =>
-  mapSelectItems(stateStore.countries, "name", "id"),
+    mapSelectItems(stateStore.countries, "name", "id"),
 );
 const companyStateItems = computed(() =>
-  mapSelectItems(stateStore.getStates(data.value.countryId), "name", "id"),
+    mapSelectItems(stateStore.getStates(data.value.countryId), "name", "id"),
 );
 const companyTimeZoneItems = computed(() =>
-  mapSelectItems(TIME_ZONES, "key", "value"),
+    mapSelectItems(TIME_ZONES, "key", "value"),
 );
 const companyStatusItems = computed(() =>
-  mapSelectItems([{ name: "ACTIVE" }, { name: "INACTIVE" }], "name", "name"),
+    mapSelectItems([{name: "ACTIVE"}, {name: "INACTIVE"}], "name", "name"),
 );
 const companyEntrantItems = computed(() =>
-  mapSelectItems([{ name: "PASSED" }, { name: "NOT_PASSED" }], "name", "name"),
+    mapSelectItems([{name: "PASSED"}, {name: "NOT_PASSED"}], "name", "name"),
 );
 
-const { errorMessages: companyCountryErr } = useFormSelectField(
-  "country",
-  () => data.value.countryId,
-  (v) => (!v && t("required")),
+const {errorMessages: companyCountryErr} = useFormSelectField(
+    "country",
+    () => data.value.countryId,
+    (v) => (!v && t("required")),
 );
-const { errorMessages: companyStateErr } = useFormSelectField(
-  "state",
-  () => data.value.stateId,
-  (v) => (!v && t("required")),
+const {errorMessages: companyStateErr} = useFormSelectField(
+    "state",
+    () => data.value.stateId,
+    (v) => (!v && t("required")),
 );
-const { errorMessages: companyTimeZoneErr } = useFormSelectField(
-  "timeZone",
-  () => data.value.timeZone,
-  (v) => (!v && t("required")),
+const {errorMessages: companyTimeZoneErr} = useFormSelectField(
+    "timeZone",
+    () => data.value.timeZone,
+    (v) => (!v && t("required")),
 );
-const { errorMessages: companyStatusErr } = useFormSelectField(
-  "status",
-  () => data.value.status,
-  (v) => (!v && t("required")),
+const {errorMessages: companyStatusErr} = useFormSelectField(
+    "status",
+    () => data.value.status,
+    (v) => (!v && t("required")),
 );
-const { errorMessages: companyEntrantErr } = useFormSelectField(
-  "entrantStatus",
-  () => data.value.entrantStatus,
-  (v) => (!v && t("required")),
+const {errorMessages: companyEntrantErr} = useFormSelectField(
+    "entrantStatus",
+    () => data.value.entrantStatus,
+    (v) => (!v && t("required")),
 );
 
 // FUNCTIONS
@@ -215,7 +239,7 @@ const onDelete = (d) => {
 }
 
 function getData() {
-  axiosIns.get(`${apiUrl}${filterString({ userId: localStorage.getItem('userId') })}`)
+  axiosIns.get(`${apiUrl}${filterString({...filter.value, ...pagination.value})}`)
       .then(res => {
         dataList.value = res.data.data;
         selectedRow.value = null;
@@ -227,16 +251,17 @@ function getData() {
 // HOOKS
 onMounted(() => {
   getData();
-
+  console.log(localStorage.getItem("fleet-theme"));
   stateStore.init();
 })
 
-function onExcel () {
-axiosIns.post(apiUrl+"/excel", data.value)
-      .then(res => {})
+function onExcel() {
+  axiosIns.post(apiUrl + "/excel", data.value)
+      .then(res => {
+      })
       .catch(e => {
-    showMessage(e)
-  });
+        showMessage(e)
+      });
 }
 
 </script>
@@ -244,18 +269,40 @@ axiosIns.post(apiUrl+"/excel", data.value)
 <template>
   <div class="company-shell">
     <UTable
-      :items="pagedData"
-      :columns="columns"
-      v-model="selectedRow"
-      v-model:pagination="pagination"
-      @row-dblclick="handleDoubleClick"
+        :items="pagedData"
+        :columns="columns"
+        v-model="selectedRow"
+        v-model:pagination="pagination"
+        @row-dblclick="handleDoubleClick"
     >
       <template #top>
         <div class="d-flex flex-wrap align-items-center justify-content-start gap-2">
-          <v-btn color="primary" size="small" prepend-icon="mdi-plus" @click="onAdd">
+          <v-btn
+              color="primary"
+              variant="flat"
+              rounded="lg"
+              prepend-icon="mdi-plus"
+              class="u-add-btn text-none px-4"
+              @click="onAdd"
+          >
             {{ t("add") }}
           </v-btn>
+
+          <v-select
+              v-model="filter.status"
+              :items="[{ title: 'Active', value: 'ACTIVE' },{ title: 'Inactive', value: 'INACTIVE' },{ title: 'All', value: null },]"
+              item-title="title"
+              item-value="value"
+              label=""
+              density="compact"
+              variant="outlined"
+              hide-details
+              bg-color="surface"
+              class="table-top-status-select"
+              @update:model-value="getData"
+          />
         </div>
+
       </template>
       <template #row_created="{row}">
         <td>{{ longToDateTime(row?.created) }}</td>
@@ -265,7 +312,7 @@ axiosIns.post(apiUrl+"/excel", data.value)
         <td>
           <div class="d-flex gap-2">
             <a class="badge bg-primary-subtle text-primary"
-               :class="`bg-${row?.status === 'PASSIVE' ? 'danger' : 'primary'}-subtle`"> {{ row?.status }}</a>
+               :class="`bg-${row?.status === 'INACTIVE' ? 'danger' : 'primary'}-subtle`"> {{ row?.status }}</a>
           </div>
         </td>
       </template>
@@ -288,43 +335,43 @@ axiosIns.post(apiUrl+"/excel", data.value)
 
       <template #body>
         <UForm id="safety-company-form" @submit="onSave">
-            <div class="row">
-              <!--            name-->
-              <div class="col-3">
-                <UInput v-model="data.name" :label="t('company_name')" :hint="t('company_name')"
-                        :name="t('company_name')"
-                        :placeholder="t('enter_company_name')" classes=""/>
-              </div>
-              <div class="col-3">
-                <UInput v-model="data.ownerName" :label="t('company_ownerName')" :hint="t('company_ownerName')"
-                        :name="t('company_ownerName')"
-                        :placeholder="t('enter_company_ownerName')" classes=""/>
-              </div>
-              <div class="col-3">
-                <UInput v-model="data.dot" :label="t('dot')" :hint="t('dot')" :name="t('dot')"
-                        :placeholder="t('enter_dot')" classes=""/>
-              </div>
-              <div class="col-3">
-                <UInput v-model="data.pinNumber" :label="t('pinNumber')" :hint="t('pinNumber')" :name="t('pinNumber')"
-                        :placeholder="t('enter_pinNumber')" classes=""/>
-              </div>
-              <div class="col-3">
-                <UInput v-model="data.mc" :label="t('mc')" :hint="t('mc')" :name="t('mc')"
-                        :placeholder="t('enter_mc')" classes=""/>
-              </div>
-              <div class="col-3">
-                <UInput v-model="data.dba" :label="t('dba')" :hint="t('dba')" :name="t('dba')"
-                        :placeholder="t('enter_dba')" classes=""/>
-              </div>
-              <div class="col-3">
-                <UInput v-model="data.fein" :label="t('fein')" :hint="t('fein')" :name="t('fein')"
-                        :placeholder="t('enter_fein')" classes=""/>
-              </div>
+          <div class="row">
+            <!--            name-->
+            <div class="col-3">
+              <UInput v-model="data.name" :label="t('company_name')" :hint="t('company_name')"
+                      :name="t('company_name')"
+                      :placeholder="t('enter_company_name')" classes=""/>
+            </div>
+            <div class="col-3">
+              <UInput v-model="data.ownerName" :label="t('company_ownerName')" :hint="t('company_ownerName')"
+                      :name="t('company_ownerName')"
+                      :placeholder="t('enter_company_ownerName')" classes=""/>
+            </div>
+            <div class="col-3">
+              <UInput v-model="data.dot" :label="t('dot')" :hint="t('dot')" :name="t('dot')"
+                      :placeholder="t('enter_dot')" classes=""/>
+            </div>
+            <div class="col-3">
+              <UInput v-model="data.pinNumber" :label="t('pinNumber')" :hint="t('pinNumber')" :name="t('pinNumber')"
+                      :placeholder="t('enter_pinNumber')" classes=""/>
+            </div>
+            <div class="col-3">
+              <UInput v-model="data.mc" :label="t('mc')" :hint="t('mc')" :name="t('mc')"
+                      :placeholder="t('enter_mc')" classes=""/>
+            </div>
+            <div class="col-3">
+              <UInput v-model="data.dba" :label="t('dba')" :hint="t('dba')" :name="t('dba')"
+                      :placeholder="t('enter_dba')" classes=""/>
+            </div>
+            <div class="col-3">
+              <UInput v-model="data.fein" :label="t('fein')" :hint="t('fein')" :name="t('fein')"
+                      :placeholder="t('enter_fein')" classes=""/>
+            </div>
 
-              <div class="col-3"/>
+            <div class="col-3"/>
 
-              <div class="col-3">
-                <v-select
+            <div class="col-3">
+              <v-select
                   v-model="data.countryId"
                   :items="companyCountryItems"
                   item-title="title"
@@ -337,10 +384,10 @@ axiosIns.post(apiUrl+"/excel", data.value)
                   bg-color="surface"
                   :error-messages="companyCountryErr"
                   class="mb-2"
-                />
-              </div>
-              <div class="col-3">
-                <v-select
+              />
+            </div>
+            <div class="col-3">
+              <v-select
                   v-model="data.stateId"
                   :items="companyStateItems"
                   item-title="title"
@@ -353,23 +400,23 @@ axiosIns.post(apiUrl+"/excel", data.value)
                   bg-color="surface"
                   :error-messages="companyStateErr"
                   class="mb-2"
-                />
-              </div>
-              <div class="col-3">
-                <UInput v-model="data.city" :label="t('city')" :hint="t('city')" :name="t('city')"
-                        :placeholder="t('enter_city')" classes=""/>
-              </div>
-              <div class="col-3">
-                <UInput v-model="data.zipcode" :label="t('zipcode')" :hint="t('zipcode')"
-                        :name="t('zipcode')"
-                        :placeholder="t('enter_zipcode')" classes=""/>
-              </div>
-              <div class="col-3">
-                <UInput v-model="data.address1" :label="t('address1')" :hint="t('address1')" :name="t('address1')"
-                        :placeholder="t('enter_address1')" classes=""/>
-              </div>
-              <div class="col-3">
-                <v-select
+              />
+            </div>
+            <div class="col-3">
+              <UInput v-model="data.city" :label="t('city')" :hint="t('city')" :name="t('city')"
+                      :placeholder="t('enter_city')" classes=""/>
+            </div>
+            <div class="col-3">
+              <UInput v-model="data.zipcode" :label="t('zipcode')" :hint="t('zipcode')"
+                      :name="t('zipcode')"
+                      :placeholder="t('enter_zipcode')" classes=""/>
+            </div>
+            <div class="col-3">
+              <UInput v-model="data.address1" :label="t('address1')" :hint="t('address1')" :name="t('address1')"
+                      :placeholder="t('enter_address1')" classes=""/>
+            </div>
+            <div class="col-3">
+              <v-select
                   v-model="data.timeZone"
                   :items="companyTimeZoneItems"
                   item-title="title"
@@ -381,22 +428,23 @@ axiosIns.post(apiUrl+"/excel", data.value)
                   clearable
                   bg-color="surface"
                   :error-messages="companyTimeZoneErr"
-                />
-              </div>
-              <div class="col-4">
-                <UInput v-model="data.address2" :label="t('mailingAddress')" :hint="t('mailingAddress')" :name="t('mailingAddress')"
-                        :placeholder="t('enter_mailingAddress')" type="email"/>
-              </div>
-              <div class="col-4">
-                <UInput v-model="data.email" type="email" :label="t('email')" :hint="t('email')" :name="t('email')"
-                        :placeholder="t('enter_email')" classes=""/>
-              </div>
-              <div class="col-4">
-                <UInput v-model="data.phone" :label="t('phone')" :hint="t('phone')" :name="t('phone')"
-                        :placeholder="t('enter_phone_number')" classes=""/>
-              </div>
-              <div class="col-3">
-                <v-select
+              />
+            </div>
+            <div class="col-4">
+              <UInput v-model="data.address2" :label="t('mailingAddress')" :hint="t('mailingAddress')"
+                      :name="t('mailingAddress')"
+                      :placeholder="t('enter_mailingAddress')" type="email"/>
+            </div>
+            <div class="col-4">
+              <UInput v-model="data.email" type="email" :label="t('email')" :hint="t('email')" :name="t('email')"
+                      :placeholder="t('enter_email')" classes=""/>
+            </div>
+            <div class="col-4">
+              <UInput v-model="data.phone" :label="t('phone')" :hint="t('phone')" :name="t('phone')"
+                      :placeholder="t('enter_phone_number')" classes=""/>
+            </div>
+            <div class="col-3">
+              <v-select
                   v-model="data.status"
                   :items="companyStatusItems"
                   item-title="title"
@@ -408,10 +456,10 @@ axiosIns.post(apiUrl+"/excel", data.value)
                   clearable
                   bg-color="surface"
                   :error-messages="companyStatusErr"
-                />
-              </div>
-              <div class="col-3">
-                <v-select
+              />
+            </div>
+            <div class="col-3">
+              <v-select
                   v-model="data.entrantStatus"
                   :items="companyEntrantItems"
                   item-title="title"
@@ -423,9 +471,9 @@ axiosIns.post(apiUrl+"/excel", data.value)
                   clearable
                   bg-color="surface"
                   :error-messages="companyEntrantErr"
-                />
-              </div>
+              />
             </div>
+          </div>
         </UForm>
       </template>
       <template #actions>
@@ -442,5 +490,22 @@ axiosIns.post(apiUrl+"/excel", data.value)
   flex: 1 1 auto;
   min-height: 0;
   height: 100%;
+}
+
+.u-add-btn {
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  box-shadow: 0 2px 6px rgba(var(--v-theme-primary), 0.28);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.u-add-btn:hover {
+  box-shadow: 0 4px 12px rgba(var(--v-theme-primary), 0.38);
+  transform: translateY(-1px);
+}
+
+.u-add-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(var(--v-theme-primary), 0.3);
 }
 </style>

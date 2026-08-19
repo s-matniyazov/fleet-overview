@@ -1,12 +1,13 @@
 package fleetoverview.controller;
 
-import fleetoverview.controller.base.CrudController;
-import fleetoverview.data.request.CompanyRequest;
 import fleetoverview.data.request.CompanyFileRequest;
+import fleetoverview.data.request.CompanyRequest;
 import fleetoverview.data.response.ApiResponse;
-import fleetoverview.domain.entity.company.CompanyEntity;
+import fleetoverview.repository.filter.CompanyFilter;
 import fleetoverview.service.CompanyService;
 import fleetoverview.service.impl.ExcelNotificationServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,21 +17,32 @@ import java.util.Map;
 
 import static fleetoverview.util.constants.UriConstants.COMPANIES;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 03 май 2025
- **/
 
 @RestController
 @RequestMapping(COMPANIES)
-public class CompanyController extends CrudController<CompanyEntity, CompanyRequest> {
+@RequiredArgsConstructor
+public class CompanyController{
     private final CompanyService service;
     private final ExcelNotificationServiceImpl excelNotificationService;
-    protected CompanyController(CompanyService service, ExcelNotificationServiceImpl excelNotificationService) {
-        super(service);
-        this.service = service;
-        this.excelNotificationService = excelNotificationService;
+
+    @GetMapping
+    protected HttpEntity<ApiResponse> findAll(@ParameterObject CompanyFilter filter) {
+        return ResponseEntity.ok(service.findAll(filter));
+    }
+
+    @PostMapping
+    protected HttpEntity<ApiResponse> post(@RequestBody CompanyRequest request) {
+        return ResponseEntity.ok(service.post(request));
+    }
+
+    @PutMapping
+    protected HttpEntity<ApiResponse> put(@RequestBody CompanyRequest request) {
+        return ResponseEntity.ok(service.put(request));
+    }
+
+    @DeleteMapping
+    protected HttpEntity<ApiResponse> delete(@RequestBody CompanyRequest request) {
+        return ResponseEntity.ok(service.delete(request));
     }
 
     @PostMapping("attach-file")

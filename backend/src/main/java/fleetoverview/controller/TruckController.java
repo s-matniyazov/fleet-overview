@@ -16,11 +16,7 @@ import java.util.Map;
 
 import static fleetoverview.util.constants.UriConstants.TRUCK;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 16 март 2025
- **/
+
 @RestController
 @RequestMapping(TRUCK)
 public class TruckController extends CrudController<TruckEntity, TruckRequest> {

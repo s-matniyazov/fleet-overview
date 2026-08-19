@@ -5,16 +5,13 @@ import fleetoverview.domain.enums.company.CompanyStatusEnum;
 import fleetoverview.domain.projection.company.CompanyFilesProjection;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 03 май 2025
- **/
-public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer> {
+
+public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer>, JpaSpecificationExecutor<CompanyEntity> {
     List<CompanyEntity> findAllByStatus(CompanyStatusEnum companyStatusEnum);
 
     @Query(value = """
@@ -39,7 +36,5 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer>
             order by t.id
             """, nativeQuery = true)
     List<CompanyFilesProjection> getCompaniesWithExpirationInfo(int companyId);
-
-    List<CompanyEntity> findByCreatedById(Integer createdById, Sort sort);
 
 }

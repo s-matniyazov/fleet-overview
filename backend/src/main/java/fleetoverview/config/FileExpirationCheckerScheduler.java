@@ -16,11 +16,7 @@ import org.springframework.stereotype.Component;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 13 май 2025
- **/
+
 @Component
 public class FileExpirationCheckerScheduler {
     private static final Logger log = LoggerFactory.getLogger(FileExpirationCheckerScheduler.class);

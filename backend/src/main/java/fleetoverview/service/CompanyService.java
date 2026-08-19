@@ -7,6 +7,7 @@ import fleetoverview.data.response.DataResponse;
 import fleetoverview.domain.entity.company.CompanyEntity;
 import fleetoverview.domain.entity.company.CompanyFileEntity;
 import fleetoverview.domain.projection.company.CompanyProjection;
+import fleetoverview.repository.filter.CompanyFilter;
 import fleetoverview.service.base.CrudService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,4 +25,5 @@ public interface CompanyService extends CrudService<CompanyEntity, CompanyReques
     DataResponse<List<CompanyProjection>> getWithFiles(Map<String, String> params);
     ApiResponse deactivate(Integer id);
     ApiResponse activate(Integer id);
+    ApiResponse findAll(CompanyFilter filter);
 }

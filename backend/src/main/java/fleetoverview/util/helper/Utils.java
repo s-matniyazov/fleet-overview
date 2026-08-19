@@ -10,23 +10,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-/**
- * @author :  sardor.matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 13 февр. 2025
- **/
+
 public class Utils {
-    private static final Set<String> publicUrls = Set.of(
-            "/error",
-            "/v3/api-docs/",
-            "/api/auth/login",
-            "/swagger-ui/index.html"
-    );
+
     public static boolean isNull(Object o) {return o == null;}
-    public static boolean isPublicPath(String o) {
-        return publicUrls.contains(o) || o.contains("swagger-ui") || o.contains("api-docs") || o.contains("fleet")
-                || o.contains("js") || o.contains("html") || o.contains("css") || o.contains("ico") || o.contains("jpg") || o.contains("svg");
-    }
 
     public static List<String> getUrls() {
         Field[] fields = UriConstants.class.getFields();

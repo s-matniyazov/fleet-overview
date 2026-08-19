@@ -6,11 +6,7 @@ import fleetoverview.domain.enums.MenuStatusEnum;
 
 import java.util.List;
 
-/**
- * @author :  qobiljon.qodirjonov
- * @mailto :  1810092kk@gmail.com
- * @created : 28 янв. 2025
- **/
+
 public record MenuRequest(
         @JsonSetter(nulls = Nulls.AS_EMPTY) int id,
         String name,

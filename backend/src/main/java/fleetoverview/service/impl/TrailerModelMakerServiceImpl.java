@@ -15,11 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 13 май 2025
- **/
+
 @Service
 public class TrailerModelMakerServiceImpl extends BaseService implements TrailerModelMakerService {
     private final TrailerModelMakerRepository repository;

@@ -4,18 +4,32 @@ import useUserStore from "@/store/UserStore.js";
 import {pinia} from "@/pinia.js";
 import axiosIns from "@/plugins/axios.js";
 import {URIS} from "@/constants/UriConstants.js";
+//
+// export function showMessage(error) {
+//     const toasterStore = useToasterStore(pinia);
+//     const msg = error?.response?.data?.message, status = error?.response?.data?.status;
+//     if (status === 500) {
+//         toasterStore.error({text: msg ? msg : error})
+//     } else if (status === 400) {
+//         toasterStore.warning({text: msg ? msg : error})
+//     } else {
+//         toasterStore.success({text: msg ? msg : error})
+//     }
+// }
 
 export function showMessage(error) {
-    const toasterStore = useToasterStore(pinia);
-    const msg = error?.response?.data?.message, status = error?.response?.data?.status;
-    if (status === 500) {
-        toasterStore.error({text: msg ? msg : error})
-    } else if (status === 400) {
-        toasterStore.warning({text: msg ? msg : error})
-    } else {
-        toasterStore.success({text: msg ? msg : error})
-    }
+    const toasterStore = useToasterStore(pinia)
+
+    const status = error?.response?.status
+    const message = error?.response?.data?.message || error?.message || 'Something went wrong'
+
+    const type = status >= 500 ? 'error' :
+        status >= 400 ? 'warning' :
+        status >= 200 ? 'success' : 'error'
+
+    toasterStore[type]({text: message})
 }
+
 
 export function showLoader() {
     useLoaderStore(pinia).show();
@@ -118,204 +132,111 @@ export const DOCUMENT_TYPES = {
     "DRIVER_AGREEMENT": "Driver Agreement",
 
 //  inspection
-    "CORRECTION":"Correction",
-    "CERTIFICATION":"Certification"
+    "CORRECTION": "Correction",
+    "CERTIFICATION": "Certification"
 }
 
-export const FLEET_TYPE_NAMES = [
-    {
-        key: "REG_CAB_CARD",
-        value: "Registration (Cab Card)"
-    },
-    {
-        key: "ANN_INS",
-        value: "Annual Inspection"
-    },
-    {
-        key: "PHYS_DAMAGE",
-        value: "Physical Damage Insurance"
-    },
-    {
-        key: "LEASE_AGR",
-        value: "Lease Agreement"
-    },
-    {
-        key: "NON_TRUCKING_LIABILITY",
-        value: "Non-Trucking Liability"
-    },
-    {
-        key: "CLEAN_TRUCK_CHECK_PERMIT",
-        value: "Clean Truck Check Permit"
-    },
-];
+export const FLEET_TYPE_NAMES = [{
+    key: "REG_CAB_CARD", value: "Registration (Cab Card)"
+}, {
+    key: "ANN_INS", value: "Annual Inspection"
+}, {
+    key: "PHYS_DAMAGE", value: "Physical Damage Insurance"
+}, {
+    key: "LEASE_AGR", value: "Lease Agreement"
+}, {
+    key: "NON_TRUCKING_LIABILITY", value: "Non-Trucking Liability"
+}, {
+    key: "CLEAN_TRUCK_CHECK_PERMIT", value: "Clean Truck Check Permit"
+},];
 
-export const SAFETY_TYPE_NAMES = [
-    {
-        key: "CDL",
-        value: "CDL (Front)"
-    },
-    {
-        key: "MEDICAL_CERT",
-        value: "Medical Certificate"
-    },
-    {
-        key: "MVR",
-        value: "MVR"
-    },
-    {
-        key: "CLEARING_HOUSE",
-        value: "Clearing House"
-    },
-    {
-        key: "SSN",
-        value: "SSN"
-    },
-    {
-        key: "CCF",
-        value: "CCF"
-    },
-    {
-        key: "DRUG_TEST_RESULT",
-        value: "Drug Test Result"
-    },
-    {
-        key: "DRIVER_APPLICATION",
-        value: "Driver Application"
-    },
-    {
-        key: "PEV",
-        value: "PEV"
-    },
-];
+export const SAFETY_TYPE_NAMES = [{
+    key: "CDL", value: "CDL (Front)"
+}, {
+    key: "MEDICAL_CERT", value: "Medical Certificate"
+}, {
+    key: "MVR", value: "MVR"
+}, {
+    key: "CLEARING_HOUSE", value: "Clearing House"
+}, {
+    key: "SSN", value: "SSN"
+}, {
+    key: "CCF", value: "CCF"
+}, {
+    key: "DRUG_TEST_RESULT", value: "Drug Test Result"
+}, {
+    key: "DRIVER_APPLICATION", value: "Driver Application"
+}, {
+    key: "PEV", value: "PEV"
+},];
 
-export const COMPANY_TYPE_NAMES = [
-    {
-        key: "INS_CERT",
-        value: "Company Insurance Certificate"
-    },
-    {
-        key: "IFTA_LICENSE",
-        value: "IFTA License"
-    },
-    {
-        key: "UCR",
-        value: "UCR (Unified Carrier Registration)"
-    },
-    {
-        key: "MCS_150",
-        value: "MCS-150 (Biennial)"
-    },
-    {
-        key: "CT_PERMIT",
-        value: "CT Permit"
-    },
-];
+export const COMPANY_TYPE_NAMES = [{
+    key: "INS_CERT", value: "Company Insurance Certificate"
+}, {
+    key: "IFTA_LICENSE", value: "IFTA License"
+}, {
+    key: "UCR", value: "UCR (Unified Carrier Registration)"
+}, {
+    key: "MCS_150", value: "MCS-150 (Biennial)"
+}, {
+    key: "CT_PERMIT", value: "CT Permit"
+},];
 
-export const COMPANY_OTHER_TYPE_NAMES = [
-    {
-        key: "ARTICLES_OF_INCORPORATION",
-        value: "Articles of Incorporation"
-    },
-    {
-        key: "MC_CERTIFICATE",
-        value: "MC Certificate"
-    },
-    {
-        key: "OWNER_OPERATOR_AGREEMENT",
-        value: "Owner operator Agreement"
-    },
-    {
-        key: "DRIVER_AGREEMENT",
-        value: "Driver Agreement"
-    },
-];
+export const COMPANY_OTHER_TYPE_NAMES = [{
+    key: "ARTICLES_OF_INCORPORATION", value: "Articles of Incorporation"
+}, {
+    key: "MC_CERTIFICATE", value: "MC Certificate"
+}, {
+    key: "OWNER_OPERATOR_AGREEMENT", value: "Owner operator Agreement"
+}, {
+    key: "DRIVER_AGREEMENT", value: "Driver Agreement"
+},];
 
-export const PERMIT_NAMES = [
-    {
-        key: "OR",
-        value: "Oregon"
-    },
-    {
-        key: "NM",
-        value: "New Mexico"
-    },
-    {
-        key: "KY",
-        value: "Kentucky"
-    },
-    {
-        key: "NY",
-        value: "New York"
-    },
-    {
-        key: "CN",
-        value: "Connecticut"
-    },
-]
+export const PERMIT_NAMES = [{
+    key: "OR", value: "Oregon"
+}, {
+    key: "NM", value: "New Mexico"
+}, {
+    key: "KY", value: "Kentucky"
+}, {
+    key: "NY", value: "New York"
+}, {
+    key: "CN", value: "Connecticut"
+},]
 
-export const DRIVER_FILE_CLASSES = [
-    {
-        key: "A",
-        value: "A Class"
-    },
-    {
-        key: "B",
-        value: "B Class"
-    },
-    {
-        key: "C",
-        value: "C Class"
-    },
-    {
-        key: "D",
-        value: "D Class"
-    },
-]
+export const DRIVER_FILE_CLASSES = [{
+    key: "A", value: "A Class"
+}, {
+    key: "B", value: "B Class"
+}, {
+    key: "C", value: "C Class"
+}, {
+    key: "D", value: "D Class"
+},]
 
-export const DRIVER_TYPES = [
-    {
-        key: "OWNER_OPERATOR",
-        value: "OWNER OPERATOR"
-    },
-    {
-        key: "COMPANY_DRIVER",
-        value: "COMPANY DRIVER"
-    },
-    {
-        key: "INDEPENDENT_CONTRACTOR",
-        value: "INDEPENDENT CONTRACTOR"
-    },
-]
+export const DRIVER_TYPES = [{
+    key: "OWNER_OPERATOR", value: "OWNER OPERATOR"
+}, {
+    key: "COMPANY_DRIVER", value: "COMPANY DRIVER"
+}, {
+    key: "INDEPENDENT_CONTRACTOR", value: "INDEPENDENT CONTRACTOR"
+},]
 
-export const INSPECTION_FILE_TYPES = [
-    {
-        key: "CORRECTION",
-        value: "CORRECTION"
-    },
-    {
-        key: "CERTIFICATION",
-        value: "CERTIFICATION"
-    }
-]
+export const INSPECTION_FILE_TYPES = [{
+    key: "CORRECTION", value: "CORRECTION"
+}, {
+    key: "CERTIFICATION", value: "CERTIFICATION"
+}]
 
-export const TIME_ZONES = [
-    {
-        key: "est",
-        value: "EST"
-    },
-    {
-        key: "cst",
-        value: "CST"
-    },
-    {
-        key: "mst",
-        value: "MST"
-    },
-    {
-        key: "pst",
-        value: "PST"
-    },
-]
+export const TIME_ZONES = [{
+    key: "est", value: "EST"
+}, {
+    key: "cst", value: "CST"
+}, {
+    key: "mst", value: "MST"
+}, {
+    key: "pst", value: "PST"
+},]
 
 export function makeResourceEntity(file) {
     return {
@@ -326,6 +247,7 @@ export function makeResourceEntity(file) {
         contentType: file?.contentType
     }
 }
+
 export function downloadResource(resource) {
     if (!resource.id) return
     axiosIns.get(URIS.RESOURCES + '/view/' + resource.id, {
@@ -362,8 +284,7 @@ export function filterString(filter) {
                 filterStr += '&';
             }
 
-            if (typeof value === 'object') filterStr += key + '=' + valuesString(value);
-            else filterStr += key + '=' + value;
+            if (typeof value === 'object') filterStr += key + '=' + valuesString(value); else filterStr += key + '=' + value;
         }
     }
 
@@ -394,11 +315,11 @@ export function stringToDateFormatter(dateStr, format = 'MM-DD-YYYY') {
 
     const tokens = {
         YYYY: date.getFullYear(),
-        MM:   pad(date.getMonth() + 1),
-        DD:   pad(date.getDate()),
-        HH:   pad(date.getHours()),
-        mm:   pad(date.getMinutes()),
-        ss:   pad(date.getSeconds()),
+        MM: pad(date.getMonth() + 1),
+        DD: pad(date.getDate()),
+        HH: pad(date.getHours()),
+        mm: pad(date.getMinutes()),
+        ss: pad(date.getSeconds()),
     };
 
     return format.replace(/YYYY|MM|DD|HH|mm|ss/g, token => tokens[token]);

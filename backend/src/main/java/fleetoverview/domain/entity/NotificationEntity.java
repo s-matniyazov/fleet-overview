@@ -6,11 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 13 май 2025
- **/
+
 @Entity
 @Table(name = "notifications")
 public class NotificationEntity extends BaseIdEntity {

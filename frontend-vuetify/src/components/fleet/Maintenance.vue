@@ -1,8 +1,9 @@
 <script setup>
+import UnderDevelopment from "@/components/setting/UnderDevelopment.vue";
 </script>
 
 <template>
-  Maintenance
+  <UnderDevelopment/>
 </template>
 
 <style scoped>

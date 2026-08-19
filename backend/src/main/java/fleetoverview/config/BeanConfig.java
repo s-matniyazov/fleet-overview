@@ -12,18 +12,14 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import java.util.Locale;
 import java.util.Properties;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 27 нояб. 2024
- **/
+
 @Configuration
 public class BeanConfig {
 
-    private final MailConfigurationParams mailParams;
+    private final MailConfigurationProperties mailParams;
 
     @Autowired
-    public BeanConfig(MailConfigurationParams mailParams) {
+    public BeanConfig(MailConfigurationProperties mailParams) {
         this.mailParams = mailParams;
     }
 

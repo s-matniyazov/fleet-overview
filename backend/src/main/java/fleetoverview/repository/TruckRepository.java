@@ -7,11 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 16 март 2025
- **/
+
 public interface TruckRepository extends JpaRepository<TruckEntity, Integer> {
     @Query("""
                     select distinct t from TruckEntity t

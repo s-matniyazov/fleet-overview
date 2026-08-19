@@ -14,11 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 16 март 2025
- **/
+
 public interface TruckService extends CrudService<TruckEntity, TruckRequest> {
     ApiResponse deactivate(Integer id);
     ApiResponse activate(Integer id);

@@ -26,7 +26,7 @@ const columns = [
 const newModel = () => ({
   id: null,
   email: null,
-  username: null,
+  name: null,
   password: null,
   role: null,
   phone_number: null,
@@ -42,7 +42,7 @@ const data = ref(newModel());
 const selectedRow = ref();
 
 const roleItems = computed(() =>
-  mapSelectItems([{ name: 'ADMIN' }, { name: 'USER' }], "name", "name"),
+  mapSelectItems([{ name: 'USER' }], "name", "name"),
 );
 const statusItems = computed(() =>
   mapSelectItems([{ name: 'ACTIVE' }, { name: 'PASSIVE' }], "name", "name"),
@@ -119,8 +119,8 @@ watch(() => pagination.value.size, () => getData());
         </div>
       </template>
 
-      <template #row_role="{row}">
-        <td>{{ row?.role?.name ?? row?.role }}</td>
+      <template #row_role="{ row }">
+        <td>{{ row?.role?.join(', ') ?? '' }}</td>
       </template>
 
       <template #row_status="{row}">
@@ -183,17 +183,17 @@ watch(() => pagination.value.size, () => getData());
           <div class="row">
             <div class="col-6 mb-3">
               <UInput
-                v-model="data.username"
-                :label="t('username')"
-                :name="t('username')"
-                :placeholder="t('enter_username')"
-                :rules="(val) => (!val && $t('required'))"
+                  v-model="data.email"
+                  label="Email"
+                  :name="t('email')"
+                  type="email"
+                  :rules="(val) => (!val && $t('required'))"
               />
             </div>
             <div class="col-6 mb-3">
               <UInput
                 v-model="data.password"
-                :label="t('password')"
+                label="Password"
                 :name="t('password')"
                 type="password"
                 :rules="(val) => (!val && $t('required'))"
@@ -201,11 +201,11 @@ watch(() => pagination.value.size, () => getData());
             </div>
             <div class="col-12 mb-3">
               <UInput
-                v-model="data.email"
-                :label="t('email')"
-                :name="t('email')"
-                type="email"
-                :rules="(val) => (!val && $t('required'))"
+                  v-model="data.name"
+                  label="Full Name"
+                  :name="t('name')"
+                  :placeholder="t('enter_full_name')"
+                  :rules="(val) => (!val && $t('required'))"
               />
             </div>
             <div class="col-6 mb-3">
@@ -215,20 +215,6 @@ watch(() => pagination.value.size, () => getData());
                 item-title="title"
                 item-value="value"
                 :label="t('role')"
-                variant="outlined"
-                density="compact"
-                hide-details="auto"
-                clearable
-                bg-color="surface"
-              />
-            </div>
-            <div class="col-6 mb-3">
-              <v-select
-                v-model="data.status"
-                :items="statusItems"
-                item-title="title"
-                item-value="value"
-                :label="t('status')"
                 variant="outlined"
                 density="compact"
                 hide-details="auto"

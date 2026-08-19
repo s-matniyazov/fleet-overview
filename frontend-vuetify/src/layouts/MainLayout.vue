@@ -133,17 +133,17 @@ watch(companyId, (newVal) => {
       {{ routerStore.currentRouterName }}
     </v-toolbar-title>
 
-    <v-select
-      v-model="companyId"
-      :items="companies"
-      item-title="name"
-      item-value="id"
-      label="Company"
-      hide-details
-      density="compact"
-      variant="outlined"
-      class="company-toolbar-select me-1 me-md-2"
-      bg-color="surface"
+    <v-autocomplete
+        v-model="companyId"
+        :items="companies"
+        item-title="name"
+        item-value="id"
+        label="Company"
+        hide-details
+        density="compact"
+        variant="outlined"
+        class="company-toolbar-select mt-2 me-3"
+        bg-color="surface"
     />
 
     <v-btn

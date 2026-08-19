@@ -47,6 +47,8 @@ public class AuthServiceImpl {
         }
         UserEntity user = UserEntity.builder()
                 .email(req.email())
+                .username(req.email())
+                .name(req.name())
                 .password(passwordEncoder.encode(req.password()))
                 .roles(Set.of(Role.USER))
                 .status(UserStatusEnum.A)

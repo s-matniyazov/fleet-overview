@@ -31,11 +31,7 @@ import static fleetoverview.domain.enums.inspection.InspectionFileTypeEnum.CORRE
 import static fleetoverview.domain.enums.truck.TruckFileTypeEnum.*;
 import static fleetoverview.util.helper.Utils.isNull;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 14 май 2025
- **/
+
 @Service
 public class ExcelNotificationServiceImpl implements NotificationService {
     private static final Logger logger = LoggerFactory.getLogger(ExcelNotificationServiceImpl.class);

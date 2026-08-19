@@ -14,6 +14,8 @@ import fleetoverview.domain.projection.company.CompanyProjection;
 import fleetoverview.repository.CompanyFileRepository;
 import fleetoverview.repository.CompanyRepository;
 import fleetoverview.repository.StateRepository;
+import fleetoverview.repository.filter.CompanyFilter;
+import fleetoverview.repository.filter.CompanySpecification;
 import fleetoverview.security.JwtService;
 import fleetoverview.service.CompanyService;
 import fleetoverview.service.ResourceService;
@@ -23,6 +25,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,11 +39,7 @@ import java.util.Objects;
 
 import static fleetoverview.util.helper.Utils.getAuthentication;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 03 май 2025
- **/
+
 @Service
 public class CompanyServiceImpl extends BaseService implements CompanyService {
     private final CompanyRepository repository;
@@ -63,15 +62,13 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
     }
 
     @Override
-    public DataResponse<List<CompanyEntity>> get(Map<String, Object> params) {
+    public DataResponse<List<CompanyEntity>> findAll(CompanyFilter filter) {
         Integer userId = ((UserEntity) Objects.requireNonNull(getAuthentication(true).getPrincipal())).getId();
 
-        return DataResponse.success(
-                repository.findByCreatedById(
-                        userId,
-                        Sort.by(Sort.Direction.DESC, "id")
-                )
-        );
+        Specification<CompanyEntity> spec = CompanySpecification.specification(filter)
+                .and(CompanySpecification.userIdEquals(userId));
+
+        return DataResponse.success(repository.findAll(spec));
     }
 
     @Override
@@ -97,6 +94,11 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
         company.setStatus(CompanyStatusEnum.ACTIVE);
         repository.save(company);
         return ApiResponse.success();
+    }
+
+    @Override
+    public DataResponse<List<CompanyEntity>> get(Map<String, Object> params) {
+        return null;
     }
 
     @Override

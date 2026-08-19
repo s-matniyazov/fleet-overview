@@ -6,11 +6,6 @@ import fleetoverview.domain.enums.company.CompanyFileTypeEnum;
 
 import java.time.LocalDate;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 06 июль 2025
- **/
 public record CompanyFileRequest(
         @JsonSetter(nulls = Nulls.AS_EMPTY) int id,
         LocalDate expirationDate,

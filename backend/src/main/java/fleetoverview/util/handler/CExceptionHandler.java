@@ -15,11 +15,7 @@ import fleetoverview.util.exceptions.NotFoundException;
 
 import java.util.logging.Logger;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 27 нояб. 2024
- **/
+
 @ControllerAdvice
 public class CExceptionHandler extends ResponseEntityExceptionHandler {
 
