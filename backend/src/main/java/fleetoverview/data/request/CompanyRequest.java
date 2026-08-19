@@ -2,7 +2,6 @@ package fleetoverview.data.request;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
-import fleetoverview.domain.entity.StateEntity;
 import fleetoverview.domain.enums.TimeZoneEnum;
 import fleetoverview.domain.enums.company.CompanyEntrantStatusEnum;
 import fleetoverview.domain.enums.company.CompanyStatusEnum;

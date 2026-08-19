@@ -2,14 +2,13 @@ package fleetoverview.config;
 
 import fleetoverview.service.FileCheckerService;
 import fleetoverview.service.NotificationService;
-import fleetoverview.service.impl.*;
-import jakarta.annotation.PostConstruct;
-import lombok.AllArgsConstructor;
+import fleetoverview.service.impl.CompanyFileCheckerServiceImpl;
+import fleetoverview.service.impl.DriverFileCheckerServiceImpl;
+import fleetoverview.service.impl.ExcelNotificationServiceImpl;
+import fleetoverview.service.impl.InspectionServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,5 @@
 package fleetoverview.repository.filter;
 
-import fleetoverview.domain.enums.StatusEnum;
 import fleetoverview.domain.enums.company.CompanyStatusEnum;
 
 public record CompanyFilter (
