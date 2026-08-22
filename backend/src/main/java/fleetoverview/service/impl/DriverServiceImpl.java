@@ -102,7 +102,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
 
     @Override
     public ApiResponse put(DriverRequest data) {
-        DriverEntity driver = repository.getReferenceById(data.id());
+        DriverEntity driver = repository.findById(data.id()).orElseThrow(()-> new NotFoundException(mSourceBundle.apply("driver.not_found")));
 
         driver.setCompany(companyRepository.getReferenceById(data.companyId()));
         driver.setFirstName(data.firstName());
