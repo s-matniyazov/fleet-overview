@@ -9,11 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 12 июнь 2025
- **/
 @Service
 public class TruckFileCheckerServiceImpl implements FileCheckerService {
     private final TruckFileRepository repository;

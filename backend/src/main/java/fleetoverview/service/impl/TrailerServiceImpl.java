@@ -117,7 +117,9 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
         if (repository.existsByIdIsNotAndUnit(data.id(), data.unit()))
             throw new ExistsException(mSourceBundle.apply("truck.unit.taken"));
 
-        TrailerEntity trailer = repository.getReferenceById(data.id());
+        TrailerEntity trailer = repository.findById(data.id())
+                .orElseThrow(()-> new NotFoundException(mSourceBundle.apply("trailer.not_found")));
+
 
         trailer.setUnit(data.unit());
         trailer.setLicensePlate(data.licensePlate());

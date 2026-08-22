@@ -121,7 +121,8 @@ public class TruckServiceImpl extends BaseService implements TruckService {
         if (repository.existsByIdIsNotAndUnit(data.id(), data.unit()))
             throw new ExistsException(mSourceBundle.apply("truck.unit.taken"));
 
-        TruckEntity truck = repository.getReferenceById(data.id());
+        TruckEntity truck = repository.findById(data.id())
+                .orElseThrow(()-> new NotFoundException(mSourceBundle.apply("truck.not_found")));
 
         truck.setUnit(data.unit());
         truck.setInServiceDate(data.inServiceDate());
