@@ -16,22 +16,21 @@ import fleetoverview.repository.CompanyRepository;
 import fleetoverview.repository.StateRepository;
 import fleetoverview.repository.filter.CompanyFilter;
 import fleetoverview.repository.filter.CompanySpecification;
-import fleetoverview.security.JwtService;
 import fleetoverview.service.CompanyService;
 import fleetoverview.service.ResourceService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.NotFoundException;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -102,6 +101,7 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
     }
 
     @Override
+    @Transactional
     public ApiResponse post(CompanyRequest data) {
         repository.save(
                 new CompanyEntity(
@@ -129,6 +129,7 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
     }
 
     @Override
+    @Transactional
     public ApiResponse put(CompanyRequest data) {
         CompanyEntity company = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("company.not.found")));
 

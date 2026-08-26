@@ -49,6 +49,7 @@ public class CollisionServiceImpl extends BaseService implements CollisionServic
     }
 
     @Override
+    @Transactional
     public ApiResponse post(CollisionRequest data) {
         CollisionEntity entity = new CollisionEntity();
         mapToEntity(data, entity);
@@ -57,6 +58,7 @@ public class CollisionServiceImpl extends BaseService implements CollisionServic
     }
 
     @Override
+    @Transactional
     public ApiResponse put(CollisionRequest data) {
         CollisionEntity entity = repository.findById(data.id())
                 .orElseThrow(() -> new NotFoundException(mSourceBundle.apply("collision.not.found")));

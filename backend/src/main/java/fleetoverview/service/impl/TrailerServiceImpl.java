@@ -19,6 +19,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.persistence.EntityManager;
@@ -34,11 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * @author :  Sardor Matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 24 май 2025
- **/
+
 @Service
 public class TrailerServiceImpl extends BaseService implements TrailerService {
     private final ResourceService resourceService;
@@ -86,6 +83,7 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
     }
 
     @Override
+    @Transactional
     public ApiResponse post(TrailerRequest data) {
         if (repository.existsByUnit(data.unit()))
             throw new ExistsException(mSourceBundle.apply("trailer.unit.taken"));
@@ -113,6 +111,7 @@ public class TrailerServiceImpl extends BaseService implements TrailerService {
     }
 
     @Override
+    @Transactional
     public ApiResponse put(TrailerRequest data) {
         if (repository.existsByIdIsNotAndUnit(data.id(), data.unit()))
             throw new ExistsException(mSourceBundle.apply("truck.unit.taken"));

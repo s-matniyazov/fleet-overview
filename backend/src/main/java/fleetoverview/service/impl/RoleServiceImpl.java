@@ -12,16 +12,13 @@ import fleetoverview.repository.RoleRepository;
 import fleetoverview.service.RoleService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.NotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * @author :  sardor.matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 30 янв. 2025
- **/
+
 @Service
 public class RoleServiceImpl extends BaseService implements RoleService {
     private final RoleRepository repository;
@@ -39,6 +36,7 @@ public class RoleServiceImpl extends BaseService implements RoleService {
     }
 
     @Override
+    @Transactional
     public ApiResponse post(RoleRequest data) {
         repository.save(
                 new RoleEntity(
@@ -53,6 +51,7 @@ public class RoleServiceImpl extends BaseService implements RoleService {
     }
 
     @Override
+    @Transactional
     public ApiResponse put(RoleRequest data) {
         RoleEntity action = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("action.not_found")));
 

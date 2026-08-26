@@ -23,6 +23,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.persistence.*;
@@ -35,6 +36,7 @@ import java.util.Objects;
 
 
 @Service
+@Transactional(readOnly = true)
 public class TruckServiceImpl extends BaseService implements TruckService {
     private final ResourceService resourceService;
     private final TruckRepository repository;
@@ -85,6 +87,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
     }
 
     @Override
+    @Transactional
     public ApiResponse post(TruckRequest data) {
         if (driverRepository.hasTruckById(data.driverId()) != 0)
             throw new ExistsException(mSourceBundle.apply("driver.hasTruck"));
@@ -117,6 +120,7 @@ public class TruckServiceImpl extends BaseService implements TruckService {
     }
 
     @Override
+    @Transactional
     public ApiResponse put(TruckRequest data) {
         if (repository.existsByIdIsNotAndUnit(data.id(), data.unit()))
             throw new ExistsException(mSourceBundle.apply("truck.unit.taken"));

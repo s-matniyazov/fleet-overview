@@ -11,6 +11,7 @@ import fleetoverview.util.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ public class PurchaseTypeServiceImpl extends BaseService implements PurchaseType
     }
 
     @Override
+    @Transactional
     public ApiResponse post(OnlyNameRequest data) {
         repository.save(
                 new PurchaseTypeEntity(data.name())
@@ -39,6 +41,7 @@ public class PurchaseTypeServiceImpl extends BaseService implements PurchaseType
     }
 
     @Override
+    @Transactional
     public ApiResponse put(OnlyNameRequest data) {
         PurchaseTypeEntity purchaseType = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("purchaseType.not_found")));
 

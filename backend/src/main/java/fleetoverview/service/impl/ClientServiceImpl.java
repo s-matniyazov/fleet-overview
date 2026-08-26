@@ -10,15 +10,12 @@ import fleetoverview.repository.ClientRepository;
 import fleetoverview.service.ClientService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.NotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author :  sardor.matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 10 февр. 2025
- **/
+
 @Service
 public class ClientServiceImpl extends BaseService implements ClientService {
     private final ClientRepository repository;
@@ -33,6 +30,7 @@ public class ClientServiceImpl extends BaseService implements ClientService {
     }
 
     @Override
+    @Transactional
     public ApiResponse post(ClientRequest data) {
         repository.save(
                 new ClientEntity(
@@ -46,6 +44,7 @@ public class ClientServiceImpl extends BaseService implements ClientService {
     }
 
     @Override
+    @Transactional
     public ApiResponse put(ClientRequest data) {
         ClientEntity action = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("client.not_found")));
 

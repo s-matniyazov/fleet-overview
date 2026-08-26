@@ -13,6 +13,7 @@ import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,7 @@ public class UserServiceImpl extends BaseService implements UserService {
     }
 
     @Override
+    @Transactional
     public ApiResponse post(UserRequest data) {
         authService.register(new RegisterRequest(
                 data.email(),
@@ -57,6 +59,7 @@ public class UserServiceImpl extends BaseService implements UserService {
     }
 
     @Override
+    @Transactional
     public ApiResponse put(UserRequest data) {
         UserEntity user = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("user.not_found")));
 

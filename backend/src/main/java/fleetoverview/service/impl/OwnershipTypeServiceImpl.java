@@ -11,6 +11,7 @@ import fleetoverview.util.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ public class OwnershipTypeServiceImpl extends BaseService implements OwnershipTy
     }
 
     @Override
+    @Transactional
     public ApiResponse post(OnlyNameRequest data) {
         repository.save(
                 new OwnershipTypeEntity(data.name())
@@ -39,6 +41,7 @@ public class OwnershipTypeServiceImpl extends BaseService implements OwnershipTy
     }
 
     @Override
+    @Transactional
     public ApiResponse put(OnlyNameRequest data) {
         OwnershipTypeEntity ownershipType = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("ownershipType.not_found")));
 

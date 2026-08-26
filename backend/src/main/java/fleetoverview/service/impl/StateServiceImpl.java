@@ -22,6 +22,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +68,7 @@ public class StateServiceImpl extends BaseService implements StateService {
     }
 
     @Override
+    @Transactional
     public ApiResponse post(StateRequest data) {
         repository.findByNameAndId(data.name(), data.countryId()).ifPresent((state) -> {
             throw new ExistsException(mSourceBundle.apply("state.not_found"));
@@ -83,6 +85,7 @@ public class StateServiceImpl extends BaseService implements StateService {
     }
 
     @Override
+    @Transactional
     public ApiResponse put(StateRequest data) {
         StateEntity state = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("state.not_found")));
 

@@ -77,6 +77,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
     }
 
     @Override
+    @Transactional
     public ApiResponse post(DriverRequest data) {
         repository.save(
                 new DriverEntity(
@@ -101,6 +102,7 @@ public class DriverServiceImpl extends BaseService implements DriverService {
     }
 
     @Override
+    @Transactional
     public ApiResponse put(DriverRequest data) {
         DriverEntity driver = repository.findById(data.id())
                 .orElseThrow(()-> new NotFoundException(mSourceBundle.apply("driver.not_found")));

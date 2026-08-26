@@ -11,15 +11,12 @@ import fleetoverview.repository.ActionRepository;
 import fleetoverview.service.ActionService;
 import fleetoverview.service.base.BaseService;
 import fleetoverview.util.exceptions.NotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author :  sardor.matniyazov
- * @mailto :  sardorbekmatniyazov03@gmail.com
- * @created : 30 янв. 2025
- **/
+
 @Service
 public class ActionServiceImpl extends BaseService implements ActionService {
     private final ActionRepository repository;
@@ -35,6 +32,7 @@ public class ActionServiceImpl extends BaseService implements ActionService {
     }
 
     @Override
+    @Transactional
     public ApiResponse post(ActionRequest data) {
         repository.save(
                 new ActionEntity(
@@ -48,6 +46,7 @@ public class ActionServiceImpl extends BaseService implements ActionService {
     }
 
     @Override
+    @Transactional
     public ApiResponse put(ActionRequest data) {
         ActionEntity action = repository.findById(data.id()).orElseThrow(() -> new NotFoundException(mSourceBundle.apply("action.not_found")));
 
