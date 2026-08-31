@@ -36,7 +36,7 @@ import java.util.Objects;
 
 
 @Service
-@Transactional(readOnly = true)
+
 public class TruckServiceImpl extends BaseService implements TruckService {
     private final ResourceService resourceService;
     private final TruckRepository repository;
