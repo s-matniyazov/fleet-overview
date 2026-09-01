@@ -21,6 +21,8 @@ services:
     env_file:
       - ./backend/.env
     container_name: fleet-app
+    volumes:
+      - /root/resources:/root/resources
     restart: always
     depends_on:
       - fleet_db
