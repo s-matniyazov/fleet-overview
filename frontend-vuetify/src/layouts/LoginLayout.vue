@@ -70,7 +70,7 @@ async function onLogin() {
     await stateStore.loadFromApi();
     await router.push("/company-layout");
   } catch (e) {
-    showMessage(e?.response?.data?.message ?? "Login failed");
+    showMessage(e);
   }
 }
 

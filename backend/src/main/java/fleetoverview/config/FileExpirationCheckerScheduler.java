@@ -57,4 +57,10 @@ public class FileExpirationCheckerScheduler {
         log.info("Mail service working time is  {}", dateFormat.format(new Date()));
         notificationService.sendNotifications();
     }
+
+//    @EventListener(ApplicationReadyEvent.class)
+//    public void onApplicationReady() {
+//        log.info("Application started. Running notification check...");
+//        checkFileAndSendNotification();
+//    }
 }

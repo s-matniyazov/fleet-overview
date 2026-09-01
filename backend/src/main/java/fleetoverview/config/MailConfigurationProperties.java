@@ -13,4 +13,5 @@ public class MailConfigurationProperties {
     private String host;
     private String username;
     private String password;
+    private int port;
 }

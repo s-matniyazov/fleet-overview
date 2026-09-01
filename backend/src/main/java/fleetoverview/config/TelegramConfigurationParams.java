@@ -1,28 +1,14 @@
 package fleetoverview.config;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-
+@Data
 @Component
 @ConfigurationProperties(prefix = "telegram")
 public class TelegramConfigurationParams {
     private String token;
     private String chatIds;
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getChatIds() {
-        return chatIds;
-    }
-
-    public void setChatIds(String chatIds) {
-        this.chatIds = chatIds;
-    }
+    private String logsChatIds;
 }

@@ -8,6 +8,7 @@ import fleetoverview.domain.entity.truck.FuelTypeEntity;
 import fleetoverview.domain.entity.truck.TruckModelMakerEntity;
 import fleetoverview.domain.enums.ActionTypesEnum;
 import fleetoverview.repository.*;
+import fleetoverview.service.impl.AuthServiceImpl;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -37,9 +38,10 @@ public class InitData implements CommandLineRunner {
     private final TrailerTypeRepository trailerTypeRepository;
     private final PurchaseTypeRepository purchaseTypeRepository;
     private final EndorsementRepository endorsementRepository;
+    private final AuthServiceImpl authServiceImpl;
     private Set<ActionEntity> actions = new HashSet<>();
 
-    public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository, StateRepository stateRepository, FuelTypeRepository fuelRepository, CountryRepository countryRepository, TruckModelMakerRepository truckModelMakerRepository, TrailerModelMakerRepository trailerModelMakerRepository, TrailerTypeRepository trailerTypeRepository, PurchaseTypeRepository purchaseTypeRepository, EndorsementRepository endorsementRepository, InspectionRepository inspectionRepository, CompanyRepository companyRepository, DriverRepository driverRepository) {
+    public InitData(ActionRepository actionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, OwnershipTypeRepository ownershipTypeRepository, StateRepository stateRepository, FuelTypeRepository fuelRepository, CountryRepository countryRepository, TruckModelMakerRepository truckModelMakerRepository, TrailerModelMakerRepository trailerModelMakerRepository, TrailerTypeRepository trailerTypeRepository, PurchaseTypeRepository purchaseTypeRepository, EndorsementRepository endorsementRepository, InspectionRepository inspectionRepository, CompanyRepository companyRepository, DriverRepository driverRepository, AuthServiceImpl authServiceImpl) {
         this.actionRepository = actionRepository;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
@@ -53,6 +55,7 @@ public class InitData implements CommandLineRunner {
         this.trailerTypeRepository = trailerTypeRepository;
         this.purchaseTypeRepository = purchaseTypeRepository;
         this.endorsementRepository = endorsementRepository;
+        this.authServiceImpl = authServiceImpl;
     }
 
     @Override
@@ -109,16 +112,12 @@ public class InitData implements CommandLineRunner {
     }
 
 //    private void initUsers() {
-//        if (userRepository.findByUsername("username").isEmpty()) {
-//            userRepository.saveAll(
-//                    List.of(
-//                            new UserEntity(
-//                                    "username",
-//                                    passwordEncoder.encode("password"),
-//                                    "Testov User",
-//                                    "kuchukcha@gmail.com"
-//                            )
-//                    )
+//        if (!userRepository.existsByEmail("kuchukcha@gmail.com")) {
+//            authServiceImpl.register(
+//                    new RegisterRequest(
+//                            "kuchukcha@gmail.com",
+//                            "password",
+//                            "tester")
 //            );
 //        }
 //    }

@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,7 +61,7 @@ public class TelegramSocialServiceImpl implements SocialService {
 
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("caption", "shit!");
+        body.add("caption", "Report - " + java.util.Date.from(Instant.now()));
         for (String chatId : telegramParams.getChatIds().split(",")) {
             body.add("chat_id", chatId);
 

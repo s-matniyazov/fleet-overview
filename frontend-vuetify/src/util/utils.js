@@ -4,24 +4,12 @@ import useUserStore from "@/store/UserStore.js";
 import {pinia} from "@/pinia.js";
 import axiosIns from "@/plugins/axios.js";
 import {URIS} from "@/constants/UriConstants.js";
-//
-// export function showMessage(error) {
-//     const toasterStore = useToasterStore(pinia);
-//     const msg = error?.response?.data?.message, status = error?.response?.data?.status;
-//     if (status === 500) {
-//         toasterStore.error({text: msg ? msg : error})
-//     } else if (status === 400) {
-//         toasterStore.warning({text: msg ? msg : error})
-//     } else {
-//         toasterStore.success({text: msg ? msg : error})
-//     }
-// }
 
 export function showMessage(error) {
     const toasterStore = useToasterStore(pinia)
 
-    const status = error?.response?.status
-    const message = error?.response?.data?.message || error?.message || 'Something went wrong'
+    const status =  error?.response?.data?.status
+    const message = error?.response?.data?.detail || error?.detail || 'Something went wrong'
 
     const type = status >= 500 ? 'error' :
         status >= 400 ? 'warning' :

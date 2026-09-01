@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <springProperty name="TELEGRAM_TOKEN" source="telegram.token" defaultValue=""/>
+    <springProperty name="TELEGRAM_LOG_CHAT_ID" source="telegram.logging.chatId" defaultValue=""/>
+
+
+    <property name="EXCLUDES"
+              value="org.springframework.security.web,org.springframework.web.filter,org.springframework.web.servlet,org.springframework.web.method,org.springframework.aop,org.springframework.transaction.interceptor,org.apache.catalina,org.apache.coyote,org.apache.tomcat,jakarta.servlet,jdk.internal.reflect,java.lang.reflect"/>
+
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%-5level) %clr([%15.15thread]){faint} %clr(%-36.36logger{36}){cyan} %clr(-){faint} %msg%n%wEx{full,${EXCLUDES}}
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="TELEGRAM" class="fleetoverview.logging.TelegramLoggingAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <token>${TELEGRAM_TOKEN}</token>
+        <chatId>${TELEGRAM_LOG_CHAT_ID}</chatId>
+        <appName>FLEET OVERVIEW</appName>
+    </appender>
+
+
+    <appender name="TELEGRAM_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="TELEGRAM"/>
+        <queueSize>256</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <neverBlock>true</neverBlock>
+        <includeCallerData>false</includeCallerData>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="TELEGRAM_ASYNC"/>
+    </root>
+
+</configuration>

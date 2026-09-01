@@ -40,8 +40,8 @@ public class BeanConfig {
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.timeweb.ru");
-        mailSender.setPort(2525);
+        mailSender.setHost(mailParams.getHost());
+        mailSender.setPort(mailParams.getPort());
 
         mailSender.setUsername(mailParams.getUsername());
         mailSender.setPassword(mailParams.getPassword());
