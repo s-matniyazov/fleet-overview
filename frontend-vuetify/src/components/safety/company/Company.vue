@@ -251,7 +251,6 @@ function getData() {
 // HOOKS
 onMounted(() => {
   getData();
-  console.log(localStorage.getItem("fleet-theme"));
   stateStore.init();
 })
 

@@ -7,11 +7,11 @@ const BASE_URL = 'http://localhost:8080/api'
 // const BASE_URL = 'https://fleet-backend.tt64295.tw1.ru/api/'
 
 const axiosIns = axios.create({
+    //TODO: replace to minIO service
     baseURL: BASE_URL,
-    timeout: 5000,
+    timeout: 30000,
 })
-
-const refreshIns = axios.create({ baseURL: BASE_URL, timeout: 5000 })
+const refreshIns = axios.create({ baseURL: BASE_URL, timeout: 30000 })
 const LOGIN_PATH = '/auth/login'
 const REFRESH_PATH = '/auth/refresh'
 
@@ -64,7 +64,6 @@ async function forceLogout() {
     const authStore = useAuthStore(pinia)
     await authStore.logout()
     console.warn('forceLogout called', new Error().stack) // who triggered this?
-    return;
     if (!window.location.pathname.startsWith('/login')) {
         window.location.replace('/login')
     }
