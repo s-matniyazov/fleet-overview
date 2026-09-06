@@ -3,11 +3,10 @@ import { pinia } from '@/pinia.js'
 import { useAuthStore } from '@/store/UseAuthStore.js'
 import { hideLoader, showLoader } from '@/util/utils.js'
 
-const BASE_URL = 'http://localhost:8080/api'
-// const BASE_URL = 'https://fleet-backend.tt64295.tw1.ru/api/'
+//const BASE_URL = 'http://localhost:8080/api'
+const BASE_URL = 'https://efficientmanllc.com/api'
 
 const axiosIns = axios.create({
-    //TODO: replace to minIO service
     baseURL: BASE_URL,
     timeout: 30000,
 })
